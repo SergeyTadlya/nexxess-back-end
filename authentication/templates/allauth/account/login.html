@@ -1,11 +1,9 @@
-{% extends "account/base.html" %}
+{% extends "base.html" %}
 {% load static %}
 {% load i18n %}
 {% load account socialaccount %}
 {% block head_title %}{% trans "Sign In" %}{% endblock %}
-
 {% block content %}
-
  <link rel="stylesheet"  href="{% static 'authentication/css/style.css' %}">
 <link rel="stylesheet"  href="{% static 'authentication/css/authentication.css' %}">
 <!--                <h1>{% trans "Sign In" %}</h1>-->
@@ -73,15 +71,11 @@
                     <p class="authentication__login-text">Don’t have an account?</p>
                     <a id="authentication__login-registration" class="authentication__login-registration" type="button" href="{{ signup_url }}" style="margin-left: 6px; color: #7C48EE;">Registration</a>
                 </div>
-
                 {% if redirect_field_value %}
                     <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
                 {% endif %}
-
-
             </form>
         </div>
     </section>
-
 </main>
 {% endblock %}

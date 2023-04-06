@@ -8,7 +8,6 @@ app_name = 'authentication'
 urlpatterns = [
     path('', views.main, name='main'),
     path('login/', views.login_view, name='login'),
-    path('logout/', views.logout_view, name='account_logout'),
     path('webhook/', views.b24_webhook, name='b24_webhook'),
     # invoices pages
     path('invoices/', views.invoices, name='invoices'),

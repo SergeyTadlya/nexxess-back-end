@@ -26,7 +26,6 @@ SECRET_KEY = 'django-insecure-5gr8pz%pg!3v@x045wmo96dj-8u$(gljgnbpj)hpeh@0p5wu(q
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = ['https://580e-188-190-190-33.eu.ngrok.io']
 
 
 # Application definition
@@ -64,7 +63,6 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR, 'authentication/templates'), os.path.join(BASE_DIR, 'authentication/templates', 'allauth')],
-        # 'DIRS': [os.path.join(BASE_DIR, 'authentication/templates'),],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -90,7 +88,6 @@ SOCIALACCOUNT_PROVIDERS = {
 # django-allauth
 # https://django-allauth.readthedocs.io/en/latest/overview.html
 AUTHENTICATION_BACKENDS = [
-
     # Needed to login by username in Django admin, regardless of 'allauth'
     'django.contrib.auth.backends.ModelBackend',
 
