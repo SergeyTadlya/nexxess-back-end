@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+  <h1>This is invoices page</h1>
+  <ul>
+    {% for invoices in invoice %}
+      <li><a href="{% url 'authentication:invoice_detail' invoice.id %}">{{ question.title }}</a></li>
+    {% endfor %}
+  </ul>
+{% endblock %}
