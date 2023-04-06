@@ -42,7 +42,7 @@
 </head>
 <main>
 
-    <section class="authentication">
+   <section class="authentication">
         <div class="authentication__body">
             <form class="authentication__login" method="POST" action="{% url 'account_login' %}">
                 {% csrf_token %}
@@ -71,11 +71,15 @@
                     <p class="authentication__login-text">Don’t have an account?</p>
                     <a id="authentication__login-registration" class="authentication__login-registration" type="button" href="{{ signup_url }}" style="margin-left: 6px; color: #7C48EE;">Registration</a>
                 </div>
+
                 {% if redirect_field_value %}
                     <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
                 {% endif %}
+
+
             </form>
         </div>
     </section>
+
 </main>
 {% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+some text
+  <h2>Профиль пользователя</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" name="edit_profile">Сохранить</button>
+  </form>
+{% endblock %}
+
