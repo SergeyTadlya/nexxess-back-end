@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-{{ invoice }}
+{{ invoices }}
 <main class="main">
   <div class="container">
     <div class="main__inner">
@@ -98,21 +98,21 @@
               </div>
             </li>
             <li class="content__list-item">
-              <a class="content__list-link" href="#">Tickets</a>
+              <a class="content__list-link" href="{% url 'authentication:tasks'%}">Tickets</a>
               <div class="content__list-body">
                 <p class="content__list-text">Get qualified sipport from experienced specialists</p>
                 <div class="content__list-info">
-                  <p class="content__info-number">1</p>
+                  <p class="content__info-number">{{task_count}}</p>
                   <p class="content__info-text">new reply</p>
                 </div>
               </div>
             </li>
             <li class="content__list-item">
-              <a class="content__list-link" href="#">Invoices</a>
+              <a class="content__list-link" href="{% url 'authentication:invoices'%}">Invoices</a>
               <div class="content__list-body">
                 <p class="content__list-text">Manage invoices and check in your personal account</p>
                 <div class="content__list-info">
-                  <p class="content__info-number">4</p>
+                  <p class="content__info-number">{{invoice_count}}</p>
                   <p class="content__info-text">new invoices</p>
                 </div>
               </div>

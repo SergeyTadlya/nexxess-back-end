@@ -26,7 +26,8 @@ SECRET_KEY = 'django-insecure-5gr8pz%pg!3v@x045wmo96dj-8u$(gljgnbpj)hpeh@0p5wu(q
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
+# CSRF_TRUSTED_ORIGINS = ['https://b2a9-188-190-190-33.eu.ngrok.io']
+B24_WEBHOOK = "https://b24-hx1f8l.bitrix24.eu/rest/1/36b359umrza782tx/"
 
 # Application definition
 
@@ -143,14 +144,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 STATIC_URL = 'static/'    # hide for test
-                    # STATIC_ROOT = os.path.join(BASE_DIR, STATIC_URL)
+# STATIC_ROOT = os.path.join(BASE_DIR, STATIC_URL)
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')   # hide for test
 ]
 SITE_ID = 1
-
-
-
 
 ACCOUNT_FORMS = {
     'login': 'authentication.forms.CustomLoginForm',
@@ -162,7 +160,6 @@ ACCOUNT_FORMS = {
     'reset_password_from_key': 'allauth.account.forms.ResetPasswordKeyForm',
     'disconnect': 'allauth.socialaccount.forms.DisconnectForm',
 }
-
 
 
 LOGIN_REDIRECT_URL = '/'

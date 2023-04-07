@@ -8,10 +8,14 @@ app_name = 'authentication'
 urlpatterns = [
     path('', views.main, name='main'),
     path('login/', views.login_view, name='login'),
-    path('webhook/', views.b24_webhook, name='b24_webhook'),
+    path('webhook/task/', views.webhook_task, name='webhook_task'),
+    path('webhook/invoice/', views.webhook_invoice, name='webhook_invoice'),
     # invoices pages
     path('invoices/', views.invoices, name='invoices'),
     path('invoice/<int:id>/', views.invoice_detail, name="invoice_detail"),
+    # tickets pages (b24 tasks)
+    path('tickets/', views.tasks, name='tasks'),
+    path('ticket/<int:id>/', views.task_detail, name="task_detail"),
     # support pages
     path('support/', views.support, name='support'),
     # services pages

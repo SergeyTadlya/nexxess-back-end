@@ -1,8 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
+
+
 {% block content %}
-  <h1>Invoice {{invoice.id}}</h1>
-  <style type="text/css">
+  <h1>This is tasks page</h1>
+    <style type="text/css">
         TABLE {
         width: 300px; /* Ширина таблицы */
         border-top: 2px solid #000; /* Линия сверху таблицы */
@@ -19,16 +21,20 @@
 
     <table cellspacing="0" style="width: 80%; margin-left: 10%;">
         <tr>
-            <th style="width: 25%">Item id</th>
-            <th style="width: 25%">Invoice id</th>
+            <th style="width: 25%">ID</th>
+            <th style="width: 25%">Task id</th>
+            <th style="width: 25%">Responsible</th>
             <th style="width: 25%">Is opened</th>
-            <th style="width: 25%">Invoice array</th>
         </tr>
-        <tr>
-            <td>{{ invoice.id }}</td>
-            <td>{{ invoice.invoice_id }}</td>
-            <td>{{ invoice.is_opened }}</td>
-            <td>{{ invoice.invoice }}</td>
-        </tr>
+        {% for task in tasks %}
+            <tr>
+                <td><a href="{% url 'authentication:task_detail' task.id %}">{{ task.id }}</a></td>
+                <td>{{ task.task_id }}</td>
+                <td>{{ task.responsible }}</td>
+                <td>{{ task.is_opened }}</td>
+            </tr>
+         {% endfor %}
+
     </table>
+
 {% endblock %}
