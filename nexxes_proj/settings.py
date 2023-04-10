@@ -161,22 +161,18 @@ ACCOUNT_FORMS = {
     'disconnect': 'allauth.socialaccount.forms.DisconnectForm',
 }
 
-
+EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
 LOGIN_REDIRECT_URL = '/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-# #
-
 SOCIALACCOUNT_LOGIN_ON_GET = True
-
 ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = True
 
 # Additional configuration settings
 SOCIALACCOUNT_QUERY_EMAIL = True
 ACCOUNT_LOGOUT_ON_GET= True
 ACCOUNT_UNIQUE_EMAIL = True
+SIGNUP_REDIRECT_URL = '/'
 ACCOUNT_EMAIL_REQUIRED = True

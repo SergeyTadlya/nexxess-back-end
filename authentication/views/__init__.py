@@ -5,3 +5,4 @@ from .Invoices import invoices, invoice_detail
 from .Services import services
 from .Webhook import webhook_task, webhook_invoice
 from .Tickets import tasks, task_detail
+from .profile import profile_view

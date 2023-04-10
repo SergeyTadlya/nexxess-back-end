@@ -35,10 +35,12 @@
             <div class="authentication__box">
                  {{ form.email }}
             <label class="authentication__box-label">E-mail</label>
+
             </div>
             <div class="authentication__box">
-                {{ form.password }}
-            <label class="authentication__box-label">Create password</label>
+                 <div class="authentication__box">
+                {{ form.password1 }}
+            <label class="authentication__box-label" id='authentication-input__password'>Create password</label>
                 {% if redirect_field_value %}
                         <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
                     {% endif %}
