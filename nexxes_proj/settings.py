@@ -143,14 +143,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 STATIC_URL = 'static/'    # hide for test
-                    # STATIC_ROOT = os.path.join(BASE_DIR, STATIC_URL)
+# STATIC_ROOT = os.path.join(BASE_DIR, STATIC_URL)
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')   # hide for test
 ]
 SITE_ID = 1
-
-
-
 
 ACCOUNT_FORMS = {
     'login': 'authentication.forms.CustomLoginForm',
