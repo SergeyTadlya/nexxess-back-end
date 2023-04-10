@@ -3,3 +3,4 @@ from .Main import main, b24_webhook
 from .Support import support
 from .Invoices import invoices, invoice_detail
 from .Services import services
+from .profile import profile_view

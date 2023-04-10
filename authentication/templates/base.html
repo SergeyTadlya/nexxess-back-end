@@ -38,7 +38,7 @@
           </ul>
         </nav>
         <div class="header__box">
-          <img class="header__box-img" src="{% static 'authentication/img/main/user.svg' %}" alt="user">
+          <a href="/profile"><img class="header__box-img" src="{% static 'authentication/img/main/user.svg' %}" alt="user"></a>
           <p class="header__box-text">Hello, {{ user.username }}</p>
           <a class="header__box-link" href="{% url 'account_logout' %}">Log Out</a>
         </div>
