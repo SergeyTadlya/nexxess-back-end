@@ -16,12 +16,13 @@ def invoices(request):
             'invoice_id': invoice.invoice_id,
             'responsible': invoice.manager,
             'is_opened': invoice.is_opened,
+            'price': invoice.price,
         })
     print('arInvoice', arInvoice)
     res = {
         "invoices": arInvoice
     }
-    return render(request, "invoices/list.html", res)
+    return render(request, "invoices/invoices.html", res)
 
 
 def invoice_detail(request, id):

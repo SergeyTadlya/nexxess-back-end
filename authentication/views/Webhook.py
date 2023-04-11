@@ -1,8 +1,12 @@
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-from authentication.models import WebhookTask, Task, WebhookInvoice, Invoice
+from authentication.models import WebhookTask, Task, WebhookInvoice, Invoice, B24keys
 from django.conf import settings
 import requests
+
+B24keys = B24keys.objects.get(id=1)     # get b24 keys from db (1 - id)
+B24_WEBHOOK = B24keys.b24_webhook       # init b24 webhook
+# print(B24_WEBHOOK)
 
 
 @csrf_exempt
@@ -43,11 +47,11 @@ def webhook_task(request):
         # тепер з допомогою рест апі бітікса, дістаємо дані про сутність яке зловив вебхук
 
         task = "tasks.task.get/?id=" + entities_id
-        task_url = settings.B24_WEBHOOK + task
+        task_url = B24_WEBHOOK + task
         task_load = requests.get(task_url).json()['result']['task']
         # отримуємо дані про користувача який є відповідальним в задачі
         responsible = "user.get/?id=" + task_load['responsible']['id']
-        responsible_url = settings.B24_WEBHOOK + responsible
+        responsible_url = B24_WEBHOOK + responsible
         responsible = requests.get(responsible_url).json()['result']
         # перевіряємо наявність запису данних про задачу в таблиці task
         # якщо запис є - робимо апдейт запису в базі
@@ -77,6 +81,15 @@ def webhook_invoice(request):
         b24_member_id = request.POST.get('auth[member_id]')
         b24_application_token = request.POST.get('auth[application_token]')
         b24_time = request.POST.get('ts')
+
+        # тепер з допомогою рест апі бітікса, дістаємо дані про сутність яке зловив вебхук
+        method = "crm.invoice.get/?id=" + entities_id
+        url = B24_WEBHOOK + method
+        invoice_load = requests.get(url).json()['result']
+        # перевіряємо наявність запису данних про інвойса в таблиці invoice
+
+
+
         # перевіряємо наявність запису із отриманими данними в таблиці
         defaults = {
             'b24_member_id': b24_member_id,
@@ -101,23 +114,31 @@ def webhook_invoice(request):
                 setattr(webhook_invoice, key, value)
             webhook_invoice.save()
 
-        # тепер з допомогою рест апі бітікса, дістаємо дані про сутність яке зловив вебхук
-        method = "crm.invoice.get/?id=" + entities_id
-        url = settings.B24_WEBHOOK + method
-        invoice_load = requests.get(url).json()['result']
-        # перевіряємо наявність запису данних про інвойса в таблиці invoice
+
         try:
             invoice_get = Invoice.objects.get(manager=invoice_load['RESPONSIBLE_EMAIL'], invoice_id=invoice_load['ID'])
             invoice_get.manager = invoice_load['RESPONSIBLE_EMAIL']
             invoice_get.invoice_id = invoice_load['ID']
             invoice_get.invoice = invoice_load
+            invoice_get.price = invoice_load['PRICE']
             invoice_get.is_opened = False
+            # invoice_get.quantity = invoice_load('QUANTITY', None)
+            # invoice_get.price = invoice_load('PRICE', None)
+            # invoice_get.discount_price = invoice_load('DISCOUNT_PRICE', None)
             invoice_get.save()
+
         except Invoice.DoesNotExist:
             Invoice.objects.create(
                 manager=invoice_load['RESPONSIBLE_EMAIL'],
                 invoice_id=invoice_load['ID'],
                 invoice=invoice_load,
+                price=invoice_load['INVOICE_PROPERTIES''PRICE'],
                 is_opened=False
+
             )
         return HttpResponse()
+    #
+    # print("invoice_load['ID']")
+    # print('PRICE')
+    # print("invoice_get.price")
+    # print("invoice_load('PRICE')")
