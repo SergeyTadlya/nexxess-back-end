@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-  <h1>Task {{task.id}}</h1>
+  <h1>Ticket {{task.id}}</h1>
   <style type="text/css">
         TABLE {
         width: 300px; /* Ширина таблицы */
@@ -20,15 +20,15 @@
     <table cellspacing="0" style="width: 80%; margin-left: 10%;">
         <tr>
             <th style="width: 25%">Item id</th>
-            <th style="width: 25%">Task id</th>
+            <th style="width: 25%">Ticket id</th>
             <th style="width: 25%">Is opened</th>
-            <th style="width: 25%">Task array</th>
+            <th style="width: 25%">Ticket array</th>
         </tr>
         <tr>
             <td>{{ task.id }}</td>
             <td>{{ task.task_id }}</td>
             <td>{{ task.is_opened }}</td>
-            <td>{{ task.task }}</td>
+            <td>{{ task.task_info }}</td>
         </tr>
     </table>
 {% endblock %}
