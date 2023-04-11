@@ -1,25 +1,19 @@
 from django.contrib import admin
-from .models import Invoice, Task, WebhookTask, WebhookInvoice
+from .models import Invoice, Task, B24keys
 
 @admin.register(Invoice)
 class InvoiceAdmin(admin.ModelAdmin):
-    list_display = ['id', 'invoice_id', 'manager', 'is_opened']
-    list_filter = ['manager']
-
-
-@admin.register(WebhookTask)
-class WebhookTaskAdmin(admin.ModelAdmin):
-    list_display = ['id', 'entities_id', 'b24_domain', 'b24_time']
-    list_filter = ['b24_domain']
-
-
-@admin.register(WebhookInvoice)
-class WebhookInvoiceAdmin(admin.ModelAdmin):
-    list_display = ['id', 'entities_id', 'b24_domain', 'b24_time']
-    list_filter = ['b24_domain']
+    list_display = ['id', 'invoice_id', 'responsible', 'is_opened']
+    list_filter = ['responsible', 'is_opened']
 
 
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):
-    list_display = ['id', 'task_id', 'manager', 'is_opened']
-    list_filter = ['manager']
+    list_display = ['id', 'task_id', 'responsible', 'is_opened']
+    list_filter = ['responsible', 'is_opened']
+
+
+@admin.register(B24keys)      # register in admin panel b24 keys
+class B24keysAdmin(admin.ModelAdmin):
+    list_display = ['id']
+

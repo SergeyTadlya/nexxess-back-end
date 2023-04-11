@@ -48,7 +48,7 @@ class CustomSignupForm(SignupForm):
     email = forms.EmailField(
         label='E-mail',
         max_length=35,
-        widget=forms.EmailInput(
+        widget=forms.TextInput(
             attrs={'placeholder': '', 'class': 'authentication__box-input', 'id': 'authentication-input__password'})
     )
 
@@ -87,7 +87,7 @@ class CustomResetPasswordForm(ResetPasswordForm):
     email = forms.EmailField(
         label='E-mail',
         max_length=35,
-        widget=forms.EmailInput(
+        widget=forms.TextInput(
             attrs={'placeholder': '', 'class': 'authentication__box-input', 'id': 'authentication-input__password'})
     )
 
