@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Invoice, Task, B24keys
+from .models import Invoice, Ticket, B24keys
 
 @admin.register(Invoice)
 class InvoiceAdmin(admin.ModelAdmin):
@@ -7,8 +7,8 @@ class InvoiceAdmin(admin.ModelAdmin):
     list_filter = ['responsible', 'is_opened']
 
 
-@admin.register(Task)
-class TaskAdmin(admin.ModelAdmin):
+@admin.register(Ticket)
+class TicketAdmin(admin.ModelAdmin):
     list_display = ['id', 'task_id', 'responsible', 'is_opened']
     list_filter = ['responsible', 'is_opened']
 

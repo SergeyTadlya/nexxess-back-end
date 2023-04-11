@@ -26,10 +26,7 @@ SECRET_KEY = 'django-insecure-5gr8pz%pg!3v@x045wmo96dj-8u$(gljgnbpj)hpeh@0p5wu(q
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = ['https://17c8-2a09-bac5-592e-52d-00-84-91.ngrok-free.app']
-
-# B24_WEBHOOK = "https://b24-hx1f8l.bitrix24.eu/rest/1/36b359umrza782tx/"
-
+CSRF_TRUSTED_ORIGINS = ['https://03c2-188-190-190-33.ngrok-free.app']
 # Application definition
 
 INSTALLED_APPS = [

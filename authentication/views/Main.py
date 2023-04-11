@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from authentication.models import Task, Invoice
+from authentication.models import Ticket, Invoice
 import requests
 import json
 
@@ -12,10 +12,10 @@ def main(request):
         # відфільтровуємо дані по пошті авторизованого користувачі (адміну будуть виводитись всі)
         if request.user.is_superuser:
             invoice_count = Invoice.objects.filter(is_opened=False).count()
-            task_count = Task.objects.filter(is_opened=False).count()
+            task_count = Ticket.objects.filter(is_opened=False).count()
         else:
-            invoice_count = Invoice.objects.filter(manager=request.user.email, is_opened=False).count()
-            task_count = Task.objects.filter(manager=request.user.email, is_opened=False).count()
+            invoice_count = Invoice.objects.filter(responsible=request.user.email, is_opened=False).count()
+            task_count = Ticket.objects.filter(responsible=request.user.email, is_opened=False).count()
 
         res = {
             'invoice_count': invoice_count,

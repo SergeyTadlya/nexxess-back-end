@@ -15,14 +15,14 @@ class Invoice(models.Model):
     created_at = models.DateTimeField(verbose_name='Create date', auto_now_add=True)
 
     def __str__(self):
-        return f'Invoice {self.invoice_id}, responsible - {self.manager}'
+        return f'Invoice {self.invoice_id}, responsible - {self.responsible}'
 
     class Meta:
         verbose_name = 'Invoice'
         verbose_name_plural = 'Invoices'
 
 
-class Task(models.Model):
+class Ticket(models.Model):
     responsible = models.CharField(max_length=150, verbose_name='Responsible')
     task_id = models.CharField(max_length=50)
     b24_domain = models.CharField(max_length=200)
@@ -34,11 +34,11 @@ class Task(models.Model):
     created_at = models.DateTimeField(verbose_name='Create date', auto_now_add=True)
 
     def __str__(self):
-        return f'Task {self.task_id}, responsible - {self.manager}'
+        return f'Ticket {self.task_id}, responsible - {self.responsible}'
 
     class Meta:
-        verbose_name = 'Task'
-        verbose_name_plural = 'Tasks'
+        verbose_name = 'Ticket'
+        verbose_name_plural = 'Tickets'
 
 
 class B24keys(models.Model):     ## create model for save and edit keys,  which must be protect from others

@@ -1,11 +1,14 @@
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-from authentication.models import Task, Invoice, B24keys
+from authentication.models import Ticket, Invoice, B24keys
 from django.conf import settings
 import requests
 
-B24keys = B24keys.objects.get(id=1)     # get b24 keys from db (1 - id)
-B24_WEBHOOK = B24keys.b24_webhook       # init b24 webhook
+try:
+    B24keys = B24keys.objects.get(id=1)     # get b24 keys from db (1 - id)
+    B24_WEBHOOK = B24keys.b24_webhook       # init b24 webhook
+except B24keys.DoesNotExist:
+    B24keys = ""
 
 
 @csrf_exempt
@@ -35,7 +38,7 @@ def webhook_task(request):
         # перевіряємо наявність запису данних про задачу в таблиці task
         # якщо запис є - робимо апдейт запису в базі
         try:
-            task = Task.objects.get(responsible=responsible[0]['EMAIL'], task_id=entities_id)
+            task = Ticket.objects.get(responsible=responsible[0]['EMAIL'], task_id=entities_id)
             task.task_id = entities_id
             task.b24_domain = b24_domain
             task.b24_member_id = b24_member_id
@@ -45,8 +48,8 @@ def webhook_task(request):
             task.is_opened = False
             task.save()
         # якщо запису немає - записуємо
-        except Task.DoesNotExist:
-            Task.objects.create(
+        except Ticket.DoesNotExist:
+            Ticket.objects.create(
                 responsible=responsible[0]['EMAIL'],
                 task_id=entities_id,
                 b24_domain=b24_domain,
@@ -72,6 +75,7 @@ def webhook_invoice(request):
         method = "crm.invoice.get/?id=" + entities_id
         url = B24_WEBHOOK + method
         invoice_load = requests.get(url).json()['result']
+        print('price', invoice_load['PRICE'])
         # перевіряємо наявність запису данних про інвойса в таблиці invoice
         try:
             invoice_get = Invoice.objects.get(responsible=invoice_load['RESPONSIBLE_EMAIL'], invoice_id=invoice_load['ID'])
@@ -94,7 +98,7 @@ def webhook_invoice(request):
                 b24_application_token=b24_application_token,
                 b24_time=b24_time,
                 invoice_info=invoice_load,
-                price=invoice_load['INVOICE_PROPERTIES''PRICE'],
+                price=invoice_load['PRICE'],
                 is_opened=False
             )
         return HttpResponse()
