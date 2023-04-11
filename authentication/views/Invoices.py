@@ -26,7 +26,7 @@ def invoices(request):
 
 def invoice_detail(request, id):
     invoice = Invoice.objects.get(id=id)
-    if request.user.is_superuser or invoice.manager == request.user.email:
+    if request.user.is_superuser or invoice.responsible == request.user.email:
         # апдейт інвойса, коли менеджер відкрив її (це щоб на головній сторінці, вона зникла із списка нових задач)
         if not request.user.is_superuser:
             Invoice.objects.filter(id=id).update(is_opened=True)
