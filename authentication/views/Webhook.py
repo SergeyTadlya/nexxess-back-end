@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-from authentication.models import WebhookTask, Task, WebhookInvoice, Invoice
+from authentication.models import WebhookTask, Task, Invoice
 from django.conf import settings
 import requests
 
