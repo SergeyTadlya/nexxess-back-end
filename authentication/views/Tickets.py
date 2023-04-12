@@ -9,16 +9,16 @@ def tasks(request):
     else:
         tasks_list = Ticket.objects.filter(responsible=request.user.email)
 
-    arTask = []
+    tasks_array = []
     for task in tasks_list:
-        arTask.append({
+        tasks_array.append({
             'id': task.id,
             'responsible': task.responsible,
             'task_id': task.task_id,
             'is_opened': task.is_opened,
         })
     res = {
-        "tasks": arTask
+        "tasks": tasks_array
     }
     return render(request, "tickets/list.html", res)
 

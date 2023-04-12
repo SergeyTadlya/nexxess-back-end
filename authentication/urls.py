@@ -12,10 +12,10 @@ urlpatterns = [
     path('webhook/invoice/', views.webhook_invoice, name='webhook_invoice'),
     path('profile/', views.profile_view, name='profile'),
     # invoices pages
-    path('invoices/', views.invoices, name='invoices'),
+    path('invoice/', views.invoices, name='invoices'),
     path('invoice/<int:id>/', views.invoice_detail, name="invoice_detail"),
     # tickets pages (b24 tasks)
-    path('tickets/', views.tasks, name='tasks'),
+    path('ticket/', views.tasks, name='tasks'),
     path('ticket/<int:id>/', views.task_detail, name="task_detail"),
     # support pages
     path('support/', views.support, name='support'),

@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-5gr8pz%pg!3v@x045wmo96dj-8u$(gljgnbpj)hpeh@0p5wu(q
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = ['https://03c2-188-190-190-33.ngrok-free.app']
+CSRF_TRUSTED_ORIGINS = ['https://01e0-188-190-190-33.ngrok-free.app']
 # Application definition
 
 INSTALLED_APPS = [
@@ -67,7 +67,7 @@ ROOT_URLCONF = 'nexxes_proj.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'authentication/templates'), os.path.join(BASE_DIR, 'authentication/templates', 'allauth')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates'), os.path.join(BASE_DIR, 'templates', 'allauth')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -182,8 +182,8 @@ SIGNUP_REDIRECT_URL = '/'
 ACCOUNT_EMAIL_REQUIRED = True
 
 REST_FRAMEWORK = {
-    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    # 'PAGE_SIZE': 100,
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 100,
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
