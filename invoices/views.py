@@ -1,5 +1,5 @@
-from django.shortcuts import render, redirect
-from authentication.models import Invoice
+from django.shortcuts import render
+from .models import Invoice
 
 
 def invoices(request):

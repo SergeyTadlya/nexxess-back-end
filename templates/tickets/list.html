@@ -1,7 +1,5 @@
 {% extends 'base.html' %}
 {% load static %}
-
-
 {% block content %}
   <h1>This is tasks page</h1>
     <table cellspacing="0" style="width: 80%; margin-left: 10%;">
@@ -13,13 +11,11 @@
         </tr>
         {% for task in tasks %}
             <tr>
-                <td><a href="{% url 'authentication:task_detail' task.id %}">{{ task.id }}</a></td>
+                <td><a href="{% url 'task_detail' task.id %}">{{ task.id }}</a></td>
                 <td>{{ task.task_id }}</td>
                 <td>{{ task.responsible }}</td>
                 <td>{{ task.is_opened }}</td>
             </tr>
          {% endfor %}
-
     </table>
-
 {% endblock %}

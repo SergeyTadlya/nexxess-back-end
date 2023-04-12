@@ -41,6 +41,10 @@ INSTALLED_APPS = [
     # my apps
     'authentication',
     'api',
+    'invoices',
+    'tickets',
+    'services',
+    'support',
     # install app
     'rest_framework',
     'rest_framework.authtoken',

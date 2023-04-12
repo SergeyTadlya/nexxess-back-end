@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-from authentication.models import Ticket, Invoice, B24keys
+from tickets.models import Ticket
+from invoices.models import Invoice
 from authentication.helpers.B24Webhook import B24_WEBHOOK
 import requests
 
@@ -16,7 +17,12 @@ def webhook_task(request):
         # 'data[IS_ACCESSIBLE_AFTER]': ['undefined']
 
         # виконуємо перевірку чи вебхук отримав дані із задачі
-        entities_id = request.POST.get('data[FIELDS_AFTER][ID]', "")
+        event = request.POST.get('event', "")
+        if(event == "ONTASKUPDATE"):
+            entities_id = request.POST.get('data[FIELDS_AFTER][ID]', "")
+        else:
+            entities_id = request.POST.get('data[FIELDS_AFTER][TASK_ID]', "")
+
         b24_domain = request.POST.get('auth[domain]', "")
         b24_member_id = request.POST.get('auth[member_id]', "")
         b24_application_token = request.POST.get('auth[application_token]', "")

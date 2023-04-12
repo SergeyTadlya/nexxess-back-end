@@ -1,7 +1,5 @@
 {% extends 'base.html' %}
 {% load static %}
-
-
 {% block content %}
   <h1>This is invoices page</h1>
     <table cellspacing="0" style="width: 80%; margin-left: 10%;">
@@ -14,13 +12,11 @@
         </tr>
         {% for invoice in invoices %}
             <tr>
-                <td><a href="{% url 'authentication:invoice_detail' invoice.id %}">{{ invoice.id }}</a></td>
+                <td><a href="{% url 'invoice_detail' invoice.id %}">{{ invoice.id }}</a></td>
                 <td>{{ invoice.invoice_id }}</td>
                 <td>{{ invoice.responsible }}</td>
                 <td>{{ invoice.is_opened }}</td>
             </tr>
          {% endfor %}
-
     </table>
-
 {% endblock %}

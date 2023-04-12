@@ -1,16 +1,5 @@
 from django.contrib import admin
-from .models import Invoice, Ticket, B24keys
-
-@admin.register(Invoice)
-class InvoiceAdmin(admin.ModelAdmin):
-    list_display = ['id', 'invoice_id', 'responsible', 'is_opened']
-    list_filter = ['responsible', 'is_opened']
-
-
-@admin.register(Ticket)
-class TicketAdmin(admin.ModelAdmin):
-    list_display = ['id', 'task_id', 'responsible', 'is_opened']
-    list_filter = ['responsible', 'is_opened']
+from .models import B24keys
 
 
 @admin.register(B24keys)      # register in admin panel b24 keys

@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
-from authentication.models import Ticket, Invoice
+from tickets.models import Ticket
+from invoices.models import Invoice
 import requests
 import json
 

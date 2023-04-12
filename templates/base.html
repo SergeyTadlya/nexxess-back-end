@@ -18,35 +18,35 @@
 <body>
     {% if user.is_authenticated %}
         <header class="header">
-    <div class="container">
-      <div class="header__inner">
-        <a href="/">
-          <img src="{% static 'img/main/logo.png' %}" alt="logo">
-        </a>
-        <nav class="nav">
-          <a class="nav__burger">
-            <span class="nav__burger-line"></span>
-          </a>
-          <ul class="nav__list">
-            <li class="nav__list-item">
-              <a class="nav__item-link" href="{% url 'authentication:invoices'%}">Invoices</a>
-            </li>
-            <li class="nav__list-item">
-              <a class="nav__item-link" href="{% url 'authentication:support'%}">Support</a>
-            </li>
-            <li class="nav__list-item">
-              <a class="nav__item-link" href="{% url 'authentication:services'%}">Services</a>
-            </li>
-          </ul>
-        </nav>
-        <div class="header__box">
-          <a href="/profile"><img class="header__box-img" src="{% static 'img/main/user.svg' %}" alt="user"></a>
-          <p class="header__box-text">Hello, {{ user.username }}</p>
-          <a class="header__box-link" href="{% url 'account_logout' %}">Log Out</a>
+        <div class="container">
+          <div class="header__inner">
+            <a href="/">
+              <img src="{% static 'img/main/logo.png' %}" alt="logo">
+            </a>
+            <nav class="nav">
+              <a class="nav__burger">
+                <span class="nav__burger-line"></span>
+              </a>
+              <ul class="nav__list">
+                <li class="nav__list-item">
+                  <a class="nav__item-link" href="{% url 'invoices'%}">Invoices</a>
+                </li>
+                <li class="nav__list-item">
+                  <a class="nav__item-link" href="{% url 'support'%}">Support</a>
+                </li>
+                <li class="nav__list-item">
+                  <a class="nav__item-link" href="{% url 'services'%}">Services</a>
+                </li>
+              </ul>
+            </nav>
+            <div class="header__box">
+              <a href="/profile"><img class="header__box-img" src="{% static 'img/main/user.svg' %}" alt="user"></a>
+              <p class="header__box-text">Hello, {{ user.username }}</p>
+              <a class="header__box-link" href="{% url 'account_logout' %}">Log Out</a>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </header>
+      </header>
     {% endif %}
 
     {% block content %}

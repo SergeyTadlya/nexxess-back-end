@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from authentication.models import Ticket
+from .models import Ticket
 
 
 def tasks(request):
