@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% load account socialaccount %}
+{% block head_title %}{% trans "Sign In" %}{% endblock %}
+<link rel="stylesheet"  href="{% static 'ss/style.css' %}">
+<link rel="stylesheet"  href="{% static 'css/authentication.css' %}">
+{% block content %}
+<head>
+  <style>
+    ul.errorlist {
+      color: red;
+      font-size: 1.1em;
+      margin-bottom: 6px;
+    }
+  </style>
+</head>
+<main>
+    <section class="authentication">
+        <div class="authentication__body">
+            <form class="authentication__login"  id="signup_form" method="post" action="{% url 'account_signup' %}">
+                {% csrf_token %}
+                <div class="authentication__registration-img">
+                    <img src="{% static 'img/logo.png' %}" alt="Castle">
+                </div>
+                <ul class="errorlist" >
+                    {% for key, value in form.errors.items %}
+                        <li>{% if key != '__all__' %}{{ key }} {% endif %}{{ value }}</li>
+                    {% endfor %}
+                 </ul>
+                <div class="authentication__box">
+                    {{ form.name }}
+                    <label class="authentication__box-label">Your Name</label>
+                </div>
+                <div class="authentication__box">
+                     {{ form.email }}
+                    <label class="authentication__box-label">E-mail</label>
+                </div>
+                <div class="authentication__box">
+                     <div class="authentication__box">
+                        {{ form.password1 }}
+                        <label class="authentication__box-label" id='authentication-input__password'>Create password</label>
+                        {% if redirect_field_value %}
+                            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                        {% endif %}
+                    </div>
+                    {% if redirect_field_value %}
+                        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                    {% endif %}
+                    <div class="authentication__registration-buttons">
+                        <button id="authentication__registration-button" class="authentication__button" type="submit">Register Account</button>
+                        <p class="authentication__registration-or">or</p>
+                        <a href="{% provider_login_url 'google' %}" class="authentication__button authentication__registration-button">
+                        <img src="{% static 'img/g_logo.png' %}"  style="width: 30px; height: 20px;" alt="logo"> Register with Google
+                        </a>
+                    </div>
+                    <div class="authentication__registration-bottom">
+                        <p class="authentication__registration-text">Already have an account?</p>
+                        <a href="{{ login_url }}" class="authentication__registration-back">Log In</a>
+                    </div>
+                </div>
+             </form>
+        </div>
+    </section>
+</main>
+{% endblock %}

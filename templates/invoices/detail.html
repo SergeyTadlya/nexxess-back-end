@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+  <h1>Invoice {{invoice.id}}</h1>
+    <table cellspacing="0" style="width: 80%; margin-left: 10%;">
+        <tr>
+            <th style="width: 25%">Item id</th>
+            <th style="width: 25%">Invoice id</th>
+            <th style="width: 25%">Is opened</th>
+            <th style="width: 25%">Price</th>
+            <th style="width: 25%">Invoice array</th>
+        </tr>
+        <tr>
+            <td>{{ invoice.id }}</td>
+            <td>{{ invoice.invoice_id }}</td>
+            <td>{{ invoice.is_opened }}</td>
+            <td>{{ invoice.price }}</td>
+            <td>{{ invoice.invoice_info }}</td>
+        </tr>
+    </table>
+{% endblock %}

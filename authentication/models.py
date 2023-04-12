@@ -2,15 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-class Invoice(models.Model):
-    manager = models.ForeignKey(User, verbose_name='Manager', on_delete=models.DO_NOTHING)
-    invoice = models.JSONField(verbose_name='Invoice', blank=True, default=list)
-    is_opened = models.BooleanField(verbose_name="Opened (yes/no)", default=False, null=True)
-    created_at = models.DateTimeField(verbose_name='Create date', auto_now_add=True)
-
-    def __str__(self):
-        return f'Invoice, responsible - {self.manager}'
+class B24keys(models.Model):     ## create model for save and edit keys,  which must be protect from others
+    # ng_link = models.CharField(max_length=200, verbose_name='ngrok link')
+    b24_webhook = models.CharField(max_length=200, verbose_name='Bitrix24 webhook')
 
     class Meta:
-        verbose_name = 'Invoice'
-        verbose_name_plural = 'Invoices'
+        verbose_name_plural = 'Server settings'

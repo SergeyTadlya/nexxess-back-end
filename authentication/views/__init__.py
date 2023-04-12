@@ -1,6 +1,4 @@
 from .Auth import login_view, CustomSignupView
-from .Main import main, b24_webhook
-from .Support import support
-from .Invoices import invoices, invoice_detail
-from .Services import services
+from .Main import main
+from .Webhook import webhook_task, webhook_invoice
 from .profile import profile_view

@@ -19,3 +19,5 @@ class CustomSignupView(SignupView):
         kwargs = super().get_form_kwargs()
         kwargs['request'] = self.request
         return kwargs
+
+

@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+{{ invoices }}
+<main class="main">
+  <div class="container">
+    <div class="main__inner">
+      <aside class="aside">
+        <div class="aside__box">
+          <div class="aside__box-top">
+            <img class="aside__top-img" src="{% static 'img/main/important.svg' %}" alt="icon">
+            <h6 class="aside__top-title">Important</h6>
+            <p class="aside__top-number">3</p>
+          </div>
+          <ul class="aside__box-list">
+            <li class="aside__box-item">
+              <p class="aside__box-text">You have earned totay:</p>
+              <p class="aside__box-money">$124.30</p>
+            </li>
+            <li class="aside__box-item">
+              <p class="aside__box-text">New servises this month:</p>
+              <p class="aside__box-money">2</p>
+            </li>
+            <li class="aside__box-item">
+              <p class="aside__box-text">Actual discounts:</p>
+              <p class="aside__box-money">10%</p>
+            </li>
+          </ul>
+        </div>
+        <div class="aside__accordion">
+          <div id="aside__accordion-top" class="aside__accordion-top">
+            <img class="aside__top-img" src="{% static 'img/main/credit-card.svg' %}" alt="icon">
+            <h6 class="aside__top-title">Payments</h6>
+            <img class="aside__top-arrow" src="{% static 'img/main/chevron-down.svg' %}" alt="icon">
+          </div>
+          <ul class="aside__accordion-list">
+            <li class="aside__accordion-item">
+              <a class="aside__accordion-link" href="#">Paypall</a>
+            </li>
+            <li class="aside__accordion-item">
+              <a class="aside__accordion-link" href="#">Payoneer</a>
+            </li>
+            <li class="aside__accordion-item">
+              <a class="aside__accordion-link" href="#">Fondy</a>
+            </li>
+          </ul>
+        </div>
+        <div class="aside__accordion">
+          <div id="aside__accordion-top" class="aside__accordion-top">
+            <img class="aside__top-img" src="{% static 'img/main/tickets.svg' %}" alt="icon">
+            <h6 class="aside__top-title">Tickets</h6>
+            <img class="aside__top-arrow" src="{% static 'img/main/chevron-down.svg' %}" alt="icon">
+          </div>
+          <ul class="aside__accordion-list">
+            <li class="aside__accordion-item">
+              <a class="aside__accordion-link" href="#">
+                <p class="aside__accordion-text">Ongoing</p>
+                <p class="aside__accordion-number number--green">2</p>
+              </a>
+            </li>
+            <li class="aside__accordion-item">
+              <a class="aside__accordion-link" href="#">
+                <p class="aside__accordion-text">Overdue</p>
+                <p class="aside__accordion-number number--red">8</p>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </aside>
+      <section class="content">
+        <div class="content__inner">
+          <div class="content__top">
+            <h1 class="title content__top-title">Main</h1>
+            <div class="content__top-search">
+              <img class="content__top-img" src="{% static 'img/main/Search.svg' %}" alt="Search">
+              <input class="content__top-input" type="text" placeholder="Search">
+            </div>
+          </div>
+          <ul class="content__list">
+            <li class="content__list-item">
+              <a class="content__list-link" href="#">Services</a>
+              <div class="content__list-body">
+                <p class="content__list-text">Learn more about products and offers in the specialized section of our services.</p>
+                <div class="content__list-info">
+                  <p class="content__info-number">35</p>
+                  <p class="content__info-text">available</p>
+                </div>
+              </div>
+            </li>
+            <li class="content__list-item">
+              <a class="content__list-link" href="#">My Services</a>
+              <div class="content__list-body">
+                <p class="content__list-text">Manage your services</p>
+                <div class="content__list-info">
+                  <p class="content__info-number">2</p>
+                  <p class="content__info-text">are used</p>
+                </div>
+              </div>
+            </li>
+            <li class="content__list-item">
+              <a class="content__list-link" href="{% url 'tasks'%}">Tickets</a>
+              <div class="content__list-body">
+                <p class="content__list-text">Get qualified sipport from experienced specialists</p>
+                <div class="content__list-info">
+                  <p class="content__info-number">{{task_count}}</p>
+                  <p class="content__info-text">new reply</p>
+                </div>
+              </div>
+            </li>
+            <li class="content__list-item">
+              <a class="content__list-link" href="{% url 'invoices'%}">Invoices</a>
+              <div class="content__list-body">
+                <p class="content__list-text">Manage invoices and check in your personal account</p>
+                <div class="content__list-info">
+                  <p class="content__info-number">{{invoice_count}}</p>
+                  <p class="content__info-text">new invoices</p>
+                </div>
+              </div>
+            </li>
+            <li class="content__list-item">
+              <a class="content__list-link" href="#">Balance</a>
+              <div class="content__list-box">
+                <div class="content__box-info">
+                  <p class="content__box-number number--green">$421</p>
+                  <p class="content__box-text">Today</p>
+                </div>
+                <div class="content__box-info">
+                  <p class="content__box-number number--yellow">$1245.6</p>
+                  <p class="content__box-text">This month</p>
+                </div>
+                <div class="content__box-info">
+                  <p class="content__box-number number--blue">$1234</p>
+                  <p class="content__box-text">This year</p>
+                </div>
+                <div class="content__box-info">
+                  <p class="content__box-number number--dark">$123454.6</p>
+                  <p class="content__box-text">All the time</p>
+                </div>
+              </div>
+            </li>
+            <li class="content__list-item">
+              <a class="content__list-link" href="#">Balance</a>
+              <div class="content__list-body">
+                <div class="content__list-info">
+                  <p class="content__info-number number--green">$421</p>
+                  <p class="content__info-text">available now</p>
+                </div>
+                <div class="content__list-info">
+                  <p class="content__info-number number--gray">$0</p>
+                  <p class="content__info-text">spent this month</p>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+{% endblock %}
