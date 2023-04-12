@@ -12,6 +12,9 @@ class Invoice(models.Model):
     is_opened = models.BooleanField(verbose_name="Opened (yes/no)", default=False, null=True)
     price = models.DecimalField(verbose_name='Price', max_digits=10, decimal_places=2, blank=True, null=True)
     created_at = models.DateTimeField(verbose_name='Create date', auto_now_add=True)
+    status = models.CharField(max_length=50, verbose_name='Status', blank=True, null=True)
+    date = models.CharField(max_length=50, verbose_name='Date', blank=True, null=True)
+    due_date = models.CharField(max_length=50, verbose_name='Due date', blank=True, null=True)
 
     def __str__(self):
         return f'Invoice {self.invoice_id}, responsible - {self.responsible}'

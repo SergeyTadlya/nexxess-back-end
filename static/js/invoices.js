@@ -12,7 +12,7 @@ accordionBtn.forEach((button, index) => {
   })
 })
 
-//_________________
+//_________*BLOCK*Cotent-top______
 
 const contentTopBox = document.querySelector('#content__top-box')
 const contentTopList = document.querySelector('#content__top-list')
@@ -48,17 +48,14 @@ function menu() {
   document.body.style.overflow = overflowValue
 }
 
-//_______MOBILE_____
+//_______Mobile content arrow_____
 
-const mobileBox = document.querySelectorAll('.content__mobile-box')
-const mobileBtn = document.querySelectorAll('.content__mobile-btn')
-// const mobileBtn = document.querySelectorAll('.content__mobile-btn')
+const contentBox = document.querySelectorAll('.content__body-box')
+const contentBtn = document.querySelectorAll('.content__body-btn')
 
-mobileBtn.forEach((button, index) => {
+contentBtn.forEach((button, index) => {
   button.addEventListener('click', (e) => {
-    mobileBox[index].classList.toggle('content__mobile-activeBox')
-    mobileBtn[index].classList.toggle('content__mobile-activeBtn')
-    // mobileBox[index].style.height = '125px'
-    // console.log();
+    contentBox[index].classList.toggle('content__body-activeBox')
+    contentBtn[index].classList.toggle('content__body-activeBtn')
   })
 })
