@@ -3,9 +3,7 @@
 {% load i18n %}
 {% load account socialaccount %}
 {% block head_title %}{% trans "Sign In" %}{% endblock %}
-{% block content %}
-<link rel="stylesheet"  href="{% static 'css/style.css' %}">
-<link rel="stylesheet"  href="{% static 'css/authentication.css' %}">
+{% block auth %}
 <head>
   <style>
     ul.errorlist {
@@ -21,7 +19,7 @@
             <form class="authentication__login" method="POST" action="{% url 'account_login' %}">
                 {% csrf_token %}
                 <div class="authentication__login-img">
-                    <img src="{% static 'img/logo.png' %}" alt="logo">
+                    <img src="{% static 'images/logo.png' %}" alt="logo">
                 </div>
                 <ul class="errorlist" >
                     {% for key, value in form.errors.items %}
@@ -52,4 +50,8 @@
         </div>
     </section>
 </main>
+{% endblock %}
+{% block extra_js %}
+    <script src="{% static 'js/authentication.js' %}"></script>
+    <script src="{% static 'js/my-account.js' %}"></script>
 {% endblock %}

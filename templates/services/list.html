@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/services.css' %}">
+{% endblock %}
+
+{% block left_menu %}
+  <div class="aside__accordion">
+    <div id="aside__accordion-top" class="aside__accordion-top">
+      <img class="aside__top-img" src="{% static 'images/services.svg' %}" alt="icon">
+      <h6 class="aside__top-title">Your servises</h6>
+      <img class="aside__top-arrow" src="{% static 'images/chevron-down.svg' %}" alt="icon">
+    </div>
+    <ul class="aside__accordion-list">
+      <li class="aside__accordion-item">
+        <a class="aside__accordion-link" href="#">Your servises 1</a>
+      </li>
+      <li class="aside__accordion-item">
+        <a class="aside__accordion-link" href="#">Your servises 1</a>
+      </li>
+    </ul>
+  </div>
+  <div class="aside__accordion">
+    <div id="aside__accordion-top" class="aside__accordion-top">
+      <img class="aside__top-img" src="{% static 'images/tickets.svg' %}" alt="icon">
+      <h6 class="aside__top-title">Tickets</h6>
+      <img class="aside__top-arrow" src="{% static 'images/chevron-down.svg' %}" alt="icon">
+    </div>
+
+    <ul class="aside__accordion-list">
+      <li class="aside__accordion-item">
+        <a class="aside__accordion-link" href="#">
+          <p class="aside__accordion-text">Ongoing</p>
+          <p class="aside__accordion-number font--green">2</p>
+        </a>
+      </li>
+      <li class="aside__accordion-item">
+        <a class="aside__accordion-link" href="#">
+          <p class="aside__accordion-text">Overdue</p>
+          <p class="aside__accordion-number font--red">8</p>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div class="aside__accordion">
+    <div id="aside__accordion-top" class="aside__accordion-top">
+      <img class="aside__top-img" src="{% static 'images/credit-card.svg' %}" alt="icon">
+      <h6 class="aside__top-title">Payments</h6>
+      <img class="aside__top-arrow" src="{% static 'images/chevron-down.svg' %}" alt="icon">
+    </div>
+
+    <ul class="aside__accordion-list">
+      <li class="aside__accordion-item">
+        <a class="aside__accordion-link" href="#">Payments</a>
+      </li>
+      <li class="aside__accordion-item">
+        <a class="aside__accordion-link" href="#">Payoneer</a>
+      </li>
+      <li class="aside__accordion-item">
+        <a class="aside__accordion-link" href="#">Fondy</a>
+      </li>
+    </ul>
+  </div>
+{% endblock left_menu %}
+
+{% block content %}
+  <div class="content__inner">
+    <div class="content__top">
+      <div class="content__top-body">
+        <h1 class="title content__top-title">Services</h1>
+        <div id="content__top-box" class="content__top-box">
+          <p class="content__top-text">Showing</p>
+          <p id="content__top-number" class="content__top-number">10</p>
+          <img src="{% static 'images/invoices/arrow-drop-down.svg' %}" alt="icon">
+          <p class="content__top-numbers">of {{ services_count }}</p>
+          <ul id="content__top-list" class="content__top-list">
+            <li class="content__top-item">10</li>
+            <li class="content__top-item">35</li>
+            <li class="content__top-item">All</li>
+          </ul>
+        </div>
+      </div>
+      <div class="content__top-search">
+        <img class="content__top-img" src="{% static 'images/Search.svg' %}" alt="Search">
+        <input class="content__top-input" type="text" placeholder="Search">
+      </div>
+    </div>
+
+    <ul class="content__list">
+      {% for service in services_info %}
+        {% if service.ACTIVE == "Y" %}
+          <li class="content__list-item">
+            <div class="content__list-box">
+              <div class="content__list-img">
+                {% if service.PREVIEW_PICTURE == "None" %}
+                  <img src="{% static 'images/service.jpg' %}" alt="images">
+                {% else %}
+                  <img src="{% static 'images/service.jpg' %}" alt="images">
+                {% endif %}
+              </div>
+              <p class="content__list-title">{{service.NAME}}</p>
+            </div>
+            <p class="content__list-text">{{ service.DESCRIPTION }}</p>
+            <div class="content__list-box">
+              <p class="content__list-price">
+                {% if service.CURRENCY_ID == "EUR" %}
+                  {% with '€' as currency %}
+                    {{ currency }}
+                  {% endwith %}
+                {% elif service.CURRENCY_ID == "USD" %}
+                  {% with '$' as currency %}
+                    {{ currency }}
+                  {% endwith %}
+                {% endif %}
+                {{ service.PRICE }}
+              </p>
+              <a class="content__list-link" href="#">Order</a>
+            </div>
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock content %}
+
+{% block extra_js %}
+    <script src="{% static 'js/services.js' %}"></script>
+{% endblock %}

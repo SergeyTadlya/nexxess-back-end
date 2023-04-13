@@ -134,7 +134,7 @@
                 </div>
 
                 <ul class="aside__accordion-list">
-                  <li class="aside__accordion-item">
+                  <li class="aside__accordion-item aside__accordion-date">
                     <p class="aside__accordion-text">From:</p>
                     <select id="aside__select-month" class="aside__accordion-select">
                       <option class="aside__accordion-option" value="january">January</option>
@@ -216,7 +216,7 @@
                       <option value="2023">2023</option>
                     </select>
                   </li>
-                  <li class="aside__accordion-item">
+                  <li class="aside__accordion-item aside__accordion-date">
                     <p class="aside__accordion-text">To:</p>
                     <select id="aside__select-month" class="aside__accordion-select">
                       <option class="aside__accordion-option" value="january">January</option>
@@ -575,105 +575,243 @@
               </div>
 
               <ul class="content__titles">
-                <li class="content__titles-item">
-                  <img src="./images/invoices/arrow-swap_top-down.svg" alt="arrow">
-                  <p class="content__titles-text">Ticked id#</p>
-                </li>
-                <li class="content__titles-item">
-                  <img src="./images/invoices/arrow-swap_top-down.svg" alt="arrow">
-                  <p class="content__titles-text">Name</p>
-                </li>
-                <li class="content__titles-item">
-                  <img src="./images/invoices/arrow-swap_top-down.svg" alt="arrow">
-                  <p class="content__titles-text">Ticket Date</p>
-                </li>
-                <li class="content__titles-item">
-                  <img src="./images/invoices/arrow-swap_top.svg" alt="arrow">
-                  <p class="content__titles-text">Due Date</p>
-                </li>
-                <li class="content__titles-item">
-                  <img src="./images/invoices/arrow-swap_down.svg" alt="arrow">
-                  <p class="content__titles-text">Status</p>
-                </li>
+                <li class="content__titles-item">Ticked id#</li>
+                <li class="content__titles-item">Name</li>
+                <li class="content__titles-item">Ticket Date</li>
+                <li class="content__titles-item">Due Date</li>
+                <li class="content__titles-item">Status</li>
               </ul>
 
               <div class="content__inner">
                 <div class="content__body">
-                  <p class="content__body-titleDate">16th Mar 2023</p>
+                  <p class="content__body-titleDate">29th Mar 2023</p>
                   <ul class="content__body-list">
-                    <li class="content__body-item">
-                      <p class="content__body-number">1</p>
-                      <div class="content__body-box style--width">
-                        <img src="./images/invoices/print.svg" alt="print">
-                        <p class="content__body-invoice">0000001</p>
-                      </div>
-                      <p class="content__body-money style--width">Title 1</p>
-                      <p class="content__body-date style--width">16 Mar 2023</p>
-                      <p class="content__body-date style--width">29 Mar 2023</p>
-                      <p class="content__body-status style--width font--green">Paid</p>
+                    <li class="content__body-box">
+                      <ul class="content__body-titles">
+                        <li class="content__body-title">Ticked id#</li>
+                        <li class="content__body-title">Status</li>
+                        <li class="content__body-title">Name</li>
+                        <li class="content__body-title">Ticket Date</li>
+                        <li class="content__body-title">Due Date</li>
+                      </ul>
+  
+                      <ul class="content__body-items">
+                        <p class="content__body-number">1</p>
+                        <li class="content__body-item style--width">
+                          <img src="./images/invoices/print.svg" alt="print">
+                          <p class="content__body-text">0000001</p>
+                        </li>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-name">Title 1</p>
+                        </li>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-date">27 Mar 2023</p>
+                        </li>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-date">27 Mar 2023</p>
+                        </li>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-status style--width font--green">Ongoing</p>
+                        </li>
+                      </ul>
+
                       <div class="content__body-messages">
                         <p>2</p>
                         <img src="./images/mail.svg" alt="print">
                       </div>
+  
+                      <button class="content__body-btn">
+                        <img class="content__body-img" src="./images/chevron.svg" alt="arrow">
+                      </button>
                     </li>
-                    <li class="content__body-item">
-                      <p class="content__body-number">2</p>
-                      <div class="content__body-box style--width">
-                        <img src="./images/invoices/print.svg" alt="print">
-                        <p class="content__body-invoice">0000001</p>
-                      </div>
-                      <p class="content__body-money style--width">Title 2</p>
-                      <p class="content__body-date style--width">16 Mar 2023</p>
-                      <p class="content__body-date style--width">29 Mar 2023</p>
-                      <p class="content__body-status style--width font--blue">Refunded</p>
+                    <li class="content__body-box">
+                      <ul class="content__body-titles">
+                        <li class="content__body-title">Ticked id#</li>
+                        <li class="content__body-title">Status</li>
+                        <li class="content__body-title">Name</li>
+                        <li class="content__body-title">Ticket Date</li>
+                        <li class="content__body-title">Due Date</li>
+                      </ul>
+  
+                      <ul class="content__body-items">
+                        <p class="content__body-number">2</p>
+                        <li class="content__body-item style--width">
+                          <img src="./images/invoices/print.svg" alt="print">
+                          <p class="content__body-text">0000002</p>
+                        </li>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-name">Title 1</p>
+                        </li>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-date">27 Mar 2023</p>
+                        </li>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-date">28 Mar 2023</p>
+                        </li>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-status style--width font--pink">Overdue</p>
+                        </li>
+                      </ul>
+
                       <div class="content__body-messages">
                       </div>
+  
+                      <button class="content__body-btn">
+                        <img class="content__body-img" src="./images/chevron.svg" alt="arrow">
+                      </button>
                     </li>
-                    <li class="content__body-item">
-                      <p class="content__body-number">3</p>
-                      <div class="content__body-box style--width">
-                        <img src="./images/invoices/print.svg" alt="print">
-                        <p class="content__body-invoice">0000001</p>
-                      </div>
-                      <p class="content__body-money style--width">Title 3</p>
-                      <p class="content__body-date style--width">16 Mar 2023</p>
-                      <p class="content__body-date style--width">29 Mar 2023</p>
-                      <p class="content__body-status style--width font--red">Cancelled</p>
+                    <li class="content__body-box">
+                      <ul class="content__body-titles">
+                        <li class="content__body-title">Ticked id#</li>
+                        <li class="content__body-title">Status</li>
+                        <li class="content__body-title">Name</li>
+                        <li class="content__body-title">Ticket Date</li>
+                        <li class="content__body-title">Due Date</li>
+                      </ul>
+  
+                      <ul class="content__body-items">
+                        <p class="content__body-number">3</p>
+                        <li class="content__body-item style--width">
+                          <img src="./images/invoices/print.svg" alt="print">
+                          <p class="content__body-text">0000001</p>
+                        </li>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-name">Title 1</p>
+                        </li>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-date">27 Mar 2023</p>
+                        </li>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-date">28 Mar 2023</p>
+                        </li>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-status style--width font--green">Ongoing</p>
+                        </li>
+                      </ul>
+
                       <div class="content__body-messages">
                       </div>
+  
+                      <button class="content__body-btn">
+                        <img class="content__body-img" src="./images/chevron.svg" alt="arrow">
+                      </button>
                     </li>
                   </ul>
                 </div>
                 <div class="content__body">
-                  <p class="content__body-titleDate">15th Mar 2023</p>
+                  <p class="content__body-titleDate">29th Mar 2023</p>
                   <ul class="content__body-list">
-                    <li class="content__body-item">
-                      <p class="content__body-number">4</p>
-                      <div class="content__body-box style--width">
-                        <img src="./images/invoices/print.svg" alt="print">
-                        <p class="content__body-invoice">0000001</p>
-                      </div>
-                      <p class="content__body-money style--width">Title 4</p>
-                      <p class="content__body-date style--width">15 Mar 2023</p>
-                      <p class="content__body-date style--width">29 Mar 2023</p>
-                      <p class="content__body-status style--width font--green">Paid</p>
+                    <li class="content__body-box">
+                      <ul class="content__body-titles">
+                        <li class="content__body-title">Ticked id#</li>
+                        <li class="content__body-title">Status</li>
+                        <li class="content__body-title">Name</li>
+                        <li class="content__body-title">Ticket Date</li>
+                        <li class="content__body-title">Due Date</li>
+                      </ul>
+  
+                      <ul class="content__body-items">
+                        <p class="content__body-number">1</p>
+                        <li class="content__body-item style--width">
+                          <img src="./images/invoices/print.svg" alt="print">
+                          <p class="content__body-text">0000001</p>
+                        </li>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-name">Title 1</p>
+                        </li>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-date">27 Mar 2023</p>
+                        </li>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-date">27 Mar 2023</p>
+                        </li>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-status style--width font--yellow">Closed</p>
+                        </li>
+                      </ul>
+
                       <div class="content__body-messages">
                         <p>2</p>
                         <img src="./images/mail.svg" alt="print">
                       </div>
+  
+                      <button class="content__body-btn">
+                        <img class="content__body-img" src="./images/chevron.svg" alt="arrow">
+                      </button>
                     </li>
-                    <li class="content__body-item">
-                      <p class="content__body-number">5</p>
-                      <div class="content__body-box style--width">
-                        <img src="./images/invoices/print.svg" alt="print">
-                        <p class="content__body-invoice">0000001</p>
-                      </div>
-                      <p class="content__body-money style--width">Title 5</p>
-                      <p class="content__body-date style--width">15 Mar 2023</p>
-                      <p class="content__body-date style--width">29 Mar 2023</p>
-                      <p class="content__body-status style--width font--green">Paid</p>
+                    <li class="content__body-box">
+                      <ul class="content__body-titles">
+                        <li class="content__body-title">Ticked id#</li>
+                        <li class="content__body-title">Status</li>
+                        <li class="content__body-title">Name</li>
+                        <li class="content__body-title">Ticket Date</li>
+                        <li class="content__body-title">Due Date</li>
+                      </ul>
+  
+                      <ul class="content__body-items">
+                        <p class="content__body-number">2</p>
+                        <li class="content__body-item style--width">
+                          <img src="./images/invoices/print.svg" alt="print">
+                          <p class="content__body-text">0000004</p>
+                        </li>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-name">Title 1</p>
+                        </li>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-date">27 Mar 2023</p>
+                        </li>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-date">27 Mar 2023</p>
+                        </li>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-status style--width font--yellow">Closed</p>
+                        </li>
+                      </ul>
+
                       <div class="content__body-messages">
                       </div>
+  
+                      <button class="content__body-btn">
+                        <img class="content__body-img" src="./images/chevron.svg" alt="arrow">
+                      </button>
+                    </li>
+                    <li class="content__body-box">
+                      <ul class="content__body-titles">
+                        <li class="content__body-title">Ticked id#</li>
+                        <li class="content__body-title">Status</li>
+                        <li class="content__body-title">Name</li>
+                        <li class="content__body-title">Ticket Date</li>
+                        <li class="content__body-title">Due Date</li>
+                      </ul>
+  
+                      <ul class="content__body-items">
+                        <p class="content__body-number">6</p>
+                        <li class="content__body-item style--width">
+                          <img src="./images/invoices/print.svg" alt="print">
+                          <p class="content__body-text">0000006</p>
+                        </li>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-name">Title 1</p>
+                        </li>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-date">27 Mar 2023</p>
+                        </li>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-date">27 Mar 2023</p>
+                        </li>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-status style--width font--yellow">Ongoing</p>
+                        </li>
+                      </ul>
+
+                      <div class="content__body-messages">
+                        <p>2</p>
+                        <img src="./images/mail.svg" alt="print">
+                      </div>
+  
+                      <button class="content__body-btn">
+                        <img class="content__body-img" src="./images/chevron.svg" alt="arrow">
+                      </button>
                     </li>
                   </ul>
                 </div>

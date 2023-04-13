@@ -1,51 +1,56 @@
-{% extends 'base.html' %}
-{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NEXXESS</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/invoices.css" />
+  </head>
 
-  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/invoices.css' %}">
-{% block content %}
-<!--<body>-->
-<!--    <header class="header">-->
-<!--      <div class="container">-->
-<!--        <div class="header__inner">-->
-<!--          <a class="header__link" href="./main.html">-->
-<!--            <img src="./images/logo.png" alt="logo">-->
-<!--          </a>-->
+  <body>
+    <header class="header">
+      <div class="container">
+        <div class="header__inner">
+          <a class="header__link" href="./main.html">
+            <img src="./images/logo.png" alt="logo">
+          </a>
 
-<!--          <nav class="nav">-->
-<!--            <a class="nav__burger">-->
-<!--              <span class="nav__burger-line"></span>-->
-<!--            </a>-->
-<!--            <ul class="nav__list">-->
-<!--              <li class="nav__list-item">-->
-<!--                <a class="nav__item-link" href="./main.html">Main</a>-->
-<!--              </li>-->
-<!--              <li class="nav__list-item">-->
-<!--                <a class="nav__item-link" href="#">Support</a>-->
-<!--              </li>-->
-<!--              <li class="nav__list-item">-->
-<!--                <a class="nav__item-link" href="./services.html">Services</a>-->
-<!--              </li>-->
-<!--              <li class="nav__list-item">-->
-<!--                <a class="nav__item-link" href="№">FAQ</a>-->
-<!--              </li>-->
-<!--            </ul>-->
-<!--          </nav>-->
+          <nav class="nav">
+            <a class="nav__burger">
+              <span class="nav__burger-line"></span>
+            </a>
+            <ul class="nav__list">
+              <li class="nav__list-item">
+                <a class="nav__item-link" href="./main.html">Main</a>
+              </li>
+              <li class="nav__list-item">
+                <a class="nav__item-link" href="#">Support</a>
+              </li>
+              <li class="nav__list-item">
+                <a class="nav__item-link" href="./services.html">Services</a>
+              </li>
+              <li class="nav__list-item">
+                <a class="nav__item-link" href="№">FAQ</a>
+              </li>
+            </ul>
+          </nav>
 
-<!--          <div class="header__box">-->
-<!--            <a class="header__box-user" href="#">-->
-<!--              <img class="header__box-img" src="./images/user.svg" alt="user">-->
-<!--            </a>-->
-<!--            <p class="header__box-text">Hello, John John</p>-->
-<!--            <a class="header__box-link" href="#">Log Out</a>-->
-<!--          </div>-->
+          <div class="header__box">
+            <a class="header__box-user" href="#">
+              <img class="header__box-img" src="./images/user.svg" alt="user">
+            </a>
+            <p class="header__box-text">Hello, John John</p>
+            <a class="header__box-link" href="#">Log Out</a>
+          </div>
 
-<!--          <a class="burger">-->
-<!--            <span class="burger-line"></span>-->
-<!--          </a>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </header>-->
+          <a class="burger">
+            <span class="burger-line"></span>
+          </a>
+        </div>
+      </div>
+    </header>
 
     <main class="main">
       <div class="container">
@@ -53,13 +58,13 @@
           <aside class="aside">
               <div class="mobile__box">
                 <a class="mobile__box-user" href="#">
-                  <img class="mobile__box-img" src="/images/user.svg""{% static 'authentication/img/main/Search.svg' %}" alt="user">
+                  <img class="mobile__box-img" src="./images/user.svg" alt="user">
                 </a>
                 <p class="mobile__box-text">Hello, John John</p>
               </div>
               <div class="aside__box">
                 <div class="aside__box-top">
-                  <img class="aside__top-img" src="./images/important.svg""{% static 'authentication/img/main/Search.svg' %}" alt="icon">
+                  <img class="aside__top-img" src="./images/important.svg" alt="icon">
                   <h6 class="aside__top-title">Important</h6>
                   <p class="aside__top-number">3</p>
                 </div>
@@ -81,9 +86,9 @@
 
               <div class="aside__accordion">
                 <div id="aside__accordion-top" class="aside__accordion-top">
-                  <img class="aside__top-img" src="./images/filter.svg""{% static 'authentication/img/main/Search.svg' %}" alt="icon">
+                  <img class="aside__top-img" src="./images/filter.svg" alt="icon">
                   <h6 class="aside__top-title">Status</h6>
-                  <img class="aside__top-arrow" src="./images/chevron-down.svg""{% static 'authentication/img/main/Search.svg' %}" alt="icon">
+                  <img class="aside__top-arrow" src="./images/chevron-down.svg" alt="icon">
                 </div>
 
                 <ul class="aside__accordion-list">
@@ -120,13 +125,13 @@
 
               <div class="aside__accordion">
                 <div id="aside__accordion-top" class="aside__accordion-top">
-                  <img class="aside__top-img" src="./images/calendar.svg""{% static 'authentication/img/main/Search.svg' %}" alt="icon">
+                  <img class="aside__top-img" src="./images/calendar.svg" alt="icon">
                   <h6 class="aside__top-title">Calendar</h6>
-                  <img class="aside__top-arrow" src="./images/chevron-down.svg""{% static 'authentication/img/main/Search.svg' %}" alt="icon">
+                  <img class="aside__top-arrow" src="./images/chevron-down.svg" alt="icon">
                 </div>
 
                 <ul class="aside__accordion-list">
-                  <li class="aside__accordion-item">
+                  <li class="aside__accordion-item aside__accordion-date">
                     <p class="aside__accordion-text">From:</p>
                     <select id="aside__select-month" class="aside__accordion-select">
                       <option class="aside__accordion-option" value="january">January</option>
@@ -208,7 +213,7 @@
                       <option value="2023">2023</option>
                     </select>
                   </li>
-                  <li class="aside__accordion-item">
+                  <li class="aside__accordion-item aside__accordion-date">
                     <p class="aside__accordion-text">To:</p>
                     <select id="aside__select-month" class="aside__accordion-select">
                       <option class="aside__accordion-option" value="january">January</option>
@@ -295,9 +300,9 @@
 
               <div class="aside__accordion">
                 <div id="aside__accordion-top" class="aside__accordion-top">
-                  <img class="aside__top-img" src="./images/credit-card.svg""{% static 'authentication/img/main/Search.svg' %}" alt="icon">
+                  <img class="aside__top-img" src="./images/credit-card.svg" alt="icon">
                   <h6 class="aside__top-title">Payments</h6>
-                  <img class="aside__top-arrow" src="./images/chevron-down.svg""{% static 'authentication/img/main/Search.svg' %}" alt="icon">
+                  <img class="aside__top-arrow" src="./images/chevron-down.svg" alt="icon">
                 </div>
 
                 <ul class="aside__accordion-list">
@@ -343,7 +348,7 @@
                   </div>
                 </div>
                 <div class="content__top-search">
-                  <img class="content__top-img" src="./images/main/Search.svg""{% static 'authentication/img/main/Search.svg' %}" alt="Search">
+                  <img class="content__top-img" src="./images/main/Search.svg" alt="Search">
                   <input class="content__top-input" type="text" placeholder="Search">
                 </div>
               </div>
@@ -370,451 +375,209 @@
                 <div class="content__body">
                   <p class="content__body-titleDate">29th Mar 2023</p>
                   <ul class="content__body-list">
-                    <li class="content__body-item">
-                      <p class="content__body-number">1</p>
-                      <div class="content__body-box style--width">
-                        <img src="./images/invoices/print.svg""{% static 'authentication/img/main/Search.svg' %}" alt="print">
-                        <p class="content__body-invoice">0000001</p>
-                      </div>
-                      <p class="content__body-date style--width">29 Mar 2023</p>
-                      <p class="content__body-date style--width">29 Mar 2023</p>
-                      <p class="content__body-money style--width">$25.80</p>
-                      <p class="content__body-status style--width font--green">Paid</p>
-                    </li>
-                    <li class="content__body-item">
-                      <p class="content__body-number">2</p>
-                      <div class="content__body-box style--width">
-                        <img src="./images/invoices/print.svg" alt="print">
-                        <p class="content__body-invoice">0000001</p>
-                      </div>
-                      <p class="content__body-date style--width">29 Mar 2023</p>
-                      <p class="content__body-date style--width">29 Mar 2023</p>
-                      <p class="content__body-money style--width">$25.80</p>
-                      <p class="content__body-status style--width font--blue">Refunded</p>
-                    </li>
-                    <li class="content__body-item">
-                      <p class="content__body-number">3</p>
-                      <div class="content__body-box style--width">
-                        <img src="./images/invoices/print.svg" alt="print">
-                        <p class="content__body-invoice">0000001</p>
-                      </div>
-                      <p class="content__body-date style--width">29 Mar 2023</p>
-                      <p class="content__body-date style--width">29 Mar 2023</p>
-                      <p class="content__body-money style--width">$25.80</p>
-                      <p class="content__body-status style--width font--red">Cancelled</p>
-                    </li>
-                  </ul>
-
-                  <ul class="content__mobile">
-
-                    <li class="content__mobile-box">
-                      <ul class="content__mobile-titles">
-                        <li class="content__mobile-title">Invoice</li>
-                        <li class="content__mobile-title">Status</li>
-                        <li class="content__mobile-title">Invoice Date</li>
-                        <li class="content__mobile-title">Due Date</li>
-                        <li class="content__mobile-title">Total</li>
+                    <li class="content__body-box">
+                      <ul class="content__body-titles">
+                        <li class="content__body-title">Invoice</li>
+                        <li class="content__body-title">Status</li>
+                        <li class="content__body-title">Invoice Date</li>
+                        <li class="content__body-title">Due Date</li>
+                        <li class="content__body-title">Total</li>
                       </ul>
   
-                      <ul class="content__mobile-list">
-                        <li class="content__mobile-item">
-                          <img src="./images/invoices/print.svg""{% static 'authentication/img/main/Search.svg' %}" alt="print">
-                          <p class="content__mobile-text">0000001</p>
-                        </li>
-                        <li class="content__mobile-item">
-                          <p class="content__mobile-status font--green">Paid</p>
-                        </li>
-                        <li class="content__mobile-item">                 <p class="content__mobile-date">27 Mar 2023</p>
-                        </li>
-                        <li class="content__mobile-item">
-                          <p class="content__mobile-date">27 Mar 2023</p>
-                        </li>
-                        <li class="content__mobile-item">
-                          <p class="content__mobile-money">$25.80</p>
-                        </li>
-                      </ul>
-  
-                      <button class="content__mobile-btn">
-                        <img class="content__mobile-img" src="./images/chevron.svg""{% static 'authentication/img/main/Search.svg' %}" alt="arrow">
-                      </button>
-                    </li>
-                    <li class="content__mobile-box">
-                      <ul class="content__mobile-titles">
-                        <li class="content__mobile-title">Invoice</li>
-                        <li class="content__mobile-title">Status</li>
-                        <li class="content__mobile-title">Invoice Date</li>
-                        <li class="content__mobile-title">Due Date</li>
-                        <li class="content__mobile-title">Total</li>
-                      </ul>
-  
-                      <ul class="content__mobile-list">
-                        <li class="content__mobile-item">
+                      <ul class="content__body-items">
+                        <p class="content__body-number">1</p>
+                        <li class="content__body-item style--width">
                           <img src="./images/invoices/print.svg" alt="print">
-                          <p class="content__mobile-text">0000002</p>
+                          <p class="content__body-text">0000001</p>
                         </li>
-                        <li class="content__mobile-item">
-                          <p class="content__mobile-status font--blue">Refunded</p>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-date">27 Mar 2023</p>
                         </li>
-                        <li class="content__mobile-item">                 <p class="content__mobile-date">27 Mar 2023</p>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-date">27 Mar 2023</p>
                         </li>
-                        <li class="content__mobile-item">
-                          <p class="content__mobile-date">27 Mar 2023</p>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-money">$25.80</p>
                         </li>
-                        <li class="content__mobile-item">
-                          <p class="content__mobile-money">$25.80</p>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-status style--width font--green">Paid</p>
                         </li>
                       </ul>
   
-                      <button class="content__mobile-btn">
-                        <img class="content__mobile-img" src="./images/chevron.svg""{% static 'authentication/img/main/Search.svg' %}" alt="arrow">
+                      <button class="content__body-btn">
+                        <img class="content__body-img" src="./images/chevron.svg" alt="arrow">
                       </button>
                     </li>
-                    <li class="content__mobile-box">
-                      <ul class="content__mobile-titles">
-                        <li class="content__mobile-title">Invoice</li>
-                        <li class="content__mobile-title">Status</li>
-                        <li class="content__mobile-title">Invoice Date</li>
-                        <li class="content__mobile-title">Due Date</li>
-                        <li class="content__mobile-title">Total</li>
+                    <li class="content__body-box">
+                      <ul class="content__body-titles">
+                        <li class="content__body-title">Invoice</li>
+                        <li class="content__body-title">Status</li>
+                        <li class="content__body-title">Invoice Date</li>
+                        <li class="content__body-title">Due Date</li>
+                        <li class="content__body-title">Total</li>
                       </ul>
   
-                      <ul class="content__mobile-list">
-                        <li class="content__mobile-item">
+                      <ul class="content__body-items">
+                        <p class="content__body-number">2</p>
+                        <li class="content__body-item style--width">
                           <img src="./images/invoices/print.svg" alt="print">
-                          <p class="content__mobile-text">0000003</p>
+                          <p class="content__body-text">0000002</p>
                         </li>
-                        <li class="content__mobile-item">
-                          <p class="content__mobile-status font--red">Cancelled</p>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-date">27 Mar 2023</p>
                         </li>
-                        <li class="content__mobile-item">                 <p class="content__mobile-date">27 Mar 2023</p>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-date">28 Mar 2023</p>
                         </li>
-                        <li class="content__mobile-item">
-                          <p class="content__mobile-date">27 Mar 2023</p>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-money">$25.80</p>
                         </li>
-                        <li class="content__mobile-item">
-                          <p class="content__mobile-money">$25.80</p>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-status style--width font--blue">Refunded</p>
                         </li>
                       </ul>
   
-                      <button class="content__mobile-btn">
-                        <img class="content__mobile-img" src="./images/chevron.svg""{% static 'authentication/img/main/Search.svg' %}" alt="arrow">
+                      <button class="content__body-btn">
+                        <img class="content__body-img" src="./images/chevron.svg" alt="arrow">
                       </button>
                     </li>
-
+                    <li class="content__body-box">
+                      <ul class="content__body-titles">
+                        <li class="content__body-title">Invoice</li>
+                        <li class="content__body-title">Status</li>
+                        <li class="content__body-title">Invoice Date</li>
+                        <li class="content__body-title">Due Date</li>
+                        <li class="content__body-title">Total</li>
+                      </ul>
+  
+                      <ul class="content__body-items">
+                        <p class="content__body-number">3</p>
+                        <li class="content__body-item style--width">
+                          <img src="./images/invoices/print.svg" alt="print">
+                          <p class="content__body-text">0000001</p>
+                        </li>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-date">27 Mar 2023</p>
+                        </li>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-date">28 Mar 2023</p>
+                        </li>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-money">$25.80</p>
+                        </li>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-status style--width font--yellow">Cancelled</p>
+                        </li>
+                      </ul>
+  
+                      <button class="content__body-btn">
+                        <img class="content__body-img" src="./images/chevron.svg" alt="arrow">
+                      </button>
+                    </li>
                   </ul>
                 </div>
                 <div class="content__body">
-                  <p class="content__body-titleDate">28th Mar 2023</p>
+                  <p class="content__body-titleDate">29th Mar 2023</p>
                   <ul class="content__body-list">
-                    <li class="content__body-item">
-                      <p class="content__body-number">4</p>
-                      <div class="content__body-box style--width">
-                        <img src="./images/invoices/print.svg""{% static 'authentication/img/main/Search.svg' %}" alt="print">
-                        <p class="content__body-invoice">0000001</p>
-                      </div>
-                      <p class="content__body-date style--width">29 Mar 2023</p>
-                      <p class="content__body-date style--width">29 Mar 2023</p>
-                      <p class="content__body-money style--width">$25.80</p>
-                      <p class="content__body-status style--width font--green">Paid</p>
-                    </li>
-                    <li class="content__body-item">
-                      <p class="content__body-number">5</p>
-                      <div class="content__body-box style--width">
-                        <img src="./images/invoices/print.svg""{% static 'authentication/img/main/Search.svg' %}" alt="print">
-                        <p class="content__body-invoice">0000001</p>
-                      </div>
-                      <p class="content__body-date style--width">29 Mar 2023</p>
-                      <p class="content__body-date style--width">29 Mar 2023</p>
-                      <p class="content__body-money style--width">$25.80</p>
-                      <p class="content__body-status style--width font--green">Paid</p>
-                    </li>
-                    <li class="content__body-item">
-                      <p class="content__body-number">6</p>
-                      <div class="content__body-box style--width">
-                        <img src="./images/invoices/print.svg""{% static 'authentication/img/main/Search.svg' %}" alt="print">
-                        <p class="content__body-invoice">0000002</p>
-                      </div>
-                      <p class="content__body-date style--width">29 Mar 2023</p>
-                      <p class="content__body-date style--width">29 Mar 2023</p>
-                      <p class="content__body-money style--width">$25.80</p>
-                      <p class="content__body-status style--width font--blue">Refunded</p>
-                    </li>
-                    <li class="content__body-item">
-                      <p class="content__body-number">7</p>
-                      <div class="content__body-box style--width">
-                        <img src="./images/invoices/print.svg""{% static 'authentication/img/main/Search.svg' %}" alt="print">
-                        <p class="content__body-invoice">0000001</p>
-                      </div>
-                      <p class="content__body-date style--width">29 Mar 2023</p>
-                      <p class="content__body-date style--width">29 Mar 2023</p>
-                      <p class="content__body-money style--width">$25.80</p>
-                      <p class="content__body-status style--width font--yellow">Unpaid</p>
-                    </li>
-                  </ul>
-
-                  <ul class="content__mobile">
-
-                    <li class="content__mobile-box">
-                      <ul class="content__mobile-titles">
-                        <li class="content__mobile-title">Invoice</li>
-                        <li class="content__mobile-title">Status</li>
-                        <li class="content__mobile-title">Invoice Date</li>
-                        <li class="content__mobile-title">Due Date</li>
-                        <li class="content__mobile-title">Total</li>
+                    <li class="content__body-box">
+                      <ul class="content__body-titles">
+                        <li class="content__body-title">Invoice</li>
+                        <li class="content__body-title">Status</li>
+                        <li class="content__body-title">Invoice Date</li>
+                        <li class="content__body-title">Due Date</li>
+                        <li class="content__body-title">Total</li>
                       </ul>
   
-                      <ul class="content__mobile-list">
-                        <li class="content__mobile-item">
-                          <img src="./images/invoices/print.svg""{% static 'authentication/img/main/Search.svg' %}" alt="print">
-                          <p class="content__mobile-text">0000003</p>
-                        </li>
-                        <li class="content__mobile-item">
-                          <p class="content__mobile-status font--green">Paid</p>
-                        </li>
-                        <li class="content__mobile-item">                 <p class="content__mobile-date">27 Mar 2023</p>
-                        </li>
-                        <li class="content__mobile-item">
-                          <p class="content__mobile-date">27 Mar 2023</p>
-                        </li>
-                        <li class="content__mobile-item">
-                          <p class="content__mobile-money">$25.80</p>
-                        </li>
-                      </ul>
-  
-                      <button class="content__mobile-btn">
-                        <img class="content__mobile-img" src="./images/chevron.svg""{% static 'authentication/img/main/Search.svg' %}" alt="arrow">
-                      </button>
-                    </li>
-                    <li class="content__mobile-box">
-                      <ul class="content__mobile-titles">
-                        <li class="content__mobile-title">Invoice</li>
-                        <li class="content__mobile-title">Status</li>
-                        <li class="content__mobile-title">Invoice Date</li>
-                        <li class="content__mobile-title">Due Date</li>
-                        <li class="content__mobile-title">Total</li>
-                      </ul>
-  
-                      <ul class="content__mobile-list">
-                        <li class="content__mobile-item">
-                          <img src="./images/invoices/print.svg""{% static 'authentication/img/main/Search.svg' %}" alt="print">
-                          <p class="content__mobile-text">0000003</p>
-                        </li>
-                        <li class="content__mobile-item">
-                          <p class="content__mobile-status font--green">Paid</p>
-                        </li>
-                        <li class="content__mobile-item">                 <p class="content__mobile-date">27 Mar 2023</p>
-                        </li>
-                        <li class="content__mobile-item">
-                          <p class="content__mobile-date">27 Mar 2023</p>
-                        </li>
-                        <li class="content__mobile-item">
-                          <p class="content__mobile-money">$25.80</p>
-                        </li>
-                      </ul>
-  
-                      <button class="content__mobile-btn">
-                        <img class="content__mobile-img" src="./images/chevron.svg""{% static 'authentication/img/main/Search.svg' %}" alt="arrow">
-                      </button>
-                    </li>
-                    <li class="content__mobile-box">
-                      <ul class="content__mobile-titles">
-                        <li class="content__mobile-title">Invoice</li>
-                        <li class="content__mobile-title">Status</li>
-                        <li class="content__mobile-title">Invoice Date</li>
-                        <li class="content__mobile-title">Due Date</li>
-                        <li class="content__mobile-title">Total</li>
-                      </ul>
-  
-                      <ul class="content__mobile-list">
-                        <li class="content__mobile-item">
-                          <img src="./images/invoices/print.svg""{% static 'authentication/img/main/Search.svg' %}" alt="print">
-                          <p class="content__mobile-text">0000006</p>
-                        </li>
-                        <li class="content__mobile-item">
-                          <p class="content__mobile-status font--blue">Refunded</p>
-                        </li>
-                        <li class="content__mobile-item">                 <p class="content__mobile-date">27 Mar 2023</p>
-                        </li>
-                        <li class="content__mobile-item">
-                          <p class="content__mobile-date">27 Mar 2023</p>
-                        </li>
-                        <li class="content__mobile-item">
-                          <p class="content__mobile-money">$25.80</p>
-                        </li>
-                      </ul>
-  
-                      <button class="content__mobile-btn">
-                        <img class="content__mobile-img" src="./images/chevron.svg""{% static 'authentication/img/main/Search.svg' %}" alt="arrow">
-                      </button>
-                    </li>
-                    <li class="content__mobile-box">
-                      <ul class="content__mobile-titles">
-                        <li class="content__mobile-title">Invoice</li>
-                        <li class="content__mobile-title">Status</li>
-                        <li class="content__mobile-title">Invoice Date</li>
-                        <li class="content__mobile-title">Due Date</li>
-                        <li class="content__mobile-title">Total</li>
-                      </ul>
-  
-                      <ul class="content__mobile-list">
-                        <li class="content__mobile-item">
-                          <img src="./images/invoices/print.svg""{% static 'authentication/img/main/Search.svg' %}" alt="print">
-                          <p class="content__mobile-text">0000007</p>
-                        </li>
-                        <li class="content__mobile-item">
-                          <p class="content__mobile-status font--yellow">Unpaid</p>
-                        </li>
-                        <li class="content__mobile-item">                 <p class="content__mobile-date">27 Mar 2023</p>
-                        </li>
-                        <li class="content__mobile-item">
-                          <p class="content__mobile-date">27 Mar 2023</p>
-                        </li>
-                        <li class="content__mobile-item">
-                          <p class="content__mobile-money">$25.80</p>
-                        </li>
-                      </ul>
-  
-                      <button class="content__mobile-btn">
-                        <img class="content__mobile-img" src="./images/chevron.svg""{% static 'authentication/img/main/Search.svg' %}" alt="arrow">
-                      </button>
-                    </li>
-
-                  </ul>
-                </div>
-                <div class="content__body">
-                  <p class="content__body-titleDate">27th Mar 2023</p>
-                  <ul class="content__body-list">
-                    <li class="content__body-item">
-                      <p class="content__body-number">8</p>
-                      <div class="content__body-box style--width">
-                        <img src="./images/invoices/print.svg""{% static 'authentication/img/main/Search.svg' %}" alt="print">
-                        <p class="content__body-invoice">0000001</p>
-                      </div>
-                      <p class="content__body-date style--width">27 Mar 2023</p>
-                      <p class="content__body-date style--width">27 Mar 2023</p>
-                      <p class="content__body-money style--width">$25.80</p>
-                      <p class="content__body-status style--width font--yellow">Unpaid</p>
-                    </li>
-                    <li class="content__body-item">
-                      <p class="content__body-number">9</p>
-                      <div class="content__body-box style--width">
-                        <img src="./images/invoices/print.svg""{% static 'authentication/img/main/Search.svg' %}" alt="print">
-                        <p class="content__body-invoice">0000001</p>
-                      </div>
-                      <p class="content__body-date style--width">27 Mar 2023</p>
-                      <p class="content__body-date style--width">27 Mar 2023</p>
-                      <p class="content__body-money style--width">$25.80</p>
-                      <p class="content__body-status style--width font--green">Paid</p>
-                    </li>
-                    <li class="content__body-item">
-                      <p class="content__body-number">10</p>
-                      <div class="content__body-box style--width">
-                        <img src="./images/invoices/print.svg""{% static 'authentication/img/main/Search.svg' %}"alt="print">
-                        <p class="content__body-invoice">0000001</p>
-                      </div>
-                      <p class="content__body-date style--width">27 Mar 2023</p>
-                      <p class="content__body-date style--width">27 Mar 2023</p>
-                      <p class="content__body-money style--width">$25.80</p>
-                      <p class="content__body-status style--width font--yellow">Unpaid</p>
-                    </li>
-                  </ul>
-
-                  <ul class="content__mobile">
-
-                    <li class="content__mobile-box">
-                      <ul class="content__mobile-titles">
-                        <li class="content__mobile-title">Invoice</li>
-                        <li class="content__mobile-title">Status</li>
-                        <li class="content__mobile-title">Invoice Date</li>
-                        <li class="content__mobile-title">Due Date</li>
-                        <li class="content__mobile-title">Total</li>
-                      </ul>
-  
-                      <ul class="content__mobile-list">
-                        <li class="content__mobile-item">
-                          <img src="./images/invoices/print.svg""{% static 'authentication/img/main/Search.svg' %}" alt="print">
-                          <p class="content__mobile-text">0000008</p>
-                        </li>
-                        <li class="content__mobile-item">
-                          <p class="content__mobile-status font--yellow">Unpaid</p>
-                        </li>
-                        <li class="content__mobile-item">                 <p class="content__mobile-date">27 Mar 2023</p>
-                        </li>
-                        <li class="content__mobile-item">
-                          <p class="content__mobile-date">27 Mar 2023</p>
-                        </li>
-                        <li class="content__mobile-item">
-                          <p class="content__mobile-money">$25.80</p>
-                        </li>
-                      </ul>
-  
-                      <button class="content__mobile-btn">
-                        <img src="./images/chevron.svg""{% static 'authentication/img/main/Search.svg' %}" alt="arrow">
-                      </button>
-                    </li>
-                    <li class="content__mobile-box">
-                      <ul class="content__mobile-titles">
-                        <li class="content__mobile-title">Invoice</li>
-                        <li class="content__mobile-title">Status</li>
-                        <li class="content__mobile-title">Invoice Date</li>
-                        <li class="content__mobile-title">Due Date</li>
-                        <li class="content__mobile-title">Total</li>
-                      </ul>
-  
-                      <ul class="content__mobile-list">
-                        <li class="content__mobile-item">
+                      <ul class="content__body-items">
+                        <p class="content__body-number">1</p>
+                        <li class="content__body-item style--width">
                           <img src="./images/invoices/print.svg" alt="print">
-                          <p class="content__mobile-text">0000003</p>
+                          <p class="content__body-text">0000001</p>
                         </li>
-                        <li class="content__mobile-item">
-                          <p class="content__mobile-status font--green">Paid</p>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-date">27 Mar 2023</p>
                         </li>
-                        <li class="content__mobile-item">                 <p class="content__mobile-date">27 Mar 2023</p>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-date">27 Mar 2023</p>
                         </li>
-                        <li class="content__mobile-item">
-                          <p class="content__mobile-date">27 Mar 2023</p>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-money">$25.80</p>
                         </li>
-                        <li class="content__mobile-item">
-                          <p class="content__mobile-money">$25.80</p>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-status style--width font--green">Paid</p>
                         </li>
                       </ul>
   
-                      <button class="content__mobile-btn">
-                        <img src="./images/chevron.svg" alt="arrow">
+                      <button class="content__body-btn">
+                        <img class="content__body-img" src="./images/chevron.svg" alt="arrow">
                       </button>
                     </li>
-                    <li class="content__mobile-box">
-                      <ul class="content__mobile-titles">
-                        <li class="content__mobile-title">Invoice</li>
-                        <li class="content__mobile-title">Status</li>
-                        <li class="content__mobile-title">Invoice Date</li>
-                        <li class="content__mobile-title">Due Date</li>
-                        <li class="content__mobile-title">Total</li>
+                    <li class="content__body-box">
+                      <ul class="content__body-titles">
+                        <li class="content__body-title">Invoice</li>
+                        <li class="content__body-title">Status</li>
+                        <li class="content__body-title">Invoice Date</li>
+                        <li class="content__body-title">Due Date</li>
+                        <li class="content__body-title">Total</li>
                       </ul>
   
-                      <ul class="content__mobile-list">
-                        <li class="content__mobile-item">
+                      <ul class="content__body-items">
+                        <p class="content__body-number">2</p>
+                        <li class="content__body-item style--width">
                           <img src="./images/invoices/print.svg" alt="print">
-                          <p class="content__mobile-text">0000010</p>
+                          <p class="content__body-text">0000004</p>
                         </li>
-                        <li class="content__mobile-item">
-                          <p class="content__mobile-status font--yellow">Unpaid</p>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-date">27 Mar 2023</p>
                         </li>
-                        <li class="content__mobile-item">                 <p class="content__mobile-date">27 Mar 2023</p>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-date">27 Mar 2023</p>
                         </li>
-                        <li class="content__mobile-item">
-                          <p class="content__mobile-date">27 Mar 2023</p>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-money">$25.80</p>
                         </li>
-                        <li class="content__mobile-item">
-                          <p class="content__mobile-money">$25.80</p>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-status style--width font--green">Paid</p>
                         </li>
                       </ul>
   
-                      <button class="content__mobile-btn">
-                        <img src="./images/chevron.svg" alt="arrow">
+                      <button class="content__body-btn">
+                        <img class="content__body-img" src="./images/chevron.svg" alt="arrow">
                       </button>
                     </li>
-
+                    <li class="content__body-box">
+                      <ul class="content__body-titles">
+                        <li class="content__body-title">Invoice</li>
+                        <li class="content__body-title">Status</li>
+                        <li class="content__body-title">Invoice Date</li>
+                        <li class="content__body-title">Due Date</li>
+                        <li class="content__body-title">Total</li>
+                      </ul>
+  
+                      <ul class="content__body-items">
+                        <p class="content__body-number">6</p>
+                        <li class="content__body-item style--width">
+                          <img src="./images/invoices/print.svg" alt="print">
+                          <p class="content__body-text">0000006</p>
+                        </li>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-date">27 Mar 2023</p>
+                        </li>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-date">27 Mar 2023</p>
+                        </li>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-money">$25.80</p>
+                        </li>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-status style--width font--yellow">Unpaid</p>
+                        </li>
+                      </ul>
+  
+                      <button class="content__body-btn">
+                        <img class="content__body-img" src="./images/chevron.svg" alt="arrow">
+                      </button>
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -823,5 +586,5 @@
       </div>
     </main>
     <script src="js/invoices.js"></script>
-<script src="{% static 'authentication/js/invoices.js' %}"></script>
-{% endblock %}
+  </body>
+</html>

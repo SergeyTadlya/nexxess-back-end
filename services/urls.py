@@ -7,7 +7,6 @@ from . import views
 urlpatterns = [
     # services pages
     path('', views.services, name='services'),
-
 ]
 
 if settings.DEBUG:
