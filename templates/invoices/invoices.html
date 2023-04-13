@@ -4,61 +4,19 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/invoices.css' %}">
 {% block content %}
   <body>
-    <header class="header">
-      <div class="container">
-        <div class="header__inner">
-          <a class="header__link" href="./main.html">
-            <img src="./images/logo.png" alt="logo">
-          </a>
-
-          <nav class="nav">
-            <a class="nav__burger">
-              <span class="nav__burger-line"></span>
-            </a>
-            <ul class="nav__list">
-              <li class="nav__list-item">
-                <a class="nav__item-link" href="./main.html">Main</a>
-              </li>
-              <li class="nav__list-item">
-                <a class="nav__item-link" href="#">Support</a>
-              </li>
-              <li class="nav__list-item">
-                <a class="nav__item-link" href="./services.html">Services</a>
-              </li>
-              <li class="nav__list-item">
-                <a class="nav__item-link" href="№">FAQ</a>
-              </li>
-            </ul>
-          </nav>
-
-          <div class="header__box">
-            <a class="header__box-user" href="#">
-              <img class="header__box-img" src="./images/user.svg" alt="user">
-            </a>
-            <p class="header__box-text">Hello, John John</p>
-            <a class="header__box-link" href="#">Log Out</a>
-          </div>
-
-          <a class="burger">
-            <span class="burger-line"></span>
-          </a>
-        </div>
-      </div>
-    </header>
-
-    <main class="main">
+  <main class="main">
       <div class="container">
         <div class="main__inner">
           <aside class="aside">
               <div class="mobile__box">
                 <a class="mobile__box-user" href="#">
-                  <img class="mobile__box-img" src="./images/user.svg" alt="user">
+                  <img class="mobile__box-img" src="{% static 'images//user.svg' %}" alt="user">
                 </a>
                 <p class="mobile__box-text">Hello, John John</p>
               </div>
               <div class="aside__box">
                 <div class="aside__box-top">
-                  <img class="aside__top-img" src="./images/important.svg" alt="icon">
+                  <img class="aside__top-img" src="{% static 'images/important.svg' %}" alt="icon">
                   <h6 class="aside__top-title">Important</h6>
                   <p class="aside__top-number">3</p>
                 </div>
@@ -369,6 +327,7 @@
                 <div class="content__body">
                   <p class="content__body-titleDate">29th Mar 2023</p>
                   <ul class="content__body-list">
+                    {% for invoice in invoices %}
                     <li class="content__body-box">
                       <ul class="content__body-titles">
                         <li class="content__body-title">Invoice</li>
@@ -377,116 +336,6 @@
                         <li class="content__body-title">Due Date</li>
                         <li class="content__body-title">Total</li>
                       </ul>
-
-                      <ul class="content__body-items">
-                        <p class="content__body-number">1</p>
-                        <li class="content__body-item style--width">
-                          <img src="{% static '/images/invoices/print.svg' %}" alt="print">
-                          <p class="content__body-text">0000001</p>
-                        </li>
-                        <li class="content__body-item style--width">
-                          <p class="content__body-date">27 Mar 2023</p>
-                        </li>
-                        <li class="content__body-item style--width">
-                          <p class="content__body-date">27 Mar 2023</p>
-                        </li>
-                        <li class="content__body-item style--width">
-                          <p class="content__body-money">$25.80</p>
-                        </li>
-                        <li class="content__body-item style--width">
-                          <p class="content__body-status style--width font--green">Paid</p>
-                        </li>
-                      </ul>
-
-                      <button class="content__body-btn">
-                        <img class="content__body-img" src="{% static '/images/chevron.svg' %}" alt="arrow">
-                      </button>
-                    </li>
-                    <li class="content__body-box">
-                      <ul class="content__body-titles">
-                        <li class="content__body-title">Invoice</li>
-                        <li class="content__body-title">Status</li>
-                        <li class="content__body-title">Invoice Date</li>
-                        <li class="content__body-title">Due Date</li>
-                        <li class="content__body-title">Total</li>
-                      </ul>
-
-                      <ul class="content__body-items">
-                        <p class="content__body-number">2</p>
-                        <li class="content__body-item style--width">
-                          <img src="{% static '/images/invoices/print.svg' %}" alt="print">
-                          <p class="content__body-text">0000002</p>
-                        </li>
-                        <li class="content__body-item style--width">
-                          <p class="content__body-date">27 Mar 2023</p>
-                        </li>
-                        <li class="content__body-item style--width">
-                          <p class="content__body-date">28 Mar 2023</p>
-                        </li>
-                        <li class="content__body-item style--width">
-                          <p class="content__body-money">$25.80</p>
-                        </li>
-                        <li class="content__body-item style--width">
-                          <p class="content__body-status style--width font--blue">Refunded</p>
-                        </li>
-                      </ul>
-
-                      <button class="content__body-btn">
-                        <img class="content__body-img" src="{% static '/images/chevron.svg' %}" alt="arrow">
-                      </button>
-                    </li>
-                    <li class="content__body-box">
-                      <ul class="content__body-titles">
-                        <li class="content__body-title">Invoice</li>
-                        <li class="content__body-title">Status</li>
-                        <li class="content__body-title">Invoice Date</li>
-                        <li class="content__body-title">Due Date</li>
-                        <li class="content__body-title">Total</li>
-                      </ul>
-
-                      <ul class="content__body-items">
-                        <p class="content__body-number">3</p>
-                        <li class="content__body-item style--width">
-                          <img src="{% static '/images/invoices/print.svg' %}" alt="print">
-                          <p class="content__body-text">0000001</p>
-                        </li>' %}"
-                        <li class="content__body-item style--width">
-                          <p class="content__body-date">27 Mar 2023</p>
-                        </li>
-                        <li class="content__body-item style--width">
-                          <p class="content__body-date">28 Mar 2023</p>
-                        </li>
-                        <li class="content__body-item style--width">
-                          <p class="content__body-money">$25.80</p>
-                        </li>
-                        <li class="content__body-item style--width">
-                          <p class="content__body-status style--width font--yellow">Cancelled</p>
-                        </li>
-                      </ul>
-
-                      <button class="content__body-btn">
-                        <img class="content__body-img" src="{% static '/images/chevron.svg' %}" alt="arrow">
-                      </button>
-                    </li>
-                  </ul>
-                </div>
-
-
-
-
-                      <button class="content__body-btn">
-                        <img class="content__body-img" src="{% static '/images/chevron.svg' %}" alt="arrow">
-                      </button>
-                    </li>
-                    <li class="content__body-box">
-                      <ul class="content__body-titles">
-                        <li class="content__body-title">Invoice</li>
-                        <li class="content__body-title">Status</li>
-                        <li class="content__body-title">Invoice Date</li>
-                        <li class="content__body-title">Due Date</li>
-                        <li class="content__body-title">Total</li>
-                      </ul>
-                        {% for invoice in invoices %}
                       <ul class="content__body-items">
                         <p class="content__body-number">{{ invoice.id }}</p>
                         <li class="content__body-item style--width">
@@ -494,63 +343,182 @@
                         <a href="{% url 'invoice_detail' invoice.id %}">  <p class="content__body-invoice" >{{ invoice.invoice_id }}</p></a>
                         </li>
                         <li class="content__body-item style--width">
-                          <p class="content__body-date style--width">{{ invoice.date }}</p>
+                          <p class="content__body-date">{{ invoice.date }}</p>
                         </li>
                         <li class="content__body-item style--width">
-                          <p class="content__body-date style--width">{{ invoice.due_date }}</p>
+                          <p class="content__body-date">{{ invoice.due_date }}</p>
                         </li>
                         <li class="content__body-item style--width">
-                          <p class="content__body-money style--width">{{ invoice.price }}</p>
+                          <p class="content__body-money">{{ invoice.price }}</p>
                         </li>
                         <li class="content__body-item style--width">
-                          {% if invoice.status == 'P' %}
+                          {% if invoice.status == 'P'  %}
                        <p class="content__body-status style--width font--green">Paid</p>
-                       {% elif invoice.status == 'F' %}
+                       {% elif invoice.status == 'F'  %}
                        <p class="content__body-status style--width font--red">Cancelled</p>
-                       {% else %}
-                       <p class="content__body-status style--width font--red">{{ invoice.status }}</p>
+                       {% elif  invoice.status == 'S' %}
+                          <p class="content__body-status style--width font--yellow">Send</p>
+                          {% elif invoice.status == 'R'%}
+                          <p class="content__body-status style--width font--blue">Refunded</p>
+                          {% else %}
+                       <p class="content__body-status style--width font--yellow">{{ invoice.status }}</p>
                        {% endif %}
                         </li>
                       </ul>
-                       {% endfor %}
+                      {% endfor %}
+
+<!--                      <button class="content__body-btn">-->
+<!--                        <img class="content__body-img" src="{% static '/images/chevron.svg' %}" alt="arrow">-->
+<!--                      </button>-->
+<!--                    </li>-->
+<!--                    <li class="content__body-box">-->
+<!--                      <ul class="content__body-titles">-->
+<!--                        <li class="content__body-title">Invoice</li>-->
+<!--                        <li class="content__body-title">Status</li>-->
+<!--                        <li class="content__body-title">Invoice Date</li>-->
+<!--                        <li class="content__body-title">Due Date</li>-->
+<!--                        <li class="content__body-title">Total</li>-->
+<!--                      </ul>-->
+
+<!--                      <ul class="content__body-items">-->
+<!--                        <p class="content__body-number">2</p>-->
+<!--                        <li class="content__body-item style&#45;&#45;width">-->
+<!--                          <img src="{% static '/images/invoices/print.svg' %}" alt="print">-->
+<!--                          <p class="content__body-text">0000002</p>-->
+<!--                        </li>-->
+<!--                        <li class="content__body-item style&#45;&#45;width">-->
+<!--                          <p class="content__body-date">27 Mar 2024</p>-->
+<!--                        </li>-->
+<!--                        <li class="content__body-item style&#45;&#45;width">-->
+<!--                          <p class="content__body-date">28 Mar 2024</p>-->
+<!--                        </li>-->
+<!--                        <li class="content__body-item style&#45;&#45;width">-->
+<!--                          <p class="content__body-money">$25.80</p>-->
+<!--                        </li>-->
+<!--                        <li class="content__body-item style&#45;&#45;width">-->
+<!--                          <p class="content__body-status style&#45;&#45;width font&#45;&#45;blue">Refunded</p>-->
+<!--                        </li>-->
+<!--                      </ul>-->
+
+<!--                      <button class="content__body-btn">-->
+<!--                        <img class="content__body-img" src="{% static '/images/chevron.svg' %}" alt="arrow">-->
+<!--                      </button>-->
+<!--                    </li>-->
+<!--                    <li class="content__body-box">-->
+<!--                      <ul class="content__body-titles">-->
+<!--                        <li class="content__body-title">Invoice</li>-->
+<!--                        <li class="content__body-title">Status</li>-->
+<!--                        <li class="content__body-title">Invoice Date</li>-->
+<!--                        <li class="content__body-title">Due Date</li>-->
+<!--                        <li class="content__body-title">Total</li>-->
+<!--                      </ul>-->
+
+<!--                      <ul class="content__body-items">-->
+<!--                        <p class="content__body-number">3</p>-->
+<!--                        <li class="content__body-item style&#45;&#45;width">-->
+<!--                          <img src="{% static '/images/invoices/print.svg' %}" alt="print">-->
+<!--                          <p class="content__body-text">0000001</p>-->
+<!--                        </li>' %}"-->
+<!--                        <li class="content__body-item style&#45;&#45;width">-->
+<!--                          <p class="content__body-date">999999</p>-->
+<!--                        </li>-->
+<!--                        <li class="content__body-item style&#45;&#45;width">-->
+<!--                          <p class="content__body-date">9999999</p>-->
+<!--                        </li>-->
+<!--                        <li class="content__body-item style&#45;&#45;width">-->
+<!--                          <p class="content__body-money">$25.80</p>-->
+<!--                        </li>-->
+<!--                        <li class="content__body-item style&#45;&#45;width">-->
+<!--                          <p class="content__body-status style&#45;&#45;width font&#45;&#45;yellow">Cancelled</p>-->
+<!--                        </li>-->
+<!--                      </ul>-->
+
+<!--                      <button class="content__body-btn">-->
+<!--                        <img class="content__body-img" src="{% static '/images/chevron.svg' %}" alt="arrow">-->
+<!--                      </button>-->
+<!--                    </li>-->
+<!--                  </ul>-->
+<!--                </div>-->
+
 
                       <button class="content__body-btn">
-                        <img class="content__body-img" src="./images/chevron.svg" alt="arrow">
+                        <img class="content__body-img" src="{% static '/images/chevron.svg' %}" alt="arrow">
                       </button>
-                    </li>
-                    <li class="content__body-box">
-                      <ul class="content__body-titles">
-                        <li class="content__body-title">Invoice</li>
-                        <li class="content__body-title">Status</li>
-                        <li class="content__body-title">Invoice Date</li>
-                        <li class="content__body-title">Due Date</li>
-                        <li class="content__body-title">Total</li>
-                      </ul>
 
-                      <ul class="content__body-items">
-                        <p class="content__body-number">6</p>
-                        <li class="content__body-item style--width">
-                          <img src="./images/invoices/print.svg" alt="print">
-                          <p class="content__body-text">0000006</p>
-                        </li>
-                        <li class="content__body-item style--width">
-                          <p class="content__body-date">27 Mar 2023</p>
-                        </li>
-                        <li class="content__body-item style--width">
-                          <p class="content__body-date">27 Mar 2023</p>
-                        </li>
-                        <li class="content__body-item style--width">
-                          <p class="content__body-money">$25.80</p>
-                        </li>
-                        <li class="content__body-item style--width">
-                          <p class="content__body-status style--width font--yellow">Unpaid</p>
-                        </li>
-                      </ul>
 
-                      <button class="content__body-btn">
-                        <img class="content__body-img" src="./images/chevron.svg" alt="arrow">
-                      </button>
-                    </li>
+<!--                      <ul class="content__body-titles">-->
+<!--                        <li class="content__body-title">Invoice</li>-->
+<!--                        <li class="content__body-title">Status</li>-->
+<!--                        <li class="content__body-title">Invoice Date</li>-->
+<!--                        <li class="content__body-title">Due Date</li>-->
+<!--                        <li class="content__body-title">Total</li>-->
+<!--                      </ul>-->
+
+<!--                        {% for invoice in invoices %}-->
+<!--                <li class="content__body-box">-->
+<!--                      <ul class="content__body-items">-->
+<!--                        <p class="content__body-number">{{ invoice.id }}</p>-->
+<!--                        <li class="content__body-item style&#45;&#45;width">-->
+<!--                          <a href="{% url 'create_invoice_pdf' invoice.id %}"> <img src="{% static 'images/invoices/print.svg' %}"  alt="print"></a>-->
+<!--                        <a href="{% url 'invoice_detail' invoice.id %}">  <p class="content__body-invoice" >{{ invoice.invoice_id }}</p></a>-->
+<!--                        </li>-->
+<!--                        <li class="content__body-item style&#45;&#45;width">-->
+<!--                          <p class="content__body-date style&#45;&#45;width">{{ invoice.date }}</p>-->
+<!--                        </li>-->
+<!--                        <li class="content__body-item style&#45;&#45;width">-->
+<!--                          <p class="content__body-date style&#45;&#45;width">{{ invoice.due_date }}</p>-->
+<!--                        </li>-->
+<!--                        <li class="content__body-item style&#45;&#45;width">-->
+<!--                          <p class="content__body-money style&#45;&#45;width">{{ invoice.price }}</p>-->
+<!--                        </li>-->
+<!--                        <li class="content__body-item style&#45;&#45;width">-->
+<!--                          {% if invoice.status == 'P' %}-->
+<!--                       <p class="content__body-status style&#45;&#45;width font&#45;&#45;green">Paid</p>-->
+<!--                       {% elif invoice.status == 'F' %}-->
+<!--                       <p class="content__body-status style&#45;&#45;width font&#45;&#45;red">Cancelled</p>-->
+<!--                       {% else %}-->
+<!--                       <p class="content__body-status style&#45;&#45;width font&#45;&#45;red">{{ invoice.status }}</p>-->
+<!--                       {% endif %}-->
+<!--                        </li>-->
+<!--                      </ul>-->
+<!--                </li>-->
+<!--                       {% endfor %}-->
+<!--                      <button class="content__body-btn">-->
+<!--                        <img class="content__body-img" src="./images/chevron.svg" alt="arrow">-->
+<!--                      </button>-->
+<!--                    </li>-->
+<!--                    <li class="content__body-box">-->
+<!--                      <ul class="content__body-titles">-->
+<!--                        <li class="content__body-title">Invoice</li>-->
+<!--                        <li class="content__body-title">Status</li>-->
+<!--                        <li class="content__body-title">Invoice Date</li>-->
+<!--                        <li class="content__body-title">Due Date</li>-->
+<!--                        <li class="content__body-title">Total</li>-->
+<!--                      </ul>-->
+<!--                      <ul class="content__body-items">-->
+<!--                        <p class="content__body-number">6</p>-->
+<!--                        <li class="content__body-item style&#45;&#45;width">-->
+<!--                          <img src="./images/invoices/print.svg" alt="print">-->
+<!--                          <p class="content__body-text">0000006</p>-->
+<!--                        </li>-->
+<!--                        <li class="content__body-item style&#45;&#45;width">-->
+<!--                          <p class="content__body-date">27 Mar 2023</p>-->
+<!--                        </li>-->
+<!--                        <li class="content__body-item style&#45;&#45;width">-->
+<!--                          <p class="content__body-date">27 Mar 2023</p>-->
+<!--                        </li>-->
+<!--                        <li class="content__body-item style&#45;&#45;width">-->
+<!--                          <p class="content__body-money">$25.80</p>-->
+<!--                        </li>-->
+<!--                        <li class="content__body-item style&#45;&#45;width">-->
+<!--                          <p class="content__body-status style&#45;&#45;width font&#45;&#45;yellow">Unpaid</p>-->
+<!--                        </li>-->
+<!--                      </ul>-->
+
+<!--                      <button class="content__body-btn">-->
+<!--                        <img class="content__body-img" src="./images/chevron.svg" alt="arrow">-->
+<!--                      </button>-->
+<!--                    </li>-->
                   </ul>
                 </div>
               </div>
