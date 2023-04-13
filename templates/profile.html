@@ -99,24 +99,32 @@
                       <input class="cabinet__photo-input" id="cabinet__photo-input" type="file" name="file" accept="image/*">
                     </label>
                     <p class="cabinet__photo-name">
-                      Iryna Shlapak
+                      {{  user.user_name }}
                     </p>
                   </div>
 
+                  <form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save changes</button>
+</form>
+                  <h2>Edit Profile</h2>
+                  <form method="POST">
+                  {% csrf_token %}
                   <ul class="cabinet__list">
                     <li class="cabinet__item">
                       <p class="cabinet__text">First name</p>
-                      <input class="cabinet__input" type="text" placeholder="First name">
+                      <input class="cabinet__input" type="text" placeholder="First name" value="{{ user.first_name }}">
                     </li>
 
                     <li class="cabinet__item">
                       <p class="cabinet__text">Last name</p>
-                      <input class="cabinet__input" type="tel" placeholder="Last name">
+                      <input class="cabinet__input" type="tel" placeholder="Last name" value="{{ user.last_name }}">
                     </li>
 
                     <li class="cabinet__item">
                       <p class="cabinet__text">Email</p>
-                      <input class="cabinet__input" type="email" placeholder="Email">
+                      <input class="cabinet__input" type="email" placeholder="Email" value="{{ user.email }}">
                     </li>
 
                     <li class="cabinet__item">
@@ -126,8 +134,8 @@
                   </ul>
 
                   <div class="cabinet__buttons">
-                    <button class="cabinet__buttons-save">Save</button>
-                    <button class="cabinet__buttons-delete">Delete account</button>
+                    <button class="cabinet__buttons-save" type="submit">Save</button>
+                    <button class="cabinet__buttons-delete" type="button">Delete account</button>
                   </div>
                 </form>
               </div>

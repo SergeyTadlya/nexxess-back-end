@@ -3,6 +3,7 @@
   <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/invoices.css' %}">
 {% block content %}
+<style> </style>
   <body>
   <main class="main">
       <div class="container">
@@ -12,7 +13,7 @@
                 <a class="mobile__box-user" href="#">
                   <img class="mobile__box-img" src="{% static 'images//user.svg' %}" alt="user">
                 </a>
-                <p class="mobile__box-text">Hello, John John</p>
+                <p class="mobile__box-text">Hello, {{ user.username }}</p>
               </div>
               <div class="aside__box">
                 <div class="aside__box-top">
@@ -337,19 +338,19 @@
                         <li class="content__body-title">Total</li>
                       </ul>
                       <ul class="content__body-items">
-                        <p class="content__body-number">{{ invoice.id }}</p>
+                          <p class="content__body-number">{{ invoice.id }}</p>
                         <li class="content__body-item style--width">
                           <a href="{% url 'create_invoice_pdf' invoice.id %}"> <img src="{% static 'images/invoices/print.svg' %}"  alt="print"></a>
                         <a href="{% url 'invoice_detail' invoice.id %}">  <p class="content__body-invoice" >{{ invoice.invoice_id }}</p></a>
                         </li>
                         <li class="content__body-item style--width">
-                          <p class="content__body-date">{{ invoice.date }}</p>
+                           <a href="{% url 'invoice_detail' invoice.id %}"> <p class="content__body-date">{{ invoice.date }}</p></a>
                         </li>
                         <li class="content__body-item style--width">
-                          <p class="content__body-date">{{ invoice.due_date }}</p>
+                           <a href="{% url 'invoice_detail' invoice.id %}"> <p class="content__body-date">{{ invoice.due_date }}</p></a>
                         </li>
                         <li class="content__body-item style--width">
-                          <p class="content__body-money">{{ invoice.price }}</p>
+                          <a href="{% url 'invoice_detail' invoice.id %}">  <p class="content__body-money">{{ invoice.price }}</p></a>
                         </li>
                         <li class="content__body-item style--width">
                           {% if invoice.status == 'P'  %}
@@ -360,12 +361,61 @@
                           <p class="content__body-status style--width font--yellow">Send</p>
                           {% elif invoice.status == 'R'%}
                           <p class="content__body-status style--width font--blue">Refunded</p>
+                          {% elif invoice.status == 'N' %}
+                          <p class="content__body-status style--width font--blue">New</p>
                           {% else %}
                        <p class="content__body-status style--width font--yellow">{{ invoice.status }}</p>
                        {% endif %}
                         </li>
                       </ul>
+                       <button class="content__body-btn">
+                        <img class="content__body-img" src="{% static 'images/chevron.svg' %}" alt="arrow">
+                      </button>
+                      </li>
+                  </ul>
+                </div>
                       {% endfor %}
+
+                    </li>
+                    <li class="content__body-box">
+                      <ul class="content__body-titles">
+                        <li class="content__body-title">Invoice</li>
+                        <li class="content__body-title">Status</li>
+                        <li class="content__body-title">Invoice Date</li>
+                        <li class="content__body-title">Due Date</li>
+                        <li class="content__body-title">Total</li>
+                      </ul>
+
+                      <ul class="content__body-items">
+                        <p class="content__body-number">2</p>
+                        <li class="content__body-item style--width">
+                          <img src="./images/invoices/print.svg" alt="print">
+                          <p class="content__body-text">0000002</p>
+                        </li>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-date">27 Mar 2023</p>
+                        </li>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-date">28 Mar 2023</p>
+                        </li>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-money">$25.80</p>
+                        </li>
+                        <li class="content__body-item style--width">
+                          <p class="content__body-status style--width font--blue">Refunded</p>
+                        </li>
+                      </ul>
+                      <button class="content__body-btn">
+                        <img class="content__body-img" src="./images/chevron.svg" alt="arrow">
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+
+
+
+
+
 
 <!--                      <button class="content__body-btn">-->
 <!--                        <img class="content__body-img" src="{% static '/images/chevron.svg' %}" alt="arrow">-->
@@ -441,9 +491,6 @@
 <!--                </div>-->
 
 
-                      <button class="content__body-btn">
-                        <img class="content__body-img" src="{% static '/images/chevron.svg' %}" alt="arrow">
-                      </button>
 
 
 <!--                      <ul class="content__body-titles">-->
@@ -526,4 +573,17 @@
         </div>
       </div>
     </main>
+  <script>
+
+          const contentBox = document.querySelectorAll('.content__body-box')
+const contentBtn = document.querySelectorAll('.content__body-btn')
+
+contentBtn.forEach((button, index) => {
+  button.addEventListener('click', (e) => {
+    contentBox[index].classList.toggle('content__body-activeBox')
+    contentBtn[index].classList.toggle('content__body-activeBtn')
+  })
+})
+</script>
+  </body>
 {% endblock %}

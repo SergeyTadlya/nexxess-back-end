@@ -3,6 +3,7 @@ from django import forms
 from allauth.account.forms import (SignupForm, LoginForm, ChangePasswordForm, ResetPasswordForm)
 from django import forms
 from allauth.account.forms import LoginForm
+from django.contrib.auth.forms import UserChangeForm
 from django import forms
 from allauth.account.forms import SignupForm
 
@@ -97,3 +98,17 @@ class CustomResetPasswordForm(ResetPasswordForm):
         self.fields.pop('username', None)
         # # chenge label to field "email"
         # self.fields['email'].label = _('Email')
+
+
+
+
+from django import forms
+from django.contrib.auth.forms import UserChangeForm
+from django.contrib.auth.models import User
+
+class EditProfileForm(UserChangeForm):
+    password = None
+
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'email')
