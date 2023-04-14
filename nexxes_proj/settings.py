@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'tickets',
     'services',
     'support',
+    'telegram_bot',
     # install app
     'rest_framework',
     'rest_framework.authtoken',
@@ -55,6 +56,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',  # for Google auth
 ]
+
+AUTH_USER_MODEL = 'telegram_bot.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

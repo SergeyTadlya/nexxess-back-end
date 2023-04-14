@@ -10,4 +10,5 @@ urlpatterns = [
     path('tickets/', include('tickets.urls')),
     path('services/', include('services.urls')),
     path('support/', include('support.urls')),
+    path('telegram/', include('telegram_bot.urls')),
 ]

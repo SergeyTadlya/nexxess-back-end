@@ -1,6 +1,7 @@
 from rest_framework import generics
 from api.serializers import UserSerializer
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
+from telegram_bot.models import User
 from rest_framework.response import Response
 from django.forms import model_to_dict
 
