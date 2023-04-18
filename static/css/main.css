@@ -151,6 +151,10 @@ body {
   color: #C2C8D0;
 }
 
+.font--pink {
+  color: #FFBAF8;
+}
+
 @media (max-width: 1000px) {
   .header .nav__item-link {
     padding: 10px 20px;
@@ -202,9 +206,9 @@ body {
   }
   .burger.burger--active::before {
     content: "";
-    -webkit-transform: translateY(4px) rotate(45deg);
-        -ms-transform: translateY(4px) rotate(45deg);
-            transform: translateY(4px) rotate(45deg);
+    -webkit-transform: translateY(3.6px) rotate(45deg);
+        -ms-transform: translateY(3.6px) rotate(45deg);
+            transform: translateY(3.6px) rotate(45deg);
     background-color: #7C48EE;
   }
   .burger-line {

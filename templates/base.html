@@ -8,53 +8,101 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/authentication.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/custom.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/authentication.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/my-account.css' %}">
+    {% block extra_css %}
+    {% endblock %}
     <title>NEXXESS</title>
 </head>
 <body>
     {% if user.is_authenticated %}
         <header class="header">
-        <div class="container">
-          <div class="header__inner">
-            <a href="/">
-              <img src="{% static 'img/main/logo.png' %}" alt="logo">
-            </a>
-            <nav class="nav">
-              <a class="nav__burger">
-                <span class="nav__burger-line"></span>
+          <div class="container">
+            <div class="header__inner">
+              <a href="{% url 'authentication:main'%}">
+                <picture>
+                    <source srcset="{% static 'images/logo-mobile.png' %}" media="(max-width: 600px)">
+                    <img src="{% static 'images/logo.png' %}" alt="logo">
+                  </picture>
               </a>
-              <ul class="nav__list">
-                <li class="nav__list-item">
-                  <a class="nav__item-link" href="{% url 'invoices'%}">Invoices</a>
-                </li>
-                <li class="nav__list-item">
-                  <a class="nav__item-link" href="{% url 'support'%}">Support</a>
-                </li>
-                <li class="nav__list-item">
-                  <a class="nav__item-link" href="{% url 'services'%}">Services</a>
-                </li>
-              </ul>
-            </nav>
-            <div class="header__box">
-              <a href="/profile"><img class="header__box-img" src="{% static 'img/main/user.svg' %}" alt="user"></a>
-              <p class="header__box-text">Hello, {{ user.username }}</p>
-              <a class="header__box-link" href="{% url 'account_logout' %}">Log Out</a>
+              <nav class="nav">
+                <ul class="nav__list">
+                  <li class="nav__list-item">
+                    <a class="nav__item-link" href="{% url 'invoices'%}">Invoices</a>
+                  </li>
+                  <li class="nav__list-item">
+                    <a class="nav__item-link" href="{% url 'support'%}">Support</a>
+                  </li>
+                  <li class="nav__list-item">
+                    <a class="nav__item-link" href="{% url 'services'%}">Services</a>
+                  </li>
+                  <li class="nav__list-item">
+                    <a class="nav__item-link" href="#">FAQ</a>
+                  </li>
+                </ul>
+              </nav>
+              <div class="header__box">
+                <a class="header__box-user" href="{% url 'authentication:profile'%}">
+                  <img class="header__box-img" src="{% static 'images/user.svg' %}" alt="user">
+                </a>
+                <p class="header__box-text">Hello, {{ user.username }}</p>
+                <a class="header__box-link" href="{% url 'account_logout' %}">Log Out</a>
+              </div>
+              <a class="burger">
+                <span class="burger-line"></span>
+              </a>
             </div>
           </div>
-        </div>
-      </header>
+        </header>
+        <main class="main">
+            <div class="container">
+                <div class="main__inner">
+                    <aside class="aside">
+                        <div class="mobile__box">
+                          <a class="mobile__box-user" href="{% url 'authentication:profile'%}">
+                            <img class="mobile__box-img" src="{% static 'images/user.svg' %}" alt="user">
+                          </a>
+                          <p class="mobile__box-text">Hello, {{ user.username }}</p>
+                        </div>
+                        <div class="aside__box">
+                          <div class="aside__box-top">
+                            <img class="aside__top-img" src="{% static 'images/important.svg' %}" alt="icon">
+                            <h6 class="aside__top-title">Important</h6>
+                            <p class="aside__top-number">3</p>
+                          </div>
+                          <ul class="aside__box-list">
+                            <li class="aside__box-item">
+                              <p class="aside__box-text">You have earned totay:</p>
+                              <p class="aside__box-money">$124.30</p>
+                            </li>
+                            <li class="aside__box-item">
+                              <p class="aside__box-text">New servises this month:</p>
+                              <p class="aside__box-money">2</p>
+                            </li>
+                            <li class="aside__box-item">
+                              <p class="aside__box-text">Actual discounts:</p>
+                              <p class="aside__box-money">10%</p>
+                            </li>
+                          </ul>
+                        </div>
+                        {% block left_menu %}
+                        {% endblock left_menu %}
+                    </aside>
+                    <section class="content">
+                        {% block content %}
+                        {% endblock content %}
+                    </section>
+                </div>
+            </div>
+        </main>
+    {% else %}
+        {% block auth %}
+        {% endblock auth %}
     {% endif %}
-
-    {% block content %}
-    {% endblock %}
-    <script src="{% static 'js/main.js' %}"></script>
-    <script src="{% static 'js/authentication.js' %}"></script>
-    <script src="{% static 'js/test.js' %}"></script>
-      <script src="{% static 'js/my-account.js' %}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    {% block extra_js %}
+    {% endblock %}
 </body>
 </html>

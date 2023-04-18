@@ -12,7 +12,7 @@ accordionBtn.forEach((button, index) => {
   })
 })
 
-//_________________
+//_________*BLOCK*Cotent-top______
 
 const contentTopBox = document.querySelector('#content__top-box')
 const contentTopList = document.querySelector('#content__top-list')
@@ -30,7 +30,7 @@ contentTopItem.forEach((item) => {
   })
 })
 
-//__________________________________
+//_________________POPUP_________________
 
 const btnNewTag = document.querySelector('#form__new-tag')
 
@@ -70,4 +70,35 @@ document.addEventListener('keydown', (e) => {
     popup.classList.remove('show')
     document.body.style.cssText = ''
   }
+})
+
+//________BURGER_____
+
+const aside = document.querySelector('.aside')
+const burger = document.querySelector('.burger')
+
+burger.addEventListener('click', menu)
+
+function menu() {
+  burger.classList.toggle('burger--active')
+  aside.classList.toggle('aside--active')
+
+  const overflowValue = burger.classList.contains('burger--active')
+    ? 'hidden'
+    : 'auto'
+
+  document.body.style.overflow = overflowValue
+}
+
+
+//_______Mobile content arrow_____
+
+const contentBox = document.querySelectorAll('.content__body-box')
+const contentBtn = document.querySelectorAll('.content__body-btn')
+
+contentBtn.forEach((button, index) => {
+  button.addEventListener('click', (e) => {
+    contentBox[index].classList.toggle('content__body-activeBox')
+    contentBtn[index].classList.toggle('content__body-activeBtn')
+  })
 })
