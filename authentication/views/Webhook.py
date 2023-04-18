@@ -82,6 +82,9 @@ def webhook_invoice(request):
                 'b24_time': b24_time,
                 'invoice_info': invoice_load,
                 'price': invoice_load['PRICE'],
+                'status': invoice_load['STATUS_ID'],
+                'date': invoice_load['DATE_BILL'],
+                'due_date': invoice_load['DATE_PAY_BEFORE'],
                 'is_opened': False
             }
 

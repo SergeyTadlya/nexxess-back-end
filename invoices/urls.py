@@ -8,6 +8,7 @@ urlpatterns = [
     # invoices pages
     path('', views.invoices, name='invoices'),
     path('detail/<int:id>/', views.invoice_detail, name="invoice_detail"),
+    path('invoices/<int:id>/pdf/', views.create_invoice_pdf, name='create_invoice_pdf'),
 ]
 
 if settings.DEBUG:
