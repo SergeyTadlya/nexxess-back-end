@@ -1,8 +1,8 @@
 'use strict'
 
-const accordionBtn = document.querySelectorAll('#aside__accordion-top')
-const accordionList = document.querySelectorAll('.aside__accordion-list')
-const accordionArrow = document.querySelectorAll('.aside__top-arrow')
+const accordionBtn = document.querySelectorAll('#aside-info__accordion-top')
+const accordionList = document.querySelectorAll('.aside-info__accordion-list')
+const accordionArrow = document.querySelectorAll('.aside-info__top-arrow')
 
 accordionBtn.forEach((button, index) => {
   button.addEventListener('click', (e) => {
@@ -14,20 +14,20 @@ accordionBtn.forEach((button, index) => {
 
 //________BURGER_____
 
-const aside = document.querySelector('.aside')
+const asideInfo = document.querySelector('.aside-info')
 const burger = document.querySelector('.burger')
 
 burger.addEventListener('click', menu)
 
 function menu() {
   burger.classList.toggle('burger--active')
-  aside.classList.toggle('aside--active')
+  asideInfo.classList.toggle('aside-info--active')
 
-  const overflowValue = burger.classList.contains('burger--active')
-    ? 'hidden'
-    : 'auto'
-
-  document.body.style.overflow = overflowValue
+  if (document.body.classList.contains('body--active')) {
+    document.body.classList.remove('body--active')
+  } else {
+    document.body.classList.add('body--active')
+  }
 }
 
 let uploadButton = document.getElementById('cabinet__photo-input')

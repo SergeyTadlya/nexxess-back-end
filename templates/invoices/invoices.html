@@ -14,7 +14,10 @@
       <div class="container">
         <div class="header__inner">
           <a class="header__link" href="./main.html">
+            <picture class="header__logo">
+            <source srcset="./images/logo-mobile.png" media="(max-width: 550px)">
             <img src="./images/logo.png" alt="logo">
+          </picture>
           </a>
 
           <nav class="nav">
@@ -23,26 +26,30 @@
             </a>
             <ul class="nav__list">
               <li class="nav__list-item">
-                <a class="nav__item-link" href="./main.html">Main</a>
-              </li>
-              <li class="nav__list-item">
-                <a class="nav__item-link" href="#">Support</a>
-              </li>
-              <li class="nav__list-item">
                 <a class="nav__item-link" href="./services.html">Services</a>
               </li>
               <li class="nav__list-item">
-                <a class="nav__item-link" href="№">FAQ</a>
+                <a class="nav__item-link" href="./invoices.html">Invoices</a>
+              </li>
+              <li class="nav__list-item">
+                <a class="nav__item-link" href="./tickets.html">Tickets</a>
+              </li>
+              <li class="nav__list-item">
+                <a class="nav__item-link" href="#">FAQ</a>
               </li>
             </ul>
           </nav>
 
           <div class="header__box">
-            <a class="header__box-user" href="#">
+            <a class="header__box-link" href="#">
+              <img class="header__box-img" src="./images/Search.svg" alt="search">
+            </a>
+            <a class="header__box-link" href="./my-account.html">
               <img class="header__box-img" src="./images/user.svg" alt="user">
             </a>
-            <p class="header__box-text">Hello, John John</p>
-            <a class="header__box-link" href="#">Log Out</a>
+            <a class="header__box-link" href="#">
+              <img class="header__box-img" src="./images/telegram.svg" alt="user">
+            </a>
           </div>
 
           <a class="burger">
@@ -56,98 +63,108 @@
       <div class="container">
         <div class="main__inner">
           <aside class="aside">
-              <div class="mobile__box">
-                <a class="mobile__box-user" href="#">
-                  <img class="mobile__box-img" src="./images/user.svg" alt="user">
-                </a>
-                <p class="mobile__box-text">Hello, John John</p>
-              </div>
-              <div class="aside__box">
-                <div class="aside__box-top">
-                  <img class="aside__top-img" src="./images/important.svg" alt="icon">
-                  <h6 class="aside__top-title">Important</h6>
-                  <p class="aside__top-number">3</p>
+            <div class="aside-info">
+              <div class="aside-info__box">
+                <div class="aside-info__box-top">
+                  <img class="aside-info__top-img" src="./images/important.svg" alt="icon">
+                  <h6 class="aside-info__top-title">Important</h6>
+                  <p class="aside-info__top-number">2</p>
                 </div>
-                <ul class="aside__box-list">
-                  <li class="aside__box-item">
-                    <p class="aside__box-text">You have earned totay:</p>
-                    <p class="aside__box-money">$124.30</p>
+                <ul class="aside-info__box-list">
+                  <li class="aside-info__box-item">
+                    <p class="aside-info__box-text">New servises this month:</p>
+                    <p class="aside-info__box-money">2</p>
                   </li>
-                  <li class="aside__box-item">
-                    <p class="aside__box-text">New servises this month:</p>
-                    <p class="aside__box-money">2</p>
-                  </li>
-                  <li class="aside__box-item">
-                    <p class="aside__box-text">Actual discounts:</p>
-                    <p class="aside__box-money">10%</p>
+                  <li class="aside-info__box-item">
+                    <p class="aside-info__box-text">Actual discounts:</p>
+                    <p class="aside-info__box-money">10%</p>
                   </li>
                 </ul>
               </div>
 
-              <div class="aside__accordion">
-                <div id="aside__accordion-top" class="aside__accordion-top">
-                  <img class="aside__top-img" src="./images/filter.svg" alt="icon">
-                  <h6 class="aside__top-title">Status</h6>
-                  <img class="aside__top-arrow" src="./images/chevron-down.svg" alt="icon">
+              <div class="aside-info__accordion">
+                <div id="aside-info__accordion-top" class="aside-info__accordion-top">
+                  <img class="aside-info__top-img" src="./images/services.svg" alt="icon">
+                  <h6 class="aside-info__top-title">Your servises</h6>
+                  <img class="aside-info__top-arrow" src="./images/chevron-down.svg" alt="icon">
                 </div>
 
-                <ul class="aside__accordion-list">
-                  <li class="aside__accordion-item">
-                    <label class="aside__accordion-label" for="status1">
-                        <input id="status1" class="aside__accordion-check"  name="check" type="checkbox" >
+                <ul class="aside-info__accordion-list">
+                  <li class="aside-info__accordion-item">
+                    <a class="aside-info__accordion-link" href="#">Your servises 1</a>
+                  </li>
+                  <li class="aside-info__accordion-item">
+                    <a class="aside-info__accordion-link" href="#">Your servises 1</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="aside-filter">
+              <div class="aside-filter__accordion">
+                <div id="aside-filter__accordion-top" class="aside-filter__accordion-top">
+                  <img class="aside-filter__top-img" src="./images/filter.svg" alt="icon">
+                  <h6 class="aside-filter__top-title">Status</h6>
+                  <img class="aside-filter__top-arrow" src="./images/chevron-down.svg" alt="icon">
+                </div>
+
+                <ul class="aside-filter__accordion-list">
+                  <li class="aside-filter__accordion-item">
+                    <label class="aside-filter__accordion-label" for="status1">
+                        <input id="status1" class="aside-filter__accordion-check"  name="check" type="checkbox" >
                         Paid
                       </label>
-                    <p class="aside__accordion-number">1</p>
+                    <p class="aside-filter__accordion-number">1</p>
                   </li>
-                  <li class="aside__accordion-item">
-                      <label class="aside__accordion-label" for="status2">
-                        <input id="status2" class="aside__accordion-check" name="check" type="checkbox">
+                  <li class="aside-filter__accordion-item">
+                      <label class="aside-filter__accordion-label" for="status2">
+                        <input id="status2" class="aside-filter__accordion-check" name="check" type="checkbox">
                         Unpaid
                       </label>
-                    <p class="aside__accordion-number">1</p>
+                    <p class="aside-filter__accordion-number">1</p>
                   </li>
-                  <li class="aside__accordion-item">
-                      <label class="aside__accordion-label" for="status3">
-                        <input id="status3" class="aside__accordion-check" name="check" type="checkbox">
+                  <li class="aside-filter__accordion-item">
+                      <label class="aside-filter__accordion-label" for="status3">
+                        <input id="status3" class="aside-filter__accordion-check" name="check" type="checkbox">
                         Canceled
                       </label>
-                    <p class="aside__accordion-number">1</p>
+                    <p class="aside-filter__accordion-number">1</p>
                   </li>
-                  <li class="aside__accordion-item">
-                    <label class="aside__accordion-label" for="status4">
-                      <input id="status4" class="aside__accordion-check"  name="check" type="checkbox">
+                  <li class="aside-filter__accordion-item">
+                    <label class="aside-filter__accordion-label" for="status4">
+                      <input id="status4" class="aside-filter__accordion-check"  name="check" type="checkbox">
                         Refunded
                       </label>
-                    <p class="aside__accordion-number">1</p>
+                    <p class="aside-filter__accordion-number">1</p>
                   </li>
                 </ul>
               </div>
 
-              <div class="aside__accordion">
-                <div id="aside__accordion-top" class="aside__accordion-top">
-                  <img class="aside__top-img" src="./images/calendar.svg" alt="icon">
-                  <h6 class="aside__top-title">Calendar</h6>
-                  <img class="aside__top-arrow" src="./images/chevron-down.svg" alt="icon">
+              <div class="aside-filter__accordion">
+                <div id="aside-filter__accordion-top" class="aside-filter__accordion-top">
+                  <img class="aside-filter__top-img" src="./images/calendar.svg" alt="icon">
+                  <h6 class="aside-filter__top-title">Calendar</h6>
+                  <img class="aside-filter__top-arrow" src="./images/chevron-down.svg" alt="icon">
                 </div>
 
-                <ul class="aside__accordion-list">
-                  <li class="aside__accordion-item aside__accordion-date">
-                    <p class="aside__accordion-text">From:</p>
-                    <select id="aside__select-month" class="aside__accordion-select">
-                      <option class="aside__accordion-option" value="january">January</option>
-                      <option class="aside__accordion-option" value="february">February</option>
-                      <option class="aside__accordion-option" value="march">March</option>
-                      <option class="aside__accordion-option" value="april">April</option>
-                      <option class="aside__accordion-option" value="may">May</option>
-                      <option class="aside__accordion-option" value="june">June</option>
-                      <option class="aside__accordion-option" value="july">July</option>
-                      <option class="aside__accordion-option" value="august">August</option>
-                      <option class="aside__accordion-option" value="september">September</option>
-                      <option class="aside__accordion-option" value="october">October</option>
-                      <option class="aside__accordion-option" value="november">November</option>
-                      <option class="aside__accordion-option" value="december">December</option>
+                <ul class="aside-filter__accordion-list">
+                  <li class="aside-filter__accordion-item aside-filter__accordion-date">
+                    <p class="aside-filter__accordion-text">From:</p>
+                    <select id="aside-filter__select-month" class="aside-filter__accordion-select">
+                      <option class="aside-filter__accordion-option" value="january">January</option>
+                      <option class="aside-filter__accordion-option" value="february">February</option>
+                      <option class="aside-filter__accordion-option" value="march">March</option>
+                      <option class="aside-filter__accordion-option" value="april">April</option>
+                      <option class="aside-filter__accordion-option" value="may">May</option>
+                      <option class="aside-filter__accordion-option" value="june">June</option>
+                      <option class="aside-filter__accordion-option" value="july">July</option>
+                      <option class="aside-filter__accordion-option" value="august">August</option>
+                      <option class="aside-filter__accordion-option" value="september">September</option>
+                      <option class="aside-filter__accordion-option" value="october">October</option>
+                      <option class="aside-filter__accordion-option" value="november">November</option>
+                      <option class="aside-filter__accordion-option" value="december">December</option>
                     </select>
-                    <select id="aside__select-days" class="aside__accordion-select">
+                    <select id="aside-filter__select-days" class="aside-filter__accordion-select">
                       <option value="1">1</option>
                       <option value="2">2</option>
                       <option value="3">3</option>
@@ -180,7 +197,7 @@
                       <option value="30">30</option>
                       <option value="31">31</option>
                     </select>
-                    <select id="aside__select-years" class="aside__accordion-select">
+                    <select id="aside-filter__select-years" class="aside-filter__accordion-select">
                       <option value="1994">1994</option>
                       <option value="1995">1995</option>
                       <option value="1996">1996</option>
@@ -213,23 +230,23 @@
                       <option value="2023">2023</option>
                     </select>
                   </li>
-                  <li class="aside__accordion-item aside__accordion-date">
+                  <li class="aside-filter__accordion-item aside-filter__accordion-date">
                     <p class="aside__accordion-text">To:</p>
-                    <select id="aside__select-month" class="aside__accordion-select">
-                      <option class="aside__accordion-option" value="january">January</option>
-                      <option class="aside__accordion-option" value="february">February</option>
-                      <option class="aside__accordion-option" value="march">March</option>
-                      <option class="aside__accordion-option" value="april">April</option>
-                      <option class="aside__accordion-option" value="may">May</option>
-                      <option class="aside__accordion-option" value="june">June</option>
-                      <option class="aside__accordion-option" value="july">July</option>
-                      <option class="aside__accordion-option" value="august">August</option>
-                      <option class="aside__accordion-option" value="september">September</option>
-                      <option class="aside__accordion-option" value="october">October</option>
-                      <option class="aside__accordion-option" value="november">November</option>
-                      <option class="aside__accordion-option" value="december">December</option>
+                    <select id="aside-filter__select-month" class="aside-filter__accordion-select">
+                      <option class="aside-filter__accordion-option" value="january">January</option>
+                      <option class="aside-filter__accordion-option" value="february">February</option>
+                      <option class="aside-filter__accordion-option" value="march">March</option>
+                      <option class="aside-filter__accordion-option" value="april">April</option>
+                      <option class="aside-filter__accordion-option" value="may">May</option>
+                      <option class="aside-filter__accordion-option" value="june">June</option>
+                      <option class="aside-filter__accordion-option" value="july">July</option>
+                      <option class="aside-filter__accordion-option" value="august">August</option>
+                      <option class="aside-filter__accordion-option" value="september">September</option>
+                      <option class="aside-filter__accordion-option" value="october">October</option>
+                      <option class="aside-filter__accordion-option" value="november">November</option>
+                      <option class="aside-filter__accordion-option" value="december">December</option>
                     </select>
-                    <select id="aside__select-days" class="aside__accordion-select">
+                    <select id="aside-filter__select-days" class="aside-filter__accordion-select">
                       <option value="1">1</option>
                       <option value="2">2</option>
                       <option value="3">3</option>
@@ -262,7 +279,7 @@
                       <option value="30">30</option>
                       <option value="31">31</option>
                     </select>
-                    <select id="aside__select-years" class="aside__accordion-select">
+                    <select id="aside-filter__select-years" class="aside-filter__accordion-select">
                       <option value="1994">1994</option>
                       <option value="1995">1995</option>
                       <option value="1996">1996</option>
@@ -298,39 +315,42 @@
                 </ul>
               </div>
 
-              <div class="aside__accordion">
-                <div id="aside__accordion-top" class="aside__accordion-top">
-                  <img class="aside__top-img" src="./images/credit-card.svg" alt="icon">
-                  <h6 class="aside__top-title">Payments</h6>
-                  <img class="aside__top-arrow" src="./images/chevron-down.svg" alt="icon">
+              <div class="aside-filter__accordion">
+                <div id="aside-filter__accordion-top" class="aside-filter__accordion-top">
+                  <img class="aside-filter__top-img" src="./images/credit-card.svg" alt="icon">
+                  <h6 class="aside-filter__top-title">Payments</h6>
+                  <img class="aside-filter__top-arrow" src="./images/chevron-down.svg" alt="icon">
                 </div>
 
-                <ul class="aside__accordion-list">
-                  <li class="aside__accordion-item">
-                    <label class="aside__accordion-label" for="payments1">
-                        <input id="payments1" class="aside__accordion-check"  name="payments" type="checkbox" >
+                <ul class="aside-filter__accordion-list">
+                  <li class="aside-filter__accordion-item">
+                    <label class="aside-filter__accordion-label" for="payments1">
+                        <input id="payments1" class="aside-filter__accordion-check"  name="payments" type="checkbox" >
                         Paypall
                       </label>
                   </li>
-                  <li class="aside__accordion-item">
-                      <label class="aside__accordion-label" for="payments2">
-                        <input id="payments2" class="aside__accordion-check" name="payments" type="checkbox">
+                  <li class="aside-filter__accordion-item">
+                      <label class="aside-filter__accordion-label" for="payments2">
+                        <input id="payments2" class="aside-filter__accordion-check" name="payments" type="checkbox">
                         Payoneer
                       </label>
                   </li>
-                  <li class="aside__accordion-item">
-                      <label class="aside__accordion-label" for="payments3">
-                        <input id="payments3" class="aside__accordion-check" name="payments" type="checkbox">
+                  <li class="aside-filter__accordion-item">
+                      <label class="aside-filter__accordion-label" for="payments3">
+                        <input id="payments3" class="aside-filter__accordion-check" name="payments" type="checkbox">
                         Fondy
                       </label>
                   </li>
                 </ul>
               </div>
 
-              <button class="aside__accordion-btn">Search</button>
+              <button class="aside-filter__accordion-btn">Search</button>
+            </div>
+
           </aside>
 
           <section class="content">
+            <div class="content__inner">
               <div class="content__top">
                 <div class="content__top-body">
                   <h1 class="title content__top-title">Invoices history</h1>
@@ -353,6 +373,11 @@
                 </div>
               </div>
 
+              <button class="content__filter-btn" type="button">
+                <img class="content__filter-img" src="./images/filter-btn.svg" alt="filter-icon">
+                Filter
+              </button>
+
               <ul class="content__titles">
                 <li class="content__titles-item">
                   Invoice
@@ -371,7 +396,7 @@
                 </li>
               </ul>
 
-              <div class="content__inner">
+              <div class="content__box">
                 <div class="content__body">
                   <p class="content__body-titleDate">29th Mar 2023</p>
                   <ul class="content__body-list">
@@ -383,7 +408,7 @@
                         <li class="content__body-title">Due Date</li>
                         <li class="content__body-title">Total</li>
                       </ul>
-  
+
                       <ul class="content__body-items">
                         <p class="content__body-number">1</p>
                         <li class="content__body-item style--width">
@@ -403,7 +428,7 @@
                           <p class="content__body-status style--width font--green">Paid</p>
                         </li>
                       </ul>
-  
+
                       <button class="content__body-btn">
                         <img class="content__body-img" src="./images/chevron.svg" alt="arrow">
                       </button>
@@ -416,7 +441,7 @@
                         <li class="content__body-title">Due Date</li>
                         <li class="content__body-title">Total</li>
                       </ul>
-  
+
                       <ul class="content__body-items">
                         <p class="content__body-number">2</p>
                         <li class="content__body-item style--width">
@@ -436,7 +461,7 @@
                           <p class="content__body-status style--width font--blue">Refunded</p>
                         </li>
                       </ul>
-  
+
                       <button class="content__body-btn">
                         <img class="content__body-img" src="./images/chevron.svg" alt="arrow">
                       </button>
@@ -449,7 +474,7 @@
                         <li class="content__body-title">Due Date</li>
                         <li class="content__body-title">Total</li>
                       </ul>
-  
+
                       <ul class="content__body-items">
                         <p class="content__body-number">3</p>
                         <li class="content__body-item style--width">
@@ -469,7 +494,7 @@
                           <p class="content__body-status style--width font--yellow">Cancelled</p>
                         </li>
                       </ul>
-  
+
                       <button class="content__body-btn">
                         <img class="content__body-img" src="./images/chevron.svg" alt="arrow">
                       </button>
@@ -487,7 +512,7 @@
                         <li class="content__body-title">Due Date</li>
                         <li class="content__body-title">Total</li>
                       </ul>
-  
+
                       <ul class="content__body-items">
                         <p class="content__body-number">1</p>
                         <li class="content__body-item style--width">
@@ -507,7 +532,7 @@
                           <p class="content__body-status style--width font--green">Paid</p>
                         </li>
                       </ul>
-  
+
                       <button class="content__body-btn">
                         <img class="content__body-img" src="./images/chevron.svg" alt="arrow">
                       </button>
@@ -520,7 +545,7 @@
                         <li class="content__body-title">Due Date</li>
                         <li class="content__body-title">Total</li>
                       </ul>
-  
+
                       <ul class="content__body-items">
                         <p class="content__body-number">2</p>
                         <li class="content__body-item style--width">
@@ -540,7 +565,7 @@
                           <p class="content__body-status style--width font--green">Paid</p>
                         </li>
                       </ul>
-  
+
                       <button class="content__body-btn">
                         <img class="content__body-img" src="./images/chevron.svg" alt="arrow">
                       </button>
@@ -553,7 +578,7 @@
                         <li class="content__body-title">Due Date</li>
                         <li class="content__body-title">Total</li>
                       </ul>
-  
+
                       <ul class="content__body-items">
                         <p class="content__body-number">6</p>
                         <li class="content__body-item style--width">
@@ -573,7 +598,7 @@
                           <p class="content__body-status style--width font--yellow">Unpaid</p>
                         </li>
                       </ul>
-  
+
                       <button class="content__body-btn">
                         <img class="content__body-img" src="./images/chevron.svg" alt="arrow">
                       </button>
@@ -581,6 +606,7 @@
                   </ul>
                 </div>
               </div>
+            </div>
           </section>
         </div>
       </div>
