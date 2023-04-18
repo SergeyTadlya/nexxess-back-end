@@ -10,8 +10,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/custom.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/invoices.css' %}">
+      <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/authentication.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/my-account.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/tickets.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/services.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/faq.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/about-service.css' %}">
+
+<!--    <link rel="stylesheet" type="text/css" href="{% static 'css/404.css' %}">-->
+<!--    <link rel="stylesheet" type="text/css" href="{% static 'css/500.css' %}">-->
+<!--    <link rel="stylesheet" type="text/css" href="{% static 'css/403.css' %}">-->
+<!--    <link rel="stylesheet" type="text/css" href="{% static 'css/404.css' %}">-->
+<!--    <link rel="stylesheet" type="text/css" href="{% static 'css/500.css' %}">-->
+<!--    <link rel="stylesheet" type="text/css" href="{% static 'css/403.css' %}">-->
+<!--    <link rel="stylesheet" type="text/css" href="{% static 'css/400.css' %}">-->
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
     {% block extra_css %}
     {% endblock %}
     <title>NEXXESS</title>
@@ -22,8 +38,8 @@
           <div class="container">
             <div class="header__inner">
               <a href="{% url 'authentication:main'%}">
-                <picture>
-                    <source srcset="{% static 'images/logo-mobile.png' %}" media="(max-width: 600px)">
+                  <picture class="header__logo">
+                    <source srcset="{% static 'images/logo-mobile.png' %}" media="(max-width: 550px)">
                     <img src="{% static 'images/logo.png' %}" alt="logo">
                   </picture>
               </a>
@@ -44,11 +60,15 @@
                 </ul>
               </nav>
               <div class="header__box">
-                <a class="header__box-user" href="{% url 'authentication:profile'%}">
-                  <img class="header__box-img" src="{% static 'images/user.svg' %}" alt="user">
-                </a>
-                <p class="header__box-text">Hello, {{ user.username }}</p>
-                <a class="header__box-link" href="{% url 'account_logout' %}">Log Out</a>
+                  <a class="header__box-link" href="#">
+              <img class="header__box-img" src="{% static 'images/Search.svg' %}" alt="search">
+            </a>
+            <a class="header__box-link" href="{% url 'authentication:profile'%}">
+              <img class="header__box-img" src="{% static 'images/user.svg' %}" alt="user">
+            </a>
+                  <a class="header__box-link" href="#">
+              <img class="header__box-img" src="{% static 'images/telegram.svg' %}" alt="user">
+                  </a>
               </div>
               <a class="burger">
                 <span class="burger-line"></span>
@@ -59,37 +79,9 @@
         <main class="main">
             <div class="container">
                 <div class="main__inner">
-                    <aside class="aside">
-                        <div class="mobile__box">
-                          <a class="mobile__box-user" href="{% url 'authentication:profile'%}">
-                            <img class="mobile__box-img" src="{% static 'images/user.svg' %}" alt="user">
-                          </a>
-                          <p class="mobile__box-text">Hello, {{ user.username }}</p>
-                        </div>
-                        <div class="aside__box">
-                          <div class="aside__box-top">
-                            <img class="aside__top-img" src="{% static 'images/important.svg' %}" alt="icon">
-                            <h6 class="aside__top-title">Important</h6>
-                            <p class="aside__top-number">3</p>
-                          </div>
-                          <ul class="aside__box-list">
-                            <li class="aside__box-item">
-                              <p class="aside__box-text">You have earned totay:</p>
-                              <p class="aside__box-money">$124.30</p>
-                            </li>
-                            <li class="aside__box-item">
-                              <p class="aside__box-text">New servises this month:</p>
-                              <p class="aside__box-money">2</p>
-                            </li>
-                            <li class="aside__box-item">
-                              <p class="aside__box-text">Actual discounts:</p>
-                              <p class="aside__box-money">10%</p>
-                            </li>
-                          </ul>
-                        </div>
                         {% block left_menu %}
+
                         {% endblock left_menu %}
-                    </aside>
                     <section class="content">
                         {% block content %}
                         {% endblock content %}
@@ -97,12 +89,26 @@
                 </div>
             </div>
         </main>
+
     {% else %}
-        {% block auth %}
-        {% endblock auth %}
+    {% block auth %}
+    {% endblock auth %}
     {% endif %}
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+       <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/authentication.js' %}"></script>
+    <script src="{% static 'js/my-account.js' %}"></script>
+<script src="js/jquery-3.6.4.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/calendar.js"></script>
+    <script src="js/invoices.js"></script>
     {% block extra_js %}
+
+
+<script src="js/jquery-3.6.4.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/calendar.js"></script>
+    <script src="js/invoices.js"></script>
     {% endblock %}
 </body>
 </html>

@@ -427,7 +427,7 @@ body {
       -ms-flex-align: center;
           align-items: center;
 }
-.aside-filter__accordion-label:hover .aside__accordion-check::before {
+.aside-filter__accordion-label:hover .aside-filter__accordion-check::before {
   border-color: #85B7F0;
 }
 .aside-filter__accordion-check {
@@ -585,6 +585,12 @@ body {
   }
 }
 @media (max-width: 750px) {
+  .header {
+    position: fixed;
+    background-color: #fff;
+    z-index: 50;
+    width: 100%;
+  }
   .header__inner {
     display: -ms-grid;
     display: grid;
@@ -661,21 +667,24 @@ body {
     transition: transform 0.4s;
     transition: transform 0.4s, -webkit-transform 0.4s;
   }
-  .burger.burger--active span {
+  .burger.burger--active span,
+.burger.burger-filter--active span {
     display: none;
   }
-  .burger.burger--active::after {
+  .burger.burger--active::after,
+.burger.burger-filter--active::after {
     content: "";
     -webkit-transform: rotate(-45deg);
         -ms-transform: rotate(-45deg);
             transform: rotate(-45deg);
     background-color: #7C48EE;
   }
-  .burger.burger--active::before {
+  .burger.burger--active::before,
+.burger.burger-filter--active::before {
     content: "";
-    -webkit-transform: translateY(4px) rotate(45deg);
-        -ms-transform: translateY(4px) rotate(45deg);
-            transform: translateY(4px) rotate(45deg);
+    -webkit-transform: translateY(3.4px) rotate(45deg);
+        -ms-transform: translateY(3.4px) rotate(45deg);
+            transform: translateY(3.4px) rotate(45deg);
     background-color: #7C48EE;
   }
   .burger-line {
@@ -714,7 +723,7 @@ body {
     transition: transform 0.4s, -webkit-transform 0.4s;
     overflow: auto;
     background-color: #fff;
-    z-index: 10;
+    z-index: 15;
   }
   .aside-info--active, .aside-filter--active {
     -webkit-transform: translateX(0);
@@ -1063,20 +1072,24 @@ body {
   }
 }
 @media (max-width: 750px) {
+  .main {
+    padding-top: 190px;
+    margin: 0 0 30px;
+  }
   .content {
     margin: 0;
   }
 }
 @media (max-width: 600px) {
-  .main {
-    margin: 30px 0;
-  }
   .content__top-search {
     padding: 5px;
     max-width: 230px;
   }
 }
 @media (max-width: 550px) {
+  .main {
+    padding-top: 160px;
+  }
   .content {
     gap: 40px;
   }

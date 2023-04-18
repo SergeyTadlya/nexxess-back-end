@@ -1,63 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>NEXXESS</title>
-    <link rel="stylesheet" href="css/style.css" />
-    <link rel="stylesheet" href="css/services.css" />
-  </head>
-
+{% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/services.css' %}">
+{% endblock %}
+{% block left_menu %}
   <body>
-    <header class="header">
-      <div class="container">
-        <div class="header__inner">
-          <a class="header__link" href="./main.html">
-            <picture class="header__logo">
-            <source srcset="./images/logo-mobile.png" media="(max-width: 550px)">
-            <img src="./images/logo.png" alt="logo">
-          </picture>
-          </a>
 
-          <nav class="nav">
-
-            <ul class="nav__list">
-              <li class="nav__list-item">
-                <a class="nav__item-link" href="./services.html">Services</a>
-              </li>
-              <li class="nav__list-item">
-                <a class="nav__item-link" href="./invoices.html">Invoices</a>
-              </li>
-              <li class="nav__list-item">
-                <a class="nav__item-link" href="./tickets.html">Tickets</a>
-              </li>
-              <li class="nav__list-item">
-                <a class="nav__item-link" href="#">FAQ</a>
-              </li>
-            </ul>
-          </nav>
-
-          <div class="header__box">
-            <a class="header__box-link" href="#">
-              <img class="header__box-img" src="./images/Search.svg" alt="search">
-            </a>
-            <a class="header__box-link" href="./my-account.html">
-              <img class="header__box-img" src="./images/user.svg" alt="user">
-            </a>
-            <a class="header__box-link" href="#">
-              <img class="header__box-img" src="./images/telegram.svg" alt="user">
-            </a>
-          </div>
-
-          <a class="burger">
-            <span class="burger-line"></span>
-          </a>
-        </div>
-      </div>
-    </header>
-
-    
     <main class="main">
       <div class="container">
         <div class="main__inner">
@@ -81,29 +29,28 @@
                 </ul>
               </div>
 
-              <div class="aside-info__accordion">
-                <div id="aside-info__accordion-top" class="aside-info__accordion-top">
-                  <img class="aside-info__top-img" src="./images/services.svg" alt="icon">
-                  <h6 class="aside-info__top-title">Your servises</h6>
-                  <img class="aside-info__top-arrow" src="./images/chevron-down.svg" alt="icon">
-                </div>
+              <div class="aside__accordion">
+    <div id="aside__accordion-top" class="aside__accordion-top">
+      <img class="aside__top-img" src="{% static 'images/services.svg' %}" alt="icon">
+      <h6 class="aside__top-title">Your servises</h6>
+      <img class="aside__top-arrow" src="{% static 'images/chevron-down.svg' %}" alt="icon">
+    </div>
+    <ul class="aside__accordion-list">
+      <li class="aside__accordion-item">
+        <a class="aside__accordion-link" href="#">Your servises 1</a>
+      </li>
+      <li class="aside__accordion-item">
+        <a class="aside__accordion-link" href="#">Your servises 1</a>
+      </li>
+    </ul>
+  </div>
 
-                <ul class="aside-info__accordion-list">
-                  <li class="aside-info__accordion-item">
-                    <a class="aside-info__accordion-link" href="#">Your servises 1</a>
-                  </li>
-                  <li class="aside-info__accordion-item">
-                    <a class="aside-info__accordion-link" href="#">Your servises 1</a>
-                  </li>
-                </ul>
-              </div>
-
-              <div class="aside-info__accordion">
-                <div id="aside-info__accordion-top" class="aside-info__accordion-top">
-                  <img class="aside-info__top-img" src="./images/credit-card.svg" alt="icon">
-                  <h6 class="aside-info__top-title">Payments</h6>
-                  <img class="aside-info__top-arrow" src="./images/chevron-down.svg" alt="icon">
-                </div>
+              <div class="aside__accordion">
+    <div id="aside__accordion-top" class="aside__accordion-top">
+      <img class="aside__top-img" src="{% static 'images/credit-card.svg' %}" alt="icon">
+      <h6 class="aside__top-title">Payments</h6>
+      <img class="aside__top-arrow" src="{% static 'images/chevron-down.svg' %}" alt="icon">
+    </div>
 
                 <ul class="aside-info__accordion-list">
                   <li class="aside-info__accordion-item">
@@ -117,104 +64,92 @@
                   </li>
                 </ul>
               </div>
-              
-              <div class="aside-info__accordion">
-                <div id="aside-info__accordion-top" class="aside-info__accordion-top">
-                  <img class="aside-info__top-img" src="./images/tickets.svg" alt="icon">
-                  <h6 class="aside-info__top-title">Tickets</h6>
-                  <img class="aside-info__top-arrow" src="./images/chevron-down.svg" alt="icon">
-                </div>
 
-                <ul class="aside-info__accordion-list">
-                  <li class="aside-info__accordion-item">
-                    <a class="aside-info__accordion-link" href="#">
-                      <p class="aside-info__accordion-text">Ongoing</p>
-                      <p class="aside-info__accordion-number font--green">2</p>
-                    </a>
-                  </li>
-                  <li class="aside-info__accordion-item">
-                    <a class="aside-info__accordion-link" href="#">
-                      <p class="aside-info__accordion-text">Overdue</p>
-                      <p class="aside-info__accordion-number font--red">8</p>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </aside>
+             <div class="aside__accordion">
+    <div id="aside__accordion-top" class="aside__accordion-top">
+      <img class="aside__top-img" src="{% static 'images/tickets.svg' %}" alt="icon">
+      <h6 class="aside__top-title">Tickets</h6>
+      <img class="aside__top-arrow" src="{% static 'images/chevron-down.svg' %}" alt="icon">
+    </div>
 
-          <section class="content">
+    <ul class="aside__accordion-list">
+      <li class="aside__accordion-item">
+        <a class="aside__accordion-link" href="#">
+          <p class="aside__accordion-text">Ongoing</p>
+          <p class="aside__accordion-number font--green">2</p>
+        </a>
+      </li>
+      <li class="aside__accordion-item">
+        <a class="aside__accordion-link" href="#">
+          <p class="aside__accordion-text">Overdue</p>
+          <p class="aside__accordion-number font--red">8</p>
+        </a>
+      </li>
+    </ul>
+  </div>
+              <section class="content">
+            {% endblock left_menu %}
+
+            {% block content %}
             <div class="content__inner">
               <div class="content__top">
                 <div class="content__top-body">
                   <h1 class="title content__top-title">Services</h1>
                   <div id="content__top-box" class="content__top-box">
                     <p class="content__top-text">Showing</p>
-                    <p id="content__top-number" class="content__top-number">10</p>
-                    <img src="./images/invoices/arrow-drop-down.svg" alt="icon">
-                    <p class="content__top-numbers">of 35</p>
-                    <ul id="content__top-list" class="content__top-list">
-                      <li class="content__top-item">10</li>
-                      <li class="content__top-item">35</li>
-                      <li class="content__top-item">All</li>
-                    </ul>
-                  </div>
-                </div>
-                <div class="content__top-search">
-                  <img class="content__top-img" src="./images/main/Search.svg" alt="Search">
-                  <input class="content__top-input" type="text" placeholder="Search">
-                </div>
-              </div>
-
-              <ul class="content__list">
-                <li class="content__list-item">
-                  <div class="content__list-box">
-                    <div class="content__list-img">
-                      <img src="./images/service.jpg" alt="images">
-                    </div>
-                    <p class="content__list-title">Servise 1</p>
-                  </div>
-                  <p class="content__list-text">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.</p>
-                  <div class="content__list-box">
-                    <p class="content__list-price">$100</p>
-                    <a class="content__list-link" href="#">Order</a>
-                  </div>
-                </li>
-
-                <li class="content__list-item">
-                  <div class="content__list-box">
-                    <div class="content__list-img">
-                      <img src="./images/service.jpg" alt="images">
-                    </div>
-                    <p class="content__list-title">Servise 2</p>
-                  </div>
-                  <p class="content__list-text">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.</p>
-                  <div class="content__list-box">
-                    <p class="content__list-price">$200</p>
-                    <a class="content__list-link" href="#">Order</a>
-                  </div>
-                </li>
-
-                <li class="content__list-item">
-                  <div class="content__list-box">
-                    <div class="content__list-img">
-                      <img src="./images/service.jpg" alt="images">
-                    </div>
-                    <p class="content__list-title">Servise 3</p>
-                  </div>
-                  <p class="content__list-text">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.</p>
-                  <div class="content__list-box">
-                    <p class="content__list-price">$300</p>
-                    <a class="content__list-link" href="#">Order</a>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </section>
+          <p id="content__top-number" class="content__top-number">10</p>
+          <img src="{% static 'images/invoices/arrow-drop-down.svg' %}" alt="icon">
+          <p class="content__top-numbers">of {{ services_count }}</p>
+          <ul id="content__top-list" class="content__top-list">
+            <li class="content__top-item">10</li>
+            <li class="content__top-item">35</li>
+            <li class="content__top-item">All</li>
+          </ul>
         </div>
       </div>
-    </main>
+              </div>
+      <div class="content__top-search">
+        <img class="content__top-img" src="{% static 'images/Search.svg' %}" alt="Search">
+        <input class="content__top-input" type="text" placeholder="Search">
+      </div>
+    </div>
 
-    <script src="js/services.js"></script>
-  </body>
-</html>
+             <ul class="content__list">
+      {% for service in services_info %}
+        {% if service.ACTIVE == "Y" %}
+          <li class="content__list-item">
+            <div class="content__list-box">
+              <div class="content__list-img">
+                {% if service.PREVIEW_PICTURE == "None" %}
+                  <img src="{% static 'images/service.jpg' %}" alt="images">
+                {% else %}
+                  <img src="{% static 'images/service.jpg' %}" alt="images">
+                {% endif %}
+              </div>
+              <p class="content__list-title">{{service.NAME}}</p>
+            </div>
+            <p class="content__list-text">{{ service.DESCRIPTION }}</p>
+            <div class="content__list-box">
+              <p class="content__list-price">
+                {% if service.CURRENCY_ID == "EUR" %}
+                  {% with '€' as currency %}
+                    {{ currency }}
+                  {% endwith %}
+                {% elif service.CURRENCY_ID == "USD" %}
+                  {% with '$' as currency %}
+                    {{ currency }}
+                  {% endwith %}
+                {% endif %}
+                {{ service.PRICE }}
+              </p>
+              <a class="content__list-link" href="#">Order</a>
+            </div>
+          </li>
+         {% endif %}
+        {% endfor %}
+      </ul>
+{% endblock content %}
+<script src="{% static 'js/services.js' %}"></script>
+{% block extra_js %}
+    <script src="{% static 'js/services.js' %}"></script>
+{% endblock extra_js %}
