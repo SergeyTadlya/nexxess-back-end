@@ -1,5 +1,6 @@
 from ..models import User
 from .invoices.handlers import InvoiceHandler
+from .logout.handlers import LogOutHandler
 
 
 class CallbackHandler:
@@ -21,7 +22,13 @@ class CallbackHandler:
 
         if 'invoices' in callback_data:
             InvoiceHandler(self.bot, self.data, callback_data)
+        elif 'services' in callback_data:
+            pass
         elif 'tickets' in callback_data:
             pass
         elif 'FAQ' in callback_data:
             pass
+        elif 'logout' in callback_data:
+            LogOutHandler(self.bot, self.data, callback_data)
+
+

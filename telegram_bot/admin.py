@@ -27,7 +27,7 @@ class UserAdmin(BaseUserAdmin):
         (None, {'fields': (
             'email',
             'password',
-            'name',
+            'username',
             'telegram_id',
             'first_name',
             'last_name',
@@ -54,7 +54,7 @@ class UserAdmin(BaseUserAdmin):
         ),
     )
 
-    list_display = ('email', 'name', 'is_staff', 'last_login', 'date_joined')
+    list_display = ('email', 'username', 'is_staff', 'last_login', 'date_joined')
     list_filter = ('is_staff', 'is_superuser', 'is_active', 'groups')
     search_fields = ('email',)
     ordering = ('email',)

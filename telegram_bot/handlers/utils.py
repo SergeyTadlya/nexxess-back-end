@@ -1,4 +1,5 @@
 from ..models import User, Authentication
+from api.views.Auth import UserAPICreate
 
 
 def get_chat_id(data):
@@ -22,20 +23,19 @@ def get_user(data):
         return None
 
 
-def create_user(data):
+def authorize_user(data):
     telegram_id = data['from']['id']
 
     unauthorized_user = Authentication.objects.filter(telegram_id=telegram_id)
     if unauthorized_user.exists():
         unauthorized_user = unauthorized_user.first()
+        unauthorized_user.delete()
 
-    user = User()
-    user.email = unauthorized_user.email
-    user.name = data['from']['username'] if data['from']['username'] else 'No username'
-    user.telegram_id = telegram_id
-    user.first_name = data['from']['first_name'] if data['from']['first_name'] else 'No name'
-    user.last_name = data['from']['last_name'] if data['from']['last_name'] else 'No last name'
-
-    user.set_password(unauthorized_user.password)
-
-    user.save()
+    user_api = UserAPICreate()
+    user_api.post(email=unauthorized_user.email,
+                  name=data['from']['username'] if data['from']['username'] else 'No username',
+                  telegram_id=telegram_id,
+                  first_name=data['from']['first_name'] if data['from']['first_name'] else 'No name',
+                  last_name=data['from']['last_name'] if data['from']['last_name'] else 'No last name',
+                  is_staff=False,
+                  password=unauthorized_user.password)

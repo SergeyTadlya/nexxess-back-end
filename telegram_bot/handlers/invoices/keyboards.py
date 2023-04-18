@@ -14,9 +14,10 @@ def has_no_invoices_keyboard() -> InlineKeyboardMarkup:
 
 def types_invoices_keyboard() -> InlineKeyboardMarkup:
     buttons = [
-        [InlineKeyboardButton('Paid', callback_data='invoices_paid'),
-         InlineKeyboardButton('Unpaid', callback_data='invoices_unpaid')],
-        [InlineKeyboardButton('Canceled', callback_data='invoices_canceled'),
-         InlineKeyboardButton('Refunded', callback_data='invoices_refunded')]
+        [InlineKeyboardButton('🟢 Paid', callback_data='invoices_paid')],
+        [InlineKeyboardButton('🟡 Unpaid', callback_data='invoices_unpaid')],
+        [InlineKeyboardButton('🔵 Refunded', callback_data='invoices_refunded')],
+        [InlineKeyboardButton('🔴 Canceled', callback_data='invoices_canceled')],
+        [InlineKeyboardButton('All invoices', callback_data='invoices_all')]
     ]
     return InlineKeyboardMarkup(buttons)
