@@ -43,7 +43,7 @@ def invoices(request):
 
     context = {
         "invoices": invoices_array,
-        "invoices_dates": invoices_dates.sort()
+        "invoices_dates": invoices_dates
     }
     return render(request, "invoices/invoices.html", context)
 
