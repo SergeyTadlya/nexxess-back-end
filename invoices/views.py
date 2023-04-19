@@ -4,11 +4,10 @@ from io import BytesIO
 from django.http import HttpResponse
 from django.template.loader import get_template
 import xhtml2pdf.pisa as pisa
-from datetime import datetime
 
 
-def format_date(date_str):
-    return datetime.strptime(date_str, '%Y-%m-%dT%H:%M:%S%z').strftime('%d %b %Y')if date_str else ''
+def format_date(date):
+    return date.strftime('%d %b %Y') if date else ''
 
 
 def format_price(price):
@@ -19,9 +18,10 @@ def format_price(price):
 
 
 def invoices(request):
-    # відфільтровуємо дані по пошті авторизованого користувачі (адміну будуть виводитись всі)
-    all_user_invoices = Invoice.objects.all() if request.user.is_superuser \
-                   else Invoice.objects.filter(responsible=request.user.email)
+    # Відфільтровуємо дані по пошті авторизованого користувача (Адміну будуть виводитись всі)
+
+    all_user_invoices = Invoice.objects.all().order_by('-date') if request.user.is_superuser \
+        else Invoice.objects.filter(responsible=request.user.email).order_by('-date')
 
     invoices_array = list()
     invoices_dates = list()
@@ -45,6 +45,7 @@ def invoices(request):
         "invoices": invoices_array,
         "invoices_dates": invoices_dates
     }
+
     return render(request, "invoices/invoices.html", context)
 
 

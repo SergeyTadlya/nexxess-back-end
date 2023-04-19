@@ -4,6 +4,7 @@ from tickets.models import Ticket
 from invoices.models import Invoice
 from authentication.helpers.B24Webhook import B24_WEBHOOK
 import requests
+from datetime import datetime
 
 
 @csrf_exempt
@@ -83,8 +84,8 @@ def webhook_invoice(request):
                 'invoice_info': invoice_load,
                 'price': invoice_load['PRICE'],
                 'status': invoice_load['STATUS_ID'],
-                'date': invoice_load['DATE_BILL'],
-                'due_date': invoice_load['DATE_PAY_BEFORE'],
+                'date': datetime.strptime(invoice_load['DATE_BILL'], '%Y-%m-%dT%H:%M:%S%z'),
+                'due_date': datetime.strptime(invoice_load['DATE_PAY_BEFORE'][:11] + '23:59:59', '%Y-%m-%dT%H:%M:%S'),
                 'is_opened': False
             }
 
