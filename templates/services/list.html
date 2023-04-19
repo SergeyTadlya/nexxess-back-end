@@ -107,8 +107,7 @@
     </div>
       {% for service in services_info %}
 
-        {% if service.ACTIVE == "Y" %}
-                <ul class="content__list">
+        {% if service.ACTIVE == "Y" %}<ul class="content__list">
           <li class="content__list-item">
             <div class="content__list-box">
               <div class="content__list-img">
@@ -139,7 +138,7 @@
             </div>
           </li>
                     {% endfor %}
-      </ul>
+            </ul>
 
 
 
@@ -148,7 +147,7 @@
 
         </div>
       </div>
-    </main>
+        </main>
 {% endblock content %}
             {% block extra_js %}
     <script src="{% static 'js/services.js' %}"></script>
