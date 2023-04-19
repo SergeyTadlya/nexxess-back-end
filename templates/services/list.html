@@ -1,8 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block extra_css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/services.css' %}">
-{% endblock %}
+
 {% block left_menu %}
   <body>
 
@@ -30,20 +28,19 @@
               </div>
 
               <div class="aside__accordion">
-    <div id="aside__accordion-top" class="aside__accordion-top">
-      <img class="aside__top-img" src="{% static 'images/services.svg' %}" alt="icon">
-      <h6 class="aside__top-title">Your servises</h6>
-      <img class="aside__top-arrow" src="{% static 'images/chevron-down.svg' %}" alt="icon">
-    </div>
-    <ul class="aside__accordion-list">
-      <li class="aside__accordion-item">
-        <a class="aside__accordion-link" href="#">Your servises 1</a>
-      </li>
-      <li class="aside__accordion-item">
-        <a class="aside__accordion-link" href="#">Your servises 1</a>
-      </li>
-    </ul>
-  </div>
+            <div id="aside__accordion-top" class="aside__accordion-top">
+            <img class="aside__top-img" src="{% static 'images/services.svg' %}" alt="icon">
+            <h6 class="aside__top-title">Your servises</h6>
+            <img class="aside__top-arrow" src="{% static 'images/chevron-down.svg' %}" alt="icon">
+           </div>
+       <ul class="aside__accordion-list">
+          <li class="aside__accordion-item">
+            <a class="aside__accordion-link" href="#">Your servises 1</a>
+           </li>
+         <li class="aside__accordion-item">
+           <a class="aside__accordion-link" href="#">Your servises 1</a>
+         </li>
+        </ul></div>
 
               <div class="aside__accordion">
     <div id="aside__accordion-top" class="aside__accordion-top">
@@ -87,9 +84,8 @@
       </li>
     </ul>
   </div>
+              {% endblock left_menu %}
               <section class="content">
-            {% endblock left_menu %}
-
             {% block content %}
             <div class="content__inner">
               <div class="content__top">
@@ -148,8 +144,12 @@
          {% endif %}
         {% endfor %}
       </ul>
+    </section></div>
+
 {% endblock content %}
-<script src="{% static 'js/services.js' %}"></script>
-{% block extra_js %}
-    <script src="{% static 'js/services.js' %}"></script>
-{% endblock extra_js %}
+
+
+
+
+
+

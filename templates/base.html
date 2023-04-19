@@ -5,19 +5,25 @@
 {% load socialaccount %}
 <html lang="en">
 <head>
+    {% block  extra_css %}
+    {% endblock  %}
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/custom.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/invoices.css' %}">
       <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/authentication.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/my-account.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/tickets.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/services.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/faq.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/about-service.css' %}">
+<!--    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">-->
+<!--    <link rel="stylesheet" type="text/css" href="{% static 'css/custom.css' %}">-->
+<!--    <link rel="stylesheet" type="text/css" href="{% static 'css/invoices.css' %}">-->
+<!--      <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">-->
+<!--    <link rel="stylesheet" type="text/css" href="{% static 'css/authentication.css' %}">-->
+<!--&lt;!&ndash;     <link rel="stylesheet" type="text/css" href="{% static 'css/services.css' %}">&ndash;&gt;-->
+<!--        <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">-->
+<!--    <link rel="stylesheet" type="text/css" href="{% static 'css/my-account.css' %}">-->
+<!--    <link rel="stylesheet" type="text/css" href="{% static 'css/tickets.css' %}">-->
+<!--        <link rel="stylesheet" type="text/css" href="{% static 'css/invoices.css' %}">-->
+<!--&lt;!&ndash;    <link rel="stylesheet" type="text/css" href="{% static 'css/services.css' %}">&ndash;&gt;-->
+<!--    <link rel="stylesheet" type="text/css" href="{% static 'css/faq.css' %}">-->
+<!--    <link rel="stylesheet" type="text/css" href="{% static 'css/about-service.css' %}">-->
 
 <!--    <link rel="stylesheet" type="text/css" href="{% static 'css/404.css' %}">-->
 <!--    <link rel="stylesheet" type="text/css" href="{% static 'css/500.css' %}">-->
@@ -28,8 +34,7 @@
 <!--    <link rel="stylesheet" type="text/css" href="{% static 'css/400.css' %}">-->
 
 <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
-    {% block extra_css %}
-    {% endblock %}
+
     <title>NEXXESS</title>
 </head>
 <body>
@@ -43,7 +48,10 @@
                     <img src="{% static 'images/logo.png' %}" alt="logo">
                   </picture>
               </a>
-              <nav class="nav">
+                <nav class="nav">
+            <a class="nav__burger">
+              <span class="nav__burger-line"></span>
+                </a>
                 <ul class="nav__list">
                   <li class="nav__list-item">
                     <a class="nav__item-link" href="{% url 'invoices'%}">Invoices</a>
@@ -57,17 +65,18 @@
                   <li class="nav__list-item">
                     <a class="nav__item-link" href="#">FAQ</a>
                   </li>
+
                 </ul>
-              </nav>
+                </nav>
               <div class="header__box">
                   <a class="header__box-link" href="#">
-              <img class="header__box-img" src="{% static 'images/Search.svg' %}" alt="search">
-            </a>
-            <a class="header__box-link" href="{% url 'authentication:profile'%}">
-              <img class="header__box-img" src="{% static 'images/user.svg' %}" alt="user">
-            </a>
+               <img class="header__box-img" src="{% static 'images/Search.svg' %}" alt="search">
+             </a>
+             <a class="header__box-link" href="{% url 'authentication:profile'%}">
+               <img class="header__box-img" src="{% static 'images/user.svg' %}" alt="user">
+             </a>
                   <a class="header__box-link" href="#">
-              <img class="header__box-img" src="{% static 'images/telegram.svg' %}" alt="user">
+               <img class="header__box-img" src="{% static 'images/telegram.svg' %}" alt="user">
                   </a>
               </div>
               <a class="burger">
@@ -76,39 +85,41 @@
             </div>
           </div>
         </header>
-        <main class="main">
-            <div class="container">
-                <div class="main__inner">
-                        {% block left_menu %}
+<!--        <main class="main">-->
+<!--            <div class="container">-->
+<!--                <div class="main__inner">-->
 
-                        {% endblock left_menu %}
-                    <section class="content">
-                        {% block content %}
+                            {% block left_menu %}
+
+                         {% endblock left_menu %}
+                        <section class="content">
+                         {% block content %}
                         {% endblock content %}
-                    </section>
-                </div>
-            </div>
-        </main>
+                        </section>
+
+<!--                </div>`-->
+<!--            </div>-->
+<!--        </main>-->
 
     {% else %}
     {% block auth %}
     {% endblock auth %}
     {% endif %}
-       <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
-    <script src="{% static 'js/main.js' %}"></script>
-    <script src="{% static 'js/authentication.js' %}"></script>
-    <script src="{% static 'js/my-account.js' %}"></script>
-<script src="js/jquery-3.6.4.min.js"></script>
-    <script src="js/jquery-ui.min.js"></script>
-    <script src="js/calendar.js"></script>
-    <script src="js/invoices.js"></script>
-    {% block extra_js %}
+<!--      <script src="{% static 'js/about-service.js' %}"></script>-->
+<!--    <script src="{% static 'js/authentication.js' %}"></script>-->
+<!--      <script src="{% static 'js/calendar.js' %}"></script>-->
+<!--    <script src="{% static 'js/invoices.js' %}"></script>-->
+<!--    <script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>-->
+<!--      <script src="{% static 'js/jquery-ui.min.js' %}"></script>-->
+<!--    <script src="{% static 'js/main.js' %}"></script>-->
+<!--    <script src="{% static 'js/my-account.js' %}"></script>-->
+<!--      <script src="{% static 'js/services.js' %}"></script>-->
 
 
-<script src="js/jquery-3.6.4.min.js"></script>
-    <script src="js/jquery-ui.min.js"></script>
-    <script src="js/calendar.js"></script>
-    <script src="js/invoices.js"></script>
-    {% endblock %}
+<!--     <script src="{% static 'js/tickets.js' %}"></script>-->
+
+{% block extra_js %}
+{% endblock extra_js %}
+
 </body>
 </html>
