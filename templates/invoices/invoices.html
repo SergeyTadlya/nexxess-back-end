@@ -1,12 +1,15 @@
 {% extends 'base.html' %}
 {% load static %}
+{% block extra_css %}
  <link rel="stylesheet" type="text/css" href="{% static 'css/invoices.css' %}">
+{% endblock %}
 
 {% block left_menu %}
-        <link rel="stylesheet" type="text/css" href="{% static 'css/invoices.css' %}">
+
   <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 <main class="main" xmlns="http://www.w3.org/1999/html">
-    <div class="container"><div class="main__inner">
+    <div class="container">
+        <div class="main__inner">
           <aside class="aside">
             <div class="aside-info">
               <div class="aside-info__box">

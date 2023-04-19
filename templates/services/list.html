@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
-
-{% block left_menu %}
+{% block extra_css %}
+ <link rel="stylesheet" type="text/css" href="{% static 'css/services.css' %}">
+{% endblock %}
+    {% block left_menu %}
   <body>
 
     <main class="main">
@@ -11,7 +13,7 @@
             <div class="aside-info">
               <div class="aside-info__box">
                 <div class="aside-info__box-top">
-                  <img class="aside-info__top-img" src="./images/important.svg" alt="icon">
+                  <img class="aside-info__top-img" src="{% static 'images/important.svg' %}" alt="icon">
                   <h6 class="aside-info__top-title">Important</h6>
                   <p class="aside-info__top-number">2</p>
                 </div>
@@ -27,27 +29,30 @@
                 </ul>
               </div>
 
-              <div class="aside__accordion">
-            <div id="aside__accordion-top" class="aside__accordion-top">
-            <img class="aside__top-img" src="{% static 'images/services.svg' %}" alt="icon">
-            <h6 class="aside__top-title">Your servises</h6>
-            <img class="aside__top-arrow" src="{% static 'images/chevron-down.svg' %}" alt="icon">
-           </div>
-       <ul class="aside__accordion-list">
-          <li class="aside__accordion-item">
-            <a class="aside__accordion-link" href="#">Your servises 1</a>
-           </li>
-         <li class="aside__accordion-item">
-           <a class="aside__accordion-link" href="#">Your servises 1</a>
-         </li>
-        </ul></div>
 
-              <div class="aside__accordion">
-    <div id="aside__accordion-top" class="aside__accordion-top">
-      <img class="aside__top-img" src="{% static 'images/credit-card.svg' %}" alt="icon">
-      <h6 class="aside__top-title">Payments</h6>
-      <img class="aside__top-arrow" src="{% static 'images/chevron-down.svg' %}" alt="icon">
-    </div>
+                  <div class="aside-info__accordion">
+                <div id="aside-info__accordion-top" class="aside-info__accordion-top">
+                  <img class="aside-info__top-img" src="{% static 'images/services.svg' %}" alt="icon">
+                  <h6 class="aside-info__top-title">Your servises</h6>
+                  <img class="aside-info__top-arrow" src="{% static 'images/chevron-down.svg' %}" alt="icon">
+                </div>
+
+       <ul class="aside-info__accordion-list">
+                  <li class="aside-info__accordion-item">
+                    <a class="aside-info__accordion-link" href="#">Your servises 1</a>
+                  </li>
+                  <li class="aside-info__accordion-item">
+                    <a class="aside-info__accordion-link" href="#">Your servises 1</a>
+                  </li>
+                </ul>
+              </div>
+
+                   <div class="aside-info__accordion">
+                <div id="aside-info__accordion-top" class="aside-info__accordion-top">
+                  <img class="aside-info__top-img" src="{% static 'images/credit-card.svg' %}" alt="icon">
+                  <h6 class="aside-info__top-title">Payments</h6>
+                  <img class="aside-info__top-arrow" src="{% static 'images/chevron-down.svg' %}" alt="icon">
+                </div>
 
                 <ul class="aside-info__accordion-list">
                   <li class="aside-info__accordion-item">
@@ -62,64 +67,55 @@
                 </ul>
               </div>
 
-             <div class="aside__accordion">
-    <div id="aside__accordion-top" class="aside__accordion-top">
-      <img class="aside__top-img" src="{% static 'images/tickets.svg' %}" alt="icon">
-      <h6 class="aside__top-title">Tickets</h6>
-      <img class="aside__top-arrow" src="{% static 'images/chevron-down.svg' %}" alt="icon">
-    </div>
 
-    <ul class="aside__accordion-list">
-      <li class="aside__accordion-item">
-        <a class="aside__accordion-link" href="#">
-          <p class="aside__accordion-text">Ongoing</p>
-          <p class="aside__accordion-number font--green">2</p>
-        </a>
-      </li>
-      <li class="aside__accordion-item">
-        <a class="aside__accordion-link" href="#">
-          <p class="aside__accordion-text">Overdue</p>
-          <p class="aside__accordion-number font--red">8</p>
-        </a>
-      </li>
-    </ul>
-  </div>
+
+                <div class="aside-info__accordion">
+                <div id="aside-info__accordion-top" class="aside-info__accordion-top">
+                  <img class="aside-info__top-img" src="{% static 'images/tickets.svg' %}" alt="icon">
+                  <h6 class="aside-info__top-title">Tickets</h6>
+                  <img class="aside-info__top-arrow" src="{% static 'images/chevron-down.svg' %}" alt="icon">
+                </div>
+
+                    <ul class="aside-info__accordion-list">
+                  <li class="aside-info__accordion-item">
+                    <a class="aside-info__accordion-link" href="#">
+                      <p class="aside-info__accordion-text">Ongoing</p>
+                      <p class="aside-info__accordion-number font--green">2</p>
+                    </a>
+                  </li>
+                  <li class="aside-info__accordion-item">
+                    <a class="aside-info__accordion-link" href="#">
+                      <p class="aside-info__accordion-text">Overdue</p>
+                      <p class="aside-info__accordion-number font--red">8</p>
+                    </a>
+                  </li>
+   </ul>
+              </div>
+            </div>
+          </aside>
               {% endblock left_menu %}
-              <section class="content">
             {% block content %}
-            <div class="content__inner">
+       <div class="content__inner">
               <div class="content__top">
                 <div class="content__top-body">
                   <h1 class="title content__top-title">Services</h1>
-                  <div id="content__top-box" class="content__top-box">
-                    <p class="content__top-text">Showing</p>
-          <p id="content__top-number" class="content__top-number">10</p>
-          <img src="{% static 'images/invoices/arrow-drop-down.svg' %}" alt="icon">
-          <p class="content__top-numbers">of {{ services_count }}</p>
-          <ul id="content__top-list" class="content__top-list">
-            <li class="content__top-item">10</li>
-            <li class="content__top-item">35</li>
-            <li class="content__top-item">All</li>
-          </ul>
-        </div>
-      </div>
-              </div>
-      <div class="content__top-search">
+                </div>
+                  <div class="content__top-search">
         <img class="content__top-img" src="{% static 'images/Search.svg' %}" alt="Search">
         <input class="content__top-input" type="text" placeholder="Search">
       </div>
     </div>
-
-             <ul class="content__list">
       {% for service in services_info %}
+
         {% if service.ACTIVE == "Y" %}
+                <ul class="content__list">
           <li class="content__list-item">
             <div class="content__list-box">
               <div class="content__list-img">
                 {% if service.PREVIEW_PICTURE == "None" %}
-                  <img src="{% static 'images/service.jpg' %}" alt="images">
+                     <img src="{% static 'images/service.jpg' %}" alt="images">
                 {% else %}
-                  <img src="{% static 'images/service.jpg' %}" alt="images">
+                     <img src="{% static 'images/service.jpg' %}" alt="images">
                 {% endif %}
               </div>
               <p class="content__list-title">{{service.NAME}}</p>
@@ -137,16 +133,26 @@
                   {% endwith %}
                 {% endif %}
                 {{ service.PRICE }}
+                   {% endif %}
               </p>
               <a class="content__list-link" href="#">Order</a>
             </div>
           </li>
-         {% endif %}
-        {% endfor %}
+                    {% endfor %}
       </ul>
-    </section></div>
 
+
+
+
+
+
+        </div>
+      </div>
+    </main>
 {% endblock content %}
+            {% block extra_js %}
+    <script src="{% static 'js/services.js' %}"></script>
+{% endblock %}
 
 
 

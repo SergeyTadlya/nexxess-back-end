@@ -15,7 +15,7 @@
 <!--    <link rel="stylesheet" type="text/css" href="{% static 'css/custom.css' %}">-->
 <!--    <link rel="stylesheet" type="text/css" href="{% static 'css/invoices.css' %}">-->
 <!--      <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">-->
-<!--    <link rel="stylesheet" type="text/css" href="{% static 'css/authentication.css' %}">-->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/authentication.css' %}">
 <!--&lt;!&ndash;     <link rel="stylesheet" type="text/css" href="{% static 'css/services.css' %}">&ndash;&gt;-->
 <!--        <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">-->
 <!--    <link rel="stylesheet" type="text/css" href="{% static 'css/my-account.css' %}">-->
@@ -33,7 +33,7 @@
 <!--    <link rel="stylesheet" type="text/css" href="{% static 'css/403.css' %}">-->
 <!--    <link rel="stylesheet" type="text/css" href="{% static 'css/400.css' %}">-->
 
-<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+<!--<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">-->
 
     <title>NEXXESS</title>
 </head>
@@ -53,19 +53,18 @@
               <span class="nav__burger-line"></span>
                 </a>
                 <ul class="nav__list">
+                    <li class="nav__list-item">
+                    <a class="nav__item-link" href="{% url 'services'%}">Services</a>
+                  </li>
                   <li class="nav__list-item">
                     <a class="nav__item-link" href="{% url 'invoices'%}">Invoices</a>
                   </li>
                   <li class="nav__list-item">
-                    <a class="nav__item-link" href="{% url 'support'%}">Support</a>
-                  </li>
-                  <li class="nav__list-item">
-                    <a class="nav__item-link" href="{% url 'services'%}">Services</a>
+                    <a class="nav__item-link" href="{% url 'support'%}">Tickets</a>
                   </li>
                   <li class="nav__list-item">
                     <a class="nav__item-link" href="#">FAQ</a>
                   </li>
-
                 </ul>
                 </nav>
               <div class="header__box">
@@ -111,7 +110,7 @@
 <!--    <script src="{% static 'js/invoices.js' %}"></script>-->
 <!--    <script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>-->
 <!--      <script src="{% static 'js/jquery-ui.min.js' %}"></script>-->
-<!--    <script src="{% static 'js/main.js' %}"></script>-->
+
 <!--    <script src="{% static 'js/my-account.js' %}"></script>-->
 <!--      <script src="{% static 'js/services.js' %}"></script>-->
 
