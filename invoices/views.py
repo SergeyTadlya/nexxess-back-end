@@ -25,8 +25,14 @@ def invoices(request):
 
     invoices_array = list()
     invoices_dates = list()
+    statuses = {'null': 0}
 
     for invoice in all_user_invoices:
+        statuses[invoice.status] = 0
+
+    for invoice in all_user_invoices:
+        statuses[invoice.status] += 1
+
         invoices_array.append({
             'id': invoice.id,
             'invoice_id': invoice.invoice_id,
@@ -43,7 +49,8 @@ def invoices(request):
 
     context = {
         "invoices": invoices_array,
-        "invoices_dates": invoices_dates
+        "invoices_dates": invoices_dates,
+        'statuses': statuses,
     }
 
     return render(request, "invoices/invoices.html", context)

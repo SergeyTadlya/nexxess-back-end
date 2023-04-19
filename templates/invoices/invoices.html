@@ -19,28 +19,52 @@
                         <input id="status1" class="aside__accordion-check"  name="check" type="checkbox" >
                         Paid
                       </label>
-                    <p class="aside__accordion-number">1</p>
+                    <p class="aside__accordion-number">
+                      {% if statuses.Paid %}
+                        {{ statuses.Paid }}
+                      {% else %}
+                        {{ statuses.null }}
+                      {% endif %}
+                    </p>
                   </li>
                   <li class="aside__accordion-item">
                       <label class="aside__accordion-label" for="status2">
                         <input id="status2" class="aside__accordion-check" name="check" type="checkbox">
                         Unpaid
                       </label>
-                    <p class="aside__accordion-number">1</p>
+                    <p class="aside__accordion-number">
+                      {% if statuses.Unpaid %}
+                        {{ statuses.Unpaid }}
+                      {% else %}
+                        {{ statuses.null }}
+                      {% endif %}
+                    </p>
                   </li>
                   <li class="aside__accordion-item">
                       <label class="aside__accordion-label" for="status3">
                         <input id="status3" class="aside__accordion-check" name="check" type="checkbox">
                         Canceled
                       </label>
-                    <p class="aside__accordion-number">1</p>
+                    <p class="aside__accordion-number">
+                      {% if statuses.Canceled %}
+                        {{ statuses.Canceled }}
+                      {% else %}
+                        {{ statuses.null }}
+                      {% endif %}
+                    </p>
                   </li>
                   <li class="aside__accordion-item">
                     <label class="aside__accordion-label" for="status4">
                       <input id="status4" class="aside__accordion-check"  name="check" type="checkbox">
                         Refunded
                       </label>
-                    <p class="aside__accordion-number">1</p>
+                    <p class="aside__accordion-number">
+                      {% if statuses.Refunded %}
+                        {{ statuses.Refunded }}
+                      {% else %}
+                        {{ statuses.null }}
+                      {% endif %}
+                    </p>
                   </li>
                 </ul>
               </div>
