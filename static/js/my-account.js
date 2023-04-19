@@ -40,4 +40,4 @@ uploadButton.onchange = () => {
   reader.onload = () => {
     chosenImage.setAttribute('src', reader.result)
   }
-} 
+}
