@@ -1199,6 +1199,9 @@ body {
       -ms-flex-align: center;
           align-items: center;
 }
+.content__body-link {
+  height: 22px;
+}
 .content__body-number {
   position: absolute;
   left: 10px;

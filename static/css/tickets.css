@@ -1904,6 +1904,9 @@ body {
         -ms-flex-order: 5;
             order: 5;
   }
+  .content__body-link {
+    height: 22px;
+  }
   .content__body-number {
     display: none;
   }

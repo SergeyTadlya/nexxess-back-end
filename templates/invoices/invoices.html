@@ -205,21 +205,21 @@
                       <ul class="content__body-items">
                           <p class="content__body-number">{{ invoice.id }}</p>
                         <li class="content__body-item style--width">
-                             <a href="{% url 'create_invoice_pdf' invoice.id %}">
+                             <a class="content__body-link" href="{% url 'create_invoice_pdf' invoice.id %}">
                             <img src="{% static 'images/invoices/print.svg' %}"  alt="print"></a>
-                            <a href="{% url 'invoice_detail' invoice.id %}">
+                            <a class="content__body-link" href="{% url 'invoice_detail' invoice.id %}">
                           <p class="content__body-invoice" >{{ invoice.invoice_id }}</p></a>
                         </li>
                         <li class="content__body-item style--width">
-                             <a href="{% url 'invoice_detail' invoice.id %}">
+                             <a class="content__body-link" href="{% url 'invoice_detail' invoice.id %}">
                              <p class="content__body-date">{{ invoice.date }}</p></a>
                         </li>
                         <li class="content__body-item style--width">
-                             <a href="{% url 'invoice_detail' invoice.id %}">
+                             <a class="content__body-link" href="{% url 'invoice_detail' invoice.id %}">
                              <p class="content__body-date">{{ invoice.due_date }}</p></a>
                         </li>
                         <li class="content__body-item style--width">
-                            <a href="{% url 'invoice_detail' invoice.id %}">
+                            <a class="content__body-link" href="{% url 'invoice_detail' invoice.id %}">
                             <p class="content__body-money">{{ invoice.price }}</p></a>
                         </li>
                         <li class="content__body-item style--width">
