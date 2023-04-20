@@ -2,6 +2,8 @@
 {% load static %}
 {% block extra_css %}
  <link rel="stylesheet" type="text/css" href="{% static 'css/services.css' %}">
+ <link rel="stylesheet" type="text/css" href="{% static 'css/dynamic_search.css' %}">
+
 {% endblock %}
     {% block left_menu %}
   <body>
@@ -102,12 +104,12 @@
                 </div>
                   <div class="content__top-search">
         <img class="content__top-img" src="{% static 'images/Search.svg' %}" alt="Search">
-        <input class="content__top-input" type="text" placeholder="Search">
+        <input class="content__top-input" type="text" id="search-input" placeholder="Search">
       </div>
     </div>
       {% for service in services_info %}
 
-        {% if service.ACTIVE == "Y" %}<ul class="content__list">
+        {% if service.ACTIVE == "Y" %}<ul class="content__list" id="list">
           <li class="content__list-item">
             <div class="content__list-box">
               <div class="content__list-img">
@@ -149,7 +151,9 @@
       </div>
         </main>
 {% endblock content %}
-            {% block extra_js %}
+
+    {% block extra_js %}
+    <script src="{% static 'js/dynamic_search.js' %}"></script>
     <script src="{% static 'js/services.js' %}"></script>
 {% endblock %}
 

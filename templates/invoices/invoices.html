@@ -2,6 +2,9 @@
 {% load static %}
 {% block extra_css %}
  <link rel="stylesheet" type="text/css" href="{% static 'css/invoices.css' %}">
+ <link rel="stylesheet" type="text/css" href="{% static 'css/dynamic_search.css' %}">
+
+
 {% endblock %}
 
 {% block left_menu %}
@@ -140,7 +143,7 @@
                 </ul>
               </div>
 
-              <button class="aside-filter__accordion-btn">Search</button>
+                <button class="aside-filter__accordion-btn" id="search-btn">Search</button>
             </div>
 
             </aside>
@@ -166,9 +169,15 @@
                     </div>
                     <div class="content__top-search">
                         <img class="content__top-img" src="{% static 'images/main/Search.svg' %}" alt="Search">
-                        <input class="content__top-input" type="text" placeholder="Search">
+                        <input class="content__top-input" type="text" id="search-input" placeholder="Search">
                     </div>
                    </div>
+
+
+
+
+
+
 
               <button class="content__filter-btn" type="button">
                     <img class="content__filter-img" src="{% static 'images/filter-btn.svg' %}" alt="filter-icon">
@@ -192,40 +201,45 @@
                     Status
                     </li>
                  </ul>
-                    <div class="content__box">
+
+
+
                 <div class="content__body">
+
                   <p class="content__body-titleDate">29th Mar 2023</p>
-                  <ul class="content__body-list">
+                  <ul class="content__body-list" >
+
+
                     {% for invoice in invoices %}
-                      <li class="content__body-box">
-                      <ul class="content__body-titles">
-                        <li class="content__body-title">Invoice</li>
+                      <li  class="content__body-box" >
+                      <ul class="content__body-titles" id="list">
+                        <li class="content__body-title" >Invoice</li>
                         <li class="content__body-title">Status</li>
                         <li class="content__body-title">Invoice Date</li>
                         <li class="content__body-title">Due Date</li>
                         <li class="content__body-title">Total</li>
                       </ul>
-                      <ul class="content__body-items">
+                      <ul class="content__body-items" id="list">
                           <p class="content__body-number">{{ invoice.id }}</p>
-                        <li class="content__body-item style--width">
+                        <li  class="content__body-item style--width">
                              <a class="content__body-link" href="{% url 'create_invoice_pdf' invoice.id %}">
                             <img src="{% static 'images/invoices/print.svg' %}"  alt="print"></a>
                             <a class="content__body-link" href="{% url 'invoice_detail' invoice.id %}">
                           <p class="content__body-invoice" >{{ invoice.invoice_id }}</p></a>
                         </li>
-                        <li class="content__body-item style--width">
+                        <li  class="content__body-item style--width">
                              <a class="content__body-link" href="{% url 'invoice_detail' invoice.id %}">
                              <p class="content__body-date">{{ invoice.date }}</p></a>
                         </li>
-                        <li class="content__body-item style--width">
+                        <li  class="content__body-item style--width">
                              <a class="content__body-link" href="{% url 'invoice_detail' invoice.id %}">
                              <p class="content__body-date">{{ invoice.due_date }}</p></a>
                         </li>
-                        <li class="content__body-item style--width">
+                        <li  class="content__body-item style--width">
                             <a class="content__body-link" href="{% url 'invoice_detail' invoice.id %}">
                             <p class="content__body-money">{{ invoice.price }}</p></a>
                         </li>
-                        <li class="content__body-item style--width">
+                        <li  class="content__body-item style--width">
                             {% if invoice.status == 'P'  %}
                             <p class="content__body-status style--width font--green">Paid</p>
                         {% elif invoice.status == 'F'  %}
@@ -249,27 +263,20 @@
 
                   </ul>
                 </div>
+
               </div>
             </div>
+
         </div>
-      </div>
-    </main>
-<!--  <script>-->
-
-<!--          const contentBox = document.querySelectorAll('.content__body-box')-->
-<!--const contentBtn = document.querySelectorAll('.content__body-btn')-->
-
-<!--contentBtn.forEach((button, index) => {-->
-<!--  button.addEventListener('click', (e) => {-->
-<!--    contentBox[index].classList.toggle('content__body-activeBox')-->
-<!--    contentBtn[index].classList.toggle('content__body-activeBtn')-->
-<!--  })-->
-<!--})-->
+</main>
 {% block extra_js %}
+
+<script src="{% static 'js/dynamic_search.js' %}"></script>
     <script src="{% static 'js/calendar.js' %}"></script>
     <script src="{% static 'js/invoices.js' %}"></script>
     <script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
       <script src="{% static 'js/jquery-ui.min.js' %}"></script>
+
 {% endblock extra_js %}
 <!--</script>-->
 
