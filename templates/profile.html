@@ -56,7 +56,7 @@
       </div>
     </header>
 
-    
+
     <main class="main">
       <div class="container">
         <div class="main__inner">
@@ -116,7 +116,7 @@
                   </li>
                 </ul>
               </div>
-              
+
               <div class="aside-info__accordion">
                 <div id="aside-info__accordion-top" class="aside-info__accordion-top">
                   <img class="aside-info__top-img" src="./images/tickets.svg" alt="icon">
@@ -141,8 +141,9 @@
               </div>
             </div>
           </aside>
+{% endblock %}
 
-            <section class="cabinet">
+{% block content %}
               <div class="container">
                 <form class="cabinet__wrap">
                   <div class="cabinet__photo-inner">
@@ -152,25 +153,27 @@
                     </label>
                     <p class="cabinet__photo-name">
                       Iryna Shlapak
+                      Test Testovich
                     </p>
                   </div>
-                
+
+
                   <ul class="cabinet__list">
                     <li class="cabinet__item">
                       <p class="cabinet__text">First name</p>
                       <input class="cabinet__input" type="text" placeholder="First name">
                     </li>
-                  
+
                     <li class="cabinet__item">
                       <p class="cabinet__text">Last name</p>
                       <input class="cabinet__input" type="tel" placeholder="Last name">
                     </li>
-                  
+
                     <li class="cabinet__item">
                       <p class="cabinet__text">Email</p>
                       <input class="cabinet__input" type="email" placeholder="Email">
                     </li>
-                  
+
                     <li class="cabinet__item">
                       <p class="cabinet__text">Password</p>
                       <input class="cabinet__input" type="password" placeholder="Password">
@@ -183,12 +186,11 @@
                   </div>
                 </form>
               </div>
-          </section>
-          </div>
-        </div>
-      </div>
-    </main>
+{% endblock %}
 
     <script src="js/my-account.js"></script>
   </body>
 </html>
+{% block extra_js %}
+  <script src="{% static 'js/my-account.js' %}"></script>
+{% endblock %}

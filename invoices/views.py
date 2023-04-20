@@ -4,34 +4,36 @@ from io import BytesIO
 from django.http import HttpResponse
 from django.template.loader import get_template
 import xhtml2pdf.pisa as pisa
-from datetime import datetime
-from decimal import Decimal
 
-def format_date(date_str):
-    if date_str:
-        date_obj = datetime.strptime(date_str, '%Y-%m-%dT%H:%M:%S%z')
-        return date_obj.strftime('%d %b %Y')
-    else:
-        return ''
+
+def format_date(date):
+    return date.strftime('%d %b %Y') if date else ''
 
 
 def format_price(price):
-    if '.' in str(price):
-        price = str(price).rstrip('0').rstrip('.')
-    else:
-        price = str(price)
+    price = str(price)
+    price = price.rstrip('0').rstrip('.') if '.' in price else price
+
     return f'${price}' if price else ''
 
-def invoices(request):
-    # відфільтровуємо дані по пошті авторизованого користувачі (адміну будуть виводитись всі)
-    if request.user.is_superuser:
-        invoices_list = Invoice.objects.all()
-    else:
-        invoices_list = Invoice.objects.filter(responsible=request.user.email)
 
-    arInvoice = []
-    for invoice in invoices_list:
-        arInvoice.append({
+def invoices(request):
+    # Відфільтровуємо дані по пошті авторизованого користувача (Адміну будуть виводитись всі)
+
+    all_user_invoices = Invoice.objects.all().order_by('-date') if request.user.is_superuser \
+        else Invoice.objects.filter(responsible=request.user.email).order_by('-date')
+
+    invoices_array = list()
+    invoices_dates = list()
+    statuses = {'null': 0}
+
+    for invoice in all_user_invoices:
+        statuses[invoice.status] = 0
+
+    for invoice in all_user_invoices:
+        statuses[invoice.status] += 1
+
+        invoices_array.append({
             'id': invoice.id,
             'invoice_id': invoice.invoice_id,
             'responsible': invoice.responsible,
@@ -41,10 +43,17 @@ def invoices(request):
             'due_date': format_date(invoice.due_date),
             'status': invoice.status,
         })
-    res = {
-        "invoices": arInvoice
+
+        if format_date(invoice.date) not in invoices_dates:
+            invoices_dates.append(format_date(invoice.date))
+
+    context = {
+        "invoices": invoices_array,
+        "invoices_dates": invoices_dates,
+        'statuses': statuses,
     }
-    return render(request, "invoices/invoices.html", res)
+
+    return render(request, "invoices/invoices.html", context)
 
 
 def invoice_detail(request, id):
@@ -63,7 +72,6 @@ def invoice_detail(request, id):
 
 
 def create_invoice_pdf(request, id):
-
     invoice = Invoice.objects.get(id=id)
 
     if request.user.is_superuser or invoice.responsible == request.user.email:
