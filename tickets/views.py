@@ -17,10 +17,11 @@ def tasks(request):
             'task_id': task.task_id,
             'is_opened': task.is_opened,
         })
-    res = {
+
+    context = {
         "tasks": tasks_array
     }
-    return render(request, "tickets/list.html", res)
+    return render(request, "tickets/tickets.html", context)
 
 
 def task_detail(request, id):

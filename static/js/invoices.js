@@ -34,14 +34,14 @@ accordionFilterBtn.forEach((button, index) => {
 
 //_________*BLOCK*Cotent-top______
 
-const contentTopBox = document.querySelector('#content__top-box')
-const contentTopList = document.querySelector('#content__top-list')
-const contentTopNumber = document.querySelector('#content__top-number')
+const contentTopBox = document.querySelector('#content__showing-box')
+const contentTopList = document.querySelector('#content__showing-list')
+const contentTopNumber = document.querySelector('#content__showing-number')
 
-const contentTopItem = document.querySelectorAll('.content__top-item')
+const contentTopItem = document.querySelectorAll('.content__showing-item')
 
 contentTopBox.addEventListener('click', () => {
-  contentTopList.classList.toggle('top__list--active')
+  contentTopList.classList.toggle('content__showing--active')
 })
 
 contentTopItem.forEach((item) => {

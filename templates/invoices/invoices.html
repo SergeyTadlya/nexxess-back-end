@@ -1,15 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block extra_css %}
- <link rel="stylesheet" type="text/css" href="{% static 'css/invoices.css' %}">
- <link rel="stylesheet" type="text/css" href="{% static 'css/dynamic_search.css' %}">
-
-
-{% endblock %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/invoices.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/dynamic_search.css' %}">
+{% endblock  %}
 
 {% block left_menu %}
-
-  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 <main class="main" xmlns="http://www.w3.org/1999/html">
     <div class="container">
         <div class="main__inner">
@@ -65,28 +62,52 @@
                         <input id="status1" class="aside-filter__accordion-check"  name="check" type="checkbox" >
                         Paid
                       </label>
-                    <p class="aside-filter__accordion-number">1</p>
+                    <p class="aside-filter__accordion-number">
+                        {% if statuses.Paid %}
+                            {{ statuses.Paid }}
+                        {% else %}
+                            {{ statuses.null }}
+                        {% endif %}
+                    </p>
                   </li>
                   <li class="aside-filter__accordion-item">
                       <label class="aside-filter__accordion-label" for="status2">
                         <input id="status2" class="aside-filter__accordion-check" name="check" type="checkbox">
                         Unpaid
                       </label>
-                    <p class="aside-filter__accordion-number">1</p>
+                    <p class="aside-filter__accordion-number">
+                        {% if statuses.Unpaid %}
+                            {{ statuses.Unpaid }}
+                        {% else %}
+                            {{ statuses.null }}
+                        {% endif %}
+                    </p>
                   </li>
                   <li class="aside-filter__accordion-item">
                       <label class="aside-filter__accordion-label" for="status3">
                         <input id="status3" class="aside-filter__accordion-check" name="check" type="checkbox">
                         Canceled
                       </label>
-                    <p class="aside-filter__accordion-number">1</p>
+                    <p class="aside-filter__accordion-number">
+                        {% if statuses.Canceled %}
+                            {{ statuses.Canceled }}
+                        {% else %}
+                            {{ statuses.null }}
+                        {% endif %}
+                    </p>
                   </li>
                   <li class="aside-filter__accordion-item">
                     <label class="aside-filter__accordion-label" for="status4">
                       <input id="status4" class="aside-filter__accordion-check"  name="check" type="checkbox">
                         Refunded
                       </label>
-                    <p class="aside-filter__accordion-number">1</p>
+                    <p class="aside-filter__accordion-number">
+                        {% if statuses.Refunded %}
+                            {{ statuses.Refunded }}
+                        {% else %}
+                            {{ statuses.null }}
+                        {% endif %}
+                    </p>
                   </li>
                 </ul>
               </div>
@@ -142,78 +163,55 @@
                   </li>
                 </ul>
               </div>
-
                 <button class="aside-filter__accordion-btn" id="search-btn">Search</button>
             </div>
+          </aside>
+{% endblock left_menu%}
 
-            </aside>
-            {% endblock left_menu%}
-                {% block content %}
-         <link rel="stylesheet" type="text/css" href="{% static 'css/invoices.css' %}">
-  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+{% block content %}
                 <div class="content__inner">
                    <div class="content__top">
                      <div class="content__top-body">
-                            <h1 class="title content__top-title">Invoices history</h1>
-                         <div id="content__top-box" class="content__top-box">
-                        <p class="content__top-text">Showing</p>
-                        <p id="content__top-number" class="content__top-number">10</p>
-                               <img src="{% static 'images/invoices/arrow-drop-down.svg' %}" alt="icon">
-                        <p class="content__top-numbers">of 245</p>
-                        <ul id="content__top-list" class="content__top-list">
-                        <li class="content__top-item">10</li>
-                        <li class="content__top-item">50</li>
-                        <li class="content__top-item">100</li>
-                        <li class="content__top-item">All</li>
-                        </ul></div>
-                    </div>
-                    <div class="content__top-search">
-                        <img class="content__top-img" src="{% static 'images/main/Search.svg' %}" alt="Search">
-                        <input class="content__top-input" type="text" id="search-input" placeholder="Search">
-                    </div>
+                         <h1 class="title content__top-title">Invoices history</h1>
+                     </div>
+                       <div class="content__top-search">
+                           <img class="content__top-img" src="{% static 'images/main/Search.svg' %}" alt="Search">
+                           <input class="content__top-input" type="text" id="search-input" placeholder="Search">
+                       </div>
                    </div>
 
+                    <button class="content__filter-btn" type="button">
+                        <img class="content__filter-img" src="{% static 'images/filter-btn.svg' %}" alt="filter-icon">
+                        Filter
+                    </button>
 
+                    <ul class="content__titles">
+                        <li class="content__titles-item">
+                            Invoice
+                        </li>
+                        <li class="content__titles-item">
+                            Invoice Date
+                        </li>
+                        <li class="content__titles-item">
+                            Due Date
+                        </li>
+                        <li class="content__titles-item">
+                            Total
+                        </li>
+                        <li class="content__titles-item">
+                            Status
+                        </li>
+                    </ul>
 
-
-
-
-
-              <button class="content__filter-btn" type="button">
-                    <img class="content__filter-img" src="{% static 'images/filter-btn.svg' %}" alt="filter-icon">
-                 Filter
-                </button>
-
-                 <ul class="content__titles">
-                    <li class="content__titles-item">
-                    Invoice
-                    </li>
-                    <li class="content__titles-item">
-                     Invoice Date
-                    </li>
-                    <li class="content__titles-item">
-                     Due Date
-                    </li>
-                    <li class="content__titles-item">
-                     Total
-                    </li>
-                    <li class="content__titles-item">
-                    Status
-                    </li>
-                 </ul>
-
-
-
+            {% for invoice_date in invoices_dates %}
                 <div class="content__body">
-
-                  <p class="content__body-titleDate">29th Mar 2023</p>
+                  <p class="content__body-titleDate">{{ invoice_date }}</p>
                   <ul class="content__body-list" >
-
-
                     {% for invoice in invoices %}
+                      {% if invoice.date == invoice_date %}
                       <li  class="content__body-box" >
                       <ul class="content__body-titles" id="list">
-                        <li class="content__body-title" >Invoice</li>
+                        <li class="content__body-title">Invoice</li>
                         <li class="content__body-title">Status</li>
                         <li class="content__body-title">Invoice Date</li>
                         <li class="content__body-title">Due Date</li>
@@ -221,11 +219,11 @@
                       </ul>
                       <ul class="content__body-items" id="list">
                           <p class="content__body-number">{{ invoice.id }}</p>
-                        <li  class="content__body-item style--width">
-                             <a class="content__body-link" href="{% url 'create_invoice_pdf' invoice.id %}">
-                            <img src="{% static 'images/invoices/print.svg' %}"  alt="print"></a>
-                            <a class="content__body-link" href="{% url 'invoice_detail' invoice.id %}">
-                          <p class="content__body-invoice" >{{ invoice.invoice_id }}</p></a>
+                          <li  class="content__body-item style--width">
+                              <a class="content__body-link" href="{% url 'create_invoice_pdf' invoice.id %}">
+                                  <img src="{% static 'images/invoices/print.svg' %}"  alt="print"></a>
+                              <a class="content__body-link" href="{% url 'invoice_detail' invoice.id %}">
+                                  <p class="content__body-invoice" >{{ invoice.invoice_id }}</p></a>
                         </li>
                         <li  class="content__body-item style--width">
                              <a class="content__body-link" href="{% url 'invoice_detail' invoice.id %}">
@@ -240,16 +238,16 @@
                             <p class="content__body-money">{{ invoice.price }}</p></a>
                         </li>
                         <li  class="content__body-item style--width">
-                            {% if invoice.status == 'P'  %}
-                            <p class="content__body-status style--width font--green">Paid</p>
-                        {% elif invoice.status == 'F'  %}
-                            <p class="content__body-status style--width font--red">Cancelled</p>
-                            {% elif  invoice.status == 'S' %}
-                             <p class="content__body-status style--width font--yellow">Send</p>
-                            {% elif invoice.status == 'R'%}
-                             <p class="content__body-status style--width font--blue">Refunded</p>
-                            {% elif invoice.status == 'N' %}
-                            <p class="content__body-status style--width font--blue">New</p>
+                            {% if invoice.status == 'Paid'  %}
+                                <p class="content__body-status style--width font--green">Paid</p>
+                            {% elif  invoice.status == 'Unpaid' %}
+                                <p class="content__body-status style--width font--yellow">Unpaid</p>
+                            {% elif invoice.status == 'Canceled'  %}
+                                <p class="content__body-status style--width font--red">Cancelled</p>
+                            {% elif invoice.status == 'Refunded'%}
+                                <p class="content__body-status style--width font--blue">Refunded</p>
+                            {% elif invoice.status == 'New' %}
+                                <p class="content__body-status style--width font--blue">New</p>
                             {% else %}
                          <p class="content__body-status style--width font--yellow">{{ invoice.status }}</p>
                         {% endif %}
@@ -259,26 +257,34 @@
                         <img class="content__body-img" src="{% static 'images/chevron.svg' %}" alt="arrow">
                         </button>
                     </li>
+                        {% endif %}
                       {% endfor %}
-
                   </ul>
                 </div>
-
-              </div>
+            {% endfor %}
             </div>
 
+            <div id="content__showing-box" class="content__showing-box">
+                <p class="content__showing-text">Showing</p>
+                <p id="content__showing-number" class="content__showing-number">10</p>
+                <img class="content__showing-img" src="{% static 'images/invoices/arrow-drop-down.svg' %}" alt="icon">
+                <p class="content__showing-numbers">of 245</p>
+                <ul id="content__showing-list" class="content__showing-list">
+                  <li class="content__showing-item">10</li>
+                  <li class="content__showing-item">50</li>
+                  <li class="content__showing-item">100</li>
+                  <li class="content__showing-item">All</li>
+                </ul>
+              </div>
         </div>
+    </div>
 </main>
+{% endblock content %}
+
 {% block extra_js %}
-
+<script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
+<script src="{% static 'js/jquery-ui.min.js' %}"></script>
 <script src="{% static 'js/dynamic_search.js' %}"></script>
-    <script src="{% static 'js/calendar.js' %}"></script>
-    <script src="{% static 'js/invoices.js' %}"></script>
-    <script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
-      <script src="{% static 'js/jquery-ui.min.js' %}"></script>
-
+<script src="{% static 'js/invoices.js' %}"></script>
+<script src="{% static 'js/calendar.js' %}"></script>
 {% endblock extra_js %}
-<!--</script>-->
-
-{% endblock %}
-
