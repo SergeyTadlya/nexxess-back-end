@@ -1,14 +1,26 @@
 'use strict'
 
-const accordionBtn = document.querySelectorAll('#aside__accordion-top')
-const accordionList = document.querySelectorAll('.aside__accordion-list')
-const accordionArrow = document.querySelectorAll('.aside__top-arrow')
+const accordionInfoBtn = document.querySelectorAll('#aside-info__accordion-top')
+const accordionInfoList = document.querySelectorAll('.aside-info__accordion-list')
+const accordionInfoArrow = document.querySelectorAll('.aside-info__top-arrow')
 
-accordionBtn.forEach((button, index) => {
+accordionInfoBtn.forEach((button, index) => {
   button.addEventListener('click', (e) => {
-    accordionBtn[index].classList.toggle('accordion__top--active')
-    accordionList[index].classList.toggle('accordion__list--active')
-    accordionArrow[index].classList.toggle('accordion__arrow--active')
+    accordionInfoBtn[index].classList.toggle('accordion__top--active')
+    accordionInfoList[index].classList.toggle('accordion__list--active')
+    accordionInfoArrow[index].classList.toggle('accordion__arrow--active')
+  })
+})
+
+const accordionFilterBtn = document.querySelectorAll('#aside-filter__accordion-top')
+const accordionFilterList = document.querySelectorAll('.aside-filter__accordion-list')
+const accordionFilterArrow = document.querySelectorAll('.aside-filter__top-arrow')
+
+accordionFilterBtn.forEach((button, index) => {
+  button.addEventListener('click', (e) => {
+    accordionFilterBtn[index].classList.toggle('accordion__top--active')
+    accordionFilterList[index].classList.toggle('accordion__list--active')
+    accordionFilterArrow[index].classList.toggle('accordion__arrow--active')
   })
 })
 
@@ -30,7 +42,15 @@ contentTopItem.forEach((item) => {
   })
 })
 
-//_________________POPUP_________________
+// ______CREATE TICKET_____
+const cteareBtn = document.querySelector('#content__create-btn')
+const contentForm = document.querySelector('#content__form')
+
+cteareBtn.addEventListener('click', () => {
+  contentForm.classList.toggle('content__form--active')
+})
+
+//_________________POPUP *NEW TAG*_________________
 
 const btnNewTag = document.querySelector('#form__new-tag')
 
@@ -72,26 +92,51 @@ document.addEventListener('keydown', (e) => {
   }
 })
 
-//________BURGER_____
+//__________BURGER AND FILTER__________
 
-const aside = document.querySelector('.aside')
+const asideInfo = document.querySelector('.aside-info')
 const burger = document.querySelector('.burger')
+const asidefilter = document.querySelector('.aside-filter')
+const filterBtn = document.querySelector('.content__filter-btn')
 
+//____BURGER___
 burger.addEventListener('click', menu)
 
 function menu() {
+  if (burger.classList.contains('burger-filter--active')) {
+    burger.classList.remove('burger-filter--active')
+    asidefilter.classList.remove('aside-filter--active')
+    document.body.classList.remove('body--active')
+    return
+  }
+
   burger.classList.toggle('burger--active')
-  aside.classList.toggle('aside--active')
+  asideInfo.classList.toggle('aside-info--active')
+  
+  if(document.body.classList.contains('body--active') && !burger.classList.contains('burger--active')) {
+    document.body.classList.remove('body--active')
+  } else {
+    document.body.classList.add('body--active')
+  }
+}
 
-  const overflowValue = burger.classList.contains('burger--active')
-    ? 'hidden'
-    : 'auto'
+//_____FILTER____
 
-  document.body.style.overflow = overflowValue
+filterBtn.addEventListener('click', filters)
+
+function filters() {
+  burger.classList.add('burger-filter--active')
+  asidefilter.classList.add('aside-filter--active')
+
+  if (document.body.classList.contains('body--active')) {
+    document.body.classList.remove('body--active')
+  } else {
+    document.body.classList.add('body--active')
+  }
 }
 
 
-//_______Mobile content arrow_____
+//__________Mobile content arrow_____
 
 const contentBox = document.querySelectorAll('.content__body-box')
 const contentBtn = document.querySelectorAll('.content__body-btn')
