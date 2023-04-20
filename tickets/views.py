@@ -4,10 +4,7 @@ from .models import Ticket
 
 def tasks(request):
     # відфільтровуємо дані по пошті авторизованого користувачі (адміну будуть виводитись всі)
-    if request.user.is_superuser:
-        tasks_list = Ticket.objects.all()
-    else:
-        tasks_list = Ticket.objects.filter(responsible=request.user.email)
+    tasks_list = Ticket.objects.all() if request.user.is_superuser else Ticket.objects.filter(responsible=request.user.email)
 
     tasks_array = []
     for task in tasks_list:
@@ -19,7 +16,8 @@ def tasks(request):
         })
 
     context = {
-        "tasks": tasks_array
+        "tasks": tasks_array,
+        'tasks_number': len(tasks_array),
     }
     return render(request, "tickets/tickets.html", context)
 

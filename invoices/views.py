@@ -51,6 +51,7 @@ def invoices(request):
         "invoices": invoices_array,
         "invoices_dates": invoices_dates,
         'statuses': statuses,
+        'invoices_number': len(invoices_array)
     }
 
     return render(request, "invoices/invoices.html", context)
@@ -84,8 +85,12 @@ def create_invoice_pdf(request, id):
         pdf_file = BytesIO()
         pisa.CreatePDF(BytesIO(html.encode('utf-8')), pdf_file)
 
+        filename = f'invoice_{id}.pdf'
+
         response = HttpResponse(pdf_file.getvalue(), content_type='application/pdf')
-        response['Content-Disposition'] = f'attachment; filename=invoice_{id}.pdf'
+        response.headers['Content-Type'] = 'application/pdf'
+        response.headers['Content-Disposition'] = 'inline; filename=%s.pdf' % filename
+
         return response
 
     else:

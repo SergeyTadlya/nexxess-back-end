@@ -1,11 +1,145 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block header_menu %}
-support header menu
-{% endblock header_menu %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/support.css' %}" />
+{% endblock %}
+
 {% block left_menu %}
-support left menu
-{% endblock left_menu %}
+    <main class="main">
+      <div class="container">
+        <div class="main__inner">
+          <aside class="aside">
+            <div class="aside-info">
+              <div class="aside-info__box">
+                <div class="aside-info__box-top">
+                  <img class="aside-info__top-img" src="{% static 'images/important.svg' %}" alt="icon">
+                  <h6 class="aside-info__top-title">Important</h6>
+                  <p class="aside-info__top-number">2</p>
+                </div>
+                <ul class="aside-info__box-list">
+                  <li class="aside-info__box-item">
+                    <p class="aside-info__box-text">New servises this month:</p>
+                    <p class="aside-info__box-money">2</p>
+                  </li>
+                  <li class="aside-info__box-item">
+                    <p class="aside-info__box-text">Actual discounts:</p>
+                    <p class="aside-info__box-money">10%</p>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="aside-info__accordion">
+                <div id="aside-info__accordion-top" class="aside-info__accordion-top">
+                  <img class="aside-info__top-img" src="{% static 'images/credit-card.svg' %}" alt="icon">
+                  <h6 class="aside-info__top-title">Payments</h6>
+                  <img class="aside-info__top-arrow" src="{% static 'images/chevron-down.svg' %}" alt="icon">
+                </div>
+
+                <ul class="aside-info__accordion-list">
+                  <li class="aside-info__accordion-item">
+                    <a class="aside-info__accordion-link" href="#">Paypall</a>
+                  </li>
+                  <li class="aside-info__accordion-item">
+                    <a class="aside-info__accordion-link" href="#">Payoneer</a>
+                  </li>
+                  <li class="aside-info__accordion-item">
+                    <a class="aside-info__accordion-link" href="#">Fondy</a>
+                  </li>
+                </ul>
+              </div>
+              
+              <div class="aside-info__accordion">
+                <div id="aside-info__accordion-top" class="aside-info__accordion-top">
+                  <img class="aside-info__top-img" src="{% static 'images/tickets.svg' %}" alt="icon">
+                  <h6 class="aside-info__top-title">Tickets</h6>
+                  <img class="aside-info__top-arrow" src="{% static 'images/chevron-down.svg' %}" alt="icon">
+                </div>
+
+                <ul class="aside-info__accordion-list">
+                  <li class="aside-info__accordion-item">
+                    <a class="aside-info__accordion-link" href="#">
+                      <p class="aside-info__accordion-text">Ongoing</p>
+                      <p class="aside-info__accordion-number font--green">2</p>
+                    </a>
+                  </li>
+                  <li class="aside-info__accordion-item">
+                    <a class="aside-info__accordion-link" href="#">
+                      <p class="aside-info__accordion-text">Overdue</p>
+                      <p class="aside-info__accordion-number font--red">8</p>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </aside>
+{% endblock %}
+
 {% block content %}
-  <h1>This is support page</h1>
-{% endblock content %}
+            <div class="content__inner">
+              <div class="content__top">
+                <h1 class="title content__top-title">Trust Q&A</h1>
+                <div class="content__top-search">
+                  <img class="content__top-img" src="{% static 'images/main/Search.svg' %}" alt="Search">
+                  <input class="content__top-input" type="text" placeholder="Search">
+                </div>
+              </div>
+
+              <ul class="content__list">
+                <li class="content__item">
+                  <h4 class="content__item-title">Q. Does Nexxess International sell “Revocable” Trusts or “Living Trusts?”</h4>
+                  <div class="content__item-box">
+                    <p class="content__item-text">
+                      A. No way! Revocable trusts, also known as Living Trusts, gives the client only one benefit, which can ultimately create buyer’s remorse for the person buying it. The only benefit of a revocable trust is bypassing probate. That’s it. Living trusts give no tax advantages, privacy protections or asset protection.</p>
+                    <video class="content__item-video" controls>
+                      <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/webm">
+                    <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/mp4">
+                  </video>
+                  </div>
+                </li>
+                <li class="content__item">
+                  <h4 class="content__item-title">Q.How fast can a trust be set up?</h4>
+                  <div class="content__item-box">
+                    <p class="content__item-text">
+                      A. No way! Revocable trusts, also known as Living Trusts, gives the client only one benefit, which can ultimately create buyer’s remorse for the person buying it. The only benefit of a revocable trust is bypassing probate. That’s it. Living trusts give no tax advantages, privacy protections or asset protection.
+                    </p>
+                    <video class="content__item-video" controls>
+                      <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/webm">
+                    <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/mp4">
+                  </video>
+                  </div>
+                </li>
+                <li class="content__item">
+                  <h4 class="content__item-title">Q. Can I purchase a non-qualified annuity from a trust, and pay it to an outsider?</h4>
+                  <div class="content__item-box">
+                    <p class="content__item-text">
+                      A. No way! Revocable trusts, also known as Living Trusts, gives the client only one benefit, which can ultimately create buyer’s remorse for the person buying it. The only benefit of a revocable trust is bypassing probate. That’s it. Living trusts give no tax advantages, privacy protections or asset protection.
+                    </p>
+                    <video class="content__item-video" controls>
+                      <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/webm">
+                    <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/mp4">
+                  </video>
+                  </div>
+                </li>
+                <li class="content__item">
+                  <h4 class="content__item-title">Q. What if a mom, a Trustee, wanted to use an annuity to give money to her daughter, a Beneficiary, say 2k per month for 20 years? How would the trust play a role?</h4>
+                  <div class="content__item-box">
+                    <p class="content__item-text">
+                      A. No way! Revocable trusts, also known as Living Trusts, gives the client only one benefit, which can ultimately create buyer’s remorse for the person buying it. The only benefit of a revocable trust is bypassing probate. That’s it. Living trusts give no tax advantages, privacy protections or asset protection.
+                    </p>
+                    <video class="content__item-video" controls>
+                      <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/webm">
+                    <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/mp4">
+                  </video>
+                  </div>
+                </li>
+              </ul>
+            </div>
+        </div>
+      </div>
+    </main>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'js/support.js' %}"></script>
+{% endblock %}

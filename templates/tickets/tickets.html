@@ -92,11 +92,8 @@
 
 {% block content %}
             <div class="content__inner">
-
               <div class="content__top">
-                <div class="content__top-body">
-                  <h1 class="title content__top-title">Tickets</h1>
-                </div>
+                <h1 class="title content__top-title">Tickets</h1>
                 <div class="content__top-search">
                   <img class="content__top-img" src="{% static 'images/main/Search.svg' %}" alt="Search">
                   <input class="content__top-input" type="text" placeholder="Search">
@@ -418,14 +415,31 @@
 
                 <div id="content__showing-box" class="content__showing-box">
                   <p class="content__showing-text">Showing</p>
-                  <p id="content__showing-number" class="content__showing-number">10</p>
+                  <p id="content__showing-number" class="content__showing-number">
+                    {% if tasks_number < 10 %}
+                        {{ tasks_number }}
+                    {% else %}
+                        10
+                    {% endif %}
+                  </p>
                   <img class="content__showing-img" src="{% static 'images/invoices/arrow-drop-down.svg' %}" alt="icon">
-                  <p class="content__showing-numbers">of 245</p>
+                  <p class="content__showing-numbers">of {{ tasks_number }}</p>
                   <ul id="content__showing-list" class="content__showing-list">
-                    <li class="content__showing-item">10</li>
-                    <li class="content__showing-item">50</li>
-                    <li class="content__showing-item">100</li>
-                    <li class="content__showing-item">All</li>
+                    {% if tasks_number < 10 %}
+                        <li class="content__showing-item">{{ tasks_number }}</li>
+                    {% elif tasks_number > 10 %}
+                        <li class="content__showing-item">10</li>
+                        <li class="content__showing-item">All</li>
+                    {% elif tasks_number > 50 %}
+                        <li class="content__showing-item">10</li>
+                        <li class="content__showing-item">50</li>
+                        <li class="content__showing-item">All</li>
+                    {% elif tasks_number > 100 %}
+                        <li class="content__showing-item">10</li>
+                        <li class="content__showing-item">50</li>
+                        <li class="content__showing-item">100</li>
+                        <li class="content__showing-item">All</li>
+                    {% endif %}
                   </ul>
                 </div>
             </div>
