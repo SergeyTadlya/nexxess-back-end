@@ -1,4 +1,4 @@
-from authentication.helpers.B24Webhook import B24_WEBHOOK
+from authentication.helpers.B24Webhook import  set_webhook
 from allauth.account.signals import user_signed_up
 from django.dispatch import receiver
 from telegram_bot.models import User
@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 def create_bitrix_contact(sender, request, user, **kwargs):  # Function to  create bitrix contact in moment of registration
     try:
         method = "crm.contact.add"
-        url = B24_WEBHOOK + method
+        url = set_webhook(method)
         payload = {
             'fields': {
                 'NAME': user.name,
@@ -53,7 +53,7 @@ def create_bitrix_contact(sender, request, user, **kwargs):
 
     try:
         method = "crm.contact.add"
-        url = B24_WEBHOOK + method
+        url = set_webhook(method)
         payload = {
             'fields': {
                 'NAME': name,

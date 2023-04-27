@@ -7,4 +7,4 @@ class B24keys(models.Model):     ## create model for save and edit keys,  which 
     b24_webhook = models.CharField(max_length=200, verbose_name='Bitrix24 webhook')
 
     class Meta:
-        verbose_name_plural = 'Server settings'
+        verbose_name_plural = 'B24 key'

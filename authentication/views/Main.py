@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from tickets.models import Ticket
 from invoices.models import Invoice
 import requests
-from authentication.helpers.B24Webhook import B24_WEBHOOK
+from authentication.helpers.B24Webhook import set_webhook
 
 
 def main(request):
@@ -21,7 +21,7 @@ def main(request):
             current_user = "not_admin"
 
         method = "crm.product.list"
-        url = B24_WEBHOOK + method
+        url = set_webhook(method)
         product_count = requests.get(url).json()['total']
 
         res = {

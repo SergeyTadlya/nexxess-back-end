@@ -1,4 +1,4 @@
-from authentication.helpers.B24Webhook import B24_WEBHOOK
+from authentication.helpers.B24Webhook import set_webhook
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 
@@ -36,7 +36,7 @@ def webhook_task(request):
         if entities_id and b24_domain and b24_member_id and b24_application_token and b24_time:
             # task = "tasks.task.get/?id=" + entities_id
             # task_url = B24_WEBHOOK + task
-            task_url = f"{B24_WEBHOOK}tasks.task.get/?id={entities_id}"
+            task_url = f"{set_webhook()}tasks.task.get/?id={entities_id}"
             task_info = requests.get(task_url).json()['result']['task']
             # print(task_info)
 
@@ -44,7 +44,7 @@ def webhook_task(request):
             # responsible = "user.get/?id=" + task_load['responsible']['id']
             # responsible_url = B24_WEBHOOK + responsible
 
-            responsible_url = f"{B24_WEBHOOK}user.get/?id={task_info['responsible']['id']}"
+            responsible_url = f"{set_webhook()}user.get/?id={task_info['responsible']['id']}"
             responsible_info = requests.get(responsible_url).json()['result']
             # print(responsible_url)
             # print(responsible_info)
@@ -86,7 +86,7 @@ def webhook_invoice(request):
                 and b24_member_id != "" and b24_application_token != "" \
                 and b24_time != "":
             method = "crm.invoice.get/?id=" + entities_id
-            url = B24_WEBHOOK + method
+            url = set_webhook(method)
             invoice_load = requests.get(url).json()['result']
             status = Status.objects.filter(abbreviation=invoice_load['STATUS_ID'])
             if status.exists():
