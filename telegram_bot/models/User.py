@@ -36,6 +36,7 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    b24_contact_id = models.PositiveIntegerField(verbose_name='Bitrix24 contact ID', unique=True, null=True, blank=True)
     email = models.EmailField(max_length=64, unique=True)
     username = models.CharField(verbose_name='Username', max_length=64, null=True, blank=True)
     telegram_id = models.PositiveIntegerField(verbose_name='Telegram user ID', unique=True, null=True, blank=True)

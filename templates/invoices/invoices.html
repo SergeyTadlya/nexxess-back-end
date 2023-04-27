@@ -1,284 +1,214 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block extra_css %}
- <link rel="stylesheet" type="text/css" href="{% static 'css/invoices.css' %}">
- <link rel="stylesheet" type="text/css" href="{% static 'css/dynamic_search.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/invoices.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/dynamic_search.css' %}">
+{% endblock  %}
 
-
-{% endblock %}
+{% block title %} Invoices {% endblock %}
 
 {% block left_menu %}
-
-  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
-<main class="main" xmlns="http://www.w3.org/1999/html">
-    <div class="container">
-        <div class="main__inner">
-          <aside class="aside">
-            <div class="aside-info">
-              <div class="aside-info__box">
-                <div class="aside-info__box-top">
-                  <img class="aside-info__top-img" src="{% static 'images/important.svg' %}" alt="icon">
-                  <h6 class="aside-info__top-title">Important</h6>
-                  <p class="aside-info__top-number">2</p>
-                </div>
-                <ul class="aside-info__box-list">
-                  <li class="aside-info__box-item">
-                    <p class="aside-info__box-text">New servises this month:</p>
-                    <p class="aside-info__box-money">2</p>
-                  </li>
-                  <li class="aside-info__box-item">
-                    <p class="aside-info__box-text">Actual discounts:</p>
-                    <p class="aside-info__box-money">10%</p>
-                  </li>
-                </ul>
-              </div>
-
-               <div class="aside-info__accordion">
-                <div id="aside-info__accordion-top" class="aside-info__accordion-top">
-                  <img class="aside-info__top-img" src="{% static 'images/services.svg' %}" alt="icon">
-                  <h6 class="aside-info__top-title">Your servises</h6>
-                  <img class="aside-info__top-arrow" src="{% static 'images/chevron-down.svg' %}" alt="icon">
-                </div>
-
-                <ul class="aside-info__accordion-list">
-                  <li class="aside-info__accordion-item">
-                    <a class="aside-info__accordion-link" href="#">Your servises 1</a>
-                  </li>
-                  <li class="aside-info__accordion-item">
-                    <a class="aside-info__accordion-link" href="#">Your servises 1</a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="aside-filter">
-              <div class="aside-filter__accordion">
-                <div  class="aside-filter__accordion-top" id="aside-filter__accordion-top">
-                  <img class="aside-filter__top-img" src="{% static 'images/filter.svg' %}" alt="icon">
-                  <h6 class="aside-filter__top-title">Status</h6>
-                  <img class="aside-filter__top-arrow" src="{% static 'images/chevron-down.svg' %}" alt="icon">
-                </div>
-
-                <ul class="aside-filter__accordion-list">
-                  <li class="aside-filter__accordion-item">
-                    <label class="aside-filter__accordion-label" for="status1">
-                        <input id="status1" class="aside-filter__accordion-check"  name="check" type="checkbox" >
-                        Paid
-                      </label>
-                    <p class="aside-filter__accordion-number">1</p>
-                  </li>
-                  <li class="aside-filter__accordion-item">
-                      <label class="aside-filter__accordion-label" for="status2">
-                        <input id="status2" class="aside-filter__accordion-check" name="check" type="checkbox">
-                        Unpaid
-                      </label>
-                    <p class="aside-filter__accordion-number">1</p>
-                  </li>
-                  <li class="aside-filter__accordion-item">
-                      <label class="aside-filter__accordion-label" for="status3">
-                        <input id="status3" class="aside-filter__accordion-check" name="check" type="checkbox">
-                        Canceled
-                      </label>
-                    <p class="aside-filter__accordion-number">1</p>
-                  </li>
-                  <li class="aside-filter__accordion-item">
-                    <label class="aside-filter__accordion-label" for="status4">
-                      <input id="status4" class="aside-filter__accordion-check"  name="check" type="checkbox">
-                        Refunded
-                      </label>
-                    <p class="aside-filter__accordion-number">1</p>
-                  </li>
-                </ul>
-              </div>
-
-              <div class="aside-filter__accordion">
-                <div id="aside-filter__accordion-top" class="aside-filter__accordion-top">
-                  <img class="aside-filter__top-img" src="{% static 'images/calendar.svg' %}" alt="icon">
-                  <h6 class="aside-filter__top-title">Calendar</h6>
-                  <img class="aside-filter__top-arrow" src="{% static 'images/chevron-down.svg' %}" alt="icon">
-                </div>
-
-              <ul class="aside-filter__accordion-list">
-                  <li class="aside-filter__accordion-item">
-                    <p class="aside-filter__accordion-text">From:</p>
-                    <div class="aside-filter__accordion-box">
-                      <input id="fromDatePicker" class="aside-filter__accordion-date"  type="text" readonly="readonly" placeholder="select a date">
-                    </div>
-                  </li>
-                  <li class="aside-filter__accordion-item">
-                    <p class="aside-filter__accordion-text">To:</p>
-                    <div class="aside-filter__accordion-box">
-                      <input id="toDatePicker" class="aside-filter__accordion-date"  type="text" readonly="readonly" placeholder="select a date">
-                    </div>
-                  </li>
-                </ul>
-              </div>
-
-               <div class="aside-filter__accordion">
-                <div id="aside-filter__accordion-top" class="aside-filter__accordion-top">
-                  <img class="aside-filter__top-img" src="{% static 'images/credit-card.svg' %}" alt="icon">
-                  <h6 class="aside-filter__top-title">Payments</h6>
-                  <img class="aside-filter__top-arrow" src="{% static 'images/chevron-down.svg' %}" alt="icon">
-                </div>
-
-                <ul class="aside-filter__accordion-list">
-                  <li class="aside-filter__accordion-item">
-                    <label class="aside-filter__accordion-label" for="payments1">
-                        <input id="payments1" class="aside-filter__accordion-check"  name="payments" type="checkbox" >
-                        Paypall
-                      </label>
-                  </li>
-                  <li class="aside-filter__accordion-item">
-                      <label class="aside-filter__accordion-label" for="payments2">
-                        <input id="payments2" class="aside-filter__accordion-check" name="payments" type="checkbox">
-                        Payoneer
-                      </label>
-                  </li>
-                  <li class="aside-filter__accordion-item">
-                      <label class="aside-filter__accordion-label" for="payments3">
-                        <input id="payments3" class="aside-filter__accordion-check" name="payments" type="checkbox">
-                        Fondy
-                      </label>
-                  </li>
-                </ul>
-              </div>
-
-                <button class="aside-filter__accordion-btn" id="search-btn">Search</button>
-            </div>
-
-            </aside>
-            {% endblock left_menu%}
-                {% block content %}
-         <link rel="stylesheet" type="text/css" href="{% static 'css/invoices.css' %}">
-  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
-                <div class="content__inner">
-                   <div class="content__top">
-                     <div class="content__top-body">
-                            <h1 class="title content__top-title">Invoices history</h1>
-                         <div id="content__top-box" class="content__top-box">
-                        <p class="content__top-text">Showing</p>
-                        <p id="content__top-number" class="content__top-number">10</p>
-                               <img src="{% static 'images/invoices/arrow-drop-down.svg' %}" alt="icon">
-                        <p class="content__top-numbers">of 245</p>
-                        <ul id="content__top-list" class="content__top-list">
-                        <li class="content__top-item">10</li>
-                        <li class="content__top-item">50</li>
-                        <li class="content__top-item">100</li>
-                        <li class="content__top-item">All</li>
-                        </ul></div>
-                    </div>
-                    <div class="content__top-search">
-                        <img class="content__top-img" src="{% static 'images/main/Search.svg' %}" alt="Search">
-                        <input class="content__top-input" type="text" id="search-input" placeholder="Search">
-                    </div>
-                   </div>
-
-
-
-
-
-
-
-              <button class="content__filter-btn" type="button">
-                    <img class="content__filter-img" src="{% static 'images/filter-btn.svg' %}" alt="filter-icon">
-                 Filter
-                </button>
-
-                 <ul class="content__titles">
-                    <li class="content__titles-item">
-                    Invoice
-                    </li>
-                    <li class="content__titles-item">
-                     Invoice Date
-                    </li>
-                    <li class="content__titles-item">
-                     Due Date
-                    </li>
-                    <li class="content__titles-item">
-                     Total
-                    </li>
-                    <li class="content__titles-item">
-                    Status
-                    </li>
-                 </ul>
-
-
-
-                <div class="content__body">
-
-                  <p class="content__body-titleDate">29th Mar 2023</p>
-                  <ul class="content__body-list" >
-
-
-                    {% for invoice in invoices %}
-                      <li  class="content__body-box" >
-                      <ul class="content__body-titles" id="list">
-                        <li class="content__body-title" >Invoice</li>
-                        <li class="content__body-title">Status</li>
-                        <li class="content__body-title">Invoice Date</li>
-                        <li class="content__body-title">Due Date</li>
-                        <li class="content__body-title">Total</li>
-                      </ul>
-                      <ul class="content__body-items" id="list">
-                          <p class="content__body-number">{{ invoice.id }}</p>
-                        <li  class="content__body-item style--width">
-                             <a class="content__body-link" href="{% url 'create_invoice_pdf' invoice.id %}">
-                            <img src="{% static 'images/invoices/print.svg' %}"  alt="print"></a>
-                            <a class="content__body-link" href="{% url 'invoice_detail' invoice.id %}">
-                          <p class="content__body-invoice" >{{ invoice.invoice_id }}</p></a>
-                        </li>
-                        <li  class="content__body-item style--width">
-                             <a class="content__body-link" href="{% url 'invoice_detail' invoice.id %}">
-                             <p class="content__body-date">{{ invoice.date }}</p></a>
-                        </li>
-                        <li  class="content__body-item style--width">
-                             <a class="content__body-link" href="{% url 'invoice_detail' invoice.id %}">
-                             <p class="content__body-date">{{ invoice.due_date }}</p></a>
-                        </li>
-                        <li  class="content__body-item style--width">
-                            <a class="content__body-link" href="{% url 'invoice_detail' invoice.id %}">
-                            <p class="content__body-money">{{ invoice.price }}</p></a>
-                        </li>
-                        <li  class="content__body-item style--width">
-                            {% if invoice.status == 'P'  %}
-                            <p class="content__body-status style--width font--green">Paid</p>
-                        {% elif invoice.status == 'F'  %}
-                            <p class="content__body-status style--width font--red">Cancelled</p>
-                            {% elif  invoice.status == 'S' %}
-                             <p class="content__body-status style--width font--yellow">Send</p>
-                            {% elif invoice.status == 'R'%}
-                             <p class="content__body-status style--width font--blue">Refunded</p>
-                            {% elif invoice.status == 'N' %}
-                            <p class="content__body-status style--width font--blue">New</p>
-                            {% else %}
-                         <p class="content__body-status style--width font--yellow">{{ invoice.status }}</p>
-                        {% endif %}
-                        </li>
-                      </ul>
-                       <button class="content__body-btn">
-                        <img class="content__body-img" src="{% static 'images/chevron.svg' %}" alt="arrow">
-                        </button>
-                    </li>
-                      {% endfor %}
-
-                  </ul>
-                </div>
-
-              </div>
-            </div>
-
+    <div class="aside-info">
+      <div class="aside-info__box">
+        <div class="aside-info__box-top">
+          <img class="aside-info__top-img" src="{% static 'images/important.svg' %}" alt="icon">
+          <h6 class="aside-info__top-title">Important</h6>
+          <p class="aside-info__top-number">3</p>
         </div>
-</main>
+        <ul class="aside-info__box-list">
+            <li class="aside-info__box-item">
+                <p class="aside-info__box-text">My current service:</p>
+                <p class="aside-info__box-money">Services Name</p>
+            </li>
+          <li class="aside-info__box-item">
+            <p class="aside-info__box-text">New servises this month:</p>
+            <p class="aside-info__box-money">2</p>
+          </li>
+          <li class="aside-info__box-item">
+            <p class="aside-info__box-text">Actual discounts:</p>
+            <p class="aside-info__box-money">10%</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="aside-filter">
+      <div class="aside-filter__accordion">
+        <div  class="aside-filter__accordion-top" id="aside-filter__accordion-top">
+          <img class="aside-filter__top-img" src="{% static 'images/filter.svg' %}" alt="icon">
+          <h6 class="aside-filter__top-title">Status</h6>
+          <img class="aside-filter__top-arrow" src="{% static 'images/chevron-down.svg' %}" alt="icon">
+        </div>
+
+        <ul class="aside-filter__accordion-list">
+        {% for invoice_status in invoices_statuses %}
+          <li class="aside-filter__accordion-item" id="statuses_amount" value="{{ statuses_amount }}">
+            <label class="aside-filter__accordion-label" for="{{ invoice_status.id }}">
+                <input id="{{ invoice_status.id }}" class="aside-filter__accordion-check" value="{{ invoice_status.name }}" type="checkbox">
+                {{ invoice_status.name }}
+              </label>
+            <p class="aside-filter__accordion-number">{{ invoice_status.number }}</p>
+          </li>
+        {% endfor %}
+        </ul>
+      </div>
+
+      <div class="aside-filter__accordion">
+        <div id="aside-filter__accordion-top" class="aside-filter__accordion-top">
+          <img class="aside-filter__top-img" src="{% static 'images/calendar.svg' %}" alt="icon">
+          <h6 class="aside-filter__top-title">Calendar</h6>
+          <img class="aside-filter__top-arrow" src="{% static 'images/chevron-down.svg' %}" alt="icon">
+        </div>
+
+      <ul class="aside-filter__accordion-list">
+          <li class="aside-filter__accordion-item">
+            <p class="aside-filter__accordion-text">From:</p>
+            <div class="aside-filter__accordion-box">
+              <input id="fromDatePicker" class="aside-filter__accordion-date"  type="text" readonly="readonly" placeholder="select a date">
+            </div>
+          </li>
+          <li class="aside-filter__accordion-item">
+            <p class="aside-filter__accordion-text">To:</p>
+            <div class="aside-filter__accordion-box">
+              <input id="toDatePicker" class="aside-filter__accordion-date"  type="text" readonly="readonly" placeholder="select a date">
+            </div>
+          </li>
+        </ul>
+      </div>
+        <button class="aside-filter__accordion-btn" id="search-btn">Search</button>
+    </div>
+{% endblock left_menu %}
+
+{% block content %}
+    <div class="content__inner">
+        <div class="content__top">
+            <h1 class="title content__top-title">Invoices history</h1>
+            <div class="content__top-search">
+                <img class="content__top-img" src="{% static 'images/main/Search.svg' %}" alt="Search">
+                <input class="content__top-input" type="text" id="search-input" placeholder="Search">
+            </div>
+        </div>
+        <button class="content__filter-btn" type="button">
+            <img class="content__filter-img" src="{% static 'images/filter-btn.svg' %}" alt="filter-icon">
+            Filter
+        </button>
+        <ul class="content__titles">
+            <li class="content__titles-item">Invoice</li>
+            <li class="content__titles-item">Invoice Date</li>
+            <li class="content__titles-item">Due Date</li>
+            <li class="content__titles-item">Total</li>
+            <li class="content__titles-item">Status</li>
+        </ul>
+        <div id="div-invoices">
+            {% for invoice_date in invoices_dates %}
+                <div class="content__body">
+                    <p class="content__body-titleDate">{{ invoice_date }}</p>
+                    {% for invoice in invoices %}
+                        {% if invoice.date == invoice_date %}
+                            <ul class="content__body-list">
+                                <li  class="content__body-box" >
+                                    <ul class="content__body-titles">
+                                        <li class="content__body-title">Invoice</li>
+                                        <li class="content__body-title">Status</li>
+                                        <li class="content__body-title">Invoice Date</li>
+                                        <li class="content__body-title">Due Date</li>
+                                        <li class="content__body-title">Total</li>
+                                    </ul>
+                                    <ul class="content__body-items">
+                                        <p class="content__body-number">{{ invoice.id }}</p>
+                                        <li  class="content__body-item style--width">
+                                            <a class="content__body-link" href="{% url 'create_invoice_pdf' invoice.id %}" target="_blank">
+                                                <img src="{% static 'images/invoices/print.svg' %}"  alt="print"></a>
+                                            <a class="content__body-link" href="{% url 'invoice_detail' invoice.id %}">
+                                                <p class="content__body-invoice" >{{ invoice.invoice_id }}</p></a>
+                                        </li>
+                                        <li  class="content__body-item style--width">
+                                            <a class="content__body-link" href="{% url 'create_invoice_pdf' invoice.id %}"  target="_blank">
+                                                <p class="content__body-date">{{ invoice.date }}</p></a>
+                                        </li>
+                                        <li class="content__body-item style--width">
+                                            <a class="content__body-link" href="{% url 'create_invoice_pdf' invoice.id %}"  target="_blank">
+                                                <p class="content__body-date">{{ invoice.due_date }}</p></a>
+                                        </li>
+                                        <li  class="content__body-item style--width">
+                                            <a class="content__body-link" href="{% url 'create_invoice_pdf' invoice.id %}"  target="_blank">
+                                            <p class="content__body-money">{{ invoice.price }}</p></a>
+                                        </li>
+                                        <li  class="content__body-item style--width">
+                                            <p class="content__body-status style--width font--{{ invoice.status.color }}">{{ invoice.status.value }}</p>
+                                        </li>
+                                    </ul>
+                                    <button class="content__body-btn">
+                                        <img class="content__body-img" src="{% static 'images/chevron.svg' %}" alt="arrow">
+                                    </button>
+                                </li>
+                            </ul>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div id="content__showing-box" class="content__showing-box">
+        <p class="content__showing-text">Showing</p>
+        <p id="content__showing-number" class="content__showing-number">10</p>
+        <img class="content__showing-img" src="{% static 'images/invoices/arrow-drop-down.svg' %}" alt="icon">
+        <p class="content__showing-numbers">of {{ invoices_number }}</p>
+        <ul id="content__showing-list" class="content__showing-list">
+          <li class="content__showing-item" id="10" value="10">10</li>
+          <li class="content__showing-item" id="50" value="50">50</li>
+          <li class="content__showing-item" id="100" value="100">100</li>
+          <li class="content__showing-item" id="All" value="All">All</li>
+        </ul>
+    </div>
+    <div class="content__pagination" id="invoices_pagination">
+        {% if invoices.has_previous %}
+            <a id="prev" class="content__pagination-arrow" href="?page={{ invoices.previous_page_number }}">
+              <svg width="46" height="46" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M14.021 6.912a.69.69 0 0 1 0 .976L9.91 12l4.112 4.112a.69.69 0 0 1-.976.976l-4.6-4.6a.69.69 0 0 1 0-.976l4.6-4.6a.69.69 0 0 1 .976 0Z" clip-rule="evenodd"></path>
+              </svg>
+            </a>
+        {% else %}
+            <a id="prev" class="content__pagination-arrow" href="" style="pointer-events: none">
+              <svg width="46" height="46" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M14.021 6.912a.69.69 0 0 1 0 .976L9.91 12l4.112 4.112a.69.69 0 0 1-.976.976l-4.6-4.6a.69.69 0 0 1 0-.976l4.6-4.6a.69.69 0 0 1 .976 0Z" clip-rule="evenodd"></path>
+              </svg>
+            </a>
+        {% endif %}
+
+        <div class="content__pagination-buttons">
+            {% if invoices.has_other_pages %}
+                {% for i in invoices.paginator.page_range %}
+                    {% if invoices.number == i %}
+                        <span class="content__pagination-button pagination--active">{{ i }}</span>
+                    {% else %}
+                        <a class="content__pagination-button" href="?page={{ i }}" >{{ i }}</a>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        {% if invoices.has_next %}
+            <a id="next" class="content__pagination-arrow" href="?page={{ invoices.next_page_number }}">
+              <svg width="46" height="46" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M9.979 6.912a.69.69 0 0 1 .976 0l4.6 4.6a.69.69 0 0 1 0 .976l-4.6 4.6a.69.69 0 1 1-.976-.976L14.091 12 9.98 7.888a.69.69 0 0 1 0-.976Z" clip-rule="evenodd"></path>
+              </svg>
+            </a>
+        {% else %}
+            <a id="next" class="content__pagination-arrow" href="" style="pointer-events: none">
+              <svg width="46" height="46" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M9.979 6.912a.69.69 0 0 1 .976 0l4.6 4.6a.69.69 0 0 1 0 .976l-4.6 4.6a.69.69 0 1 1-.976-.976L14.091 12 9.98 7.888a.69.69 0 0 1 0-.976Z" clip-rule="evenodd"></path>
+              </svg>
+            </a>
+        {% endif %}
+    </div>
+{% endblock content %}
+
 {% block extra_js %}
-
-<script src="{% static 'js/dynamic_search.js' %}"></script>
-    <script src="{% static 'js/calendar.js' %}"></script>
-    <script src="{% static 'js/invoices.js' %}"></script>
     <script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
-      <script src="{% static 'js/jquery-ui.min.js' %}"></script>
-
+    <script src="{% static 'js/jquery-ui.min.js' %}"></script>
+    <script src="{% static 'js/invoices.js' %}"></script>
+    <script src="{% static 'js/calendar.js' %}"></script>
+    <script src="{% static 'ajax/invoices_ajax.js' %}"></script>
 {% endblock extra_js %}
-<!--</script>-->
-
-{% endblock %}
-

@@ -277,6 +277,15 @@
   color: #312D3A;
   cursor: pointer;
 }
+.authentication__registration-link {
+  color: #7C48EE;
+  -webkit-transition: all 0.5s;
+  -o-transition: all 0.5s;
+  transition: all 0.5s;
+}
+.authentication__registration-link:hover {
+  color: #85B7F0;
+}
 .authentication__registration-buttons {
   display: -webkit-box;
   display: -ms-flexbox;

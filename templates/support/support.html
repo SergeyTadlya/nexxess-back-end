@@ -1,11 +1,314 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block header_menu %}
-support header menu
-{% endblock header_menu %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/support.css' %}" />
+{% endblock %}
+
+{% block title %} Support {% endblock %}
+
 {% block left_menu %}
-support left menu
-{% endblock left_menu %}
+            <div class="aside-info">
+              <div class="aside-info__box">
+                <div class="aside-info__box-top">
+                  <img class="aside-info__top-img" src="{% static 'images/important.svg' %}" alt="icon">
+                  <h6 class="aside-info__top-title">Important</h6>
+                  <p class="aside-info__top-number">3</p>
+                </div>
+                <ul class="aside-info__box-list">
+                  <li class="aside-info__box-item">
+                    <p class="aside-info__box-text">My current service:</p>
+                    <p class="aside-info__box-money">Services Name</p>
+                  </li>
+                  <li class="aside-info__box-item">
+                    <p class="aside-info__box-text">New servises this month:</p>
+                    <p class="aside-info__box-money">2</p>
+                  </li>
+                  <li class="aside-info__box-item">
+                    <p class="aside-info__box-text">Actual discounts:</p>
+                    <p class="aside-info__box-money">10%</p>
+                  </li>
+                </ul>
+              </div>
+              
+              <div class="aside-info__accordion">
+                <div id="aside-info__accordion-top" class="aside-info__accordion-top">
+                  <img class="aside-info__top-img" src="{% static 'images/tickets.svg' %}" alt="icon">
+                  <h6 class="aside-info__top-title">Tickets</h6>
+                  <img class="aside-info__top-arrow" src="{% static 'images/chevron-down.svg' %}" alt="icon">
+                </div>
+
+                <ul class="aside-info__accordion-list">
+                  <li class="aside-info__accordion-item">
+                    <a class="aside-info__accordion-link" href="#">
+                      <p class="aside-info__accordion-text">Ongoing</p>
+                      <p class="aside-info__accordion-number font--green">2</p>
+                    </a>
+                  </li>
+                  <li class="aside-info__accordion-item">
+                    <a class="aside-info__accordion-link" href="#">
+                      <p class="aside-info__accordion-text">Overdue</p>
+                      <p class="aside-info__accordion-number font--red">8</p>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <button class="aside-filter__accordion-btn" id="search-btn">Search</button>
+            </div>
+{% endblock %}
+
 {% block content %}
-  <h1>This is support page</h1>
-{% endblock content %}
+  <div class="content__inner">
+    <div class="content__top">
+      <h1 class="title content__top-title">Trust Q&A</h1>
+      <div class="content__top-search">
+        <img class="content__top-img" src="{% static 'images/main/Search.svg' %}" alt="Search">
+        <input class="content__top-input" type="text" placeholder="Search">
+      </div>
+    </div>
+
+
+    <ul class="content__list">
+      <li class="content__item">
+        <h4 class="content__item-title">Q. Does Nexxess International sell “Revocable” Trusts or “Living Trusts?”</h4>
+        <div class="content__item-box">
+          <p class="content__item-text">
+            A. No way! Revocable trusts, also known as Living Trusts, gives the client only one benefit, which can ultimately create buyer’s remorse for the person buying it. The only benefit of a revocable trust is bypassing probate. That’s it. Living trusts give no tax advantages, privacy protections or asset protection.</p>
+          <video class="content__item-video" controls>
+            <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/webm">
+          <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/mp4">
+        </video>
+        </div>
+      </li>
+      <li class="content__item">
+        <h4 class="content__item-title">Q. How fast can a trust be set up?</h4>
+        <div class="content__item-box">
+          <p class="content__item-text">
+            A. Typically, we can get the trust set up and begin the activation, consultation and implementation within the first week. There is a 3 day “right of rescission” period which must pass before any work is to begin. This is why we like to say 5-7 business days before the trust set up is complete.</p>
+          <video class="content__item-video" controls>
+            <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/webm">
+          <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/mp4">
+        </video>
+        </div>
+      </li>
+      <li class="content__item">
+        <h4 class="content__item-title">Q. Can I purchase a non-qualified annuity from a trust, and pay it to an outsider?</h4>
+        <div class="content__item-box">
+          <p class="content__item-text">
+            A. The Trust can purchase a non-qualified annuity; however, it cannot pay the money to someone that is not the Trustee or a Trust Beneficiary. The owner should be the Trust, and the beneficiary could be the Trustee or the Beneficiary.</p>
+          <video class="content__item-video" controls>
+            <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/webm">
+          <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/mp4">
+        </video>
+        </div>
+      </li>
+      <li class="content__item">
+        <h4 class="content__item-title">Q. Does Nexxess International sell “Revocable” Trusts or “Living Trusts?”</h4>
+        <div class="content__item-box">
+          <p class="content__item-text">
+            A. No way! Revocable trusts, also known as Living Trusts, gives the client only one benefit, which can ultimately create buyer’s remorse for the person buying it. The only benefit of a revocable trust is bypassing probate. That’s it. Living trusts give no tax advantages, privacy protections or asset protection.</p>
+          <video class="content__item-video" controls>
+            <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/webm">
+          <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/mp4">
+        </video>
+        </div>
+      </li>
+      <li class="content__item">
+        <h4 class="content__item-title">Q. What if a mom, a Trustee, wanted to use an annuity to give money to her daughter, a Beneficiary, say 2k per month for 20 years? How would the trust play a role?</h4>
+        <div class="content__item-box">
+          <p class="content__item-text">
+            A. Because the daughter did not pay the principal payments into the annuity, the payments from the annuity would be taxable income to the daughter. However, the mom could “gift” the amount to the daughter, and the daughter would need to file a gift tax return if the amount were over 15k. The amount over 15k would then be included in the lifetime exemption called the “Unified Credit.” (A unified tax credit is a certain dollar amount of assets that each person can gift to other parties without having to pay gift, estate, or generation-skipping transfer taxes) If the trust purchases the annuity, the trust must also be the beneficiary and receive the payments. If the mother deposited the principal payments “amount” into the trust, this would allow the trust to give her a demand note for the amount of the principal payments of the annuity, and she could then draw down on the demand note tax free.</p>
+          <video class="content__item-video" controls>
+            <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/webm">
+          <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/mp4">
+        </video>
+        </div>
+      </li>
+      <li class="content__item">
+        <h4 class="content__item-title">Q. For someone who has both a business trust and a beneficial trust, what are the implications of moving assets from one trust to another trust?</h4>
+        <div class="content__item-box">
+          <p class="content__item-text">
+            A. This can be dangerous, as there is an obscure IRS rule that could be violated, as the IRS says that any diversion of anticipated income is considered tax evasion. All assets in a trust are trust-property, and they have no gift-basis when placed in Trust. Therefore, no trust can “endow” or “gift” another trust with trust property.</p>
+          <video class="content__item-video" controls>
+            <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/webm">
+          <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/mp4">
+        </video>
+        </div>
+      </li>
+      <li class="content__item">
+        <h4 class="content__item-title">Q. What about purchasing “currency” like Iraqi Dinar, where there is an expectation of the currency to “revalue” and go up in value 100X?</h4>
+        <div class="content__item-box">
+          <p class="content__item-text">
+            A. The proper method of putting other “currencies” into a trust is the have the Trust purchase the currencies directly. If the trust purchases them from an individual, there needs to be a executed bill of sale. If the currency “revalues” then the Trustee would declare the gain as an extra-ordinary dividend allocated to the corpus of the Trust. The gain would not be considered income in this case.</p>
+          <video class="content__item-video" controls>
+            <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/webm">
+          <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/mp4">
+        </video>
+        </div>
+      </li>
+      <li class="content__item">
+        <h4 class="content__item-title">Q. When I sell assets into the trust, do I always get a demand note for myself?</h4>
+        <div class="content__item-box">
+          <p class="content__item-text">
+            A. Anytime that anyone sells anything to the Trust, the Trust can either pay for the asset with cash or it can give the seller a “demand note.” And it’s always best to sell the item to the Trust at the “cost-basis” so there is no capital gain owed by the one selling the item. (A demand note is essentially a formal I-O-U, where the Trust would owe the money listed on the demand note. The cost-basis is the amount that someone actually paid for something.)</p>
+          <video class="content__item-video" controls>
+            <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/webm">
+          <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/mp4">
+        </video>
+        </div>
+      </li>
+      <li class="content__item">
+        <h4 class="content__item-title">Q. Can beneficiaries convey or transfer assets into the Trust and receive the value back to themselves? Can they draw the principal out tax free?</h4>
+        <div class="content__item-box">
+          <p class="content__item-text">
+            A. When a beneficiary transfers or conveys anything into the trust, they can receive either the cash for the basis, and not owe a capital gain on the asset, or they can take a demand note and receive back principal payments tax free. However, if the Trust pays any amount over the basis amount, that is considered a gain to the seller of the asset. Capital gains must be reported on the seller’s tax return. If the seller is paid “interest” for any asset that is sold to the trust, then that amount is considered “income” to the seller and must be reported as income. </p>
+          <video class="content__item-video" controls>
+            <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/webm">
+          <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/mp4">
+        </video>
+        </div>
+      </li>
+      <li class="content__item">
+        <h4 class="content__item-title">Q. How does one value “household furniture and furnishings” when sold to the trust?</h4>
+        <div class="content__item-box">
+          <p class="content__item-text">
+            A. The authorized value of household furniture and furnishings, fixtures, appliances, and other items are generally valued at 25% of the insured home value. When selling these to the trust, all these items are to be lumped into one notarized bill of sale. </p>
+          <video class="content__item-video" controls>
+            <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/webm">
+          <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/mp4">
+        </video>
+        </div>
+      </li>
+      <li class="content__item">
+        <h4 class="content__item-title">Q. What is the price of the trust that you sell?</h4>
+        <div class="content__item-box">
+          <p class="content__item-text">
+            The pricing of our Trust Program varies based on the needs and complexity of the Trust and the client. When you create a trust, you must keep in mind how many businesses and other outside entities must be connected to it, and those entities require time for setup and organization. The cost varies based on the scope of work and needs of the customer.</p>
+          <video class="content__item-video" controls>
+            <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/webm">
+          <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/mp4">
+        </video>
+        </div>
+      </li>
+      <li class="content__item">
+        <h4 class="content__item-title">Q. How fast can a trust be set up?</h4>
+        <div class="content__item-box">
+          <p class="content__item-text">
+            A. Typically, we can get the trust set up and begin the activation, consultation and implementation within the first week. There is a 3 day “right of rescission” period which must pass before any work is to begin. This is why we like to say 5-7 business days before the trust set up is complete.</p>
+          <video class="content__item-video" controls>
+            <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/webm">
+          <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/mp4">
+        </video>
+        </div>
+      </li>
+      <li class="content__item">
+        <h4 class="content__item-title">Q. Can I purchase a non-qualified annuity from a trust, and pay it to an outsider?</h4>
+        <div class="content__item-box">
+          <p class="content__item-text">
+            A. The Trust can purchase a non-qualified annuity; however, it cannot pay the money to someone that is not the Trustee or a Trust Beneficiary. The owner should be the Trust, and the beneficiary could be the Trustee or the Beneficiary.</p>
+          <video class="content__item-video" controls>
+            <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/webm">
+          <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/mp4">
+        </video>
+        </div>
+      </li>
+      <li class="content__item">
+        <h4 class="content__item-title">Q. Does Nexxess International sell “Revocable” Trusts or “Living Trusts?”</h4>
+        <div class="content__item-box">
+          <p class="content__item-text">
+            A. No way! Revocable trusts, also known as Living Trusts, gives the client only one benefit, which can ultimately create buyer’s remorse for the person buying it. The only benefit of a revocable trust is bypassing probate. That’s it. Living trusts give no tax advantages, privacy protections or asset protection.</p>
+          <video class="content__item-video" controls>
+            <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/webm">
+          <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/mp4">
+        </video>
+        </div>
+      </li>
+      <li class="content__item">
+        <h4 class="content__item-title">Q. What if a mom, a Trustee, wanted to use an annuity to give money to her daughter, a Beneficiary, say 2k per month for 20 years? How would the trust play a role?</h4>
+        <div class="content__item-box">
+          <p class="content__item-text">
+            A. Because the daughter did not pay the principal payments into the annuity, the payments from the annuity would be taxable income to the daughter. However, the mom could “gift” the amount to the daughter, and the daughter would need to file a gift tax return if the amount were over 15k. The amount over 15k would then be included in the lifetime exemption called the “Unified Credit.” (A unified tax credit is a certain dollar amount of assets that each person can gift to other parties without having to pay gift, estate, or generation-skipping transfer taxes) If the trust purchases the annuity, the trust must also be the beneficiary and receive the payments. If the mother deposited the principal payments “amount” into the trust, this would allow the trust to give her a demand note for the amount of the principal payments of the annuity, and she could then draw down on the demand note tax free.</p>
+          <video class="content__item-video" controls>
+            <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/webm">
+          <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/mp4">
+        </video>
+        </div>
+      </li>
+      <li class="content__item">
+        <h4 class="content__item-title">Q. For someone who has both a business trust and a beneficial trust, what are the implications of moving assets from one trust to another trust?</h4>
+        <div class="content__item-box">
+          <p class="content__item-text">
+            A. This can be dangerous, as there is an obscure IRS rule that could be violated, as the IRS says that any diversion of anticipated income is considered tax evasion. All assets in a trust are trust-property, and they have no gift-basis when placed in Trust. Therefore, no trust can “endow” or “gift” another trust with trust property.</p>
+          <video class="content__item-video" controls>
+            <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/webm">
+          <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/mp4">
+        </video>
+        </div>
+      </li>
+      <li class="content__item">
+        <h4 class="content__item-title">Q. What about purchasing “currency” like Iraqi Dinar, where there is an expectation of the currency to “revalue” and go up in value 100X?</h4>
+        <div class="content__item-box">
+          <p class="content__item-text">
+            A. The proper method of putting other “currencies” into a trust is the have the Trust purchase the currencies directly. If the trust purchases them from an individual, there needs to be a executed bill of sale. If the currency “revalues” then the Trustee would declare the gain as an extra-ordinary dividend allocated to the corpus of the Trust. The gain would not be considered income in this case.</p>
+          <video class="content__item-video" controls>
+            <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/webm">
+          <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/mp4">
+        </video>
+        </div>
+      </li>
+      <li class="content__item">
+        <h4 class="content__item-title">Q. When I sell assets into the trust, do I always get a demand note for myself?</h4>
+        <div class="content__item-box">
+          <p class="content__item-text">
+          A. Anytime that anyone sells anything to the Trust, the Trust can either pay for the asset with cash or it can give the seller a “demand note.” And it’s always best to sell the item to the Trust at the “cost-basis” so there is no capital gain owed by the one selling the item. (A demand note is essentially a formal I-O-U, where the Trust would owe the money listed on the demand note. The cost-basis is the amount that someone actually paid for something.)</p>
+          <video class="content__item-video" controls>
+            <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/webm">
+          <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/mp4">
+        </video>
+        </div>
+      </li>
+      <li class="content__item">
+        <h4 class="content__item-title">Q. Can beneficiaries convey or transfer assets into the Trust and receive the value back to themselves? Can they draw the principal out tax free?</h4>
+        <div class="content__item-box">
+          <p class="content__item-text">
+            A. When a beneficiary transfers or conveys anything into the trust, they can receive either the cash for the basis, and not owe a capital gain on the asset, or they can take a demand note and receive back principal payments tax free. However, if the Trust pays any amount over the basis amount, that is considered a gain to the seller of the asset. Capital gains must be reported on the seller’s tax return. If the seller is paid “interest” for any asset that is sold to the trust, then that amount is considered “income” to the seller and must be reported as income. </p>
+          <video class="content__item-video" controls>
+            <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/webm">
+          <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/mp4">
+        </video>
+        </div>
+      </li>
+      <li class="content__item">
+        <h4 class="content__item-title">Q. Is there ever a reason that a businessperson would need to put “equipment” into a spendthrift trust?</h4>
+        <div class="content__item-box">
+          <p class="content__item-text">
+            A. A spendthrift trust can easily own business equipment, but the question is why? A spendthrift trust does not take depreciation deductions on assets that it owns. Business assets are sold into the beneficial trust at “book value” (which is cost minus depreciation). So, it’s better for the businessperson to operate the business from a Business Trust, and lease the assets from the Beneficial Trust, as the lease creates the ultimate tax advantage for the business. It gives the business the deduction it needs and provides the “income” back to the beneficial trust, though it’s not considered income-because the trustee makes a declaration of it being an extra-ordinary dividend (a return of corpus).
+            ADDITIONAL NOTES
+            A Settlor has no rights or beneficial interest in the Trust. The Settlor resigns and leaves the picture on the first day.
+            The Trust Guardian can be the trustee (as long as he/she is not the Settlor of the trust). The Trust Guardian can appoint another party to be the trustee; however, the Trust Guardian can still replace the trustee that he/she has appointed. The Trust Guardian is the ultimate controller of the trust. However, the trust does not require a Trust Guardian position. Only a Trustee is required.
+            The Trust Guardian can appoint or remove any beneficiary at will. A Trust Guardian may never be a beneficiary.
+            Beneficiaries in a Spendthrift Trust may be anyone or any organization named in the Trust Documents.
+            The Trust Guardian can appoint his/her successor at any time during his lifetime.
+            The Trustee controls all busines activities, and he or she may disburse funds to the beneficiaries in equal amounts, unequal amounts or not at all at his/her absolute discretion.
+            If a Trust Guardian does not appoint a successor, then upon his/her death, the office disappears. Yet, the existing appointed trustee and the beneficiaries remain the same.
+            When the Settlor or anyone else gives money or assets to the trust for it to be capitalized or endowed, no taxable event has occurred, according to the trust documents. The trust pays taxes only on what the assets earns unless deemed to be paid to the corpus according to the terms and conditions of the trust, which is discretionary.
+            Any monies that the trustee distributes from the original endowment of the trust to the beneficiaries are a nontaxable event for the trust. The monies that the trust earns are taxable unless deemed to be paid to the corpus according to the terms and conditions of the trust.
+            Once the assets are placed into the trust, no court or entity can remove them. Spendthrift Trusts have proven to withstand court judgments, divorces, bankruptcies, and lawsuits. These trusts have been successful in preventing creditors from attaching any trust assets.
+            Trusts can own and trade government securities, stocks, and bonds, gold precious metals or any other form of asset. The trust can hold, buy, or sell real estate and not incur any capital gains with proper management.
+            The monies that are paid to the beneficiaries are a taxable event to the beneficiary from the endowment funds of the trust according to their income level if earned income is the distribution; only the monies that a trust earns from the endowment and are undistributed to the beneficiaries are taxable to the trust if retained by the trust unless deemed to be paid to the corpus according to the terms and conditions of the trust. Our Trust is a discretionary trust and complies with this IRS regulation.
+            Trusts are required to file federal income tax returns. Form 1041 is used. However, a Spendthrift Trust is a complex trust, and the capitalizations or endowments of the trust are not taxable events and deemed to be paid to the corpus according to the terms and conditions of the trust. Capitalizations or Endowments are retained indefinitely and only distributed by the trustees of the trust to the beneficiaries at the sole and absolute discretion of the trustees only. All capitalizations or endowments of a trust that are retained in the corpus are not considered taxable income to the Trust. It is deferred, indefinitely until distributed.
+            This Executive Summary is not created to answer all questions, but only some of the main ones. Please call us with your questions or you’re welcome to view our website. Thank you!!
+          </p>
+          <video class="content__item-video" controls>
+            <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/webm">
+          <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/mp4">
+        </video>
+        </div>
+      </li>
+    </ul>
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'js/support.js' %}"></script>
+{% endblock %}

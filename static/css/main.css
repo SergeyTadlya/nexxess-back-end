@@ -1054,6 +1054,25 @@ body {
   .content {
     width: 100%;
   }
+  .content__top {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-align: start;
+        -ms-flex-align: start;
+            align-items: flex-start;
+    border: none;
+  }
+  .content__top-box {
+    margin-top: 10px;
+  }
+  .content__top-search {
+    margin: 10px 0 0;
+    -ms-flex-item-align: start;
+        -ms-grid-row-align: start;
+        align-self: start;
+  }
   .content__list {
     display: -webkit-box;
     display: -ms-flexbox;
