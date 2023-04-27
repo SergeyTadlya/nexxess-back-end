@@ -1,21 +1,14 @@
-.content__top-box {
+.content__showing-box {
   background-color: #EFF0F6;
   border-radius: 8px;
   border: 1px solid #D3D3D3;
   color: #6B7280;
-  display: inline-block;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   line-height: 20px;
   margin-left: 10px;
   padding: 8px 16px;
 }
-.content__top-numbers {
-  margin-left: 4px;
-}
-.content__top-box .content__top-number {
-  font-weight: 700;
-}
-.highlight {
-  background-color: #8b00ff;
+.content__showing-list {
+    background-color: #EFF0F6;
 }

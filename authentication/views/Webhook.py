@@ -1,81 +1,94 @@
-from django.http import HttpResponse
-from django.views.decorators.csrf import csrf_exempt
-from tickets.models import Ticket
-from invoices.models import Invoice
 from authentication.helpers.B24Webhook import B24_WEBHOOK
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
+
+from invoices.models import Invoice
+from tickets.models import Ticket
+
 import requests
-from datetime import datetime
+import logging
 
 
 @csrf_exempt
 def webhook_task(request):
-    # вебхук бітрікса відправляє дані через post
+    # Output information about new invoice or new task, which received webhook from bitrix
     if request.method == 'POST':
-        # вебхук, по задачам, відправляє нові поля
-        # 'data[FIELDS_BEFORE][ID]': ['2'],
-        # 'data[FIELDS_AFTER][ID]': ['2'],
-        # 'data[IS_ACCESSIBLE_BEFORE]': ['undefined'],
-        # 'data[IS_ACCESSIBLE_AFTER]': ['undefined']
 
-        # виконуємо перевірку чи вебхук отримав дані із задачі
+        # Do system check is webhook received data from task
         event = request.POST.get('event', "")
-        if(event == "ONTASKUPDATE"):
+        if (event == "ONTASKUPDATE"):
             entities_id = request.POST.get('data[FIELDS_AFTER][ID]', "")
+
+            # print(entities_id)
         else:
             entities_id = request.POST.get('data[FIELDS_AFTER][TASK_ID]', "")
+            # print(entities_id)
 
+        # event = request.POST.get('event', "")
+        # entities_id = request.POST.get('data[FIELDS_AFTER][TASK_ID]', "")
         b24_domain = request.POST.get('auth[domain]', "")
+        # print(b24_domain)
         b24_member_id = request.POST.get('auth[member_id]', "")
         b24_application_token = request.POST.get('auth[application_token]', "")
         b24_time = request.POST.get('ts', "")
-        # тепер з допомогою рест апі бітікса, дістаємо дані про сутність яке зловив вебхук
-        if entities_id != "" and b24_domain != "" \
-                and b24_member_id != "" and b24_application_token != "" \
-                and b24_time != "":
-            task = "tasks.task.get/?id=" + entities_id
-            task_url = B24_WEBHOOK + task
-            task_load = requests.get(task_url).json()['result']['task']
-            # отримуємо дані про користувача який є відповідальним в задачі
-            responsible = "user.get/?id=" + task_load['responsible']['id']
-            responsible_url = B24_WEBHOOK + responsible
-            responsible = requests.get(responsible_url).json()['result']
-            # перевіряємо наявність запису данних про задачу в таблиці task
-            # якщо запис є - робимо апдейт запису в базі, якщо немає - створюємо
+        # With help rest api
+        if entities_id and b24_domain and b24_member_id and b24_application_token and b24_time:
+            # task = "tasks.task.get/?id=" + entities_id
+            # task_url = B24_WEBHOOK + task
+            task_url = f"{B24_WEBHOOK}tasks.task.get/?id={entities_id}"
+            task_info = requests.get(task_url).json()['result']['task']
+            # print(task_info)
+
+            # Give the responsible info
+            # responsible = "user.get/?id=" + task_load['responsible']['id']
+            # responsible_url = B24_WEBHOOK + responsible
+
+            responsible_url = f"{B24_WEBHOOK}user.get/?id={task_info['responsible']['id']}"
+            responsible_info = requests.get(responsible_url).json()['result']
+            # print(responsible_url)
+            # print(responsible_info)
+
+            # Check avaible about task
+            # if task is avaible do this
             defaults = {
                 'b24_domain': b24_domain,
                 'b24_member_id': b24_member_id,
                 'b24_application_token': b24_application_token,
                 'b24_time': b24_time,
-                'task_info': task_load,
-                'is_opened': False
+                'task_info': task_info,
+                'is_opened': False,
+                'responsible': responsible_info['UF_CONTACT_ID']
             }
 
-            Ticket.objects.update_or_create(
-                responsible=responsible[0]['EMAIL'],
-                task_id=entities_id,
-                defaults=defaults,
-            )
+            try:
+                Ticket.objects.update_or_create(
+                    task_id=entities_id,
+                    defaults=defaults,
+                )
+            except Exception as e:
+                print(e)
         return HttpResponse()
 
 
 @csrf_exempt
 def webhook_invoice(request):
     if request.method == 'POST':
-        # виконуємо перевірку чи вебхук отримав дані із інвойса
+        # check if webhook received data from invoice
         entities_id = request.POST.get('data[FIELDS][ID]', "")
         b24_domain = request.POST.get('auth[domain]', "")
         b24_member_id = request.POST.get('auth[member_id]', "")
         b24_application_token = request.POST.get('auth[application_token]', "")
         b24_time = request.POST.get('ts', "")
-        # тепер з допомогою рест апі бітікса, дістаємо дані про сутність яке зловив вебхук
+
+        # Now we can get info about invoice
         if entities_id != "" and b24_domain != "" \
                 and b24_member_id != "" and b24_application_token != "" \
                 and b24_time != "":
             method = "crm.invoice.get/?id=" + entities_id
             url = B24_WEBHOOK + method
             invoice_load = requests.get(url).json()['result']
-            # перевіряємо наявність запису данних про інвойса в таблиці invoice
-            # якщо запис є - робимо апдейт запису в базі, якщо немає - створюємо
+            # Check avaible to write in database
+
             defaults = {
                 'b24_domain': b24_domain,
                 'b24_member_id': b24_member_id,
@@ -84,14 +97,17 @@ def webhook_invoice(request):
                 'invoice_info': invoice_load,
                 'price': invoice_load['PRICE'],
                 'status': invoice_load['STATUS_ID'],
-                'date': datetime.strptime(invoice_load['DATE_BILL'], '%Y-%m-%dT%H:%M:%S%z'),
-                'due_date': datetime.strptime(invoice_load['DATE_PAY_BEFORE'][:11] + '23:59:59', '%Y-%m-%dT%H:%M:%S'),
+                'date': invoice_load['DATE_BILL'],
+                'due_date': invoice_load['DATE_PAY_BEFORE'],
                 'is_opened': False
             }
 
-            Invoice.objects.update_or_create(
-                responsible=invoice_load['RESPONSIBLE_EMAIL'],
-                invoice_id=invoice_load['ID'],
-                defaults=defaults,
-            )
+            try:
+                Invoice.objects.update_or_create(
+                    responsible=invoice_load['UF_CONTACT_ID'],
+                    invoice_id=invoice_load['ID'],
+                    defaults=defaults,
+                )
+            except Exception as e:
+                print(e)
             return HttpResponse()

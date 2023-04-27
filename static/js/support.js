@@ -54,4 +54,4 @@ accordiontitle.forEach((button, index) => {
     accordionBox[index].classList.add('content__item--active')
     accordiontitle[index].classList.add('content__title--active')
   })
-} )
+})

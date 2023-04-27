@@ -10,9 +10,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/authentication.css' %}">
-    {% block  extra_css %}
+    {% block extra_css %}
     {% endblock %}
-    <title>NEXXESS</title>
+    <title>{% block title %}NEXXESS{% endblock %}</title>
 </head>
 <body>
     {% if user.is_authenticated %}
@@ -59,14 +59,27 @@
           </div>
         </header>
 
-    {% block left_menu %}
-    {% endblock left_menu %}
+        <main class="main">
+          <div class="container">
+            <div class="main__inner">
+                <aside class="aside">
+                    {% block left_menu %}
+                    {% endblock left_menu %}
+                </aside>
 
-    <section class="content">
-        {% block content %}
-        {% endblock content %}
-    </section>
+                <section class="content">
+                    {% block content %}
+                    {% endblock content %}
+                </section>
 
+                <section class="cabinet">
+                    {% block cabinet %}
+                    {% endblock cabinet %}
+                </section>
+
+            </div>
+          </div>
+        </main>
     {% else %}
 
     {% block auth %}
@@ -76,6 +89,5 @@
 
 {% block extra_js %}
 {% endblock extra_js %}
-
 </body>
 </html>
