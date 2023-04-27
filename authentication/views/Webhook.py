@@ -2,8 +2,9 @@ from authentication.helpers.B24Webhook import B24_WEBHOOK
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 
-from invoices.models import Invoice
+from invoices.models import Invoice, Status
 from tickets.models import Ticket
+from datetime import datetime
 
 import requests
 import logging
@@ -87,6 +88,9 @@ def webhook_invoice(request):
             method = "crm.invoice.get/?id=" + entities_id
             url = B24_WEBHOOK + method
             invoice_load = requests.get(url).json()['result']
+            status = Status.objects.filter(abbreviation=invoice_load['STATUS_ID'])
+            if status.exists():
+                status = status.first()
             # Check avaible to write in database
 
             defaults = {
@@ -96,9 +100,9 @@ def webhook_invoice(request):
                 'b24_time': b24_time,
                 'invoice_info': invoice_load,
                 'price': invoice_load['PRICE'],
-                'status': invoice_load['STATUS_ID'],
-                'date': invoice_load['DATE_BILL'],
-                'due_date': invoice_load['DATE_PAY_BEFORE'],
+                'status': status,
+		'date': datetime.strptime(invoice_load['DATE_BILL'], '%Y-%m-%dT%H:%M:%S%z'),
+		'due_date': datetime.strptime(invoice_load['DATE_PAY_BEFORE'][:11] + '23:59:59', '%Y-%m-%dT%H:%M:%S'),
                 'is_opened': False
             }
 
@@ -111,3 +115,4 @@ def webhook_invoice(request):
             except Exception as e:
                 print(e)
             return HttpResponse()
+

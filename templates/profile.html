@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load account %}
+{% load socialaccount %}
 
 {% block extra_css %}
   <link rel="stylesheet" href="{% static 'css/my-account.css' %}" />
@@ -73,34 +75,31 @@
 {% endblock %}
 
 {% block cabinet %}
-  <form id="cabinet__info" class="cabinet__info">
+  <form id="cabinet__info" class="cabinet__info" method="post" action="{% url 'account_logout' %}">
+    {% csrf_token %}
     <div class="cabinet__info-inner">
-    <!-- <label class="cabinet__info-label" title="insert a new picture"> -->
       <img class="cabinet__info-img" src="{% static 'images/profile-user.png' %}">
-      <!-- <input class="cabinet__info-file" id="cabinet__info-file" type="file" name="file" accept="image/*"> -->
-    <!-- </label> -->
   </div>
 
   <ul class="cabinet__info-list">
     <li class="cabinet__info-item">
       <p class="cabinet__info-text">Username</p>
-      <input class="cabinet__info-input" type="text" placeholder="Pasha Karvatskiy" disabled>
+      <input class="cabinet__info-input" type="text" placeholder="{{ user.nexxess_username }}" disabled>
     </li>
 
     <li class="cabinet__info-item">
       <p class="cabinet__info-text">Email</p>
-      <input class="cabinet__info-input" type="email" placeholder="pashakarvatskiy@gmail.com" disabled>
-    </li>
-
-    <li class="cabinet__info-item">
-      <p class="cabinet__info-text">Password</p>
-      <input class="cabinet__info-input" type="password" placeholder="******" disabled>
+      <input class="cabinet__info-input" type="email" placeholder="{{ user.email }}" disabled>
     </li>
   </ul>
 
   <div class="cabinet__info-buttons">
     <button id="cabinet__btn-edit" class="cabinet__info-button" type="button">Edit</button>
-    <button class="cabinet__info-button" type="button">Log out</button>
+
+        {% if redirect_field_value %}
+            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+        {% endif %}
+        <button class="cabinet__info-button" type="submit">Log out</button>
   </div>
 </form>
 

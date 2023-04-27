@@ -27,7 +27,7 @@ def invoices(request):
     # Відфільтровуємо дані по пошті авторизованого користувача (Адміну будуть виводитись всі)
 
     all_user_invoices = Invoice.objects.all().order_by('-date') if request.user.is_superuser \
-        else Invoice.objects.filter(responsible=request.user.email).order_by('-date')
+        else Invoice.objects.filter(responsible=request.user.b24_contact_id).order_by('-date')
 
     invoices_array = list()
     invoices_dates = list()
@@ -160,7 +160,7 @@ def ajax_invoice_filter(request):
 
 def invoice_detail(request, id):
     invoice = Invoice.objects.get(id=id)
-    if request.user.is_superuser or invoice.responsible == request.user.email:
+    if request.user.is_superuser or invoice.responsible == request.b24_contact_id:
         # апдейт інвойса, коли менеджер відкрив її (це щоб на головній сторінці, вона зникла із списка нових задач)
         if not request.user.is_superuser:
             Invoice.objects.filter(id=id).update(is_opened=True)
@@ -176,7 +176,7 @@ def invoice_detail(request, id):
 def create_invoice_pdf(request, id):
     invoice = Invoice.objects.get(id=id)
 
-    if request.user.is_superuser or invoice.responsible == request.user.email:
+    if request.user.is_superuser or invoice.responsible == request.user.b24_contact_id:
 
         context = {'invoice': invoice}
 

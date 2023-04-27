@@ -25,7 +25,7 @@ class AuthenticationAdmin(admin.ModelAdmin):
 class UserAdmin(BaseUserAdmin):
     fieldsets = (
         (None, {'fields': (
-            'b24_contact_id'
+            'b24_contact_id',
             'email',
             'password',
             'username',

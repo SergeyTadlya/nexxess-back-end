@@ -22,12 +22,12 @@ def main(request):
 
         method = "crm.product.list"
         url = B24_WEBHOOK + method
-        # product_count = requests.get(url).json()['total']
+        product_count = requests.get(url).json()['total']
 
         res = {
             'invoice_count': invoice_count,
             'task_count': task_count,
-            # 'services_all_count': product_count,
+            'services_all_count': product_count,
             'current_user': current_user
         }
         return render(request, "main.html", res)

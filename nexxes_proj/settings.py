@@ -155,11 +155,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 STATIC_URL = 'static/'    # hide for test
-# STATIC_ROOT = os.path.join(BASE_DIR, STATIC_URL)
+#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')   # hide for test
+   os.path.join(BASE_DIR, 'static')   # hide for test
 ]
-SITE_ID = 1
+SITE_ID = 2
 
 ACCOUNT_FORMS = {
     'login': 'authentication.forms.CustomLoginForm',
@@ -246,3 +246,6 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainSlidingSerializer",
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 }
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'

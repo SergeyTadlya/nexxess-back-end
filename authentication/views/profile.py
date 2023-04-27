@@ -1,26 +1,16 @@
-from django.shortcuts import render, redirect
-from authentication.forms import *
-from allauth.account.views import SignupView
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserChangeForm
+from django.shortcuts import render, redirect
+
+from telegram_bot.models import User
 
 
 @login_required
 def profile_view(request):
-    user = request.user
+    user = User.objects.filter(id=request.user.id)
+    if user.exists():
+        user = user.first()
 
-    if request.method == 'POST':
-        form = UserChangeForm(request.POST, instance=user)
-        if form.is_valid():
-            form.save()
-            return redirect('profile')
-    else:
-        form = UserChangeForm(instance=user)
-
-    context = {
-        'form': form
-    }
+    context = {'user': user}
 
     return render(request, 'profile.html', context)

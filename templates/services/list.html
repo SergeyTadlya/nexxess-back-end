@@ -86,9 +86,9 @@
                 <input class="content__top-input" type="text" id="search-input" placeholder="Search">
             </div>
         </div>
-        {% for service in services_info %}
-            {% if service.ACTIVE == "Y" %}
-                <ul class="content__list">
+ 	<ul class="content__list">
+       		 {% for service in services_info %}
+           	 {% if service.ACTIVE == "Y" %}
                     <li class="content__list-item">
                         <div class="content__list-box">
                             <div class="content__list-img">
@@ -117,9 +117,10 @@
                             <a class="content__list-link" href="#">Order</a>
                         </div>
                     </li>
-                </ul>
+               
             {% endif %}
         {% endfor %}
+	</ul>
     </div>
 {% endblock content %}
 
