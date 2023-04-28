@@ -1,13 +1,21 @@
 from authentication.models import B24keys
 
-
 def set_webhook(method='', b24_id=1):
+
     try:
-    	b24_key = B24keys.objects.get(id=b24_id)     # get b24 keys from db (1 - id)
-    	b24_webhook = b24_key.b24_webhook       # init b24 webhook
-	b24_webhook += method
+
+        b24_key = B24keys.objects.get(id=b24_id)     # get b24 keys from db (1 - id)
+
+        b24_webhook = b24_key.b24_webhook       # init b24 webhook
+
+        b24_webhook += method
+
+
 
     except B24keys.DoesNotExist:
-        b24_webhook  = False
+
+        b24_webhook = False
+
+
 
     return b24_webhook

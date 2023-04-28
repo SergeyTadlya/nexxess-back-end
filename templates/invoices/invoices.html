@@ -120,7 +120,7 @@
                                         <li  class="content__body-item style--width">
                                             <a class="content__body-link" href="{% url 'create_invoice_pdf' invoice.id %}" target="_blank">
                                                 <img src="{% static 'images/invoices/print.svg' %}"  alt="print"></a>
-                                            <a class="content__body-link" href="{% url 'invoice_detail' invoice.id %}">
+                                            <a class="content__body-link" href="{% url 'create_invoice_pdf' invoice.id %}" target="_blank">
                                                 <p class="content__body-invoice" >{{ invoice.invoice_id }}</p></a>
                                         </li>
                                         <li  class="content__body-item style--width">

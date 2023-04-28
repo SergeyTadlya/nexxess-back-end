@@ -19,7 +19,7 @@
       <ul class="aside-info__box-list">
         <li class="aside-info__box-item">
           <p class="aside-info__box-text">Your current service:</p>
-          <p class="aside-info__box-money">Gold</p>
+          <p class="aside-info__box-money">Bronze</p>
         </li>
         <li class="aside-info__box-item">
           <p class="aside-info__box-text">New servises this month:</p>
@@ -35,15 +35,15 @@
      <div class="aside-info__accordion">
       <div id="aside-info__accordion-top" class="aside-info__accordion-top">
         <img class="aside-info__top-img" src="{% static 'images/services.svg' %}" alt="icon">
-        <h6 class="aside-info__top-title">Your servises</h6>
+        <h6 class="aside-info__top-title">Your services</h6>
         <img class="aside-info__top-arrow" src="{% static 'images/chevron-down.svg' %}" alt="icon">
       </div>
       <ul class="aside-info__accordion-list">
         <li class="aside-info__accordion-item">
-          <a class="aside-info__accordion-link" href="#">Your servise #1</a>
+          <a class="aside-info__accordion-link" href="#">Your service #1</a>
         </li>
         <li class="aside-info__accordion-item">
-          <a class="aside-info__accordion-link" href="#">Your servise #2</a>
+          <a class="aside-info__accordion-link" href="#">Your service #2</a>
         </li>
       </ul>
     </div>
@@ -60,13 +60,13 @@
         <li class="aside-info__accordion-item">
           <a class="aside-info__accordion-link" href="#">
             <p class="aside-info__accordion-text">Ongoing</p>
-            <p class="aside-info__accordion-number font--green">2</p>
+            <p class="aside-info__accordion-number font--green">0</p>
           </a>
         </li>
         <li class="aside-info__accordion-item">
           <a class="aside-info__accordion-link" href="#">
             <p class="aside-info__accordion-text">Overdue</p>
-            <p class="aside-info__accordion-number font--red">8</p>
+            <p class="aside-info__accordion-number font--red">0</p>
           </a>
         </li>
       </ul>
@@ -84,7 +84,7 @@
   <ul class="cabinet__info-list">
     <li class="cabinet__info-item">
       <p class="cabinet__info-text">Username</p>
-      <input class="cabinet__info-input" type="text" placeholder="{{ user.nexxess_username }}" disabled>
+      <input class="cabinet__info-input" type="text" placeholder="{{ user.username }}" disabled>
     </li>
 
     <li class="cabinet__info-item">

@@ -13,4 +13,5 @@ def services(request):
          'services_info': services_info,
          'services_count': services_count,
      }
+    
     return render(request, "services/list.html", context)
