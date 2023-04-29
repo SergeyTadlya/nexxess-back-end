@@ -31,16 +31,16 @@
                     </a>
                     <ul class="nav__list">
                         <li class="nav__list-item">
-                            <a class="nav__item-link" href="{% url 'services' %}">Services</a>
+                            <a class="{% if "/services/" == request.path %} active_menu_item {% else %} nav__item-link{% endif %}" href="{% url 'services' %}">Services</a>
                         </li>
                         <li class="nav__list-item">
-                            <a class="nav__item-link" href="{% url 'invoices' %}">Invoices</a>
+                            <a class="{% if "/invoices/" == request.path %} active_menu_item {% else %} nav__item-link{% endif %}" href="{% url 'invoices' %}">Invoices</a>
                         </li>
                         <li class="nav__list-item">
-                            <a class="nav__item-link" href="{% url 'tasks' %}">Tickets</a>
+                            <a class="{% if "/tickets/" == request.path %} active_menu_item {% else %} nav__item-link{% endif %}" href="{% url 'tasks' %}">Tickets</a>
                         </li>
                         <li class="nav__list-item">
-                            <a class="nav__item-link" href="{% url 'support' %}">FAQ</a>
+                            <a class="{% if "/support/" == request.path %} active_menu_item {% else %} nav__item-link{% endif %}" href="{% url 'support' %}">FAQ</a>
                         </li>
                     </ul>
                 </nav>
@@ -49,7 +49,7 @@
                       <img class="header__box-img" src="{% static 'images/user.svg' %}" alt="user">
                   </a>
                   <a class="header__box-link" href="#">
-                      <img class="header__box-img" src="{% static 'images/telegram.svg' %}" alt="user">
+                      <img class="header__box-img" title="Go to Telegram bot" src="{% static 'images/telegram.svg' %}" alt="user">
                   </a>
               </div>
               <a class="burger">

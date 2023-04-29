@@ -3,14 +3,12 @@ from tickets.models import Ticket
 from invoices.models import Invoice
 import requests
 from authentication.helpers.B24Webhook import set_webhook
+from django.contrib.auth.decorators import login_required
 
 
+@login_required(login_url='/accounts/login/')
 def main(request):
-    if not request.user.is_authenticated:
-        return redirect("/accounts/login/")
-    else:
-        # виведення інформації про новий інвойс чи нову задачу, який отримав вебхук бітрікса
-        # відфільтровуємо дані по пошті авторизованого користувачі (адміну будуть виводитись всі)
+    try:
         if request.user.is_superuser:
             invoice_count = Invoice.objects.filter(is_opened=False).count()
             task_count = Ticket.objects.filter(is_opened=False).count()
@@ -30,4 +28,11 @@ def main(request):
             'services_all_count': product_count,
             'current_user': current_user
         }
-        return render(request, "main.html", res)
+    except:
+        res = {
+            'invoice_count': "0",
+            'task_count': "0",
+            'services_all_count': "0",
+            # 'current_user': current_user
+        }
+    return render(request, "main.html", res)

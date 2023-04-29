@@ -5,7 +5,7 @@ from django.db.models import Q
 from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
 from datetime import datetime
 from io import BytesIO
-
+from django.contrib.auth.decorators import login_required
 from .models import Invoice, Status
 
 import xhtml2pdf.pisa as pisa
@@ -22,9 +22,9 @@ def format_price(price):
 
     return f'${price}' if price else ''
 
-
+@login_required(login_url='/accounts/login/')
 def invoices(request):
-    # Відфільтровуємо дані по пошті авторизованого користувача (Адміну будуть виводитись всі)
+  
 
     all_user_invoices = Invoice.objects.all().order_by('-date') if request.user.is_superuser \
         else Invoice.objects.filter(responsible=request.user.b24_contact_id).order_by('-date')
@@ -157,11 +157,11 @@ def ajax_invoice_filter(request):
 
             return JsonResponse(response)
 
-
+@login_required(login_url='/accounts/login/')
 def invoice_detail(request, id):
     invoice = Invoice.objects.get(id=id)
     if request.user.is_superuser or invoice.responsible == request.b24_contact_id:
-        # апдейт інвойса, коли менеджер відкрив її (це щоб на головній сторінці, вона зникла із списка нових задач)
+       
         if not request.user.is_superuser:
             Invoice.objects.filter(id=id).update(is_opened=True)
         invoice = Invoice.objects.get(id=id)

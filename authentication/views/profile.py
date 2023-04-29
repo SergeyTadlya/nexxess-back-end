@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from telegram_bot.models import User
 
 
-@login_required
+@login_required(login_url='/accounts/login/')
 def profile_view(request):
     user = User.objects.filter(id=request.user.id)
     if user.exists():

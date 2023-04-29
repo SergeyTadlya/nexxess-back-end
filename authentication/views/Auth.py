@@ -74,7 +74,7 @@ class CustomSignupView(SignupView):
         return kwargs
 
 
-@login_required
+@login_required(login_url='/accounts/login/')
 def edit_profile(request):
     if request.method == 'POST':
 

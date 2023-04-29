@@ -242,6 +242,32 @@ body {
   background-color: #7C48EE;
   color: #fff;
 }
+
+.header .active_menu_item {
+  padding: 10px 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  width: 150px;
+  border: 1px solid #7C48EE;
+  -webkit-filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.05));
+  filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.05));
+  border-radius: 2px;
+  color: #fff;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  -webkit-transition: all 0.5s;
+  -o-transition: all 0.5s;
+  transition: all 0.5s;
+  background-color: #7C48EE;
+}
 .header__box {
   display: -webkit-box;
   display: -ms-flexbox;
