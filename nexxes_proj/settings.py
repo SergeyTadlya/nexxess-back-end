@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-5gr8pz%pg!3v@x045wmo96dj-8u$(gljgnbpj)hpeh@0p5wu(q
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = ['https://7e62-2a09-bac1-7560-28-00-84-7e.ngrok-free.app']
+CSRF_TRUSTED_ORIGINS = ['https://dev1.nexxess.com']
 # Application definition
 
 INSTALLED_APPS = [
@@ -247,30 +247,12 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 }
 
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
-
-
-LOGIN_REDIRECT_URL = '/'
-SIGNUP_REDIRECT_URL = '/'
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-# #
-EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
-
-SOCIALACCOUNT_LOGIN_ON_GET = True
-
-ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = True
-
-# Additional configuration settings
-SOCIALACCOUNT_QUERY_EMAIL = True
-ACCOUNT_LOGOUT_ON_GET= True
-ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_EMAIL_REQUIRED = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST_USER = 'cutrys69@gmail.com'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_PASSWORD = 'knea ggzc msdt jsep'
 
 
 

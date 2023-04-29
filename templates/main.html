@@ -122,7 +122,22 @@
       </ul>
   </div>
 {% endblock %}
+{% block  after_sign_up %}
+<header class="header">
+          <div class="container">
+            <div class="header__inner">
+              <a href="{% url 'authentication:main'%}">
+                  <picture class="header__logo">
+                    <source srcset="{% static 'images/logo-mobile.png' %}" media="(max-width: 550px)">
+                    <img src="{% static 'images/logo.png' %}" alt="logo" style="align:">
+                  </picture>
+              </a>
+            </div>
+          </div>
+        </header>
+    <p>We have sent an e-mail to you for verification. Follow the link provided to finalize the signup process. If you do not see the verification e-mail in your main inbox, check your spam folder. Please contact us if you do not receive the verification e-mail within a few minutes.</p>
 
 {% block extra_js %}
-    <script src="{% static 'js/main.js' %}"></script>
+ <script src="{% static 'js/main.js' %}"></script>
 {% endblock %}
+{% endblock after_sign_up%}

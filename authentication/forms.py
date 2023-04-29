@@ -1,11 +1,8 @@
 from django.forms import ModelForm, TextInput, PasswordInput, NumberInput, FileInput
-from django import forms
 from allauth.account.forms import (SignupForm, LoginForm, ChangePasswordForm, ResetPasswordForm)
-from django import forms
-from allauth.account.forms import LoginForm
+from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserChangeForm
 from django import forms
-from allauth.account.forms import SignupForm
 
 
 class CustomLoginForm(LoginForm):
@@ -75,7 +72,6 @@ class CustomSignupForm(SignupForm):
                                                       'id': 'authentication-input__password',
                                                       'placeholder': '',
                                                       })
-        # self.fields['agree_terms'].label = 'I agree to terms & conditions'
 
     def save(self, request):
         user = super().save(request)
@@ -94,17 +90,8 @@ class CustomResetPasswordForm(ResetPasswordForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # delete label field
         self.fields.pop('username', None)
-        # # chenge label to field "email"
-        # self.fields['email'].label = _('Email')
 
-
-
-
-from django import forms
-from django.contrib.auth.forms import UserChangeForm
-from django.contrib.auth.models import User
 
 class EditProfileForm(UserChangeForm):
     password = None
