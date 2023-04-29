@@ -7,6 +7,7 @@ from . import views
 urlpatterns = [
     # services pages
     path('', views.services, name='services'),
+    path('about_service/<int:id>/', views.product_detail, name='product_detail')
 ]
 
 if settings.DEBUG:

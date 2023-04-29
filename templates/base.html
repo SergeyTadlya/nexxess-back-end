@@ -15,7 +15,7 @@
     <title>{% block title %} NEXXESS {% endblock %}</title>
 </head>
 <body>
-    {% if user.google_auth %}
+    {% if user.google_auth  or user.is_superuser %}
         <header class="header">
           <div class="container">
             <div class="header__inner">

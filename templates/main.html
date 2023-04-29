@@ -123,6 +123,7 @@
   </div>
 {% endblock %}
 {% block  after_sign_up %}
+{% if not user.is_superuser %}
 <header class="header">
           <div class="container">
             <div class="header__inner">
@@ -136,7 +137,7 @@
           </div>
         </header>
     <p>We have sent an e-mail to you for verification. Follow the link provided to finalize the signup process. If you do not see the verification e-mail in your main inbox, check your spam folder. Please contact us if you do not receive the verification e-mail within a few minutes.</p>
-
+{% endif %}
 {% block extra_js %}
  <script src="{% static 'js/main.js' %}"></script>
 {% endblock %}
