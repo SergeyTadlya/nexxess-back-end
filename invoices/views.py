@@ -10,6 +10,7 @@ from .models import Invoice, Status
 
 import xhtml2pdf.pisa as pisa
 import json
+import fitz
 
 
 def format_date(date):
@@ -173,26 +174,53 @@ def invoice_detail(request, id):
         return redirect('/invoices/')
 
 
+
+    
+def generate_new_pdf(pdf_path, id, invoice):
+    pdf_file = fitz.open(pdf_path)
+
+    # Load the first page of the PDF
+    page = pdf_file.load_page(0)
+
+    # Insert the invoice id
+    page.insert_text(fitz.Point(115, 206), str(invoice.invoice_id), fontsize = 16)
+
+    # Insert the date
+    page.insert_text(fitz.Point(105, 225), str(format_date(invoice.date)))
+
+
+    # Insert the due date
+    page.insert_text(fitz.Point(95, 242), str(format_date(invoice.due_date)))
+
+    # Insert the price
+    page.insert_text(fitz.Point(475, 343), str(format_price(invoice.price)))
+    page.insert_text(fitz.Point(475, 400), str(format_price(invoice.price)))
+    page.insert_text(fitz.Point(477, 491), str(format_price(invoice.price)))
+
+    # Save the modified PDF with a new name
+    new_file_path = f'pdf_client/invoice_{id}.pdf'
+    pdf_file.save(new_file_path)
+
+    return new_file_path
+
+
 def create_invoice_pdf(request, id):
-    invoice = Invoice.objects.get(id=id)
+    try:
+        invoice = Invoice.objects.get(id=id)
 
-    if request.user.is_superuser or invoice.responsible == request.user.b24_contact_id:
+        if request.user.is_superuser or invoice.responsible == request.user.email:
+            if invoice.status.value == 'Paid':
+                pdf_template_path = 'invoices/PDF_templates/invoice_template.pdf'
+            else:
+                pdf_template_path = 'invoices/PDF_templates/invoice_ordinary.pdf'
 
-        context = {'invoice': invoice}
+            generated_pdf_path = generate_new_pdf(pdf_template_path, id, invoice)
+            binary_pdf = open(generated_pdf_path, 'rb')
 
-        template = get_template('invoices/pdf_template.html')
-        html = template.render(context)
+            response = HttpResponse(binary_pdf, content_type='application/pdf')
+            response.headers['Content-Type'] = 'application/pdf'
+            response.headers['Content-Disposition'] = 'inline; filename=%s.pdf' % generated_pdf_path
 
-        pdf_file = BytesIO()
-        pisa.CreatePDF(BytesIO(html.encode('utf-8')), pdf_file)
-
-        filename = f'invoice_{id}.pdf'
-
-        response = HttpResponse(pdf_file.getvalue(), content_type='application/pdf')
-        response.headers['Content-Type'] = 'application/pdf'
-        response.headers['Content-Disposition'] = 'inline; filename=%s.pdf' % filename
-
-        return response
-
-    else:
+            return response
+    except Exception as e:
         return redirect('/invoices/')
