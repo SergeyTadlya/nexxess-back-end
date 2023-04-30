@@ -35,3 +35,23 @@ class Invoice(models.Model):
     class Meta:
         verbose_name = 'Invoice'
         verbose_name_plural = 'Invoices'
+
+
+class StripeSettings(models.Model):
+    name = models.CharField(verbose_name="Name", max_length=20, unique=True)
+    publishable_key = models.CharField(verbose_name="Publishable key", max_length=250, unique=True)
+    secret_key = models.CharField(verbose_name="Secret key", max_length=250, unique=True)
+    webhook_url = models.CharField(verbose_name='Webhook url', max_length=250, null=True, blank=True)
+
+    def __str__(self):
+        return f'Stripe - {self.name}'
+
+    class Meta:
+        verbose_name = 'Stripe settings'
+        verbose_name_plural = 'Stripe settings'
+
+
+class LocalInvoice(models.Model):
+    b24_invoice_id = models.CharField(verbose_name='Bitrix24 invoice id', max_length=10)
+    stripe_price_id = models.CharField(verbose_name='Stripe id', max_length=100)
+    payment_link = models.CharField(verbose_name='Payment link', max_length=250, null=True, blank=True)

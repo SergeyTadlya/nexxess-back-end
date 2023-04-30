@@ -139,7 +139,7 @@
                                         <li  class="content__body-item style--width">
                                             <p class="content__body-status style--width font--{{ invoice.status.color }}">{{ invoice.status.value }}</p>
                                         </li>
-                                        <li class="content__body-item style--width"><a class="button_pay">Pay</a></li>
+                                        <li class="content__body-item style--width"><a class="button_pay" data-b24invoice="{{ invoice.invoice_id }}">Pay</a></li>
                                     </ul>
                                     <button class="content__body-btn">
                                         <img class="content__body-img" src="{% static 'images/chevron.svg' %}" alt="arrow">

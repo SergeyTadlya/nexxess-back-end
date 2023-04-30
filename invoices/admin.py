@@ -11,3 +11,12 @@ class InvoiceAdmin(admin.ModelAdmin):
 @admin.register(Status)
 class StatusAdmin(admin.ModelAdmin):
     list_display = ['abbreviation', 'value', 'color']
+
+@admin.register(StripeSettings)
+class StripeSettingsAdmin(admin.ModelAdmin):
+    list_display = ["id", "name"]
+
+
+@admin.register(LocalInvoice)
+class LocalInvoiceAdmin(admin.ModelAdmin):
+    list_display = ['b24_invoice_id', 'stripe_price_id']

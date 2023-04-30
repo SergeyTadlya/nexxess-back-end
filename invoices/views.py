@@ -1,3 +1,5 @@
+import time
+import fitz
 from django.template.loader import get_template
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, redirect
@@ -6,12 +8,17 @@ from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
 from datetime import datetime
 from io import BytesIO
 from django.contrib.auth.decorators import login_required
-from .models import Invoice, Status
+from django.views.decorators.csrf import csrf_exempt
+
+from authentication.helpers.B24Webhook import set_webhook
+from services.models import Service
+from .models import Invoice, Status, StripeSettings, LocalInvoice
 
 import xhtml2pdf.pisa as pisa
 import json
-import fitz
+import stripe
 
+from bitrix24 import Bitrix24, BitrixError
 
 def format_date(date):
     return date.strftime('%d %b %Y') if date else ''
@@ -173,9 +180,7 @@ def invoice_detail(request, id):
     else:
         return redirect('/invoices/')
 
-
-
-    
+@login_required(login_url='/accounts/login/')
 def generate_new_pdf(pdf_path, id, invoice):
     pdf_file = fitz.open(pdf_path)
 
@@ -203,7 +208,7 @@ def generate_new_pdf(pdf_path, id, invoice):
 
     return new_file_path
 
-
+@login_required(login_url='/accounts/login/')
 def create_invoice_pdf(request, id):
     try:
         invoice = Invoice.objects.get(id=id)
@@ -224,3 +229,35 @@ def create_invoice_pdf(request, id):
             return response
     except Exception as e:
         return redirect('/invoices/')
+
+@login_required(login_url='/accounts/login/')
+@csrf_exempt
+def create_payment_link(request):
+    stipe_settings = StripeSettings.objects.all().first()
+    stripe.api_key = stipe_settings.secret_key
+    b24_invoice_id = request.POST["b24_invoice_id"]
+    invoice = LocalInvoice.objects.get(b24_invoice_id=b24_invoice_id)
+    stripe_response = stripe.PaymentLink.create(
+        line_items=[
+            {
+                "price": invoice.stripe_price_id,
+                "quantity": 1,
+            },
+        ],
+        metadata={"b24_invoice_id": b24_invoice_id},
+        after_completion={"type": "redirect", "redirect": {"url": stipe_settings.webhook_url+b24_invoice_id},}
+    )
+    print(stripe_response)
+    return JsonResponse({'pay_link': stripe_response.url})
+
+
+@csrf_exempt
+def complete_payment_link(request):
+    b24invoice_id = request.GET["b24invoice_id"]
+    url = set_webhook("")
+    bx24 = Bitrix24(url)
+    bx24.callMethod('crm.invoice.update', id=b24invoice_id, fields={
+                                                            'STATUS_ID': 'P',
+                                                            })
+    time.sleep(5)
+    return redirect("/invoices/")

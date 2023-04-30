@@ -6,7 +6,7 @@ from requests import Response
 from authentication.helpers.B24Webhook import set_webhook
 from django.contrib.auth.decorators import login_required
 
-from invoices.models import Invoice
+from invoices.models import Invoice, StripeSettings, LocalInvoice
 from telegram_bot.models import User
 from .models import Service
 from django.shortcuts import render
@@ -15,6 +15,7 @@ import json
 import re
 import time
 import datetime
+import stripe
 
 from bitrix24 import Bitrix24, BitrixError
 
@@ -45,18 +46,34 @@ def services(request):
         products_data = response.json().get('result', [])
         products = []
         for product_data in products_data:
-            product = Service.objects.update_or_create(
-                service_id=product_data.get('ID'),
-                defaults={
-                    'title': product_data.get('NAME'),
-                    'service_id':  product_data.get('ID'),
-                    'title_description': clean_and_shorten_text(product_data.get('DESCRIPTION')),
-                    'price': format_price(product_data.get('PRICE')),
-                    'currency': product_data.get('CURRENCY_ID'),
-
-
-                }
-            )[0]
+            # stripe_response = stripe.Product.create(name="Gold Special")
+            product = Service.objects.filter(service_id=product_data.get('ID'))
+            if len(product) == 0:
+                stripe.api_key = StripeSettings.objects.all().first().secret_key
+                price = format_price(product_data.get('PRICE'))
+                print(int(price)*100)
+                stripe_response = stripe.Price.create(
+                    unit_amount=int(price)*100,
+                    currency="usd",
+                    product_data={"name": product_data.get('NAME')},
+                )
+                product = Service.objects.create(
+                    service_id=product_data.get('ID'),
+                    stripe_id=stripe_response.id,
+                    title=product_data.get('NAME'),
+                    title_description=clean_and_shorten_text(product_data.get('DESCRIPTION')),
+                    price=format_price(product_data.get('PRICE')),
+                    currency=product_data.get('CURRENCY_ID'),
+                )
+                product.save()
+            else:
+                product = Service.objects.get(id=product.first().id)
+                product.service_id = product_data.get('ID')
+                product.title = product_data.get('NAME')
+                product.title_description = clean_and_shorten_text(product_data.get('DESCRIPTION'))
+                product.price = format_price(product_data.get('PRICE'))
+                product.currency = product_data.get('CURRENCY_ID')
+                product.save()
             products.append(product)
 
         context = {
@@ -82,9 +99,9 @@ def product_detail(request, id):
         return redirect('services')
 
 
+@login_required(login_url='/accounts/login/')
 @csrf_exempt
 def create_invoice(request):
-    # print(request.user.b24_contact_id)
     method = "crm.product.list"
     url = set_webhook(method)
     b24_product_id = request.POST["b24_product_id"]
@@ -108,8 +125,7 @@ def create_invoice(request):
                                                    ]})
 
         time.sleep(5)
-        print(invoice_id)
-        # Invoice.objects.filter(invoice_id=invoice_id)
+        LocalInvoice.objects.create(b24_invoice_id=invoice_id,stripe_price_id=product.stripe_id)
 
     except BitrixError as message:
         print(message)

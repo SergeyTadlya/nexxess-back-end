@@ -138,3 +138,6 @@ webencodings==0.5.1
 xhtml2pdf==0.2.9
 yarl==1.8.2
 zipp==3.15.0
+xattr==0.10.1
+stripe==5.4.0
+bitrix24-rest==1.1.1
