@@ -104,7 +104,7 @@
   </div>
 {% endblock %}
 {% block  after_sign_up %}
-{% if not user.is_superuser %}
+{% if not user.is_superuser and not user.google_auth %}
 <header class="header">
           <div class="container">
             <div class="header__inner">
