@@ -93,7 +93,7 @@
                 {% endif %}
                 {{ product.price }}
             </p>
-            <a class="content__list-link" href="{% url 'product_detail' product.id %}">Order</a>
+            <a class="content__list-link" href="{% url 'product_detail' product.id %}">Detail</a>
         </div>
     </li>
 {% endfor %}
@@ -106,9 +106,3 @@
     <script src="{% static 'js/dynamic_search.js' %}"></script>
     <script src="{% static 'js/services.js' %}"></script>
 {% endblock extra_js %}
-
-
-
-
-
-

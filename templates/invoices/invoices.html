@@ -99,6 +99,7 @@
             <li class="content__titles-item">Due Date</li>
             <li class="content__titles-item">Total</li>
             <li class="content__titles-item">Status</li>
+            <li class="content__titles-item">Action</li>
         </ul>
         <div id="div-invoices">
             {% for invoice_date in invoices_dates %}
@@ -138,6 +139,7 @@
                                         <li  class="content__body-item style--width">
                                             <p class="content__body-status style--width font--{{ invoice.status.color }}">{{ invoice.status.value }}</p>
                                         </li>
+                                        <li class="content__body-item style--width"><a class="button_pay">Pay</a></li>
                                     </ul>
                                     <button class="content__body-btn">
                                         <img class="content__body-img" src="{% static 'images/chevron.svg' %}" alt="arrow">

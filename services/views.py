@@ -1,11 +1,22 @@
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.views.decorators.csrf import csrf_exempt
+from requests import Response
+
 from authentication.helpers.B24Webhook import set_webhook
 from django.contrib.auth.decorators import login_required
+
+from invoices.models import Invoice
+from telegram_bot.models import User
 from .models import Service
 from django.shortcuts import render
 import requests
 import json
 import re
+import time
+import datetime
+
+from bitrix24 import Bitrix24, BitrixError
 
 
 def format_price(price):
@@ -58,9 +69,6 @@ def services(request):
         return render(request, "services/list.html", context=context)
 
 
-
-
-
 @login_required(login_url='/accounts/login/')
 def product_detail(request, id):
     try:
@@ -72,3 +80,38 @@ def product_detail(request, id):
 
     except:
         return redirect('services')
+
+
+@csrf_exempt
+def create_invoice(request):
+    # print(request.user.b24_contact_id)
+    method = "crm.product.list"
+    url = set_webhook(method)
+    b24_product_id = request.POST["b24_product_id"]
+    product = Service.objects.get(service_id=request.POST["b24_product_id"])
+    tomorrow = datetime.date.today() + datetime.timedelta(days=1)
+    bx24 = Bitrix24(url)
+    try:
+        invoice_id = bx24.callMethod('crm.invoice.add', fields={'ORDER_TOPIC': "Invoice - " + product.title,
+                                                   'PERSON_TYPE_ID': 1,
+                                                   'UF_CONTACT_ID': 2,
+                                                   'STATUS_ID': 'N',
+                                                   'RESPONSIBLE_ID': 1,
+                                                   'PAY_SYSTEM_ID': 4,
+                                                   'DATE_PAY_BEFORE': tomorrow.strftime("%m/%d/%Y"),
+                                                   "PRODUCT_ROWS": [
+                                                       {"ID": 0,
+                                                        "PRODUCT_ID": product.id,
+                                                        "PRODUCT_NAME": product.title,
+                                                        "QUANTITY": 1,
+                                                        "PRICE": product.price},
+                                                   ]})
+
+        time.sleep(5)
+        print(invoice_id)
+        # Invoice.objects.filter(invoice_id=invoice_id)
+
+    except BitrixError as message:
+        print(message)
+
+    return JsonResponse({'invoice_id': str(invoice_id)})

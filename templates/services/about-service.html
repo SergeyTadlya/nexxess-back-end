@@ -74,7 +74,7 @@
   <div class="content__inner">
     <div class="content__top">
       <div class="content__top-body">
-        <h1 class="title content__top-title">About service {{ service.title }}</h1>
+        <h1 class="title content__top-title">{{ service.title }}</h1>
       </div>
     </div>
 
@@ -101,7 +101,7 @@
       <p class="content__body-text">
         Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages
       </p>
-      <a class="content__body-link" href="#">Order</a>
+      <button class="content__body-link order_click" data-b24id="{{ service.service_id }}">Order</button>
 
     </div>
 
@@ -109,5 +109,7 @@
 {% endblock %}
 
 {% block extra_js %}
-  <script src="{% static 'js/about-service.js' %}"></script>
+    <script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
+    <script src="{% static 'js/jquery-ui.min.js' %}"></script>
+    <script src="{% static 'js/about-service.js' %}"></script>
 {% endblock %}

@@ -62,67 +62,79 @@
                 <h1 class="title content__top-title">About invoice {{invoice.id}}</h1>
               </div>
             </div>
-
-            <ul class="content__titles">
-              <li class="content__titles-item">
-                Invoice
-              </li>
-              <li class="content__titles-item">
-                Invoice Date
-              </li>
-              <li class="content__titles-item">
-                Due Date
-              </li>
-              <li class="content__titles-item">
-                Total
-              </li>
-              <li class="content__titles-item">
-                Status
-              </li>
-            </ul>
-
-            <div class="content__box">
               <div class="content__body">
-                <ul class="content__body-list">
-                  <li class="content__body-box">
-                    <ul class="content__body-titles">
-                      <li class="content__body-title">Invoice</li>
-                      <li class="content__body-title">Status</li>
-                      <li class="content__body-title">Invoice Date</li>
-                      <li class="content__body-title">Due Date</li>
-                      <li class="content__body-title">Total</li>
-                    </ul>
+                  <div class="content__body-box">
+                      <ul class="content__body-titles">
+                        <li class="content__body-title">Invoice</li>
+                        <li class="content__body-title">Status</li>
+                        <li class="content__body-title">Invoice Date</li>
+                        <li class="content__body-title">Due Date</li>
+                        <li class="content__body-title">Total</li>
+                        <li class="content__body-title">Remains</li>
+                      </ul>
+                      <ul class="content__body-items">
+                        <li class="content__body-item">
+                          <a class="content__body-link" href="">
+                            <img src="{% static 'images/invoices/print.svg' %}" alt="print">
+                          </a>
+                          <p class="content__body-text">{{ invoice.invoice_id }}</p>
+                        </li>
+                        <li class="content__body-item">
+                          <p class="content__body-date">{{ invoice.date }}</p>
+                        </li>
+                        <li class="content__body-item">
+                          <p class="content__body-date">{{ invoice.due_date }}</p>
+                        </li>
+                        <li class="content__body-item">
+                          <p class="content__body-money">{{ invoice.price }}$</p>
+                        </li>
+                        <li class="content__body-item">
+                          <p class="content__body-status font--green">{{ invoice.status.value }}</p>
+                        </li>
+                        <li class="content__body-item">
+                          <p class="content__body-hours">20:00</p>
+                        </li>
+                      </ul>
+                  </div>
 
-                    <ul class="content__body-items">
-                      <li class="content__body-item style--width">
-                        <a class="content__body-link" href="">
-                          <img src="{% static 'images/invoices/print.svg' %}" alt="print">
-                        </a>
-                        <p class="content__body-text">{{ invoice.invoice_id }}</p>
-                      </li>
-                      <li class="content__body-item style--width">
-                        <p class="content__body-date">{{ invoice.date }}</p>
-                      </li>
-                      <li class="content__body-item style--width">
-                        <p class="content__body-date">{{ invoice.due_date }}</p>
-                      </li>
-                      <li class="content__body-item style--width">
-                        <p class="content__body-money">{{ invoice.price }}</p>
-                      </li>
-                      <li class="content__body-item style--width">
-                        <p class="content__body-status style--width font--green">{{ invoice.status.value }}</p>
-                      </li>
-                    </ul>
-                  </li>
-                </ul>
-              </div>
+                  <div class="content__body-descrip">
+                    <h6 class="content__descrip-title">GOLD PACKAGE - $20,000 <br>
+                      Add to Nexxess© Trust Book (total $35,000) <br>
+                      or purchase a gold package a la cart
+                    </h6>
+                    <p class="content__descrip-text">INCLUDES:</p>
+                      <ul class="content__descrip-list">
+                        <li class="content__descrip-item">
+                          Forty (40) hours of business consultation for 5 years.
+                        </li>
+                        <li class="content__descrip-item">
+                          Includes up to ten(lO) business entities or real estate properties into trust
+                        </li>
+                        <li class="content__descrip-item">
+                          Trust defense*(TD)
+                        </li>
+                        <li class="content__descrip-item">
+                          Referrals to banks and bookkeeping companies.
+                        </li>
+                        <li class="content__descrip-item">
+                          Access with a Nexxess© Tax Advisors. (6 hours)
+                        </li>
+                        <li class="content__descrip-item">
+                          Access with a Nexxess© Attorney. (10 hours)
+                        </li>
+                        <li class="content__descrip-item">
+                          One Lifetime replacement copy of trust if lost or stolen.
+                        </li>
+                        <li class="content__descrip-item">
+                          Trust completion and activation within 20 days of payment.
+                        </li>
+                        <li class="content__descrip-item">
+                          Survivorship Service*
+                        </li>
+                      </ul>
+                  </div>
+                </div>
             </div>
-
-            <div class="content__hours">
-              <p class="content__hours-text">remains:</p>
-              <p class="content__hours-number">20:00</p>
-            </div>
-          </div>
 {% endblock content %}
 {% block extra_js %}
     <script src="{% static 'js/about-invoice.js' %}"></script>

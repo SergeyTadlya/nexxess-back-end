@@ -7,7 +7,8 @@ from . import views
 urlpatterns = [
     # services pages
     path('', views.services, name='services'),
-    path('about_service/<int:id>/', views.product_detail, name='product_detail')
+    path('about_service/<int:id>/', views.product_detail, name='product_detail'),
+    path('create_invoice/', views.create_invoice, name='create_invoice')
 ]
 
 if settings.DEBUG:

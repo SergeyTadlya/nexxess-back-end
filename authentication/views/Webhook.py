@@ -101,8 +101,8 @@ def webhook_invoice(request):
                 'invoice_info': invoice_load,
                 'price': invoice_load['PRICE'],
                 'status': status,
-		'date': datetime.strptime(invoice_load['DATE_BILL'], '%Y-%m-%dT%H:%M:%S%z'),
-		'due_date': datetime.strptime(invoice_load['DATE_PAY_BEFORE'][:11] + '23:59:59', '%Y-%m-%dT%H:%M:%S'),
+                'date': datetime.strptime(invoice_load['DATE_BILL'], '%Y-%m-%dT%H:%M:%S%z'),
+                'due_date': datetime.strptime(invoice_load['DATE_PAY_BEFORE'][:11] + '23:59:59', '%Y-%m-%dT%H:%M:%S'),
                 'is_opened': False
             }
 
@@ -115,4 +115,3 @@ def webhook_invoice(request):
             except Exception as e:
                 print(e)
             return HttpResponse()
-
