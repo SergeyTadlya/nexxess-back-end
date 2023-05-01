@@ -111,10 +111,10 @@ def create_invoice(request):
     try:
         invoice_id = bx24.callMethod('crm.invoice.add', fields={'ORDER_TOPIC': "Invoice - " + product.title,
                                                    'PERSON_TYPE_ID': 1,
-                                                   'UF_CONTACT_ID': 2,
+                                                   'UF_CONTACT_ID': request.user.b24_contact_id,
                                                    'STATUS_ID': 'N',
                                                    'RESPONSIBLE_ID': 1,
-                                                   'PAY_SYSTEM_ID': 4,
+                                                   'PAY_SYSTEM_ID': 3,
                                                    'DATE_PAY_BEFORE': tomorrow.strftime("%m/%d/%Y"),
                                                    "PRODUCT_ROWS": [
                                                        {"ID": 0,

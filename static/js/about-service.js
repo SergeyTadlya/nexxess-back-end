@@ -29,3 +29,27 @@ function menu() {
     document.body.classList.add('body--active')
   }
 }
+
+
+
+$(document).ready(function () {
+  $(".order_click").click(function()
+  {
+    var button = $(".order_click")[0];
+    var b24_product_id = $(button).data("b24id");
+    $.ajax({
+      url: '/services/create_invoice/',
+      type: 'POST',
+      data: {"b24_product_id":b24_product_id},
+      dataType: 'json',
+      success: function(data) {
+      if (data.invoice_id){
+        window.location.href = '/invoices/';
+      }else
+      {
+        alert("We have some problem. Please try late")
+      }
+      },
+    });
+  });
+});
