@@ -22,7 +22,7 @@
           </div>
           <div class="authentication__email-box authentication__box-titles">
             <h5 class="authentication__box-title">Enter your code</h5>
-            <p class="authentication__box-subtitle authentication__email-subtitle">We sent a code to <span id="authentication__box-span" class="authentication__box-span">{{ user.mail }}</span></p>
+            <p class="authentication__box-subtitle authentication__email-subtitle">We sent a code to <span id="authentication__box-span" class="authentication__box-span">{{ user.email }}</span></p>
           </div>
           <div class="authentication__box">
             <input id="authentication__code-input" class="authentication__box-input" type="text" required="" name="verify_code">
@@ -31,7 +31,7 @@
           <button id="authentication__email-button" class="authentication__button authentication__email-button" type="submit">Verify my account</button>
           <div class="authentication__email-bottom">
             <p class="authentication__email-text">Haven't received it?</p>
-            <button class="authentication__email-btn" type="button">Resend a new link</button>
+            <button class="authentication__email-btn" type="button">Resend a new code</button>
         </div>
         </div>
       </form>

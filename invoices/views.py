@@ -167,21 +167,23 @@ def ajax_invoice_filter(request):
 
 @login_required(login_url='/accounts/login/')
 def invoice_detail(request, id):
-    invoice = Invoice.objects.get(id=id)
-    if request.user.is_superuser or invoice.responsible==request.user.b24_contact_id:
-       
-        if not request.user.is_superuser:
-            Invoice.objects.filter(id=id).update(is_opened=True)
+    try:
         invoice = Invoice.objects.get(id=id)
-        res = {
-            'invoice': invoice,
-        }
-        return render(request, "invoices/detail.html", res)
-    else:
-        return redirect('/invoices/')
+        if request.user.is_superuser or int(invoice.responsible) == request.user.b24_contact_id:
+            if not request.user.is_superuser:
+                Invoice.objects.filter(id=id).update(is_opened=True)
+            invoice = Invoice.objects.get(id=id)
+            res = {
+                'invoice': invoice,
+            }
+            return render(request, "invoices/detail.html", res)
+        else:
+            return redirect('/invoices/')
+    except :
+            return redirect('/invoices/')
 
-@login_required(login_url='/accounts/login/')
 def generate_new_pdf(pdf_path, id, invoice):
+
     pdf_file = fitz.open(pdf_path)
 
     # Load the first page of the PDF
@@ -210,25 +212,24 @@ def generate_new_pdf(pdf_path, id, invoice):
 
 @login_required(login_url='/accounts/login/')
 def create_invoice_pdf(request, id):
-    try:
-        invoice = Invoice.objects.get(id=id)
+    request.user.b24_contact_id = int(request.user.b24_contact_id)
+    invoice = Invoice.objects.get(id=id)
+    invoice.responsible = int(invoice.responsible)
+    # try:
+    if invoice.responsible == request.user.b24_contact_id or request.user.is_superuser:
+        if invoice.status.value == 'Paid':
+            pdf_template_path = 'invoices/PDF_templates/invoice_template.pdf'
+        else:
+            pdf_template_path = 'invoices/PDF_templates/invoice_ordinary.pdf'
 
-        if request.user.is_superuser or invoice.responsible == request.user.b24_contact_id:
-            if invoice.status.value == 'Paid':
-                pdf_template_path = 'invoices/PDF_templates/invoice_template.pdf'
-            else:
-                pdf_template_path = 'invoices/PDF_templates/invoice_ordinary.pdf'
+        generated_pdf_path = generate_new_pdf(pdf_template_path, id, invoice)
+        binary_pdf = open(generated_pdf_path, 'rb')
 
-            generated_pdf_path = generate_new_pdf(pdf_template_path, id, invoice)
-            binary_pdf = open(generated_pdf_path, 'rb')
+        response = HttpResponse(binary_pdf, content_type='application/pdf')
+        response.headers['Content-Type'] = 'application/pdf'
+        response.headers['Content-Disposition'] = 'inline; filename=%s.pdf' % generated_pdf_path
 
-            response = HttpResponse(binary_pdf, content_type='application/pdf')
-            response.headers['Content-Type'] = 'application/pdf'
-            response.headers['Content-Disposition'] = 'inline; filename=%s.pdf' % generated_pdf_path
-
-            return response
-    except Exception as e:
-        return redirect('/invoices/')
+        return response
 
 @login_required(login_url='/accounts/login/')
 @csrf_exempt

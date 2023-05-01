@@ -117,8 +117,9 @@
             </div>
           </div>
         </header>
-  <div class="container"><p style="margin-top: 203px; max-width: 860px; margin: 145px AUTO 0;">We have sent an e-mail to you for verification. Follow the link provided to finalize the signup process. If you do not see the verification e-mail in your main inbox, check your spam folder.
-       Please contact us if you do not receive the verification e-mail within a few minutes.</p></div>
+  <div class="container"><p style="margin-top: 203px; max-width: 860px; margin: 145px AUTO 0;">We have sent an e-mail to you for verification. Follow the link provided to finalize  process. If you do not see the verification e-mail in your main inbox, check your spam folder.
+       Please contact us if you do not receive the verification e-mail within a few minutes.</p>
+  <a href="{% url 'account_logout' %}">Log out</a></div>
 {% endif %}
 {% block extra_js %}
  <script src="{% static 'js/main.js' %}"></script>
