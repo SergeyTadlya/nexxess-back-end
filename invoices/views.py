@@ -56,6 +56,7 @@ def invoices(request):
             'date': format_date(invoice.date),
             'due_date': format_date(invoice.due_date),
             'status': invoice.status,
+            'title': invoice.product_title,
         })
 
         if format_date(invoice.date) not in invoices_dates:
@@ -182,7 +183,7 @@ def invoice_detail(request, id):
     except :
             return redirect('/invoices/')
 
-def generate_new_pdf(pdf_path, id, invoice):
+def generate_new_pdf(pdf_path, id, invoice, request):
 
     pdf_file = fitz.open(pdf_path)
 
@@ -194,15 +195,16 @@ def generate_new_pdf(pdf_path, id, invoice):
 
     # Insert the date
     page.insert_text(fitz.Point(105, 225), str(format_date(invoice.date)))
-
+    data = str(request.user.first_name) + ' ' + str(request.user.last_name)
+    page.insert_text(fitz.Point(100, 342), str((invoice.product_title)), fontsize = 12)
 
     # Insert the due date
-    page.insert_text(fitz.Point(95, 242), str(format_date(invoice.due_date)))
-
+    page.insert_text(fitz.Point(95, 241), str(format_date(invoice.due_date)))
+    page.insert_text(fitz.Point(105, 283), str(data), fontsize = 14)
     # Insert the price
-    page.insert_text(fitz.Point(475, 343), str(format_price(invoice.price)))
-    page.insert_text(fitz.Point(475, 400), str(format_price(invoice.price)))
-    page.insert_text(fitz.Point(477, 491), str(format_price(invoice.price)))
+    page.insert_text(fitz.Point(469, 343), str(format_price(invoice.price)))
+    page.insert_text(fitz.Point(469, 400), str(format_price(invoice.price)))
+    page.insert_text(fitz.Point(469, 492), str(format_price(invoice.price)))
 
     # Save the modified PDF with a new name
     new_file_path = f'pdf_client/invoice_{id}.pdf'
@@ -212,7 +214,6 @@ def generate_new_pdf(pdf_path, id, invoice):
 
 @login_required(login_url='/accounts/login/')
 def create_invoice_pdf(request, id):
-    request.user.b24_contact_id = int(request.user.b24_contact_id)
     invoice = Invoice.objects.get(id=id)
     invoice.responsible = int(invoice.responsible)
     # try:
@@ -222,7 +223,7 @@ def create_invoice_pdf(request, id):
         else:
             pdf_template_path = 'invoices/PDF_templates/invoice_ordinary.pdf'
 
-        generated_pdf_path = generate_new_pdf(pdf_template_path, id, invoice)
+        generated_pdf_path = generate_new_pdf(pdf_template_path, id, invoice, request)
         binary_pdf = open(generated_pdf_path, 'rb')
 
         response = HttpResponse(binary_pdf, content_type='application/pdf')

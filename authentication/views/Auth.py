@@ -27,6 +27,10 @@ class MyLoginView(LoginView):
     def form_valid(self, form):
         response = super().form_valid(form)
         if self.request.user.is_authenticated:
+            if self.request.user.is_superuser:
+                next_url = self.request.GET.get('next', reverse_lazy('authentication:main'))
+                return redirect(next_url)
+        
             try:
                 code = randint(100000, 999999)
                 user = User.objects.filter(email=self.request.user.email)

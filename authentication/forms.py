@@ -1,11 +1,14 @@
-from django.forms import ModelForm, TextInput, PasswordInput, NumberInput, FileInput
-from allauth.account.forms import (SignupForm, LoginForm, ChangePasswordForm, ResetPasswordForm)
-from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserChangeForm
+from allauth.account.forms import (SignupForm, LoginForm, ChangePasswordForm, ResetPasswordForm)
+from django.forms import ModelForm, TextInput, PasswordInput, NumberInput, FileInput, EmailInput
+
 from django import forms
+
+from telegram_bot.models import User
 
 
 class CustomLoginForm(LoginForm):
+
     login = forms.CharField(
         max_length=30,
         widget=forms.TextInput(attrs={
@@ -34,6 +37,8 @@ class CustomLoginForm(LoginForm):
         self.fields['password'].widget.attrs.update({'class': 'authentication__box-input',
                                                      'id': 'authentication-input__password',
                                                      })
+
+
 
 
 class CustomSignupForm(SignupForm):
@@ -91,11 +96,3 @@ class CustomResetPasswordForm(ResetPasswordForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields.pop('username', None)
-
-
-class EditProfileForm(UserChangeForm):
-    password = None
-
-    class Meta:
-        model = User
-        fields = ('first_name', 'last_name', 'email')

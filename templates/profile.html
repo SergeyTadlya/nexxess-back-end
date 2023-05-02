@@ -2,7 +2,6 @@
 {% load static %}
 {% load account %}
 {% load socialaccount %}
-
 {% block extra_css %}
   <link rel="stylesheet" href="{% static 'css/my-account.css' %}" />
 {% endblock %}
@@ -75,10 +74,10 @@
 {% endblock %}
 
 {% block cabinet %}
-  <form id="cabinet__info" class="cabinet__info" method="post" action="{% url 'account_logout' %}">
-    {% csrf_token %}
-    <div class="cabinet__info-inner">
-      <img class="cabinet__info-img" src="{% static 'images/profile-user.png' %}">
+<form id="cabinet__info" class="cabinet__info" method="post" action="{% url 'account_logout' %}">
+  {% csrf_token %}
+  <div class="cabinet__info-inner">
+    <img class="cabinet__info-img" src="/media/{{ user.photo }}">
   </div>
 
   <ul class="cabinet__info-list">
@@ -95,47 +94,47 @@
 
   <div class="cabinet__info-buttons">
     <button id="cabinet__btn-edit" class="cabinet__info-button" type="button">Edit</button>
-
-        {% if redirect_field_value %}
-            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
-        {% endif %}
-        <button class="cabinet__info-button" type="submit">Log out</button>
+    {% if redirect_field_value %}
+        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+    {% endif %}
+    <button class="cabinet__info-button" type="submit">Log out</button>
   </div>
 </form>
 
-  <form id="cabinet__edit" class="cabinet__edit">
-    <div class="cabinet__edit-inner">
+<form id="cabinet__edit" class="cabinet__edit" method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <div class="cabinet__edit-inner">
     <label class="cabinet__edit-label" title="insert a new picture">
       <img class="cabinet__edit-img" id="cabinet__edit-img">
-      <input class="cabinet__edit-file" id="cabinet__edit-file" type="file" name="file" accept="image/*">
+      <input class="cabinet__edit-file" id="cabinet__edit-file" type="file" name="profile_image" accept="image/*">
     </label>
   </div>
 
   <ul class="cabinet__edit-list">
     <li class="cabinet__edit-item">
       <p class="cabinet__edit-text">Username</p>
-      <input class="cabinet__edit-input" type="text" placeholder="Enter your Username">
+      <input class="cabinet__edit-input" type="text" name="username" placeholder="Enter your Username">
     </li>
 
     <li class="cabinet__edit-item">
       <p class="cabinet__edit-text">Email</p>
-      <input class="cabinet__edit-input" type="email" placeholder="Enter your email">
+      <input class="cabinet__edit-input" type="email" name="email" placeholder="Enter your email">
     </li>
 
     <li class="cabinet__edit-item">
       <p class="cabinet__edit-text">Current password</p>
-      <input class="cabinet__edit-input" type="password" placeholder="Enter your password">
+      <input class="cabinet__edit-input" type="password" name="old_password" placeholder="Enter your password">
     </li>
 
     <li class="cabinet__edit-item">
       <p class="cabinet__edit-text">New Password</p>
-      <input class="cabinet__edit-input" type="password" placeholder="Repeat the password">
+      <input class="cabinet__edit-input" type="password" name="new_password" placeholder="Repeat the password">
     </li>
   </ul>
 
   <div class="cabinet__edit-buttons">
     <button class="cabinet__edit-button" type="submit">Save</button>
-    <button id="cabinet__btn-cancel" class="cabinet__edit-button" type="button">Cancel</button>
+    <button id="cabinet__btn-cancel" class="cabinet__edit-button" type="submit">Cancel</button>
   </div>
 </form>
 {% endblock %}

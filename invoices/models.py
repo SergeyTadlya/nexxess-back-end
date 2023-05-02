@@ -28,6 +28,8 @@ class Invoice(models.Model):
     status = models.ForeignKey(Status, on_delete=models.PROTECT, verbose_name='Status', blank=True, null=True)
     date = models.DateTimeField(verbose_name='Date', blank=True, null=True)
     due_date = models.DateTimeField(verbose_name='Due date', blank=True, null=True)
+    product_title = models.CharField(verbose_name='Product title', max_length=200, blank=True, null=True)
+
 
     def __str__(self):
         return f'Invoice {self.invoice_id}, responsible - {self.responsible}'

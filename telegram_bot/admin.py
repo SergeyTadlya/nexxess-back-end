@@ -29,6 +29,7 @@ class UserAdmin(BaseUserAdmin):
             'email',
             'password',
             'username',
+            'photo',
             'telegram_id',
             'first_name',
             'last_name',

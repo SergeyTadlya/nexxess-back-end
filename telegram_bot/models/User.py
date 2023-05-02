@@ -39,6 +39,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     b24_contact_id = models.PositiveIntegerField(verbose_name='Bitrix24 contact ID', unique=True, null=True, blank=True)
     email = models.EmailField(max_length=64, unique=True)
     username = models.CharField(verbose_name='Username', max_length=64, null=True, blank=True)
+    photo = models.ImageField(default='profile-user.png', upload_to='')
     telegram_id = models.PositiveIntegerField(verbose_name='Telegram user ID', unique=True, null=True, blank=True)
     first_name = models.CharField(verbose_name='First name', max_length=50, null=True, blank=True)
     last_name = models.CharField(verbose_name='Last name', max_length=50, null=True, blank=True)

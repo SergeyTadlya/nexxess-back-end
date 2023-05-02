@@ -32,17 +32,44 @@
                     </a>
                     <ul class="nav__list">
                         <li class="nav__list-item">
+                          <a class="{% if "/support/" == request.path %} active_menu_item {% else %} nav__item-link{% endif %}" href="{% url 'support' %}">Home</a>
+                        </li>
+                        <li class="nav__list-item">
                             <a class="{% if "/services/" == request.path %} active_menu_item {% else %} nav__item-link{% endif %}" href="{% url 'services' %}">Services</a>
                         </li>
                         <li class="nav__list-item">
-                            <a class="{% if "/invoices/" == request.path %} active_menu_item {% else %} nav__item-link{% endif %}" href="{% url 'invoices' %}">Invoices</a>
+                            <a class="{% if "/invoices/" == request.path %} active_menu_item {% else %} nav__item-link{% endif %}"
+                              href="{% url 'invoices' %}">
+                              Invoices
+                              
+                            </a>
                         </li>
                         <li class="nav__list-item">
-                            <a class="{% if "/tickets/" == request.path %} active_menu_item {% else %} nav__item-link{% endif %}" href="{% url 'tasks' %}">Tickets</a>
+                            <span class="{% if "/tickets/" == request.path %} active_menu_item {% else %} nav__item-link{% endif %}" href="{% url 'tasks' %}">Tickets
+                              <span class="nav__item-link-arrow"></span>
+                            </span>
+
+                            <ul class="nav__sublist">
+                              <li class="nav__subitem">
+                                <a href="#" class="nav__subitem-link">
+                                  Support Tickets
+                                </a>
+                              </li>
+
+                              <li class="nav__subitem">
+                                <a href="#" class="nav__subitem-link">
+                                  Submit a Ticket
+                                </a>
+                              </li>
+                            </ul>
+
                         </li>
                         <li class="nav__list-item">
                             <a class="{% if "/support/" == request.path %} active_menu_item {% else %} nav__item-link{% endif %}" href="{% url 'support' %}">FAQ</a>
                         </li>
+                        <li class="nav__list-item">
+                          <a class="{% if "/support/" == request.path %} active_menu_item {% else %} nav__item-link{% endif %}" href="{% url 'support' %}">Refer a Friend</a>
+                      </li>
                     </ul>
                 </nav>
               <div class="header__box">
@@ -52,10 +79,11 @@
                   <a class="header__box-link" href="#">
                       <img class="header__box-img" title="Go to Telegram bot" src="{% static 'images/telegram.svg' %}" alt="user">
                   </a>
+                  <a class="burger">
+                    <span class="burger-line"></span>
+                  </a>
               </div>
-              <a class="burger">
-                <span class="burger-line"></span>
-              </a>
+              
             </div>
           </div>
         </header>

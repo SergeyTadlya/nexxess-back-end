@@ -103,7 +103,8 @@ def webhook_invoice(request):
                 'status': status,
                 'date': datetime.strptime(invoice_load['DATE_BILL'], '%Y-%m-%dT%H:%M:%S%z'),
                 'due_date': datetime.strptime(invoice_load['DATE_PAY_BEFORE'][:11] + '23:59:59', '%Y-%m-%dT%H:%M:%S'),
-                'is_opened': False
+                'is_opened': False,
+                'product_title': ', '.join([row['PRODUCT_NAME'] for row in invoice_load['PRODUCT_ROWS']])
             }
 
             try:
