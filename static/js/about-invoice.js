@@ -2,26 +2,7 @@
 
 // _____Event click on the header icon___
 
-const headerIcon = document.querySelectorAll('.header__box-icon')[0]
-const headerLinks = document.querySelector('.header__box-links')
 
-headerIcon.addEventListener('mouseenter', (e) => {
-  e.preventDefault()
-  headerLinks.style.display = 'flex'
-})
-
-headerIcon.addEventListener('mouseleave', (e) => {
-  e.preventDefault()
-  headerLinks.style.display = 'none'
-})
-
-headerLinks.addEventListener('mouseenter', (e) => {
-  headerLinks.style.display = 'flex'
-})
-
-headerLinks.addEventListener('mouseleave', (e) => {
-  headerLinks.style.display = 'none'
-})
 
 //______ACCORDION______
 

@@ -1,11 +1,12 @@
-from .utils import *
-from ..models import User, Authentication
 from .start.handlers import StartHandler, AuthenticationHandler
 from .invoices.handlers import InvoiceHandler
 from .services.handlers import ServicesHandler
 from .tickets.handlers import TicketsHandler
 from .FAQ.handlers import FAQHandler
 from .logout.handlers import LogOutHandler
+
+from .utils import *
+from ..models import User, Authentication
 
 
 class MessageHandler:
@@ -14,7 +15,7 @@ class MessageHandler:
         self.data = data
 
     def get_message_text(self):
-        return self.data['message']['text'] if 'sticker' not in self.data['message'].keys() else ''
+        return self.data['message']['text'] if 'text' in self.data['message'].keys() else 'None'
 
     def get_user_step(self):
         user = User.objects.filter(telegram_id=self.data['message']['from']['id'])
@@ -28,25 +29,30 @@ class MessageHandler:
     def get_user(self):
         user = User.objects.filter(telegram_id=self.data['message']['from']['id'])
 
-        return False if not user.exists() else user.first().is_active
+        return False if not user.exists() else user.first().telegram_is_authenticate
 
     def handle_request(self):
         message = self.get_message_text()
         user_step = self.get_user_step()
-        is_user_active = self.get_user()
+        is_user_authorize = self.get_user()
 
-        if is_user_active:
-            if message == '/menu':
-                pass
-            elif message == '/invoices' or message == '🧾 Invoices':
+        if is_user_authorize:  # access to commands and keyboard
+            if message == '/start':
+                self.bot.sendMessage(chat_id=get_chat_id(self.data),
+                                     text='You are authorized.\n'
+                                          'This command will be available after you are logging out.\n\n'
+                                          'If you want to log out, just write /logout or click it on keyboard.')
+            elif message == '/menu':
+                StartHandler.show_menu(self.bot, self.data)
+            elif message in ['/invoices', '🧾 Invoices']:
                 InvoiceHandler.show_keyboard(self.bot, self.data)
-            elif message == '/services' or message == '👨‍💻 Services':
+            elif message in ['/services', '👨‍💻 Services']:
                 ServicesHandler.show_keyboard(self.bot, self.data)
-            elif message == '/tickets' or message == '📝 Tickets':
+            elif message in ['/tickets', '📝 Tickets']:
                 TicketsHandler.show_keyboard(self.bot, self.data)
-            elif message == '/faq' or message == '⁉️ FAQ':
+            elif message in ['/faq', '⁉️ FAQ']:
                 FAQHandler.show_keyboard(self.bot, self.data)
-            elif message == '/logout' or message == '🚪 Log Out':
+            elif message in ['/logout', '🚪 Log Out']:
                 LogOutHandler.show_confirm_keyboard(self.bot, self.data)
             else:
                 # steps users ...
@@ -54,14 +60,15 @@ class MessageHandler:
                                      text='Unknown command, please choose another option',
                                      reply_markup=StartHandler.main_keyboard())
         else:
-            authentication_main: AuthenticationHandler = AuthenticationHandler(self.bot, self.data)
+            authentication: AuthenticationHandler = AuthenticationHandler(self.bot, self.data)
 
             if message == '/start':
                 StartHandler.start(self.bot, self.data)
             elif 'set_email' in user_step:
-                authentication_main.set_user_email(self.data)
-            elif 'set_password' in user_step:
-                authentication_main.set_user_password(self.data)
+                authentication.set_user_email(self.data)
+            elif 'set_verify_code' in user_step:
+                authentication.set_user_verification_code(self.data)
             else:
                 self.bot.sendMessage(chat_id=get_chat_id(self.data),
-                                     text='Authorization first')
+                                     text='Authorization first 🙃\n'
+                                          'Use /start and write an email 👇')

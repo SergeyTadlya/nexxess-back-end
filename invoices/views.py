@@ -97,7 +97,7 @@ def ajax_invoice_filter(request):
             data = json.load(request)
             statuses = [keys for keys in data if data[keys] is True]
 
-            all_user_invoices = Invoice.objects.filter(responsible=request.user).order_by('-date')
+            all_user_invoices = Invoice.objects.filter(responsible=request.user.email).order_by('-date')
             invoices_array = list()
             invoices_dates = list()
 

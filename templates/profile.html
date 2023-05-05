@@ -82,13 +82,23 @@
 
   <ul class="cabinet__info-list">
     <li class="cabinet__info-item">
-      <p class="cabinet__info-text">Username</p>
-      <input class="cabinet__info-input" type="text" placeholder="{{ user.username }}" disabled>
+      <p class="cabinet__info-text">First name</p>
+      <input class="cabinet__info-input" type="text" placeholder="{{ user.first_name }}" disabled>
+    </li>
+
+    <li class="cabinet__info-item">
+      <p class="cabinet__info-text">Last name</p>
+      <input class="cabinet__info-input" type="text" placeholder="{{ user.last_name }}" disabled>
     </li>
 
     <li class="cabinet__info-item">
       <p class="cabinet__info-text">Email</p>
       <input class="cabinet__info-input" type="email" placeholder="{{ user.email }}" disabled>
+    </li>
+
+    <li class="cabinet__info-item">
+      <p class="cabinet__info-text">Username</p>
+      <input class="cabinet__info-input" type="text" placeholder="{{ user.username }}" disabled>
     </li>
   </ul>
 
@@ -105,40 +115,48 @@
   {% csrf_token %}
   <div class="cabinet__edit-inner">
     <label class="cabinet__edit-label" title="insert a new picture">
-      <img class="cabinet__edit-img" id="cabinet__edit-img">
+      <img class="cabinet__edit-img" id="cabinet__edit-img" src="/media/{{ user.photo }}">
       <input class="cabinet__edit-file" id="cabinet__edit-file" type="file" name="profile_image" accept="image/*">
     </label>
   </div>
 
   <ul class="cabinet__edit-list">
     <li class="cabinet__edit-item">
-      <p class="cabinet__edit-text">Username</p>
-      <input class="cabinet__edit-input" type="text" name="username" placeholder="Enter your Username">
+      <p class="cabinet__edit-text">First name</p>
+      <input class="cabinet__edit-input" type="text" id="first_name" name="first_name" placeholder="First name">
     </li>
 
     <li class="cabinet__edit-item">
-      <p class="cabinet__edit-text">Email</p>
-      <input class="cabinet__edit-input" type="email" name="email" placeholder="Enter your email">
+      <p class="cabinet__edit-text">Last name</p>
+      <input class="cabinet__edit-input" type="text" id=last_name name="last_name" placeholder="Last name">
+    </li>
+
+    <li class="cabinet__edit-item">
+      <p class="cabinet__edit-text">Username</p>
+      <input class="cabinet__edit-input" type="text" id="username" name="username">
     </li>
 
     <li class="cabinet__edit-item">
       <p class="cabinet__edit-text">Current password</p>
-      <input class="cabinet__edit-input" type="password" name="old_password" placeholder="Enter your password">
+      <input class="cabinet__edit-input" type="password" id="old_password" name="old_password" placeholder="Enter your current password">
     </li>
 
     <li class="cabinet__edit-item">
       <p class="cabinet__edit-text">New Password</p>
-      <input class="cabinet__edit-input" type="password" name="new_password" placeholder="Repeat the password">
+      <input class="cabinet__edit-input" type="password" id="new_password" name="new_password" placeholder="Enter a new password">
     </li>
   </ul>
 
   <div class="cabinet__edit-buttons">
-    <button class="cabinet__edit-button" type="submit">Save</button>
-    <button id="cabinet__btn-cancel" class="cabinet__edit-button" type="submit">Cancel</button>
+    <button class="cabinet__edit-button" id="save-profile" type="submit" >Save</button>
+    <button id="cabinet__btn-cancel" class="cabinet__edit-button" type="button">Cancel</button>
   </div>
 </form>
 {% endblock %}
 
 {% block extra_js %}
-    <script src="{% static 'js/my-account.js' %}"></script>
+  <script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
+  <script src="{% static 'js/jquery-ui.min.js' %}"></script>
+  <script src="{% static 'js/my-account.js' %}"></script>
+  <script src="{% static 'ajax/profile_ajax.js' %}"></script>
 {% endblock %}

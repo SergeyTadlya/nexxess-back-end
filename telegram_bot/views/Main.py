@@ -21,11 +21,14 @@ def main(request):
         if 'message' in data:
             message_handler = MessageHandler(bot, data)
             message_handler.handle_request()
-            print(f"message from {data['message']['from']['id']} - {data['message']['text']}")
+            if 'text' in data['message'].keys():
+                print(f"Message from: {data['message']['from']['id']} - {data['message']['text']}")
+            else:
+                print(f"Message from: {data['message']['from']['id']} - Not text")
 
         elif 'callback_query' in data:
             callback_handler = CallbackHandler(bot, data)
             callback_handler.handle_request()
-            print(f"message from {data['callback_query']['from']['id']} - {data['callback_query']['message']['text']}")
+            print(f"Message from: {data['callback_query']['from']['id']} - {data['callback_query']['message']['text']}")
 
     return HttpResponse('Main worked')

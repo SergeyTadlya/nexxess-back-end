@@ -14,18 +14,12 @@ accordionBtn.forEach((button, index) => {
 
 //________BURGER_____
 
-const asideInfo = document.querySelector('.aside-info')
+const headerNav = document.querySelector('.nav__list')
 const burger = document.querySelector('.burger')
 
 burger.addEventListener('click', menu)
 
 function menu() {
   burger.classList.toggle('burger--active')
-  asideInfo.classList.toggle('aside-info--active')
-
-  if (document.body.classList.contains('body--active')) {
-    document.body.classList.remove('body--active')
-  } else {
-    document.body.classList.add('body--active')
-  }
+  headerNav.classList.toggle('show-nav')
 }

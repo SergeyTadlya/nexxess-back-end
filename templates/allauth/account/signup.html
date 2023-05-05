@@ -48,7 +48,7 @@
                     <div class="authentication__registration-buttons">
                         <button id="authentication__registration-button" class="authentication__button" type="submit">Register Account</button>
                         <p class="authentication__registration-or">or</p>
-                        <a href='#' class="authentication__button authentication__registration-button">
+                        <a href="{% provider_login_url 'google' %}"  class="authentication__button authentication__registration-button">
                         <img src="{% static 'images/authentication/icons_google.svg' %}"  style="width: 30px; height: 20px;" alt="logo"> Register with Google
                         </a>
                     </div>

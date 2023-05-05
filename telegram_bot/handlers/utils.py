@@ -1,5 +1,4 @@
 from ..models import User, Authentication
-from api.views.Auth import UserAPICreate
 
 
 def get_chat_id(data):
@@ -9,18 +8,19 @@ def get_chat_id(data):
 
 
 def get_user(data):
-    telegram_id = data['message']['from']['id']
+    telegram_id = data['message']['chat']['id']
 
     user = User.objects.filter(telegram_id=telegram_id)
 
-    if user.exists():
-        user = user.first()
-        return user
+    if user.exists() and user.first().telegram_is_authenticate:
+        return user.first()
     else:
-        unauthorized_user = Authentication.objects.create(telegram_id=telegram_id)
+        unauthorized_user = Authentication.objects.filter(telegram_id=telegram_id)
+        unauthorized_user = unauthorized_user.first() if unauthorized_user.exists() else Authentication.objects.create(telegram_id=telegram_id)
+
         unauthorized_user.step = 'set_email'
         unauthorized_user.save()
-        return None
+        return unauthorized_user
 
 
 def authorize_user(data):
@@ -29,13 +29,18 @@ def authorize_user(data):
     unauthorized_user = Authentication.objects.filter(telegram_id=telegram_id)
     if unauthorized_user.exists():
         unauthorized_user = unauthorized_user.first()
-        unauthorized_user.delete()
 
-    user_api = UserAPICreate()
-    user_api.post(email=unauthorized_user.email,
-                  name=data['from']['username'] if data['from']['username'] else 'No username',
-                  telegram_id=telegram_id,
-                  first_name=data['from']['first_name'] if data['from']['first_name'] else 'No name',
-                  last_name=data['from']['last_name'] if data['from']['last_name'] else 'No last name',
-                  is_staff=False,
-                  password=unauthorized_user.password)
+    user = User.objects.filter(email=unauthorized_user.email)
+    unauthorized_user.delete()
+    if user.exists():
+        user = user.first()
+
+    try:
+        user.telegram_id = telegram_id
+        user.telegram_username = data['from']['username'] if 'username' in data['from'].keys() else ''
+        user.telegram_first_name = data['from']['first_name'] if 'first_name' in data['from'].keys() else ''
+        user.telegram_last_name = data['from']['last_name'] if 'last_name' in data['from'].keys() else ''
+        user.telegram_is_authenticate = True
+        user.save()
+    except Exception as e:
+        print(e)

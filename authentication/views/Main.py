@@ -6,6 +6,15 @@ from authentication.helpers.B24Webhook import set_webhook
 from django.contrib.auth.decorators import login_required
 
 
+
+from django.views.generic import TemplateView
+
+
+
+
+class TestView(TemplateView):
+    template_name = 'test.html'
+    
 @login_required(login_url='/accounts/login/')
 def main(request):
     try:

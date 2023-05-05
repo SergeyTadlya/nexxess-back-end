@@ -27,12 +27,16 @@ class UserAdmin(BaseUserAdmin):
         (None, {'fields': (
             'b24_contact_id',
             'email',
-            'password',
             'username',
-            'photo',
-            'telegram_id',
             'first_name',
             'last_name',
+            'photo',
+            'password',
+            'telegram_id',
+            'telegram_username',
+            'telegram_first_name',
+            'telegram_last_name',
+            'telegram_is_authenticate',
             'step',
             'activation_code',
             'google_auth',
@@ -64,4 +68,3 @@ class UserAdmin(BaseUserAdmin):
 
 
 admin.site.register(User, UserAdmin)
-

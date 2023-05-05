@@ -40,7 +40,7 @@
                 <a id="authentication__login-forgot" class="authentication__login-forgot" type="button" href="{% url 'account_reset_password' %}">Forgot password?</a>
                 <button id="authentication__login-button" class="authentication__button" type="submit">Log in</button>
 		<p class="authentication__registration-or" style="text-align: center;">or</p>
-                <a href="#" class="authentication__button authentication__registration-button">
+                <a href="{% provider_login_url 'google' %}" class="authentication__button authentication__registration-button">
                     <img src="{% static 'images/authentication/icons_google.svg' %}"  style="width: 30px; height: 20px;" alt="logo"> Login with Google
                 </a>
                 <div class="authentication__login-bottom">

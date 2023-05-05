@@ -22,26 +22,44 @@
             <div class="header__inner">
               <a href="{% url 'authentication:main'%}">
                   <picture class="header__logo">
-                    <source srcset="{% static 'images/logo-mobile.png' %}" media="(max-width: 550px)">
-                    <img src="{% static 'images/logo.png' %}" alt="logo">
+                    <source srcset="{% static 'images/logo-mobile.svg' %}" media="(max-width: 550px)">
+                    <img src="{% static 'images/logo.svg' %}" alt="logo">
                   </picture>
               </a>
                 <nav class="nav">
                     <a class="nav__burger">
                         <span class="nav__burger-line"></span>
+
                     </a>
                     <ul class="nav__list">
                         <li class="nav__list-item">
                           <a class="{% if "/support/" == request.path %} active_menu_item {% else %} nav__item-link{% endif %}" href="{% url 'support' %}">Home</a>
                         </li>
                         <li class="nav__list-item">
-                            <a class="{% if "/services/" == request.path %} active_menu_item {% else %} nav__item-link{% endif %}" href="{% url 'services' %}">Services</a>
+                            <span class="{% if "/services/" == request.path %} active_menu_item {% else %} nav__item-link{% endif %}" href="{% url 'services' %}">
+                              Services
+                              <span class="nav__item-link-arrow"></span>
+                            </span>
+
+                            <ul class="nav__sublist">
+                              <li class="nav__subitem">
+                                <a href="#" class="nav__subitem-link">
+                                  Support Tickets
+                                </a>
+                              </li>
+
+                              <li class="nav__subitem">
+                                <a href="#" class="nav__subitem-link">
+                                  Submit a Ticket
+                                </a>
+                              </li>
+                            </ul>
                         </li>
                         <li class="nav__list-item">
                             <a class="{% if "/invoices/" == request.path %} active_menu_item {% else %} nav__item-link{% endif %}"
                               href="{% url 'invoices' %}">
                               Invoices
-                              
+
                             </a>
                         </li>
                         <li class="nav__list-item">
@@ -73,9 +91,22 @@
                     </ul>
                 </nav>
               <div class="header__box">
-                  <a class="header__box-link" href="{% url 'authentication:profile'%}">
+                  <span class="header__box-link header__box-link-sublist" href="{% url 'authentication:profile'%}">
                       <img class="header__box-img" src="{% static 'images/user.svg' %}" alt="user">
-                  </a>
+                      <ul class="header__box-link-list">
+                        <li class="header__box-link-item">
+                          <a href="{% url 'authentication:profile'%}" class="header__box-link-sublink">
+                            Settings
+                          </a>
+                        </li>
+
+                        <li class="header__box-link-item">
+                          <a href="{% url 'account_logout'%}" class="header__box-link-sublink">
+                            Logout
+                          </a>
+                        </li>
+                      </ul>
+                  </span>
                   <a class="header__box-link" href="#">
                       <img class="header__box-img" title="Go to Telegram bot" src="{% static 'images/telegram.svg' %}" alt="user">
                   </a>
@@ -83,7 +114,7 @@
                     <span class="burger-line"></span>
                   </a>
               </div>
-              
+
             </div>
           </div>
         </header>
@@ -119,7 +150,10 @@
 {% block after_sign_up %}
 
 {% endblock after_sign_up %}
+<footer class="footer">
+{% block footer %}
+{% endblock footer %}
+</footer>
 {% block extra_js %}
+
 {% endblock extra_js %}
-</body>
-</html>

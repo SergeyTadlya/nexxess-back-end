@@ -25,10 +25,11 @@ class LogOutHandler:
     def exit(self):
         user = User.objects.filter(telegram_id=self.data['callback_query']['from']['id'])
         if user.exists():
-            # user = user.first()
-            user.first().delete()
+            user = user.first()
 
-        # user.is_active = False
+        user.telegram_is_authenticate = False
+        user.save()
+
         delete_commands(self.bot)
         self.bot.sendMessage(chat_id=get_chat_id(self.data['callback_query']),
                              text='You are logged out')

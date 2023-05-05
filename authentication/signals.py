@@ -13,15 +13,21 @@ logger = logging.getLogger(__name__)
 @receiver(user_signed_up)
 def create_bitrix_contact(sender, request, user, **kwargs):
     if hasattr(user, 'sociallogin') and user.sociallogin is not None:
-       
+
         source_id = 'SOCIAL'
         name = user.sociallogin.account.extra_data.get('name')
+        # parsed_data = name.split(' ')
+        # first_name = parsed_data(0)
+        # last_name = parsed_data(1)
         email = user.email
-       
+
     else:
-     
+
         source_id = 'WEB'
         name = user.name
+        # parsed_data = name.split(' ')
+        # first_name = parsed_data(0)
+        # last_name = parsed_data(1)
         email = user.email
 
     try:
