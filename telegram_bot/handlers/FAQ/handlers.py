@@ -8,7 +8,7 @@ class FAQHandler:
         self.data = data
 
     @staticmethod
-    def show_keyboard(bot, data):
+    def show_faq_menu(bot, data):
         bot.sendMessage(chat_id=get_chat_id(data),
                         text='Choose the topic for more information',
-                        reply_markup=faqs_topics())
+                        reply_markup=faqs_topics_keyboard())

@@ -3,16 +3,17 @@ from ..utils import *
 
 
 class TicketsHandler:
-    def __init__(self, bot, data):
+    def __init__(self, bot, data, callback_title):
         self.bot = bot
         self.data = data
 
-    @staticmethod
-    def show_keyboard(bot, data):
-        tickets = ''
-        if not tickets == '':
+        callback_title = callback_title.replace('tickets_', '')
+
+        if callback_title == '':
             pass
-        else:
-            bot.sendMessage(chat_id=get_chat_id(data),
-                            text='You have no tickets',
-                            reply_markup=has_no_tickets())
+
+    @staticmethod
+    def show_tickets_menu(bot, data):
+        bot.sendMessage(chat_id=get_chat_id(data),
+                        text='Choose options',
+                        reply_markup=tickets_menu_keyboard())

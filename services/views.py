@@ -1,23 +1,24 @@
-from django.http import JsonResponse
-from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse
+
+from bitrix24 import Bitrix24, BitrixError
 from requests import Response
 
 from authentication.helpers.B24Webhook import set_webhook
-from django.contrib.auth.decorators import login_required
-from . import urls
 from invoices.models import Invoice, StripeSettings, LocalInvoice
 from telegram_bot.models import User
 from .models import Service
-from django.shortcuts import render
+from . import urls
+
+import datetime
 import requests
+import stripe
+import time
 import json
 import re
-import time
-import datetime
-import stripe
 
-from bitrix24 import Bitrix24, BitrixError
 
 
 def format_price(price):

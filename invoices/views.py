@@ -1,24 +1,23 @@
-import time
-import fitz
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import get_template
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, redirect
 from django.db.models import Q
 from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
-from datetime import datetime
-from io import BytesIO
-from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_exempt
 
+from .models import Invoice, Status, StripeSettings, LocalInvoice
 from authentication.helpers.B24Webhook import set_webhook
 from services.models import Service
-from .models import Invoice, Status, StripeSettings, LocalInvoice
-
-import xhtml2pdf.pisa as pisa
-import json
-import stripe
 
 from bitrix24 import Bitrix24, BitrixError
+from datetime import datetime
+
+import stripe
+import json
+import time
+import fitz
+
 
 def format_date(date):
     return date.strftime('%d %b %Y') if date else ''
@@ -30,9 +29,9 @@ def format_price(price):
 
     return f'${price}' if price else ''
 
+
 @login_required(login_url='/accounts/login/')
 def invoices(request):
-  
 
     all_user_invoices = Invoice.objects.all().order_by('-date') if request.user.is_superuser \
         else Invoice.objects.filter(responsible=request.user.b24_contact_id).order_by('-date')
@@ -97,7 +96,8 @@ def ajax_invoice_filter(request):
             data = json.load(request)
             statuses = [keys for keys in data if data[keys] is True]
 
-            all_user_invoices = Invoice.objects.filter(responsible=request.user.email).order_by('-date')
+            all_user_invoices = Invoice.objects.all() if request.user.is_superuser else Invoice.objects.filter(responsible=request.user.b24_contact_id).order_by('-date')
+            print(all_user_invoices)
             invoices_array = list()
             invoices_dates = list()
 
@@ -159,12 +159,16 @@ def ajax_invoice_filter(request):
                 'invoices_dates': invoices_dates,
                 'invoices_number': str(len(all_user_invoices)),
                 'showing_amount': str(len(all_user_invoices)),
-                'has_next': has_next,
-                'has_previous': has_previous,
-                'has_other_pages': has_other_pages,
+                'has_next': invoices_array.has_next(),
+                'has_previous': invoices_array.has_previous(),
+                'has_other_pages': invoices_array.has_other_pages(),
+                'page_range': list(invoices_array.paginator.page_range),
+                'next_page': invoices_array.number + 1 if invoices_array.has_next() else invoices_array.number,
+                'previous_page': invoices_array.number - 1 if invoices_array.has_previous() else invoices_array.number
             }
 
             return JsonResponse(response)
+
 
 @login_required(login_url='/accounts/login/')
 def invoice_detail(request, id):
@@ -182,6 +186,7 @@ def invoice_detail(request, id):
             return redirect('/invoices/')
     except :
             return redirect('/invoices/')
+
 
 def generate_new_pdf(pdf_path, id, invoice, request):
 
@@ -212,6 +217,7 @@ def generate_new_pdf(pdf_path, id, invoice, request):
 
     return new_file_path
 
+
 @login_required(login_url='/accounts/login/')
 def create_invoice_pdf(request, id):
     invoice = Invoice.objects.get(id=id)
@@ -231,6 +237,7 @@ def create_invoice_pdf(request, id):
         response.headers['Content-Disposition'] = 'inline; filename=%s.pdf' % generated_pdf_path
 
         return response
+
 
 @login_required(login_url='/accounts/login/')
 @csrf_exempt
@@ -258,8 +265,6 @@ def complete_payment_link(request):
     b24invoice_id = request.GET["b24invoice_id"]
     url = set_webhook("")
     bx24 = Bitrix24(url)
-    bx24.callMethod('crm.invoice.update', id=b24invoice_id, fields={
-                                                            'STATUS_ID': 'P',
-                                                            })
+    bx24.callMethod('crm.invoice.update', id=b24invoice_id, fields={'STATUS_ID': 'P',})
     time.sleep(5)
     return redirect("/invoices/")

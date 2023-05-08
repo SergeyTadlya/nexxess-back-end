@@ -5,7 +5,6 @@ from telegram import Bot, BotCommand
 
 def set_up_commands(bot_instance: Bot) -> None:
     commands: Dict[str, str] = {
-        'start': 'Restart the bot',
         'menu': 'Menu',
         'invoices': 'Show the invoices',
         'services': 'Show my or all services',

@@ -24,6 +24,7 @@ def tasks(request):
     return render(request, "tickets/tickets.html", context)
 
 
+
 def task_detail(request, id):
     task = Ticket.objects.get(id=id)
     if request.user.is_superuser or task.responsible == request.user.email:
