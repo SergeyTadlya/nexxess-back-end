@@ -8,6 +8,9 @@ urlpatterns = [
     # tickets pages (b24 tasks)
     path('', views.tasks, name='tasks'),
     path('detail/<int:id>/', views.task_detail, name="task_detail"),
+    path('list', views.task_data, name='list'),
+
+
 ]
 
 if settings.DEBUG:

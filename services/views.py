@@ -5,7 +5,7 @@ from requests import Response
 
 from authentication.helpers.B24Webhook import set_webhook
 from django.contrib.auth.decorators import login_required
-
+from . import urls
 from invoices.models import Invoice, StripeSettings, LocalInvoice
 from telegram_bot.models import User
 from .models import Service
@@ -45,6 +45,7 @@ def services(request):
         response = requests.get(url)
         products_data = response.json().get('result', [])
         products = []
+        print(products)
         for product_data in products_data:
             # stripe_response = stripe.Product.create(name="Gold Special")
             product = Service.objects.filter(service_id=product_data.get('ID'))
@@ -57,11 +58,12 @@ def services(request):
                     currency="usd",
                     product_data={"name": product_data.get('NAME')},
                 )
+                print('succcess')
                 product = Service.objects.create(
                     service_id=product_data.get('ID'),
                     stripe_id=stripe_response.id,
                     title=product_data.get('NAME'),
-                    title_description=clean_and_shorten_text(product_data.get('DESCRIPTION')),
+                    title_description=product_data.get('DESCRIPTION'),
                     price=format_price(product_data.get('PRICE')),
                     currency=product_data.get('CURRENCY_ID'),
                 )
@@ -97,6 +99,158 @@ def product_detail(request, id):
 
     except:
         return redirect('services')
+
+@login_required(login_url='/accounts/login/')
+def service_1(request):
+    try:
+        method = "crm.product.list"
+        url = set_webhook(method)
+        response = requests.get(url)
+        products_data = response.json().get('result', [])
+        products = []
+        for product_data in products_data:
+            # stripe_response = stripe.Product.create(name="Gold Special")
+            product = Service.objects.filter(service_id=product_data.get('ID'))
+            if len(product) == 0:
+                stripe.api_key = StripeSettings.objects.all().first().secret_key
+                price = format_price(product_data.get('PRICE'))
+                print(int(price)*100)
+                stripe_response = stripe.Price.create(
+                    unit_amount=int(price)*100,
+                    currency="usd",
+                    product_data={"name": product_data.get('NAME')},
+                )
+                product = Service.objects.create(
+                    service_id=product_data.get('ID'),
+                    stripe_id=stripe_response.id,
+                    title=product_data.get('NAME'),
+                    title_description=product_data.get('DESCRIPTION'),
+                    price=format_price(product_data.get('PRICE')),
+                    currency=product_data.get('CURRENCY_ID'),
+                )
+                product.save()
+            else:
+                product = Service.objects.get(id=product.first().id)
+                product.service_id = product_data.get('ID')
+                product.title = product_data.get('NAME')
+                product.title_description = clean_and_shorten_text(product_data.get('DESCRIPTION'))
+                product.price = format_price(product_data.get('PRICE'))
+                product.currency = product_data.get('CURRENCY_ID')
+                product.save()
+            products.append(product)
+
+        context = {
+            'services_info': products,
+            'services_count': len(products),
+        }
+        return render(request, "services/service1.html", context=context)
+    except:
+        context = {}
+    return render(request, 'services/service1.html', context=context)
+
+
+
+def service_2(request):
+    try:
+        method = "crm.product.list"
+        url = set_webhook(method)
+        response = requests.get(url)
+        products_data = response.json().get('result', [])
+        products = []
+        for product_data in products_data:
+            # stripe_response = stripe.Product.create(name="Gold Special")
+            product = Service.objects.filter(service_id=product_data.get('ID'))
+            if len(product) == 0:
+                stripe.api_key = StripeSettings.objects.all().first().secret_key
+                price = format_price(product_data.get('PRICE'))
+                print(int(price)*100)
+                stripe_response = stripe.Price.create(
+                    unit_amount=int(price)*100,
+                    currency="usd",
+                    product_data={"name": product_data.get('NAME')},
+                )
+                product = Service.objects.create(
+                    service_id=product_data.get('ID'),
+                    stripe_id=stripe_response.id,
+                    title=product_data.get('NAME'),
+                    title_description=product_data.get('DESCRIPTION'),
+                    price=format_price(product_data.get('PRICE')),
+                    currency=product_data.get('CURRENCY_ID'),
+                )
+                product.save()
+            else:
+                product = Service.objects.get(id=product.first().id)
+                product.service_id = product_data.get('ID')
+                product.title = product_data.get('NAME')
+                product.title_description = clean_and_shorten_text(product_data.get('DESCRIPTION'))
+                product.price = format_price(product_data.get('PRICE'))
+                product.currency = product_data.get('CURRENCY_ID')
+                product.save()
+            products.append(product)
+
+        context = {
+            'services_info': products,
+            'services_count': len(products),
+        }
+        return render(request, "services/service2.html", context=context)
+    except:
+        context = {}
+    return render(request, 'services/service2.html', context=context)
+
+
+
+
+
+def service_3(request):
+    try:
+        method = "crm.product.list"
+        url = set_webhook(method)
+        response = requests.get(url)
+        products_data = response.json().get('result', [])
+        products = []
+        for product_data in products_data:
+            # stripe_response = stripe.Product.create(name="Gold Special")
+            product = Service.objects.filter(service_id=product_data.get('ID'))
+            if len(product) == 0:
+                stripe.api_key = StripeSettings.objects.all().first().secret_key
+                price = format_price(product_data.get('PRICE'))
+                print(int(price)*100)
+                stripe_response = stripe.Price.create(
+                    unit_amount=int(price)*100,
+                    currency="usd",
+                    product_data={"name": product_data.get('NAME')},
+                )
+                product = Service.objects.create(
+                    service_id=product_data.get('ID'),
+                    stripe_id=stripe_response.id,
+                    title=product_data.get('NAME'),
+                    title_description=product_data.get('DESCRIPTION'),
+                    price=format_price(product_data.get('PRICE')),
+                    currency=product_data.get('CURRENCY_ID'),
+                )
+                product.save()
+            else:
+                product = Service.objects.get(id=product.first().id)
+                product.service_id = product_data.get('ID')
+                product.title = product_data.get('NAME')
+                product.title_description = clean_and_shorten_text(product_data.get('DESCRIPTION'))
+                product.price = format_price(product_data.get('PRICE'))
+                product.currency = product_data.get('CURRENCY_ID')
+                product.save()
+            products.append(product)
+
+        context = {
+            'services_info': products,
+            'services_count': len(products),
+        }
+        return render(request, "services/service3.html", context=context)
+    except:
+        context = {}
+    return render(request, 'services/service3.html', context=context)
+
+
+
+
 
 
 @login_required(login_url='/accounts/login/')

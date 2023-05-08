@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from .models import Ticket
+from .urls import *
 
+import requests
 
 def tasks(request):
     # відфільтровуємо дані по пошті авторизованого користувачі (адміну будуть виводитись всі)
@@ -35,3 +37,7 @@ def task_detail(request, id):
         return render(request, "tickets/detail.html", res)
     else:
         return redirect('/tickets/')
+
+
+def task_data(request):
+    return render(request, 'tickets/list.html')

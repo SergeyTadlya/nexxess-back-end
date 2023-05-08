@@ -1,4 +1,4 @@
-{% extends "account/templ.html" %}
+{% extends "account/base.html" %}
 {% load static %}
 {% load i18n %}
 {% load account %}
@@ -13,7 +13,7 @@
         {% if confirmation %}
         {% user_display confirmation.email_address.user as user_display %}
 
-<p>{% blocktrans with confirmation.email_address.email as email %}Please confirm that <p style="font-weight: 700; border-bottom: 1px solid; color: #7C48EE;"><a href="mailto:{{ email }}">{{ email }}</a></p> is an e-mail address for user <p style="font-weight: 700; border-bottom: 1px solid">{{ user_display }}</p>{% endblocktrans %}</>
+<p>{% blocktrans with confirmation.email_address.email as email %}Please confirm that <p ><a href="mailto:{{ email }}">{{ email }}</a></p> is an e-mail address for user <p style="font-weight: 700; border-bottom: 1px solid">{{ user_display }}</p>{% endblocktrans %}</>
 
         <form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
         {% csrf_token %}

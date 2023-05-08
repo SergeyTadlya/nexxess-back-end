@@ -60,166 +60,88 @@
 {% block content %}
     <div class="content__inner">
         <div class="content__top">
-            <h1 class="title content__top-title">Services</h1>
+            <h1 class="title content__top-title">Hourly Rate Chart for Consultation</h1>
             <div class="content__top-search">
                 <img class="content__top-img" src="{% static 'images/main/Search.svg' %}" alt="Search">
                 <input class="content__top-input" type="text" id="search-input" placeholder="Search">
             </div>
         </div>
         <ul class="content__list">
-          <li class="content__list-item">
-            <div class="content__list-box content__list-box-consultation">
-              <div class="content__list-img">
-                <img src="{% static 'images/service.jpg' %}" alt="images">
-              </div>
-              <p class="content__list-title">HOURLY RATE CHART FOR CONSULTATION</p>
-            </div>
-            <ul class="content__list-product-description">
-              <li class="content__list-product-description-item">
-                <p class="content__list-product-description-text">
-                  1. STANDARD RATE
-                </p>
-                <p class="content__list-product-description-hour">
-                  1 HOUR
-                </p>
-              </li>
-
-              <li class="content__list-product-description-item">
-                <p class="content__list-product-description-text">
-                  2. BRONZE PACKAGE
-                </p>
-                <p class="content__list-product-description-hour">
-                  10 HOURS
-                </p>
-              </li>
-
-              <li class="content__list-product-description-item">
-                <p class="content__list-product-description-text">
-                  3. SILVER PACKAGE
-                </p>
-                <p class="content__list-product-description-hour">
-                  20 HOURS
-                </p>
-              </li>
-
-              <li class="content__list-product-description-item">
-                <p class="content__list-product-description-text">
-                  4. GOLD PACKAGE
-                </p>
-                <p class="content__list-product-description-hour">
-                  40 HOURS
-                </p>
-              </li>
-
-              <li class="content__list-product-description-item">
-                <p class="content__list-product-description-text">
-                  5. PLATINUM PACKAGE
-                </p>
-                <p class="content__list-product-description-hour">
-                  60 HOURS
-                </p>
-              </li>
-
-              <li class="content__list-product-description-item">
-                <p class="content__list-product-description-text">
-                  6. BLUE DIAMOND PACKAGE
-                </p>
-                <p class="content__list-product-description-hour">
-                  120 HOURS
-                </p>
-              </li>
-            </ul>
+          <li class="content__list-item content__list-item-hourly">
             <div class="content__list-box">
-              <p class="content__list-price"> <span class="content__list-price-text">Start From:</span> $350</p>
-              <a class="content__list-link" href="{% url 'services:service1' %}">Detail</a>
+              <p class="content__list-title">STANDARD RATE</p>
+            </div>
+            <p class="content__list-text">
+              1 HOUR
+            </p>
+            <div class="content__list-price-box">
+              <p class="content__list-price">$1000 <span class="content__list-price-text">PER HOUR</span> </p>
+              <a class="content__list-link" href="./about-service.html">Order</a>
             </div>
           </li>
 
-          <li class="content__list-item">
+          <li class="content__list-item content__list-item-hourly">
             <div class="content__list-box">
-              <div class="content__list-img">
-                <img src="{% static 'images/service.jpg' %}" alt="images">
-              </div>
-              <p class="content__list-title">NEXXESS TRUST BOOKS</p>
+              <p class="content__list-title">BRONZE PACKAGE</p>
             </div>
-            <ul class="content__list-product-description">
-              <li class="content__list-product-description-item">
-                <p class="content__list-product-description-text">
-                  1. Professionally prepared Nexxess© Beneficial or Business Trust.
-                </p>
-              </li>
-
-              <li class="content__list-product-description-item">
-                <p class="content__list-product-description-text">
-                  2. Up to three (3) hours of trust activation with a financial services specialist.
-                </p>
-              </li>
-
-              <li class="content__list-product-description-item">
-                <p class="content__list-product-description-text">
-                  3. Trust completion and activation within 30 days of payment.
-                </p>
-              </li>
-
-              <li class="content__list-product-description-item">
-                <p class="content__list-product-description-text">
-                  4. No consultation hours after activation.
-                </p>
-              </li>
-
-              <li class="content__list-product-description-item">
-                <p class="content__list-product-description-text">
-                  5. Consultation hours can be purchased at Standard rate.
-                </p>
-              </li>
-            </ul>
-            <div class="content__list-box">
-              <p class="content__list-price"> <span class="content__list-price-text">Start From:</span> $15 000</p>
-              <a class="content__list-link" href="{% url 'services:service2' %}">Detail</a>
+            <p class="content__list-text">
+              10 HOUR
+            </p>
+            <div class="content__list-price-box">
+              <p class="content__list-price">$700 <span class="content__list-price-text">PER HOUR</span> </p>
+              <a class="content__list-link" href="./about-service.html">Order</a>
             </div>
           </li>
 
-          <li class="content__list-item">
+          <li class="content__list-item content__list-item-hourly">
             <div class="content__list-box">
-              <div class="content__list-img">
-                <img src="{% static 'images/service.jpg' %}" alt="images">
-              </div>
-              <p class="content__list-title">NEXXESS PACKAGES</p>
+              <p class="content__list-title">SILVER PACKAGE</p>
             </div>
-            <ul class="content__list-product-description">
-              <li class="content__list-product-description-item">
-                <p class="content__list-product-description-text">
-                  1. BRONZE PACKAGE
-                </p>
-              </li>
+            <p class="content__list-text">
+              20 HOUR
+            </p>
+            <div class="content__list-price-box">
+              <p class="content__list-price">$600 <span class="content__list-price-text">PER HOUR</span> </p>
+              <a class="content__list-link" href="./about-service.html">Order</a>
+            </div>
+          </li>
 
-              <li class="content__list-product-description-item">
-                <p class="content__list-product-description-text">
-                  2. SILVER PACKAGE
-                </p>
-              </li>
-
-              <li class="content__list-product-description-item">
-                <p class="content__list-product-description-text">
-                  3. GOLD PACKAGE
-                </p>
-              </li>
-
-              <li class="content__list-product-description-item">
-                <p class="content__list-product-description-text">
-                  4. PLATINUM PACKAGE
-                </p>
-              </li>
-
-              <li class="content__list-product-description-item">
-                <p class="content__list-product-description-text">
-                  5. BLUE DIAMOND PACKAGE
-                </p>
-              </li>
-            </ul>
+          <li class="content__list-item content__list-item-hourly">
             <div class="content__list-box">
-              <p class="content__list-price"> <span class="content__list-price-text">Start From:</span> $7 000</p>
-              <a class="content__list-link" href="{% url 'services:service3' %}">Detail</a>
+              <p class="content__list-title">GOLD PACKAGE</p>
+            </div>
+            <p class="content__list-text">
+              40 HOUR
+            </p>
+            <div class="content__list-price-box">
+              <p class="content__list-price">$500 <span class="content__list-price-text">PER HOUR</span> </p>
+              <a class="content__list-link" href="./about-service.html">Order</a>
+            </div>
+          </li>
+
+          <li class="content__list-item content__list-item-hourly">
+            <div class="content__list-box">
+              <p class="content__list-title">PLATINUM PACKAGE</p>
+            </div>
+            <p class="content__list-text">
+              60 HOUR
+            </p>
+            <div class="content__list-price-box">
+              <p class="content__list-price">$400 <span class="content__list-price-text">PER HOUR</span> </p>
+              <a class="content__list-link" href="./about-service.html">Order</a>
+            </div>
+          </li>
+
+          <li class="content__list-item content__list-item-hourly">
+            <div class="content__list-box">
+              <p class="content__list-title">BLUE DIAMOND PACKAGE</p>
+            </div>
+            <p class="content__list-text">
+              120 HOUR
+            </p>
+            <div class="content__list-price-box">
+              <p class="content__list-price">$350 <span class="content__list-price-text">PER HOUR</span> </p>
+              <a class="content__list-link" href="./about-service.html">Order</a>
             </div>
           </li>
         </ul>
@@ -258,7 +180,6 @@
 
     </div>
 {% endblock content %}
-
 {% block footer %}
 <div class="container">
   <ul class="footer__list">
@@ -338,12 +259,13 @@
       </p>
     </li>
     <li class="footer__item">
-      <a class="footer__btn-link" href="{% url 'account_logout' %}">
+      <a class="footer__btn-link" href="#">
         consultation
       </a>
     </li>
   </ul>
 </div>
+
 {% endblock footer %}
 {% block extra_js %}
     <script src="{% static 'js/dynamic_search.js' %}"></script>

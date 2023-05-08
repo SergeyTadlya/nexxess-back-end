@@ -3,6 +3,13 @@
 {% load i18n %}
 {% load account socialaccount %}
 {% block head_title %}{% trans "Sign In" %}{% endblock %}
+
+{% block  extra_css %}
+      <link rel="stylesheet" type="text/css" href="{% static 'css/authentication.css' %}">
+      <style>
+      .footer {padding: 0;}
+    </style>
+{% endblock  %}
 {% block auth %}
 <head>
   <style>

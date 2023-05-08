@@ -3,12 +3,13 @@
 
 {% block extra_css %}
   <link rel="stylesheet" href="{% static 'css/support.css' %}" />
+
 {% endblock %}
 
 {% block title %} Support {% endblock %}
 
 {% block left_menu %}
-            <div class="aside-info">
+            <div class="aside-info aside-info-none">
               <div class="aside-info__box">
                 <div class="aside-info__box-top">
                   <img class="aside-info__top-img" src="{% static 'images/important.svg' %}" alt="icon">
@@ -330,7 +331,7 @@
       </p>
     </li>
     <li class="footer__item">
-      <a class="footer__btn-link" href="#">
+      <a class="footer__btn-link" href="{% url 'account_logout' %}">
         consultation
       </a>
     </li>
