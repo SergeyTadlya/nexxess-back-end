@@ -107,47 +107,48 @@
       Create ticket
     </button>
 
-    <form id="content__form" class="content__form" action="#">
-        <div class="content__form-box">
-          <input class="content__form-input" type="text" placeholder="Title">
-          <textarea class="content__form-textarea" name="" id="" cols="30" rows="7" placeholder="Enter a task"></textarea>
-          <button class="content__form-submit" type="submit">Apply</button>
-        </div>
-        <div class="content__form-box">
-          <div class="content__form-tags">
-            <h5 class="content__form-title">Choose tags:</h5>
-            <div class="content__form-body">
-              <ul class="content__form-list">
-                <li class="content__form-item">#Tag 1</li>
-                <li class="content__form-item">#Tag 2</li>
-                <li class="content__form-item">#Tag 3</li>
-              </ul>
-            <button id="form__new-tag" class="content__form-btn" type="button">New tag</button>
-              <div class="popup">
-                <div class="popup__content">
-                  <div class="popup__body">
-                    <button class="popup__close" type="button"></button>
-                    <div class="popup__box">
-                      <h5 class="popup__text">Create new tag</h5>
-                      <input id="popup__input" class="popup__input" type="text" placeholder="#newtag">
-                      <button class="popup__btn" type="button">Create</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="content__form-duration">
-            <h5 class="content__form-title">Determine the duration:</h5>
-            <div class="content__form-selects">
-              <p class="content__form-text">Deadline:</p>
-              <div class="content__form__accordion-box">
-                <input id="contentFormDatePicker" class="content__form__accordion-date"  type="text" readonly="readonly" placeholder="select a date">
+    <form id="content__form" class="content__form" method="POST" action="{% url 'tickets:create_task' %}" >
+  {% csrf_token %}
+  <div class="content__form-box">
+    <input class="content__form-input" type="text" name="task_name" placeholder="Title">
+    <textarea class="content__form-textarea" name="task_description" id="task-description" cols="30" rows="7" placeholder="Enter a task"></textarea>
+    <button class="content__form-submit" type="submit">Apply</button>
+  </div>
+  <div class="content__form-box">
+    <div class="content__form-tags">
+      <h5 class="content__form-title">Choose tags:</h5>
+      <div class="content__form-body">
+        <ul class="content__form-list">
+          <li class="content__form-item">#Tag 1</li>
+          <li class="content__form-item">#Tag 2</li>
+          <li class="content__form-item">#Tag 3</li>
+        </ul>
+        <button id="form__new-tag" class="content__form-btn" type="button">New tag</button>
+        <div class="popup">
+          <div class="popup__content">
+            <div class="popup__body">
+              <button class="popup__close" type="button"></button>
+              <div class="popup__box">
+                <h5 class="popup__text">Create new tag</h5>
+                <input id="popup__input" class="popup__input" type="text" placeholder="#newtag">
+                <button class="popup__btn" type="button">Create</button>
               </div>
             </div>
           </div>
         </div>
-    </form>
+      </div>
+    </div>
+    <div class="content__form-duration">
+      <h5 class="content__form-title">Determine the duration:</h5>
+      <div class="content__form-selects">
+        <p class="content__form-text">Deadline:</p>
+        <div class="content__form__accordion-box">
+          <input id="contentFormDatePicker" class="content__form__accordion-date"  type="text" readonly="readonly" placeholder="select a date" name="task_deadline">
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
   </div>
 {% endblock %}
 {% block footer %}
@@ -238,6 +239,7 @@
 
 {% endblock footer %}
 {% block extra_js %}
+  <script src="{% static 'ajax/task_ajax.js' %}"></script>
   <script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
   <script src="{% static 'js/jquery-ui.min.js' %}"></script>
   <script src="{% static 'js/calendar.js' %}"></script>

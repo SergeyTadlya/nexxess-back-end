@@ -96,12 +96,12 @@
             </li>
         {% endif %}
             <li class="content__list-item">
-              <a class="content__list-link content__list-link-tickets" href="{% url 'tasks'%}">
+              <a class="content__list-link content__list-link-tickets" href="{% url 'tickets:tasks'%}">
                 <span class="content__list-link-title">Tickets</span>
                 <div class="content__list-body">
                   <p class="content__list-text">Get qualified support from experienced specialists</p>
                   <div class="content__list-info">
-                    <p class="content__info-number">{{task_count}}</p>
+                    <p class="content__info-number">{{tasks_number}}</p>
                     <p class="content__info-text">new reply</p>
                   </div>
                 </div>
@@ -125,20 +125,44 @@
 {% block  after_sign_up %}
 {% if not user.is_superuser and not user.google_auth %}
 <header class="header">
-          <div class="container">
-            <div class="header__inner">
-              <a href="{% url 'authentication:main'%}">
-                  <picture class="header__logo">
-                    <source srcset="{% static 'images/logo-mobile.png' %}" media="(max-width: 550px)">
-                    <img src="{% static 'images/logo.png' %}" alt="logo">
-                  </picture>
-              </a>
-            </div>
-          </div>
-        </header>
-  <div class="container"><p style="margin-top: 203px; max-width: 860px; margin: 145px AUTO 0;">We have sent an e-mail to you for verification. Follow the link provided to finalize  process. If you do not see the verification e-mail in your main inbox, check your spam folder.
-       Please contact us if you do not receive the verification e-mail within a few minutes.</p>
-  <a href="{% url 'account_logout' %}">Log out</a></div>
+  <div class="container">
+    <div class="header__inner">
+      <a href="{% url 'authentication:main' %}">
+        <picture class="header__logo">
+          <source srcset="{% static 'images/logo-mobile.png' %}" media="(max-width: 550px)">
+          <img src="{% static 'images/logo.png' %}" alt="logo">
+        </picture>
+      </a>
+    </div>
+  </div>
+</header>
+<div class="container">
+  <p style="margin-top: 203px; max-width: 860px; margin: 145px auto 0;">We have sent an email to you for verification. Follow the link provided to finalize the process. If you do not see the verification email in your main inbox, check your spam folder.
+    Please contact us if you do not receive the verification email within a few minutes.</p>
+  <a href="{% url 'account_logout' %}" class="logout-button">Log out</a>
+</div>
+<style>
+  .logout-button {
+    margin-top: 30px;
+    align: center;
+    text-decoration: none;
+    background: -webkit-gradient(linear, left bottom, left top, from(#7842F6), to(#509CE9));
+    background: -o-linear-gradient(bottom, #7842F6 0%, #509CE9 100%);
+    background: linear-gradient(360deg, #7842F6 0%, #509CE9 100%);
+    border-radius: 4px;
+    outline: 1px solid transparent;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 10px;
+    letter-spacing: 0.15px;
+    color: #fff;
+    text-transform: uppercase;
+    transition: all 0.3s;
+    width: 150px;
+  }
+</style>
+
+
 {% endif %}
 {% endblock after_sign_up%}
 

@@ -87,7 +87,7 @@
                         </li>
                         <li class="nav__list-item">
                           <div class="nav__list-item-link-inner">
-                            <a class="{% if "/tickets/" == request.path %} nav__item-link {% else %} nav__item-link{% endif %}" href="{% url 'list' %}">Tickets
+                            <a class="{% if "/tickets/" == request.path %} nav__item-link {% else %} nav__item-link{% endif %}" href="{% url 'tickets:list' %}">Tickets
                             </a>
                             <span class="nav__item-link-arrow">
                               <svg width="15px" height="15px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -104,13 +104,13 @@
 
                             <ul class="nav__sublist">
                               <li class="nav__subitem">
-                                <a href="{% url 'tasks' %}" class="nav__subitem-link">
+                                <a href="{% url 'tickets:tasks' %}" class="nav__subitem-link">
                                   My Tickets
                                 </a>
                               </li>
 
                               <li class="nav__subitem">
-                                <a href="{% url 'list' %}" class="nav__subitem-link">
+                                <a href="{% url 'tickets:list' %}"  class="nav__subitem-link">
                                   Create a Ticket
                                 </a>
                               </li>

@@ -165,51 +165,52 @@
     <div class="content__box">
 
       <div class="content__body">
-        <p class="content__body-titleDate">29th Mar 2023</p>
-        <ul class="content__body-list">
-
-          <li class="content__body-box">
-            <ul class="content__body-titles">
-              <li class="content__body-title">Ticked id#</li>
-              <li class="content__body-title">Status</li>
-              <li class="content__body-title">Name</li>
-              <li class="content__body-title">Ticket Date</li>
-              <li class="content__body-title">Due Date</li>
-            </ul>
-
-            <ul class="content__body-items">
-              
-              <li class="content__body-item style--width">
-                <a class="content__body-link" href="">
-                  <img src="{% static 'images/invoices/print.svg' %}" alt="print">
-                </a>
-                <p class="content__body-text">0000001</p>
-              </li>
-              <li class="content__body-item style--width">
-                <p class="content__body-name">Title 1</p>
-              </li>
-              <li class="content__body-item style--width">
-                <p class="content__body-date">27 Mar 2023</p>
-              </li>
-              <li class="content__body-item style--width">
-                <p class="content__body-date">27 Mar 2023</p>
-              </li>
-              <li class="content__body-item style--width">
-                <p class="content__body-status style--width font--green">Ongoing</p>
-              </li>
-            </ul>
-
-            <div class="content__body-messages">
-              <p>2</p>
-              <img src="{% static 'images/mail.svg' %}" alt="print">
-            </div>
-
-            <button class="content__body-btn">
-              <img class="content__body-img" src="{% static 'images/chevron.svg' %}" alt="arrow">
-            </button>
-          </li>
-
-        </ul>
+          <ul class="content__body-list">
+              {% for task in tasks %}
+                  <li class="content__body-box">
+                      <ul class="content__body-titles">
+                          <li class="content__body-title">Ticket id#</li>
+                          <li class="content__body-title">Status</li>
+                          <li class="content__body-title">Name</li>
+                          <li class="content__body-title">Ticket Date</li>
+                          <li class="content__body-title">Due Date</li>
+                      </ul>
+                      <ul class="content__body-items">
+                          <li class="content__body-item style--width">
+                              <a class="content__body-link" href="">
+                                  <img src="{% static 'images/invoices/print.svg' %}" alt="print">
+                              </a>
+                              <p class="content__body-text">{{ task.id }}</p>
+                          </li>
+                          <li class="content__body-item style--width">
+                              <p class="content__body-name">{{ task.title }}</p>
+                          </li>
+                          <li class="content__body-item style--width">
+                              <p class="content__body-date">{{ task.created_at }}</p>
+                          </li>
+                          <li class="content__body-item style--width">
+                              <p class="content__body-date">{{ task.deadline }}</p>
+                          </li>
+                          <li class="content__body-item style--width">
+                              {% if task.status == '2' %}
+                              <p class="content__body-status style--width font--blue">New</p>
+                              {% elif task.status == '3' %}
+                              <p class="content__body-status style--width font--blue">Ongoing</p>
+                              {% else %}
+                              <p class="content__body-status style--width font--white">Closed</p>
+                              {% endif %}
+                          </li>
+                      </ul>
+                      <div class="content__body-messages">
+                          <p>1</p>
+                          <img src="{% static 'images/mail.svg' %}" alt="print">
+                      </div>
+                      <button class="content__body-btn">
+                          <img class="content__body-img" src="{% static 'images/chevron.svg' %}" alt="arrow">
+                      </button>
+                  </li>
+              {% endfor %}
+          </ul>
       </div>
 
     </div>
@@ -316,6 +317,7 @@
 
 {% endblock footer %}
 {% block extra_js %}
+  <script src="{% static 'ajax/task_ajax.js' %}"></script>
   <script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
   <script src="{% static 'js/jquery-ui.min.js' %}"></script>
   <script src="{% static 'js/calendar.js' %}"></script>
