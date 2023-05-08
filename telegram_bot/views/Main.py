@@ -4,8 +4,7 @@ from telegram import Bot
 
 from .Helper import SettingsHelper
 
-from ..handlers import MessageHandler
-from ..handlers import CallbackHandler
+from ..handlers import MessageHandler, CallbackHandler, system_commands
 
 import json
 
@@ -19,16 +18,20 @@ def main(request):
         data = json.loads(request.body)
 
         if 'message' in data:
+            system_commands.delete_commands(bot)
             message_handler = MessageHandler(bot, data)
             message_handler.handle_request()
             if 'text' in data['message'].keys():
-                print(f"Message from: {data['message']['from']['id']} - {data['message']['text']}")
+                print('Message from: ' + str(data['message']['from']['id']) + ' - ' + data['message']['text'] + '\n')
             else:
-                print(f"Message from: {data['message']['from']['id']} - Not text")
+                print('Message from: ' + str(data['message']['from']['id']) + ' - Not text\n')
 
         elif 'callback_query' in data:
             callback_handler = CallbackHandler(bot, data)
             callback_handler.handle_request()
-            print(f"Message from: {data['callback_query']['from']['id']} - {data['callback_query']['message']['text']}")
+            if 'text' in data['callback_query']['message'].keys():
+                print('Callback from: ' + str(data['callback_query']['from']['id']) + ' - ' + data['callback_query']['data'] + '\n')
+            else:
+                print('Callback from: ' + str(data['callback_query']['from']['id']) + ' - Not text\n')
 
     return HttpResponse('Main worked')

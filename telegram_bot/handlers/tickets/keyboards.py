@@ -1,13 +1,10 @@
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton
 
 
-def there_are_tickets() -> InlineKeyboardMarkup:
-    pass
-
-
-def has_no_tickets() -> InlineKeyboardMarkup:
+def tickets_menu_keyboard() -> InlineKeyboardMarkup:
     buttons = [
-        [InlineKeyboardButton('All ticket', callback_data='tickets_all')],
-        [InlineKeyboardButton('Create new', callback_data='tickets_new')]
+        [InlineKeyboardButton('My tickets', callback_data='tickets_my')],
+        [InlineKeyboardButton('Create ticket', callback_data='tickets_create')]
     ]
+
     return InlineKeyboardMarkup(buttons)

@@ -6,6 +6,7 @@ from .FAQ.handlers import FAQHandler
 from .logout.handlers import LogOutHandler
 
 from .utils import *
+from .system_commands import set_up_commands
 from ..models import User, Authentication
 
 
@@ -43,15 +44,16 @@ class MessageHandler:
                                           'This command will be available after you are logging out.\n\n'
                                           'If you want to log out, just write /logout or click it on keyboard.')
             elif message == '/menu':
+                set_up_commands(self.bot)
                 StartHandler.show_menu(self.bot, self.data)
             elif message in ['/invoices', '🧾 Invoices']:
-                InvoiceHandler.show_keyboard(self.bot, self.data)
+                InvoiceHandler.show_invoices_menu(self.bot, self.data)
             elif message in ['/services', '👨‍💻 Services']:
-                ServicesHandler.show_keyboard(self.bot, self.data)
+                ServicesHandler.show_services_menu(self.bot, self.data)
             elif message in ['/tickets', '📝 Tickets']:
-                TicketsHandler.show_keyboard(self.bot, self.data)
+                TicketsHandler.show_tickets_menu(self.bot, self.data)
             elif message in ['/faq', '⁉️ FAQ']:
-                FAQHandler.show_keyboard(self.bot, self.data)
+                FAQHandler.show_faq_menu(self.bot, self.data)
             elif message in ['/logout', '🚪 Log Out']:
                 LogOutHandler.show_confirm_keyboard(self.bot, self.data)
             else:

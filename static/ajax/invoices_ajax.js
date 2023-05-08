@@ -30,8 +30,6 @@ $(document).ready(function () {
         result['to_date'] = document.getElementById('toDatePicker').value;
         result['local_search'] = document.getElementById('search-input').value;
         result['showing_amount'] = document.getElementById('content__showing-number').textContent;
-//        console.log(document.getElementById('content__showing-number').textContent);
-//        console.log(result);
 
         $.ajax({
             type: 'POST',
@@ -112,7 +110,7 @@ $(document).ready(function () {
 
                     if (data['has_previous']) {
                         html_pagination += `
-                            <a id="prev" class="content__pagination-arrow" href="?page=` + data['invoices'].previous_page_number + `">
+                            <a id="prev" class="content__pagination-arrow" href="?page=` + (data['previous_page']) + `">
                               <svg width="46" height="46" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" d="M14.021 6.912a.69.69 0 0 1 0 .976L9.91 12l4.112 4.112a.69.69 0 0 1-.976.976l-4.6-4.6a.69.69 0 0 1 0-.976l4.6-4.6a.69.69 0 0 1 .976 0Z" clip-rule="evenodd"></path>
                               </svg>
@@ -129,13 +127,13 @@ $(document).ready(function () {
                     html_pagination += `
                         <div class="content__pagination-buttons">`
                             if (data['has_other_pages']) {
-                                for (i in data['invoices'].paginator.page_range) {
-                                    if (data['invoices'].number == data['invoices'].i) {
+                                for (page in data['page_range']) {
+                                    if (data['invoices'].number == data['page_range'][page]) {
                                         html_pagination += `
-                                            <span class="content__pagination-button pagination--active">` + data['invoices'].i + `</span>`
+                                            <span class="content__pagination-button pagination--active">` + data['page_range'][page] + `</span>`
                                     } else {
                                         html_pagination += `
-                                            <a class="content__pagination-button" href="?page=` + data['invoices'][0].i + `" >` + data['invoices'].i + `</a>`
+                                            <a class="content__pagination-button" href="?page=` + data['page_range'][page] + `" >` + data['page_range'][page] + `</a>`
                                     }
                                 }
                             }
@@ -144,7 +142,7 @@ $(document).ready(function () {
 
                     if (data['has_next']) {
                         html_pagination += `
-                            <a id="next" class="content__pagination-arrow" href="?page=` + data['invoices'].previous_page_number + `">
+                            <a id="next" class="content__pagination-arrow" href="?page=` + data['next_page'] + `">
                               <svg width="46" height="46" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" d="M9.979 6.912a.69.69 0 0 1 .976 0l4.6 4.6a.69.69 0 0 1 0 .976l-4.6 4.6a.69.69 0 1 1-.976-.976L14.091 12 9.98 7.888a.69.69 0 0 1 0-.976Z" clip-rule="evenodd"></path>
                               </svg>

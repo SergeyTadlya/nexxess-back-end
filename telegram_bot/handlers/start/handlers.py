@@ -39,6 +39,7 @@ class StartHandler:
 
     @staticmethod
     def show_menu(bot, data):
+        set_up_commands(bot)
         bot.sendMessage(chat_id=get_chat_id(data),
                         text='Something info here about bot',
                         reply_markup=main_keyboard())

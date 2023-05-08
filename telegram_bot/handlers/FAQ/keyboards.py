@@ -1,7 +1,7 @@
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton
 
 
-def faqs_topics() -> InlineKeyboardMarkup:
+def faqs_topics_keyboard() -> InlineKeyboardMarkup:
     buttons = [
         [InlineKeyboardButton('Topic 1', callback_data='faq_topic1'),
          InlineKeyboardButton('Topic 2', callback_data='faq_topic2')],

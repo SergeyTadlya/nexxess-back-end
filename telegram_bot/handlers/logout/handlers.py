@@ -12,17 +12,21 @@ class LogOutHandler:
         callback_title = str(callback_title).replace('logout_', '')
 
         if callback_title == 'Yes':
-            self.exit()
+            self.show_logout()
         elif callback_title == 'No':
-            self.delete_confirm_message()
+            self.show_delete_confirm_message()
 
     @staticmethod
     def show_confirm_keyboard(bot, data):
         bot.sendMessage(chat_id=get_chat_id(data),
                         text='Are you sure you want to exit?',
-                        reply_markup=confirm_logout())
+                        reply_markup=confirm_logout_keyboard())
 
-    def exit(self):
+    def show_delete_confirm_message(self):
+        self.bot.deleteMessage(message_id=self.data['callback_query']['message']['message_id'],
+                               chat_id=get_chat_id(self.data['callback_query']))
+
+    def show_logout(self):
         user = User.objects.filter(telegram_id=self.data['callback_query']['from']['id'])
         if user.exists():
             user = user.first()
@@ -31,9 +35,7 @@ class LogOutHandler:
         user.save()
 
         delete_commands(self.bot)
+        remove_reply_keyboard()
+
         self.bot.sendMessage(chat_id=get_chat_id(self.data['callback_query']),
                              text='You are logged out')
-
-    def delete_confirm_message(self):
-        self.bot.deleteMessage(message_id=self.data['callback_query']['message']['message_id'],
-                               chat_id=get_chat_id(self.data['callback_query']))
