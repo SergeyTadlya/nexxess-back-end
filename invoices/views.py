@@ -145,9 +145,16 @@ def ajax_invoice_filter(request):
             except EmptyPage:
                 invoices_array = paginator.page(paginator.num_pages)
 
+
+
             has_next = invoices_array.has_next()
             has_previous = invoices_array.has_previous()
             has_other_pages = invoices_array.has_other_pages()
+            page_range = list(invoices_array.paginator.page_range)
+            next_page = invoices_array.number + 1 if invoices_array.has_next() else invoices_array.number
+            previous_page = invoices_array.number - 1 if invoices_array.has_previous() else invoices_array.number
+
+
 
             if data['showing_amount']:
                 # showing_amount = int(data['showing_amount']) if not data['showing_amount'] == 'All' else len(invoices_array)
@@ -159,12 +166,12 @@ def ajax_invoice_filter(request):
                 'invoices_dates': invoices_dates,
                 'invoices_number': str(len(all_user_invoices)),
                 'showing_amount': str(len(all_user_invoices)),
-                'has_next': invoices_array.has_next(),
-                'has_previous': invoices_array.has_previous(),
-                'has_other_pages': invoices_array.has_other_pages(),
-                'page_range': list(invoices_array.paginator.page_range),
-                'next_page': invoices_array.number + 1 if invoices_array.has_next() else invoices_array.number,
-                'previous_page': invoices_array.number - 1 if invoices_array.has_previous() else invoices_array.number
+                'has_next': has_next,
+                'has_previous': has_previous,
+                'has_other_pages': has_other_pages,
+                'page_range': page_range,
+                'next_page': next_page,
+                'previous_page': previous_page
             }
 
             return JsonResponse(response)
