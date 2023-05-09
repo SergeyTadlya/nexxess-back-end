@@ -1,136 +1,108 @@
-{% extends 'base.html' %}
+{% extends "account/base.html" %}
 {% load static %}
+{% load i18n %}
+{% load account %}
 
-{% block extra_css %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
-{% endblock %}
-
-{% block left_menu %}
-
-{% endblock %}
-{% block  after_sign_up %}
-{% if  user.is_superuser  %}
-<style>
-  .logout-button {
-    margin-top: 30px;
-    text-align: center;
-    text-decoration: none;
-    background: -webkit-gradient(linear, left bottom, left top, from(#7842F6), to(#509CE9));
-    background: -o-linear-gradient(bottom, #7842F6 0%, #509CE9 100%);
-    background: linear-gradient(360deg, #7842F6 0%, #509CE9 100%);
-    border-radius: 4px;
-    outline: 1px solid transparent;
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 10px;
-    letter-spacing: 0.15px;
-    color: #fff;
-    text-transform: uppercase;
-    transition: all 0.3s;
-    width: 150px;
-  }
-</style>
-<div class="container">
-  <div class="confirmation__email">
-    <p style="margin-top: 203px; max-width: 860px; margin: 145px auto 0;">We have sent an email to you for verification. Follow the link provided to finalize the process. If you do not see the verification email in your main inbox, check your spam folder.
-      Please contact us if you do not receive the verification email within a few minutes.</p>
-    <a href="{% url 'account_logout' %}" class="logout-button">Log out</a>
-  </div>  
-</div>
+{% block head_title %}{% trans "Confirm E-mail Address" %}{% endblock %}
 
 
-{% endif %}
-{% endblock after_sign_up%}
+{% block content %}
 
-{% block footer %}
-<div class="container">
-  <ul class="footer__list">
-    <li class="footer__item">
-      <div class="footer__social">
-        <a class="footer__social-link" href="#">
-          <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="26.4583mm" height="26.4584mm" version="1.1"
-            style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
-            viewBox="0 0 2646 2646" xmlns:xlink="http://www.w3.org/1999/xlink">
-            <defs>
-              <style type="text/css">
-                <![CDATA[
-                .fil0 {
-                  fill: white
-                }
-                ]]>
-              </style>
-            </defs>
-            <g id="Layer_x0020_1">
-              <metadata id="CorelCorpID_0Corel-Layer" />
-              <path class="fil0"
-                d="M0 1324c0,333 108,605 299,847 13,17 24,27 37,43 22,28 48,50 73,76 13,13 24,26 38,37 90,72 119,101 228,161 19,10 28,17 48,27 100,50 231,95 342,117 14,3 53,9 65,15l0 -954 -299 0 0 -368 299 0c0,-170 -15,-406 53,-544 63,-126 151,-198 290,-238 50,-14 99,-16 153,-23 52,-6 302,26 324,26l0 325 -240 0c-59,0 -114,17 -146,46 -20,18 -29,32 -41,55 -11,22 -21,48 -21,80l0 256c0,12 4,16 16,16l373 0c-1,27 -9,64 -14,93l-36 235c-3,22 1,39 -19,39l-245 0 0 954c59,-28 174,-22 418,-168 123,-73 226,-166 322,-270 11,-12 20,-25 31,-38l94 -130c284,-453 269,-1041 -44,-1483 -75,-106 -108,-131 -193,-217 -16,-16 -26,-22 -43,-37l-95 -71c-32,-21 -66,-46 -101,-64 -155,-80 -320,-148 -501,-160 -116,-8 -188,-13 -302,2 -132,18 -274,50 -388,108 -184,93 -338,198 -468,358 -26,32 -46,60 -71,94 -25,34 -42,65 -64,101 -20,32 -41,75 -56,109 -64,143 -117,337 -117,544z" />
-            </g>
-          </svg>
+      <style>
+        .confirm-address-title {
+          font-family: "Roboto", sans-serif;
+          font-weight: 600;
+          font-size: 32px;
+          line-height: 150%;
+          text-align: center;
+        }
+
+        .confirm-address-text {
+          font-family: "Roboto", sans-serif;
+          font-size: 20px;
+          text-align: center;
+        }
+
+        .confirm-address-email {
+          font-family: "Roboto", sans-serif;
+          font-size: 20px;
+          color: #7C48EE;
+          line-height: 130%;
+          text-decoration: none;
+          transition: all 0.3s;
+        }
+
+        .confirm-address-email:hover {
+          color: #509CE9;
+        }
+
+        .confirm-address-user {
+          font-family: "Roboto", sans-serif;
+          font-weight: 600;
+          font-size: 40px;
+          line-height: 130%;
+          color: #7C48EE;
+        }
+
+        .confirm-address-btn {
+          text-decoration: none;
+          background: -webkit-gradient(linear, left bottom, left top, from(#7842F6), to(#509CE9));
+          background: -o-linear-gradient(bottom, #7842F6 0%, #509CE9 100%);
+          background: linear-gradient(360deg, #7842F6 0%, #509CE9 100%);
+          border-radius: 4px;
+          outline: 1px solid transparent;
+          font-weight: 500;
+          font-size: 16px;
+          line-height: 10px;
+          letter-spacing: 0.15px;
+          color: #fff;
+          padding: 18px 20px;
+          text-transform: uppercase;
+          cursor: pointer;
+          border: none;
+          transition: all 0.3s;
+        }
+
+        .confirm-address-btn:hover {
+          background: transparent;
+          outline-color: #7842F6;
+          color: #7842F6;
+        }
+      </style>
+
+        <h1 class="confirm-address-title">{% trans "Confirm E-mail Address" %}</h1>
+
+        <p class="confirm-address-text">Please confirm that </p>
+        <a class="confirm-address-email" href="mailto:{{ email }}">
+          Go to Email
         </a>
-        <a class="footer__social-link" href="#">
-          <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="26.4582mm" height="26.4579mm" version="1.1"
-            style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
-            viewBox="0 0 2646 2646" xmlns:xlink="http://www.w3.org/1999/xlink">
-            <defs>
-              <style type="text/css">
-                <![CDATA[
-                .fil0 {
-                  fill: white
-                }
-                ]]>
-              </style>
-            </defs>
-            <g id="Layer_x0020_1">
-              <metadata id="CorelCorpID_0Corel-Layer" />
-              <path class="fil0"
-                d="M0 1228c0,447 69,713 383,1028 618,620 1682,495 2130,-339 131,-243 133,-427 133,-689 0,-348 -204,-659 -383,-838 -618,-620 -1682,-495 -2130,339 -63,117 -133,328 -133,499zm1306 -162c-397,-30 -493,-184 -701,-343 -98,218 -8,313 90,438l-126 -29c-10,159 96,269 218,307l-102 31c59,171 129,173 293,237 -128,115 -263,118 -467,142 660,354 1381,35 1467,-791 14,-137 82,-110 152,-232l-136 29c35,-54 78,-88 100,-170 -178,76 -159,86 -249,40 -91,-46 -121,-91 -269,-67 -194,31 -285,182 -272,407z" />
-            </g>
-          </svg>
-        </a>
-        <a class="footer__social-link" href="#">
-          <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="26.4584mm" height="26.4581mm" version="1.1"
-            style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
-            viewBox="0 0 2646 2646" xmlns:xlink="http://www.w3.org/1999/xlink">
-            <defs>
-              <style type="text/css">
-                <![CDATA[
-                .fil0 {
-                  fill: white
-                }
-                ]]>
-              </style>
-            </defs>
-            <g id="Layer_x0020_1">
-              <metadata id="CorelCorpID_0Corel-Layer" />
-              <g id="_1943331531584">
-                <path class="fil0"
-                  d="M1267 2646c160,0 228,2 388,-40 147,-38 308,-110 430,-199 33,-24 101,-75 130,-105 16,-17 27,-22 42,-38 224,-227 388,-564 388,-888 0,-195 -9,-323 -77,-505 -27,-72 -39,-100 -73,-164 -64,-119 -79,-135 -161,-241 -41,-53 -80,-83 -116,-120 -14,-15 -27,-24 -42,-38 -51,-46 -128,-94 -186,-130 -34,-21 -68,-36 -105,-55 -116,-60 -337,-124 -509,-124 -160,0 -224,0 -383,40 -101,25 -254,88 -342,142 -70,44 -147,97 -208,152 -62,56 -126,124 -175,191 -84,115 -153,233 -197,372 -91,283 -96,557 -4,841 60,184 172,371 307,508 228,233 572,400 894,400zm-173 -2191c-228,9 -470,33 -569,288 -70,181 -57,604 -49,819 8,231 34,480 282,580 180,72 585,58 797,50 135,-5 250,-9 361,-64 95,-47 165,-117 207,-225 68,-173 56,-610 49,-816 -9,-238 -33,-477 -282,-582 -169,-71 -593,-58 -796,-50z" />
-                <path class="fil0"
-                  d="M1210 608c-227,6 -448,0 -534,172 -65,131 -54,494 -50,662 5,226 0,459 170,544 136,69 480,56 650,52 229,-5 440,2 527,-174 67,-135 54,-492 50,-664 -5,-234 2,-451 -169,-541 -128,-67 -479,-56 -643,-52zm53 279c-236,34 -410,219 -369,501 20,136 79,231 152,286 88,67 200,107 341,84 227,-37 406,-224 367,-499 -37,-265 -253,-405 -491,-371zm496 -137c-55,11 -102,39 -92,105 9,60 46,100 111,96 141,-9 106,-227 -19,-201z" />
-                <path class="fil0"
-                  d="M1311 1033c-400,42 -322,606 31,578 160,-13 275,-129 263,-306 -11,-156 -128,-289 -294,-272z" />
-              </g>
-            </g>
-          </svg>
-        </a>
-      </div>
-    </li>
-    <li class="footer__item">
-      <p class="footer__item-text">
-        Copyright 2000-2023, Nexxess International, All Rights Reserved
-      </p>
-    </li>
-    <li class="footer__item">
-      <a class="footer__btn-link" href="{% url 'account_logout' %}">
-        consultation
-      </a>
-    </li>
-  </ul>
-</div>
+         <p class="confirm-address-text">
+          is an e-mail address for user
+         </p>
+          <p class="confirm-address-user">
+            user_display
+          </p>
 
-{% endblock footer %}
-{% block extra_js %}
- <script src="{% static 'js/main.js' %}"></script>
+          <form method="post" action=>
+            {% csrf_token %}
+            <a class="content__pay" href="{% url 'account_logout' %}">
+              <button class="confirm-address-btn" type="button" id="confirm-button">
+                {% trans 'Confirm' %}
+              </button>
+            </a>
+          </form>
+
+
+
+
+
+        <p class="confirm-address-text">
+          This e-mail confirmation link expired or is invalid. Please
+          <a class="confirm-address-email" href="{{ email_url }}">
+            issue a new e-mail confirmation request.
+          </a>
+        </p>
+
 
 
 {% endblock %}

@@ -42,7 +42,7 @@ def tasks(request):
         })
 
     context = {
-        "tasks": tasks,  # здесь имя переменной должно совпадать с тем, что используется в шаблоне
+        "tasks": tasks,  
         'tasks_number': len(tasks),
     }
     return render(request, "tickets/tickets.html", context)
@@ -51,7 +51,6 @@ def tasks(request):
 def task_detail(request, id):
     task = Ticket.objects.get(id=id)
     if request.user.is_superuser or task.responsible == request.user.b24_contact_id:
-        # апдейт задачі, коли менеджер відкрив її (це щоб на головній сторінці, вона зникла із списка нових задач)
         if not request.user.is_superuser:
             Ticket.objects.filter(id=id).update(is_opened=True)
 
@@ -100,13 +99,13 @@ def create_bitrix_task(request):
         except Exception as e:
             print(e)
 
-    return render(request, 'tickets:tasks')
+    return render(request, 'tickets/tickets.html')
 
 
 def task_data(request):
     tasks_list = Ticket.objects.all() if request.user.is_superuser else Ticket.objects.filter(
         responsible=str(request.user.b24_contact_id))
-    tasks = []  # вместо tasks_array
+    tasks = []
 
     for task in tasks_list:
         tasks.append({

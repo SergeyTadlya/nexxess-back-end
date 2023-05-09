@@ -136,15 +136,24 @@
     </div>
   </div>
 </header>
-<div class="container">
-  <p style="margin-top: 203px; max-width: 860px; margin: 145px auto 0;">We have sent an email to you for verification. Follow the link provided to finalize the process. If you do not see the verification email in your main inbox, check your spam folder.
-    Please contact us if you do not receive the verification email within a few minutes.</p>
-  <a href="{% url 'account_logout' %}" class="logout-button">Log out</a>
-</div>
 <style>
-  .logout-button {
+
+  .confirmation__email {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+
+  .confirmation__email-text {
+    text-align: center;
+    width: 50%;
+  }
+
+  .confirmation__email-button {
     margin-top: 30px;
-    align: center;
+    text-align: center;
     text-decoration: none;
     background: -webkit-gradient(linear, left bottom, left top, from(#7842F6), to(#509CE9));
     background: -o-linear-gradient(bottom, #7842F6 0%, #509CE9 100%);
@@ -158,9 +167,22 @@
     color: #fff;
     text-transform: uppercase;
     transition: all 0.3s;
-    width: 150px;
+    padding: 16px 32px;
+  }
+
+  .confirmation__email-button:hover {
+    outline-color: #7842F6;
+    background: transparent;
+    color: #7842F6;
   }
 </style>
+<div class="container">
+  <div class="confirmation__email">
+    <p class="confirmation__email-text">We have sent an email to you for verification. Follow the link provided to finalize the process. If you do not see the verification email in your main inbox, check your spam folder.
+      Please contact us if you do not receive the verification email within a few minutes.</p>
+    <a href="{% url 'account_logout' %}" class="confirmation__email-button">Log out</a>
+  </div>
+</div>
 
 
 {% endif %}
