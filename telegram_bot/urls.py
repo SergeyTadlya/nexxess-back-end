@@ -7,7 +7,3 @@ urlpatterns = [
     path('', views.main, name='main'),
     path('setwebhook/', views.set_telegram_webhook, name='set_webhook')
 ]
-
-# Nexxess Avivi test
-
-# https://api.telegram.org/

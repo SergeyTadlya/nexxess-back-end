@@ -123,7 +123,6 @@ def services(request):
             return render(request, "services/list.html", context=context)
 
 
-
 @login_required(login_url='/accounts/login/')
 def product_detail(request, id):
     try:
