@@ -96,10 +96,14 @@ def ajax_invoice_filter(request):
             data = json.load(request)
             statuses = [keys for keys in data if data[keys] is True]
 
-            all_user_invoices = Invoice.objects.all() if request.user.is_superuser else Invoice.objects.filter(responsible=request.user.b24_contact_id).order_by('-date')
-            print(all_user_invoices)
+            all_user_invoices = Invoice.objects.all().order_by('-date') if request.user.is_superuser else Invoice.objects.filter(responsible=request.user.b24_contact_id).order_by('-date')
             invoices_array = list()
             invoices_dates = list()
+
+            if 'ascending' in data.keys():
+                all_user_invoices = all_user_invoices.order_by(data['ascending'])
+            elif 'descending' in data.keys():
+                all_user_invoices = all_user_invoices.order_by('-' + data['descending'])
 
             if statuses:
                 all_user_invoices = all_user_invoices.filter(status__value__in=statuses)
@@ -145,16 +149,12 @@ def ajax_invoice_filter(request):
             except EmptyPage:
                 invoices_array = paginator.page(paginator.num_pages)
 
-
-
             has_next = invoices_array.has_next()
             has_previous = invoices_array.has_previous()
             has_other_pages = invoices_array.has_other_pages()
             page_range = list(invoices_array.paginator.page_range)
             next_page = invoices_array.number + 1 if invoices_array.has_next() else invoices_array.number
             previous_page = invoices_array.number - 1 if invoices_array.has_previous() else invoices_array.number
-
-
 
             if data['showing_amount']:
                 # showing_amount = int(data['showing_amount']) if not data['showing_amount'] == 'All' else len(invoices_array)

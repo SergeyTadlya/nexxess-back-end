@@ -12,7 +12,7 @@
   <div class="aside-info">
     <div class="aside-info__box">
       <div class="aside-info__box-top">
-        <img class="aside-info__top-img" src="{% static 'images/important.svg' %}" alt="icon">
+        <img class="aside-info__top-img" src="{% static 'images/alert.svg' %}" alt="icon">
         <h6 class="aside-info__top-title">Important</h6>
         <p class="aside-info__top-number">3</p>
       </div>
@@ -102,58 +102,6 @@
       </div>
     </div>
 
-    <!-- <button id="content__create-btn" class="content__create-btn" type="button">
-      <img class="content__create-img" src="{% static 'images/create-btn.svg' %}" alt="create-icon">
-      Create ticket
-    </button>
-
-    <form id="content__form" class="content__form" action="#">
-        <div class="content__form-box">
-          <input class="content__form-input" type="text" placeholder="Title">
-          <textarea class="content__form-textarea" name="" id="" cols="30" rows="7" placeholder="Enter a task"></textarea>
-          <button class="content__form-submit" type="submit">Apply</button>
-        </div>
-        <div class="content__form-box">
-          <div class="content__form-tags">
-            <h5 class="content__form-title">Choose tags:</h5>
-            <div class="content__form-body">
-              <ul class="content__form-list">
-                <li class="content__form-item">#Tag 1</li>
-                <li class="content__form-item">#Tag 2</li>
-                <li class="content__form-item">#Tag 3</li>
-              </ul>
-            <button id="form__new-tag" class="content__form-btn" type="button">New tag</button>
-              <div class="popup">
-                <div class="popup__content">
-                  <div class="popup__body">
-                    <button class="popup__close" type="button"></button>
-                    <div class="popup__box">
-                      <h5 class="popup__text">Create new tag</h5>
-                      <input id="popup__input" class="popup__input" type="text" placeholder="#newtag">
-                      <button class="popup__btn" type="button">Create</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="content__form-duration">
-            <h5 class="content__form-title">Determine the duration:</h5>
-            <div class="content__form-selects">
-              <p class="content__form-text">Deadline:</p>
-              <div class="content__form__accordion-box">
-                <input id="contentFormDatePicker" class="content__form__accordion-date"  type="text" readonly="readonly" placeholder="select a date">
-              </div>
-            </div>
-          </div>
-        </div>
-    </form> -->
-
-    <!-- <button class="content__filter-btn" type="button">
-      <img class="content__filter-img" src="{% static 'images/filter-btn.svg' %}" alt="filter-icon">
-      Filter
-    </button> -->
-
     <ul class="content__titles">
       <li class="content__titles-item">Ticked id#</li>
       <li class="content__titles-item">Name</li>
@@ -195,7 +143,7 @@
                               {% if task.status == '2' %}
                               <p class="content__body-status style--width font--blue">New</p>
                               {% elif task.status == '3' %}
-                              <p class="content__body-status style--width font--blue">Ongoing</p>
+                              <p class="content__body-status style--width font--green">Ongoing</p>
                               {% else %}
                               <p class="content__body-status style--width font--white">Closed</p>
                               {% endif %}
@@ -316,6 +264,7 @@
 </div>
 
 {% endblock footer %}
+
 {% block extra_js %}
   <script src="{% static 'ajax/task_ajax.js' %}"></script>
   <script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>

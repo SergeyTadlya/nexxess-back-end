@@ -81,12 +81,12 @@ def webhook_task(request):
                     'b24_time': b24_time,
                     'ticket_text': ticket_text,
                     'task_info': task_info,
-                    'deadline': datetime.strptime(deadline, '%Y-%m-%dT%H:%M:%S%z'),
+                    'deadline': created_at,
                     'status': status,
                     'task_info_crm': task_info_crm,
                     'is_opened': False,
                     'responsible': trim_before(task_info_crm["ufCrmTask"][0]),
-                    'created_at': datetime.strptime(created_at, '%Y-%m-%dT%H:%M:%S%z'),
+                    'created_at': created_at,
                     'is_active': True,
                 }
                 try:

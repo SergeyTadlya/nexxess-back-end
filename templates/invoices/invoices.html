@@ -97,12 +97,12 @@
             Filter
         </button>
         <ul class="content__titles">
-            <li class="content__titles-item">Invoice</li>
-            <li class="content__titles-item">Invoice Date</li>
-            <li class="content__titles-item">Due Date</li>
-            <li class="content__titles-item">Total</li>
-            <li class="content__titles-item">Status</li>
-            <li class="content__titles-item">Action</li>
+          <li class="content__titles-item" id="invoice_id">Invoice</li>
+          <li class="content__titles-item" id="date">Invoice Date</li>
+          <li class="content__titles-item" id="due_date">Due Date</li>
+          <li class="content__titles-item" id="price">Total</li>
+          <li class="content__titles-item" id="status">Status</li>
+          <li class="content__titles-item">Action</li>
         </ul>
         <div id="div-invoices">
             {% for invoice_date in invoices_dates %}
@@ -142,7 +142,9 @@
                                         <li  class="content__body-item style--width">
                                             <p class="content__body-status style--width font--{{ invoice.status.color }}">{{ invoice.status.value }}</p>
                                         </li>
-                                        <li class="content__body-item style--width"><a class="button_pay" data-b24invoice="{{ invoice.invoice_id }}">Pay</a></li>
+                                        <li class="content__body-item style--width">
+                                            <a class="button_pay" data-b24invoice="{{ invoice.invoice_id }}">Pay</a>
+                                        </li>
                                     </ul>
                                     <button class="content__body-btn">
                                         <img class="content__body-img" src="{% static 'images/chevron.svg' %}" alt="arrow">

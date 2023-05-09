@@ -1,114 +1,47 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}About service{% endblock %}
-
 {% block extra_css %}
-  <link rel="stylesheet" href="{% static 'css/about-service.css' %}" />
-
-
+<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
 {% endblock %}
 
 {% block left_menu %}
-  <div class="aside-info">
-    <div class="aside-info__box">
-      <div class="aside-info__box-top">
-        <img class="aside-info__top-img" src="{% static 'images/important.svg' %}" alt="icon">
-        <h6 class="aside-info__top-title">Important</h6>
-        <p class="aside-info__top-number">2</p>
-      </div>
-      <ul class="aside-info__box-list">
-        <li class="aside-info__box-item">
-          <p class="aside-info__box-text">New serviсes this month:</p>
-          <p class="aside-info__box-money">2</p>
-        </li>
-        <li class="aside-info__box-item">
-          <p class="aside-info__box-text">Actual discounts:</p>
-          <p class="aside-info__box-money">10%</p>
-        </li>
-      </ul>
-    </div>
 
-
-    <div class="aside-info__accordion">
-      <div id="aside-info__accordion-top" class="aside-info__accordion-top">
-        <img class="aside-info__top-img" src="{% static 'images/services.svg' %}" alt="icon">
-        <h6 class="aside-info__top-title">Your servises</h6>
-        <img class="aside-info__top-arrow" src="{% static 'images/chevron-down.svg' %}" alt="icon">
-      </div>
-
-      <ul class="aside-info__accordion-list">
-        <li class="aside-info__accordion-item">
-          <a class="aside-info__accordion-link" href="#">Your services 1</a>
-        </li>
-        <li class="aside-info__accordion-item">
-          <a class="aside-info__accordion-link" href="#">Your services 1</a>
-        </li>
-      </ul>
-    </div>
-
-    <div class="aside-info__accordion">
-      <div id="aside-info__accordion-top" class="aside-info__accordion-top">
-        <img class="aside-info__top-img" src="{% static 'images/tickets.svg' %}" alt="icon">
-        <h6 class="aside-info__top-title">Tickets</h6>
-        <img class="aside-info__top-arrow" src="{% static 'images/chevron-down.svg' %}" alt="icon">
-      </div>
-
-      <ul class="aside-info__accordion-list">
-        <li class="aside-info__accordion-item">
-          <a class="aside-info__accordion-link" href="#">
-            <p class="aside-info__accordion-text">Ongoing</p>
-            <p class="aside-info__accordion-number font--green">0</p>
-          </a>
-        </li>
-        <li class="aside-info__accordion-item">
-          <a class="aside-info__accordion-link" href="#">
-            <p class="aside-info__accordion-text">Overdue</p>
-            <p class="aside-info__accordion-number font--red">0</p>
-          </a>
-        </li>
-      </ul>
-    </div>
-  </div>
 {% endblock %}
+{% block  after_sign_up %}
+{% if  user.is_superuser  %}
+<style>
+  .logout-button {
+    margin-top: 30px;
+    text-align: center;
+    text-decoration: none;
+    background: -webkit-gradient(linear, left bottom, left top, from(#7842F6), to(#509CE9));
+    background: -o-linear-gradient(bottom, #7842F6 0%, #509CE9 100%);
+    background: linear-gradient(360deg, #7842F6 0%, #509CE9 100%);
+    border-radius: 4px;
+    outline: 1px solid transparent;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 10px;
+    letter-spacing: 0.15px;
+    color: #fff;
+    text-transform: uppercase;
+    transition: all 0.3s;
+    width: 150px;
+  }
+</style>
+<div class="container">
+  <div class="confirmation__email">
+    <p style="margin-top: 203px; max-width: 860px; margin: 145px auto 0;">We have sent an email to you for verification. Follow the link provided to finalize the process. If you do not see the verification email in your main inbox, check your spam folder.
+      Please contact us if you do not receive the verification email within a few minutes.</p>
+    <a href="{% url 'account_logout' %}" class="logout-button">Log out</a>
+  </div>  
+</div>
 
-{% block content %}
-  <div class="content__inner">
-    <div class="content__top">
-      <div class="content__top-body">
-        <h1 class="title content__top-title">service title</h1>
-      </div>
-    </div>
 
-    <div class="content__body">
-      <ul class="content__list">
-        <li class="content__list-item">
-          <div class="content__list-img">
-            <img src="{% static 'images/about-service.jpg' %}" alt="images">
-          </div>
-          <p class="content__list-text">
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages
-          </p>
-        </li>
-        <li class="content__list-item">
-          <div class="content__list-img">
-            <img src="{% static 'images/about-service.jpg' %}" alt="images">
-          </div>
-          <p class="content__list-text">
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages
-          </p>
-        </li>
-      </ul>
+{% endif %}
+{% endblock after_sign_up%}
 
-      <p class="content__body-text">
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages
-      </p>
-      <button class="content__body-link order_click" data-b24id="{{ service.service_id }}">Order</button>
-
-    </div>
-
-  </div>
-{% endblock %}
 {% block footer %}
 <div class="container">
   <ul class="footer__list">
@@ -188,7 +121,7 @@
       </p>
     </li>
     <li class="footer__item">
-      <a class="footer__btn-link" href="#">
+      <a class="footer__btn-link" href="{% url 'account_logout' %}">
         consultation
       </a>
     </li>
@@ -197,7 +130,7 @@
 
 {% endblock footer %}
 {% block extra_js %}
-    <script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
-    <script src="{% static 'js/jquery-ui.min.js' %}"></script>
-    <script src="{% static 'js/about-service.js' %}"></script>
+ <script src="{% static 'js/main.js' %}"></script>
+
+
 {% endblock %}
