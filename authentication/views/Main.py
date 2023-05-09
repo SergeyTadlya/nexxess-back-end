@@ -14,7 +14,7 @@ from django.views.generic import TemplateView
 
 class TestView(TemplateView):
     template_name = 'test.html'
-    
+
 @login_required(login_url='/accounts/login/')
 def main(request):
     try:
@@ -23,8 +23,8 @@ def main(request):
             task_count = Ticket.objects.filter(is_opened=False).count()
             current_user = "admin"
         else:
-            invoice_count = Invoice.objects.filter(responsible=request.user.email, is_opened=False).count()
-            task_count = Ticket.objects.filter(responsible=request.user.email, is_opened=False).count()
+            invoice_count = Invoice.objects.filter(responsible=request.user.b24_contact_id, is_opened=False).count()
+            task_count = Ticket.objects.filter(responsible=request.user.b24_contact_id, is_opened=False).count()
             current_user = "not_admin"
 
         method = "crm.product.list"
