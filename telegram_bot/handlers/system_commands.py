@@ -22,6 +22,7 @@ def set_up_commands(bot_instance: Bot) -> None:
 def delete_commands(bot_instance: Bot) -> None:
     bot_instance.delete_my_commands()
     commands: Dict[str, str] = {'start': 'Begin'}
+
     bot_instance.set_my_commands(
         commands=[BotCommand(command, description) for command, description in commands.items()]
     )

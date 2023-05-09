@@ -176,7 +176,6 @@ def ajax_invoice_filter(request):
 
             return JsonResponse(response)
 
-
 @login_required(login_url='/accounts/login/')
 def invoice_detail(request, id):
     try:
@@ -193,7 +192,6 @@ def invoice_detail(request, id):
             return redirect('/invoices/')
     except :
             return redirect('/invoices/')
-
 
 def generate_new_pdf(pdf_path, id, invoice, request):
 
