@@ -196,7 +196,6 @@ def ajax_invoice_filter(request):
 
             return JsonResponse(response)
 
-
 @login_required(login_url='/accounts/login/')
 def invoice_detail(request, id):
     if request.user.is_authenticated and request.user.google_auth or request.user.is_superuser:
