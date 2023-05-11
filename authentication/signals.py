@@ -16,26 +16,12 @@ def create_bitrix_contact(sender, request, user, **kwargs):
 
         source_id = 'SOCIAL'
         name = user.sociallogin.account.extra_data.get('name')
-        if ' ' in name:
-            parsed_data = name.split()
-            first_name = parsed_data[0]
-            last_name = parsed_data[1]
-        else:
-            first_name = name
-            last_name = ''
         email = user.email
 
     else:
 
         source_id = 'WEB'
-        name = user.name
-        if ' ' in name:
-            parsed_data = name.split()   # own invention from PAvlo
-            first_name = parsed_data[0]
-            last_name = parsed_data[1]
-        else:
-            first_name = name
-            last_name = ''
+        name = request.POST.get('name')
         email = user.email
 
     try:

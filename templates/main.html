@@ -17,10 +17,11 @@
         </div>
         <ul class="aside-info__box-list">
           <li class="aside-info__box-item">
-            Scott McGrath
+            {{ request.user.first_name }}
+            {{ request.user.last_name }}
           </li>
           <li class="aside-info__box-item">
-            1244 Harwood Rd
+            Street road
           </li>
           <li class="aside-info__box-item">
             Bedford, Texas, 76021
@@ -38,15 +39,15 @@
             </div>
             <ul class="aside-info__accordion-list">
               <li class="aside-info__accordion-item">
-                <a class="aside-info__accordion-link" href="#">
+                <a class="aside-info__accordion-link" href="{% url 'tickets:tasks'%}">
                   <p class="aside-info__accordion-text">Ongoing</p>
-                  <p class="aside-info__accordion-number font--green">2</p>
+                  <p class="aside-info__accordion-number font--green">{{task_count}}</p>
                 </a>
               </li>
               <li class="aside-info__accordion-item">
-                <a class="aside-info__accordion-link" href="#">
+                <a class="aside-info__accordion-link" href="{% url 'tickets:tasks'%}">
                   <p class="aside-info__accordion-text">Overdue</p>
-                  <p class="aside-info__accordion-number font--red">8</p>
+                  <p class="aside-info__accordion-number font--red">0</p>
                 </a>
               </li>
             </ul>
@@ -61,7 +62,7 @@
           <div class="title__date">
             <span id="date"></span>, <span id="month"></span> <span id="day"></span>
           </div>
-          <h1 class="title content__top-title">Welcome Back, <span id="name">Scott</span></h1>
+          <h1 class="title content__top-title">Welcome Back, <span id="name">{{ request.user.first_name }}</span></h1>
         </div>
           <div class="content__top-search">
               <img class="content__top-img" src="{% static 'images/main/Search.svg' %}" alt="Search">
@@ -175,14 +176,22 @@
     background: transparent;
     color: #7842F6;
   }
+
+  @media (max-width: 550px) {
+    .confirmation__email-text {
+      width: 100%;
+    }
+  }
 </style>
-<div class="container">
-  <div class="confirmation__email">
-    <p class="confirmation__email-text">We have sent an email to you for verification. Follow the link provided to finalize the process. If you do not see the verification email in your main inbox, check your spam folder.
-      Please contact us if you do not receive the verification email within a few minutes.</p>
-    <a href="{% url 'account_logout' %}" class="confirmation__email-button">Log out</a>
+<main class="main">
+  <div class="container">
+    <div class="confirmation__email">
+      <p class="confirmation__email-text">We have sent an email to you for verification. Follow the link provided to finalize the process. If you do not see the verification email in your main inbox, check your spam folder.
+        Please contact us if you do not receive the verification email within a few minutes.</p>
+      <a href="{% url 'account_logout' %}" class="confirmation__email-button">Log out</a>
+    </div>
   </div>
-</div>
+</main>
 
 
 {% endif %}
@@ -193,7 +202,7 @@
   <ul class="footer__list">
     <li class="footer__item">
       <div class="footer__social">
-        <a class="footer__social-link" href="#">
+        <a class="footer__social-link" href="https://www.facebook.com/nexxesstrust">
           <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="26.4583mm" height="26.4584mm" version="1.1"
             style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
             viewBox="0 0 2646 2646" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -213,7 +222,7 @@
             </g>
           </svg>
         </a>
-        <a class="footer__social-link" href="#">
+        <a class="footer__social-link" href="https://twitter.com/nexxessintl">
           <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="26.4582mm" height="26.4579mm" version="1.1"
             style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
             viewBox="0 0 2646 2646" xmlns:xlink="http://www.w3.org/1999/xlink">

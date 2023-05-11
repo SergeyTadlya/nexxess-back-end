@@ -80,7 +80,13 @@ class CustomSignupForm(SignupForm):
 
     def save(self, request):
         user = super().save(request)
-        user.name = self.cleaned_data.get('name')
+        custom_data = self.cleaned_data.get('name').strip().split()
+        if '@' in custom_data:
+            custom_data.remove('@')
+
+        user.first_name = custom_data[0] if len(custom_data) > 0 else ''
+
+        user.last_name = custom_data[1] if len(custom_data) > 1 else ''
         user.save()
         return user
 

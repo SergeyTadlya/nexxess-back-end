@@ -16,15 +16,18 @@
     <title>{% block title %} NEXXESS {% endblock %}</title>
 </head>
 <body>
+
+
     {% if user.google_auth  or user.is_superuser %}
         <header class="header">
           <div class="container">
             <div class="header__inner">
               <a href="{% url 'authentication:main'%}">
-                  <picture class="header__logo">
+                <img class="header__logo-img" src="{% static 'images/logo.svg' %}" alt="logo">
+                  <!-- <picture class="header__logo">
                     <source srcset="{% static 'images/logo-mobile.svg' %}" media="(max-width: 550px)">
-                    <img src="{% static 'images/logo.svg' %}" alt="logo">
-                  </picture>
+                    
+                  </picture> -->
               </a>
                 <nav class="nav">
                     <a class="nav__burger">
@@ -153,9 +156,9 @@
             </div>
           </div>
         </header>
-
         <main class="main">
           <div class="container">
+
             <div class="main__inner">
 
                 <aside class="aside">
@@ -164,8 +167,11 @@
                 </aside>
 
                 <section class="content">
+                  {% block task %}
+                  {% endblock %}
                     {% block content %}
                     {% endblock content %}
+
                 </section>
 
                 <section class="cabinet">

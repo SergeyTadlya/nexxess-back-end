@@ -11,7 +11,7 @@
           <div class="aside-info">
             <div class="aside-info__box">
               <div class="aside-info__box-top">
-                <img class="aside-info__top-img" src="{% static 'mages/alert.svg' %}" alt="icon">
+                <img class="aside-info__top-img" src="{% static 'images/alert.svg' %}" alt="icon">
                 <h6 class="aside-info__top-title">Important</h6>
                 <p class="aside-info__top-number">2</p>
               </div>
@@ -33,9 +33,9 @@
 
             <div class="aside-info__accordion">
               <div id="aside-info__accordion-top" class="aside-info__accordion-top">
-                <img class="aside-info__top-img" src="{% static 'images/tickets.svg' %}" alt="icon">
+                <img class="aside-info__top-img" src="{% static 'images/main/custom-tickets.svg' %}" alt="icon">
                 <h6 class="aside-info__top-title">Tickets</h6>
-                <img class="aside-info__top-arrow" src="{% static 'chevron-down.svg' %}" alt="icon">
+                <img class="aside-info__top-arrow" src="{% static 'images/chevron-down.svg' %}" alt="icon">
               </div>
 
               <ul class="aside-info__accordion-list">
@@ -135,7 +135,7 @@
                       </ul>
                   </div>
                 </div>
-		<a class="content__pay" href="#">Pay</a>
+			<a class="content__pay button_pay" data-b24invoice="{{ invoice.invoice_id }}">Pay</a>
             </div>
 {% endblock content %}
 {% block footer %}
@@ -143,7 +143,7 @@
   <ul class="footer__list">
     <li class="footer__item">
       <div class="footer__social">
-        <a class="footer__social-link" href="#">
+        <a class="footer__social-link" href="https://www.facebook.com/nexxesstrust">
           <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="26.4583mm" height="26.4584mm" version="1.1"
             style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
             viewBox="0 0 2646 2646" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -163,7 +163,7 @@
             </g>
           </svg>
         </a>
-        <a class="footer__social-link" href="#">
+        <a class="footer__social-link" href="https://twitter.com/nexxessintl">
           <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="26.4582mm" height="26.4579mm" version="1.1"
             style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
             viewBox="0 0 2646 2646" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -226,5 +226,7 @@
 
 {% endblock footer %}
 {% block extra_js %}
+    <script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
     <script src="{% static 'js/about-invoice.js' %}"></script>
+    <script src="{% static 'js/invoices.js' %}"></script>
 {% endblock extra_js %}

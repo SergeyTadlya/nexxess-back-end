@@ -42,13 +42,13 @@
           <li class="aside-info__accordion-item">
             <a class="aside-info__accordion-link" href="#">
               <p class="aside-info__accordion-text">Ongoing</p>
-              <p class="aside-info__accordion-number font--green">2</p>
+              <p class="aside-info__accordion-number font--green">{{task_count}}</p>
             </a>
           </li>
           <li class="aside-info__accordion-item">
             <a class="aside-info__accordion-link" href="#">
               <p class="aside-info__accordion-text">Overdue</p>
-              <p class="aside-info__accordion-number font--red">8</p>
+              <p class="aside-info__accordion-number font--red">0</p>
             </a>
           </li>
         </ul>
@@ -76,7 +76,7 @@
             </p>
             <div class="content__list-price-box">
               <p class="content__list-price">$1000 <span class="content__list-price-text">PER HOUR</span> </p>
-              <a class="content__list-link" href="./about-service.html">Order</a>
+              <a class="content__list-link" href="#">Order</a>
             </div>
           </li>
 
@@ -89,7 +89,7 @@
             </p>
             <div class="content__list-price-box">
               <p class="content__list-price">$700 <span class="content__list-price-text">PER HOUR</span> </p>
-              <a class="content__list-link" href="./about-service.html">Order</a>
+              <a class="content__list-link" href="#">Order</a>
             </div>
           </li>
 
@@ -102,7 +102,7 @@
             </p>
             <div class="content__list-price-box">
               <p class="content__list-price">$600 <span class="content__list-price-text">PER HOUR</span> </p>
-              <a class="content__list-link" href="./about-service.html">Order</a>
+              <a class="content__list-link" href="#">Order</a>
             </div>
           </li>
 
@@ -115,7 +115,7 @@
             </p>
             <div class="content__list-price-box">
               <p class="content__list-price">$500 <span class="content__list-price-text">PER HOUR</span> </p>
-              <a class="content__list-link" href="./about-service.html">Order</a>
+              <a class="content__list-link" href="#">Order</a>
             </div>
           </li>
 
@@ -128,7 +128,7 @@
             </p>
             <div class="content__list-price-box">
               <p class="content__list-price">$400 <span class="content__list-price-text">PER HOUR</span> </p>
-              <a class="content__list-link" href="./about-service.html">Order</a>
+              <a class="content__list-link" href="#">Order</a>
             </div>
           </li>
 
@@ -141,7 +141,7 @@
             </p>
             <div class="content__list-price-box">
               <p class="content__list-price">$350 <span class="content__list-price-text">PER HOUR</span> </p>
-              <a class="content__list-link" href="./about-service.html">Order</a>
+              <a class="content__list-link" href="#">Order</a>
             </div>
           </li>
         </ul>
@@ -185,7 +185,7 @@
   <ul class="footer__list">
     <li class="footer__item">
       <div class="footer__social">
-        <a class="footer__social-link" href="#">
+        <a class="footer__social-link" href="https://www.facebook.com/nexxesstrust">
           <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="26.4583mm" height="26.4584mm" version="1.1"
             style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
             viewBox="0 0 2646 2646" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -205,7 +205,7 @@
             </g>
           </svg>
         </a>
-        <a class="footer__social-link" href="#">
+        <a class="footer__social-link" href="https://twitter.com/nexxessintl">
           <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="26.4582mm" height="26.4579mm" version="1.1"
             style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
             viewBox="0 0 2646 2646" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -259,7 +259,7 @@
       </p>
     </li>
     <li class="footer__item">
-      <a class="footer__btn-link" href="#">
+      <a class="footer__btn-link" href="{% url 'account_logout' %}">
         consultation
       </a>
     </li>

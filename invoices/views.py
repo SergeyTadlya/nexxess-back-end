@@ -32,61 +32,66 @@ def format_price(price):
 
 @login_required(login_url='/accounts/login/')
 def invoices(request):
+    if request.user.is_authenticated and request.user.google_auth or request.user.is_superuser:
+        all_user_invoices = Invoice.objects.all().order_by('-date') if request.user.is_superuser \
+            else Invoice.objects.filter(responsible=request.user.b24_contact_id).order_by('-date')
 
-    all_user_invoices = Invoice.objects.all().order_by('-date') if request.user.is_superuser \
-        else Invoice.objects.filter(responsible=request.user.b24_contact_id).order_by('-date')
+        all_statuses = Status.objects.all()
+        statuses = (status.value for status in all_statuses)
+        statuses_quantity = (value - value for value in range(len(all_statuses)))
+        invoices_array = list()
+        invoices_dates = list()
+        statuses_number = {key: value for key, value in zip(statuses, statuses_quantity)}
+        invoices_statuses = list()
 
-    invoices_array = list()
-    invoices_dates = list()
-    statuses_number = dict()
-    invoices_statuses = list()
 
-    for invoice in all_user_invoices:
+        for invoice in all_user_invoices:
 
-        statuses_number[invoice.status.value] = 1 if invoice.status.value not in statuses_number.keys() \
-            else statuses_number[invoice.status.value] + 1
+            statuses_number[invoice.status.value] = 1 if invoice.status.value not in statuses_number.keys() \
+                else statuses_number[invoice.status.value] + 1
 
-        invoices_array.append({
-            'id': invoice.id,
-            'invoice_id': invoice.invoice_id,
-            'responsible': invoice.responsible,
-            'is_opened': invoice.is_opened,
-            'price': format_price(invoice.price),
-            'date': format_date(invoice.date),
-            'due_date': format_date(invoice.due_date),
-            'status': invoice.status,
-            'title': invoice.product_title,
-        })
+            invoices_array.append({
+                'id': invoice.id,
+                'invoice_id': invoice.invoice_id,
+                'responsible': invoice.responsible,
+                'is_opened': invoice.is_opened,
+                'price': format_price(invoice.price),
+                'date': format_date(invoice.date),
+                'due_date': format_date(invoice.due_date),
+                'status': invoice.status,
+                'title': invoice.product_title,
+            })
 
-        if format_date(invoice.date) not in invoices_dates:
-            invoices_dates.append(format_date(invoice.date))
+            if format_date(invoice.date) not in invoices_dates:
+                invoices_dates.append(format_date(invoice.date))
 
-    for index, (status_name, status_number) in enumerate(statuses_number.items()):
-        invoices_statuses.append({
-            'id': 'status' + str(index + 1),
-            'name': status_name,
-            'number': status_number
-        })
+        for index, (status_name, status_number) in enumerate(statuses_number.items()):
+            invoices_statuses.append({
+                'id': 'status' + str(index + 1),
+                'name': status_name,
+                'number': status_number
+            })
 
-    paginator = Paginator(invoices_array, 10)
-    page = request.GET.get('page', 1)
+        paginator = Paginator(invoices_array, 10)
+        page = request.GET.get('page', 1)
 
-    try:
-        invoices_array = paginator.page(page)
-    except PageNotAnInteger:
-        invoices_array = paginator.page(1)
-    except EmptyPage:
-        invoices_array = paginator.page(paginator.num_pages)
+        try:
+            invoices_array = paginator.page(page)
+        except PageNotAnInteger:
+            invoices_array = paginator.page(1)
+        except EmptyPage:
+            invoices_array = paginator.page(paginator.num_pages)
 
-    context = {
-        "invoices": invoices_array,
-        "invoices_dates": invoices_dates,
-        'invoices_statuses': invoices_statuses,
-        'statuses_amount': len(invoices_statuses),
-        'invoices_number': len(all_user_invoices),
-    }
+        context = {
+            "invoices": invoices_array,
+            "invoices_dates": invoices_dates,
+            'invoices_statuses': invoices_statuses,
+            'statuses_amount': len(invoices_statuses),
+            'invoices_number': len(all_user_invoices),
+        }
 
-    return render(request, "invoices/invoices.html", context)
+        return render(request, "invoices/invoices.html", context)
+    else: return redirect('authentication:main')
 
 
 def ajax_invoice_filter(request):
@@ -179,20 +184,22 @@ def ajax_invoice_filter(request):
 
 @login_required(login_url='/accounts/login/')
 def invoice_detail(request, id):
-    try:
-        invoice = Invoice.objects.get(id=id)
-        if request.user.is_superuser or int(invoice.responsible) == request.user.b24_contact_id:
-            if not request.user.is_superuser:
-                Invoice.objects.filter(id=id).update(is_opened=True)
+    if request.user.is_authenticated and request.user.google_auth or request.user.is_superuser:
+        try:
             invoice = Invoice.objects.get(id=id)
-            res = {
-                'invoice': invoice,
-            }
-            return render(request, "invoices/detail.html", res)
-        else:
-            return redirect('/invoices/')
-    except :
-            return redirect('/invoices/')
+            if request.user.is_superuser or int(invoice.responsible) == request.user.b24_contact_id:
+                if not request.user.is_superuser:
+                    Invoice.objects.filter(id=id).update(is_opened=True)
+                invoice = Invoice.objects.get(id=id)
+                res = {
+                    'invoice': invoice,
+                }
+                return render(request, "invoices/detail.html", res)
+            else:
+                return redirect('/invoices/')
+        except :
+                return redirect('/invoices/')
+    else: return redirect('authentication:main')
 
 
 def generate_new_pdf(pdf_path, id, invoice, request):

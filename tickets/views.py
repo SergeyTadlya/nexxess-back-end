@@ -26,38 +26,40 @@ def check_and_shorten_string(string):
 
 
 def tasks(request):
-    tasks_list = Ticket.objects.all() if request.user.is_superuser else Ticket.objects.filter(responsible=str(request.user.b24_contact_id))
-    tasks = []
+    if request.user.is_authenticated and request.user.google_auth or request.user.is_superuser:
+        tasks_list = Ticket.objects.all() if request.user.is_superuser else Ticket.objects.filter(responsible=str(request.user.b24_contact_id))
+        tasks = []
 
-    for task in tasks_list:
+        for task in tasks_list:
 
-        tasks.append({
-            'id': task.task_id,
-            'title': check_and_shorten_string(task.ticket_title),
-            'created_at': format_date(task.created_at),
-            'deadline': format_date(task.deadline),
-            'is_opened': task.is_opened,
-            'status': task.status,
+            tasks.append({
+                'id': task.task_id,
+                'title': check_and_shorten_string(task.ticket_title),
+                'created_at': format_date(task.created_at),
+                'deadline': format_date(task.deadline),
+                'is_opened': task.is_opened,
+                'status': task.status,
 
-        })
+            })
 
-    context = {
-        "tasks": tasks,  
-        'tasks_number': len(tasks),
-    }
-    return render(request, "tickets/tickets.html", context)
+        context = {
+            "tasks": tasks,
+            'tasks_number': len(tasks),
+        }
+        return render(request, "tickets/tickets.html", context)
+    else: return redirect('authentication:main')
 
 
 def task_detail(request, id):
-    task = Ticket.objects.get(id=id)
-    if request.user.is_superuser or task.responsible == request.user.b24_contact_id:
+    task = Ticket.objects.get(task_id=str(id))
+    if request.user.is_superuser or task.responsible == str(request.user.b24_contact_id):
         if not request.user.is_superuser:
             Ticket.objects.filter(id=id).update(is_opened=True)
 
         res = {
             'task': task,
         }
-        return render(request, "tickets/tickets.html", res)
+        return render(request, "tickets/detail.html", res)
     else:
         return redirect('/tickets/')
 

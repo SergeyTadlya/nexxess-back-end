@@ -11,7 +11,7 @@
     <div class="aside-info aside-info-none">
       <div class="aside-info__box">
         <div class="aside-info__box-top">
-          <img class="aside-info__top-img" src="{% static 'images/alert.svg' %}" alt="icon">
+          <img class="aside-info__top-img" src="{% static 'images/important.svg' %}" alt="icon">
           <h6 class="aside-info__top-title">Important</h6>
           <p class="aside-info__top-number">3</p>
         </div>
@@ -33,7 +33,7 @@
 
       <div class="aside-info__accordion">
         <div id="aside-info__accordion-top" class="aside-info__accordion-top">
-          <img class="aside-info__top-img" src="{% static 'images/main/custom-tickets.svg' %}" alt="icon">
+          <img class="aside-info__top-img" src="{% static 'images/tickets.svg' %}" alt="icon">
           <h6 class="aside-info__top-title">Tickets</h6>
           <img class="aside-info__top-arrow" src="{% static 'images/chevron-down.svg' %}" alt="icon">
         </div>
@@ -67,195 +67,34 @@
             </div>
         </div>
         <ul class="content__list">
-          <li class="content__list-item">
-            <div class="content__list-box content__list-box-consultation">
-              <div class="content__list-img">
-                <img src="{% static 'images/service.jpg' %}" alt="images">
-              </div>
-              <p class="content__list-title">HOURLY RATE CHART FOR CONSULTATION</p>
-            </div>
-            <ul class="content__list-product-description content__list-product-description-changetext">
-              <li class="content__list-product-description-item">
-                <div class="content__list-product-description-item-inner">
-                  <p class="content__list-product-description-text">
-                    STANDARD RATE
-                  </p>
-                  <p class="content__list-product-description-hour">
-                    1 HOUR
-                  </p>
+            {% for section in sections %}
+              <li class="content__list-item">
+                <div class="content__list-box content__list-box-consultation">
+                  <div class="content__list-img">
+                    <img src="{% static 'images/service.jpg' %}" alt="images">
+                  </div>
+                  <p class="content__list-title">{{ section.sections_title }}</p>
+                </div>
+                <ul class="content__list-product-description">
+                    {% for product in section.products %}
+                      <li class="content__list-product-description-item">
+                        <p class="content__list-product-description-text">
+                          {{  product.title }}
+                        </p>
+                        <p class="content__list-product-description-hour">
+                          {% if product.preview_text != None %}
+                              {{ product.preview_text }}
+                          {% endif %}
+                        </p>
+                      </li>
+                    {% endfor %}
+                </ul>
+                <div class="content__list-box">
+                  <p class="content__list-price"> <span class="content__list-price-text">Start From:</span> ${{ section.min_price }}</p>
+                  <a class="content__list-link" href="{% url 'services:product_detail' section.section_id %}">Detail</a>
                 </div>
               </li>
-
-              <li class="content__list-product-description-item">
-                <div class="content__list-product-description-item-inner">
-                  <p class="content__list-product-description-text">
-                    BRONZE PACKAGE
-                  </p>
-                  <p class="content__list-product-description-hour">
-                    10 HOURS
-                  </p>
-                </div>
-              </li>
-
-              <li class="content__list-product-description-item">
-                <div class="content__list-product-description-item-inner">
-                  <p class="content__list-product-description-text">
-                    SILVER PACKAGE
-                  </p>
-                  <p class="content__list-product-description-hour">
-                    20 HOURS
-                  </p>
-                </div>
-              </li>
-
-              <li class="content__list-product-description-item">
-                <div class="content__list-product-description-item-inner">
-                  <p class="content__list-product-description-text">
-                    GOLD PACKAGE
-                  </p>
-                  <p class="content__list-product-description-hour">
-                    40 HOURS
-                  </p>
-                </div>
-              </li>
-
-              <li class="content__list-product-description-item">
-                <div class="content__list-product-description-item-inner">
-                  <p class="content__list-product-description-text">
-                    PLATINUM PACKAGE
-                  </p>
-                  <p class="content__list-product-description-hour">
-                    60 HOURS
-                  </p>
-                </div>
-              </li>
-
-              <li class="content__list-product-description-item">
-                <div class="content__list-product-description-item-inner">
-                  <p class="content__list-product-description-text">
-                    BLUE DIAMOND PACKAGE
-                  </p>
-                  <p class="content__list-product-description-hour">
-                    120 HOURS
-                  </p>
-                </div>
-              </li>
-            </ul>
-            <div class="content__list-box">
-              <p class="content__list-price"> <span class="content__list-price-text">Start From:</span> $350</p>
-              <a class="content__list-link" href="{% url 'services:service1' %}">Detail</a>
-            </div>
-          </li>
-
-          <li class="content__list-item">
-            <div class="content__list-box">
-              <div class="content__list-img">
-                <img src="{% static 'images/service.jpg' %}" alt="images">
-              </div>
-              <p class="content__list-title">NEXXESS PACKAGES</p>
-            </div>
-            <ul class="content__list-product-description content__list-product-description-changetext">
-              <li class="content__list-product-description-item">
-                <div class="content__list-product-description-item-inner">
-                  <p class="content__list-product-description-text">
-                    BRONZE PACKAGE
-                  </p>
-                </div>
-              </li>
-
-              <li class="content__list-product-description-item">
-                <div class="content__list-product-description-item-inner">
-                  <p class="content__list-product-description-text">
-                    SILVER PACKAGE
-                  </p>
-                </div>
-              </li>
-
-              <li class="content__list-product-description-item">
-                <div class="content__list-product-description-item-inner">
-                  <p class="content__list-product-description-text">
-                    GOLD PACKAGE
-                  </p>
-                </div>
-              </li>
-
-              <li class="content__list-product-description-item">
-                <div class="content__list-product-description-item-inner">
-
-                </div>
-                <p class="content__list-product-description-text">
-                  PLATINUM PACKAGE
-                </p>
-              </li>
-
-              <li class="content__list-product-description-item">
-                <div class="content__list-product-description-item-inner">
-
-                </div>
-                <p class="content__list-product-description-text">
-                  BLUE DIAMOND PACKAGE
-                </p>
-              </li>
-            </ul>
-            <div class="content__list-box">
-              <p class="content__list-price"> <span class="content__list-price-text">Start From:</span> $7 000</p>
-              <a class="content__list-link" href="{% url 'services:service3' %}">Detail</a>
-            </div>
-          </li>
-
-          <li class="content__list-item">
-            <div class="content__list-box">
-              <div class="content__list-img">
-                <img src="{% static 'images/service.jpg' %}" alt="images">
-              </div>
-              <p class="content__list-title">NEXXESS TRUST BOOKS</p>
-            </div>
-            <ul class="content__list-product-description content__list-product-description-text-small">
-              <li class="content__list-product-description-item">
-                <div class="content__list-product-description-item-inner">
-                  <p class="content__list-product-description-text">
-                    Professionally prepared Nexxess© Beneficial or Business Trust.
-                  </p>
-                </div>
-              </li>
-
-              <li class="content__list-product-description-item">
-                <div class="content__list-product-description-item-inner">
-                  <p class="content__list-product-description-text">
-                    Up to three (3) hours of trust activation with a financial services specialist.
-                  </p>
-                </div>
-              </li>
-
-              <li class="content__list-product-description-item">
-                <div class="content__list-product-description-item-inner">
-                  <p class="content__list-product-description-text">
-                    Trust completion and activation within 30 days of payment.
-                  </p>
-                </div>
-              </li>
-
-              <li class="content__list-product-description-item">
-                <div class="content__list-product-description-item-inner">
-                  <p class="content__list-product-description-text">
-                    No consultation hours after activation.
-                  </p>
-                </div>
-              </li>
-
-              <li class="content__list-product-description-item">
-                <div class="content__list-product-description-item-inner">
-                  <p class="content__list-product-description-text">
-                    Consultation hours can be purchased at Standard rate.
-                  </p>
-                </div>
-              </li>
-            </ul>
-            <div class="content__list-box">
-              <p class="content__list-price"> <span class="content__list-price-text">Start From:</span> $15 000</p>
-              <a class="content__list-link" href="{% url 'services:service2' %}">Detail</a>
-            </div>
-          </li>
+            {% endfor %}
         </ul>
 
 {% for product in services_info %}
@@ -298,7 +137,7 @@
   <ul class="footer__list">
     <li class="footer__item">
       <div class="footer__social">
-        <a class="footer__social-link" href="#">
+        <a class="footer__social-link" href="https://www.facebook.com/nexxesstrust">
           <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="26.4583mm" height="26.4584mm" version="1.1"
             style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
             viewBox="0 0 2646 2646" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -318,7 +157,7 @@
             </g>
           </svg>
         </a>
-        <a class="footer__social-link" href="#">
+        <a class="footer__social-link" href="https://twitter.com/nexxessintl">
           <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="26.4582mm" height="26.4579mm" version="1.1"
             style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
             viewBox="0 0 2646 2646" xmlns:xlink="http://www.w3.org/1999/xlink">

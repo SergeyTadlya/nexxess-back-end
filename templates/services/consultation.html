@@ -8,10 +8,10 @@
 {% block title %} Services {% endblock %}
 
 {% block left_menu %}
-    <div class="aside-info">
+    <div class="aside-info aside-info-none">
       <div class="aside-info__box">
         <div class="aside-info__box-top">
-          <img class="aside-info__top-img" src="{% static 'images/alert.svg' %}" alt="icon">
+          <img class="aside-info__top-img" src="{% static 'images/important.svg' %}" alt="icon">
           <h6 class="aside-info__top-title">Important</h6>
           <p class="aside-info__top-number">3</p>
         </div>
@@ -33,7 +33,7 @@
 
       <div class="aside-info__accordion">
         <div id="aside-info__accordion-top" class="aside-info__accordion-top">
-          <img class="aside-info__top-img" src="{% static 'images/main/custom-tickets.svg' %}" alt="icon">
+          <img class="aside-info__top-img" src="{% static 'images/tickets.svg' %}" alt="icon">
           <h6 class="aside-info__top-title">Tickets</h6>
           <img class="aside-info__top-arrow" src="{% static 'images/chevron-down.svg' %}" alt="icon">
         </div>
@@ -42,13 +42,13 @@
           <li class="aside-info__accordion-item">
             <a class="aside-info__accordion-link" href="#">
               <p class="aside-info__accordion-text">Ongoing</p>
-              <p class="aside-info__accordion-number font--green">{{task_count}}</p>
+              <p class="aside-info__accordion-number font--green">2</p>
             </a>
           </li>
           <li class="aside-info__accordion-item">
             <a class="aside-info__accordion-link" href="#">
               <p class="aside-info__accordion-text">Overdue</p>
-              <p class="aside-info__accordion-number font--red">0</p>
+              <p class="aside-info__accordion-number font--red">8</p>
             </a>
           </li>
         </ul>
@@ -60,144 +60,29 @@
 {% block content %}
     <div class="content__inner">
         <div class="content__top">
-            <h1 class="title content__top-title">Nexxess Trust Books</h1>
+            <h1 class="title content__top-title">{{ section_title}}</h1>
             <div class="content__top-search">
                 <img class="content__top-img" src="{% static 'images/main/Search.svg' %}" alt="Search">
                 <input class="content__top-input" type="text" id="search-input" placeholder="Search">
             </div>
         </div>
         <ul class="content__list">
-          <li class="content__list-item">
-            <div class="content__list-box">
-              <div class="content__list-img">
-                <img src="{% static 'images/service.jpg' %}" alt="images">
-              </div>
-              <p class="content__list-title">NEXXESS TRUST BOOKS ONE</p>
-            </div>
-            <ul class="content__list-product-description">
-              <li class="content__list-product-description-item">
-                <p class="content__list-product-description-text">
-                  Professionally prepared Nexxess© Beneficial or Business Trust.
+            {% for product in services %}
+              <li class="content__list-item content__list-item-hourly">
+                <div class="content__list-box">
+                  <p class="content__list-title">{{ product.NAME }}</p>
+                </div>
+                <p class="content__list-text">
+                    {% if product.PROPERTY_98 != None %}
+                        {{ product.PROPERTY_98.value }}
+                    {% endif %}
                 </p>
+                <div class="content__list-price-box">
+                  <p class="content__list-price">${{ product.PRICE }} <span class="content__list-price-text">PER HOUR</span> </p>
+                  <a class="content__list-link order_click" data-b24id="{{ product.ID }}">Order</a>
+                </div>
               </li>
-
-              <li class="content__list-product-description-item">
-                <p class="content__list-product-description-text">
-                  Up to three (3) hours of trust activation with a financial services specialist.
-                </p>
-              </li>
-
-              <li class="content__list-product-description-item">
-                <p class="content__list-product-description-text">
-                  Trust completion and activation within 30 days of payment.
-                </p>
-              </li>
-
-              <li class="content__list-product-description-item">
-                <p class="content__list-product-description-text">
-                  No consultation hours after activation.
-                </p>
-              </li>
-
-              <li class="content__list-product-description-item">
-                <p class="content__list-product-description-text">
-                  Consultation hours can be purchased at Standard rate.
-                </p>
-              </li>
-            </ul>
-            <div class="content__list-box">
-              <p class="content__list-price">$100</p>
-              <a class="content__list-link" href="#">Order</a>
-            </div>
-          </li>
-
-          <li class="content__list-item">
-            <div class="content__list-box">
-              <div class="content__list-img">
-                <img src="{% static 'images/service.jpg' %}" alt="images">
-              </div>
-              <p class="content__list-title">NEXXESS TRUST BOOKS TWO</p>
-            </div>
-            <ul class="content__list-product-description">
-              <li class="content__list-product-description-item">
-                <p class="content__list-product-description-text">
-                  Professionally prepared Nexxess© Beneficial or Business Trust.
-                </p>
-              </li>
-
-              <li class="content__list-product-description-item">
-                <p class="content__list-product-description-text">
-                  Up to three (3) hours of trust activation with a financial services specialist.
-                </p>
-              </li>
-
-              <li class="content__list-product-description-item">
-                <p class="content__list-product-description-text">
-                  Trust completion and activation within 30 days of payment.
-                </p>
-              </li>
-
-              <li class="content__list-product-description-item">
-                <p class="content__list-product-description-text">
-                  No consultation hours after activation.
-                </p>
-              </li>
-
-              <li class="content__list-product-description-item">
-                <p class="content__list-product-description-text">
-                  Consultation hours can be purchased at Standard rate.
-                </p>
-              </li>
-            </ul>
-            <div class="content__list-box">
-              <p class="content__list-price">$200</p>
-              <a class="content__list-link" href="#">Order</a>
-            </div>
-          </li>
-
-          <li class="content__list-item">
-            <div class="content__list-box">
-              <div class="content__list-img">
-                <img src="{% static 'images/service.jpg' %}" alt="images">
-              </div>
-              <p class="content__list-title">NEXXESS TRUST BOOKS THREE</p>
-            </div>
-            <ul class="content__list-product-description">
-              <li class="content__list-product-description-item">
-                <p class="content__list-product-description-text">
-                  Professionally prepared Nexxess© Beneficial or Business Trust.
-                </p>
-              </li>
-
-              <li class="content__list-product-description-item">
-                <p class="content__list-product-description-text">
-                  Up to three (3) hours of trust activation with a financial services specialist.
-                </p>
-              </li>
-
-              <li class="content__list-product-description-item">
-                <p class="content__list-product-description-text">
-                  Trust completion and activation within 30 days of payment.
-                </p>
-              </li>
-
-              <li class="content__list-product-description-item">
-                <p class="content__list-product-description-text">
-                  No consultation hours after activation.
-                </p>
-              </li>
-
-              <li class="content__list-product-description-item">
-                <p class="content__list-product-description-text">
-                  Consultation hours can be purchased at Standard rate.
-                </p>
-              </li>
-            </ul>
-            <div class="content__list-box">
-              <p class="content__list-price">$300</p>
-              <a class="content__list-link" href="#">Order</a>
-            </div>
-          </li>
+            {% endfor %}
         </ul>
 
 {% for product in services_info %}
@@ -239,7 +124,7 @@
   <ul class="footer__list">
     <li class="footer__item">
       <div class="footer__social">
-        <a class="footer__social-link" href="https://www.facebook.com/nexxesstrust">
+        <a class="footer__social-link" href="#">
           <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="26.4583mm" height="26.4584mm" version="1.1"
             style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
             viewBox="0 0 2646 2646" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -259,7 +144,7 @@
             </g>
           </svg>
         </a>
-        <a class="footer__social-link" href="https://twitter.com/nexxessintl">
+        <a class="footer__social-link" href="#">
           <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="26.4582mm" height="26.4579mm" version="1.1"
             style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
             viewBox="0 0 2646 2646" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -313,7 +198,7 @@
       </p>
     </li>
     <li class="footer__item">
-      <a class="footer__btn-link" href="{% url 'account_logout' %}">
+      <a class="footer__btn-link" href="#">
         consultation
       </a>
     </li>
@@ -322,8 +207,8 @@
 
 {% endblock footer %}
 {% block extra_js %}
+    <script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
     <script src="{% static 'js/dynamic_search.js' %}"></script>
     <script src="{% static 'js/services.js' %}"></script>
     <script src="{% static 'js/main.js' %}"></script>
-
 {% endblock extra_js %}

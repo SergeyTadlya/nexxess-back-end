@@ -40,66 +40,114 @@ def clean_and_shorten_text(text):
 
 @login_required(login_url='/accounts/login/')
 def services(request):
-    try:
-        method = "crm.product.list"
-        url = set_webhook(method)
-        response = requests.get(url)
-        products_data = response.json().get('result', [])
-        products = []
-        print(products)
-        for product_data in products_data:
-            # stripe_response = stripe.Product.create(name="Gold Special")
-            product = Service.objects.filter(service_id=product_data.get('ID'))
-            if len(product) == 0:
-                stripe.api_key = StripeSettings.objects.all().first().secret_key
-                price = format_price(product_data.get('PRICE'))
-                print(int(price)*100)
-                stripe_response = stripe.Price.create(
-                    unit_amount=int(price)*100,
-                    currency="usd",
-                    product_data={"name": product_data.get('NAME')},
-                )
-                print('succcess')
-                product = Service.objects.create(
-                    service_id=product_data.get('ID'),
-                    stripe_id=stripe_response.id,
-                    title=product_data.get('NAME'),
-                    title_description=product_data.get('DESCRIPTION'),
-                    price=format_price(product_data.get('PRICE')),
-                    currency=product_data.get('CURRENCY_ID'),
-                )
-                product.save()
-            else:
-                product = Service.objects.get(id=product.first().id)
-                product.service_id = product_data.get('ID')
-                product.title = product_data.get('NAME')
-                product.title_description = clean_and_shorten_text(product_data.get('DESCRIPTION'))
-                product.price = format_price(product_data.get('PRICE'))
-                product.currency = product_data.get('CURRENCY_ID')
-                product.save()
-            products.append(product)
+    if request.user.is_authenticated and request.user.google_auth or request.user.is_superuser:
+        try:
+            url = set_webhook()
+            bx24 = Bitrix24(url)
+            section_list = bx24.callMethod('crm.productsection.list', order={'ID': "ASC"}, filter={"CATALOG_ID": 14}, select={"ID", "NAME", "CODE",
+                                                                                                   "DESCRIPTION"})
+            print(section_list)
+            sections = []
+            for section in section_list:
+                section_products = bx24.callMethod('crm.product.list', order={'ID': "ASC"},
+                                                   filter={"SECTION_ID": section["ID"]},
+                                                   select=["ID", "NAME", "PROPERTY_98", "PRICE", "CURRENCY_ID"])
+                min_price = 1000000
+                products = []
+                for product_b24 in section_products:
+                    # print(product_b24)
 
-        context = {
-            'services_info': products,
-            'services_count': len(products),
-        }
-        return render(request, "services/list.html", context=context)
-    except:
-        context = {}
-        return render(request, "services/list.html", context=context)
+                    if min_price > float(product_b24["PRICE"]):
+                        min_price = float(product_b24["PRICE"])
+                    product = Service.objects.filter(service_id=product_b24['ID'])
+                    if len(product) == 0:
+                        stripe.api_key = StripeSettings.objects.all().first().secret_key
+                        price = format_price(product_b24["PRICE"])
+                        stripe_response = stripe.Price.create(
+                            unit_amount=int(price)*100,
+                            currency="usd",
+                            product_data={"name": product_b24["NAME"]},
+                        )
+                        if product_b24["PROPERTY_98"] is None:
+                            product = Service.objects.create(
+                                service_id=product_b24["ID"],
+                                stripe_id=stripe_response.id,
+                                title=product_b24["NAME"],
+                                price=format_price(product_b24["PRICE"]),
+                                currency=product_b24["CURRENCY_ID"],
+                            )
+                        else:
+                            product = Service.objects.create(
+                                service_id=product_b24["ID"],
+                                stripe_id=stripe_response.id,
+                                title=product_b24["NAME"],
+                                preview_text=product_b24["PROPERTY_98"]["value"],
+                                price=format_price(product_b24["PRICE"]),
+                                currency=product_b24["CURRENCY_ID"],
+                            )
+                        product.save()
+                    else:
+                        if product_b24["PROPERTY_98"] is None:
+                            product = Service.objects.get(id=product.first().id)
+                            product.service_id = product_b24["ID"]
+                            product.title = product_b24["NAME"]
+                            product.price = format_price(product_b24["PRICE"])
+                            product.currency = product_b24["CURRENCY_ID"]
+                        else:
+                            product = Service.objects.get(id=product.first().id)
+                            product.service_id = product_b24["ID"]
+                            product.title = product_b24["NAME"]
+                            product.preview_text = product_b24["PROPERTY_98"]["value"]
+                            product.price = format_price(product_b24["PRICE"])
+                            product.currency = product_b24["CURRENCY_ID"]
+                        product.save()
+                    products.append(product)
+                    # print(product_b24)
+                test = {
+                    'products': products,
+                    'min_price': min_price,
+                    'sections_title': section["NAME"],
+                    'section_id': section["ID"]
+                }
+                sections.append(test)
+                # print(sections)
+
+            context = {
+                'sections': sections,
+                'services_count': len(products),
+            }
+            print(context)
+            return render(request, "services/list.html", context=context)
+        except:
+            context = {}
+            return render(request, "services/list.html", context=context)
+
 
 
 @login_required(login_url='/accounts/login/')
 def product_detail(request, id):
     try:
-        service = get_object_or_404(Service, id=id)
+        print(id)
+        url = set_webhook()
+        bx24 = Bitrix24(url)
+        section = bx24.callMethod('crm.productsection.list', order={'ID': "ASC"},
+                                  filter={"ID": id},
+                                  select={"ID", "NAME", "CODE"})
+        print(section)
+        sections = []
+        section_products = bx24.callMethod('crm.product.list', order={'PRICE': "ASC"},
+                                           filter={"SECTION_ID": id},
+                                           select=["ID", "NAME", "PROPERTY_98", "PRICE", "CURRENCY_ID"])
+        # service = get_object_or_404(Service, id=id)
         context = {
-            'service': service,
+            'services': section_products,
+            'section_title': section[0]["NAME"]
         }
-        return render(request, "services/about-service.html", context=context)
+        return render(request, "services/consultation.html", context=context)
 
     except:
         return redirect('services')
+
 
 @login_required(login_url='/accounts/login/')
 def service_1(request):
@@ -144,10 +192,10 @@ def service_1(request):
             'services_info': products,
             'services_count': len(products),
         }
-        return render(request, "services/service1.html", context=context)
+        return render(request, "services/consultation.html", context=context)
     except:
         context = {}
-    return render(request, 'services/service1.html', context=context)
+    return render(request, 'services/consultation.html', context=context)
 
 
 
@@ -279,10 +327,10 @@ def create_invoice(request):
                                                         "PRICE": product.price},
                                                    ]})
 
-        time.sleep(5)
-        LocalInvoice.objects.create(b24_invoice_id=invoice_id,stripe_price_id=product.stripe_id)
-
+        time.sleep(3)
+        LocalInvoice.objects.create(b24_invoice_id=invoice_id, stripe_price_id=product.stripe_id)
+        invoice = Invoice.objects.get(invoice_id=invoice_id)
     except BitrixError as message:
         print(message)
 
-    return JsonResponse({'invoice_id': str(invoice_id)})
+    return JsonResponse({'invoice_id': str(invoice.id)})
