@@ -146,7 +146,7 @@ def product_detail(request, id):
         return render(request, "services/consultation.html", context=context)
 
     except:
-        return redirect('services')
+        return redirect('/')
 
 
 @login_required(login_url='/accounts/login/')

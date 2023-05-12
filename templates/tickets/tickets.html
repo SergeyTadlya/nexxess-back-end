@@ -126,15 +126,20 @@
                       <ul class="content__body-items">
                           <li class="content__body-item style--width">
                               <a class="content__body-link" href="{% url 'tickets:task_detail' task.id %}">
-                                  <img src="{% static 'images/invoices/print.svg' %}" alt="print">
-                              </a>
+
+
                               <a href="{% url 'tickets:task_detail' task.id %}"><p class="content__body-name">{{ task.id }}</p></a>
+
                           </li>
                           <li class="content__body-item style--width">
+                            <a class="content__body-link" href="{% url 'tickets:task_detail' task.id %}">
                               <p class="content__body-name">{{ task.title }}</p>
+                                </a>
                           </li>
                           <li class="content__body-item style--width">
+                            <a class="content__body-link" href="{% url 'tickets:task_detail' task.id %}">
                               <p class="content__body-date">{{ task.created_at }}</p>
+                              </a>
                           </li>
                           <li class="content__body-item style--width">
                               <p class="content__body-date">{{ task.deadline }}</p>

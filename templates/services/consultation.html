@@ -207,8 +207,71 @@
 
 {% endblock footer %}
 {% block extra_js %}
+    <script type="text/javascript">
+  const accordionBtn = document.querySelectorAll('#aside-info__accordion-top')
+  const accordionList = document.querySelectorAll('.aside-info__accordion-list')
+  const accordionArrow = document.querySelectorAll('.aside-info__top-arrow')
+
+  accordionBtn.forEach((button, index) => {
+    button.addEventListener('click', (e) => {
+      accordionBtn[index].classList.toggle('accordion__top--active')
+      accordionList[index].classList.toggle('accordion__list--active')
+      accordionArrow[index].classList.toggle('accordion__arrow--active')
+    })
+  })
+
+  //________BURGER_____
+
+  const headerNav = document.querySelector('.nav__list')
+  const burger = document.querySelector('.burger')
+
+  burger.addEventListener('click', menu)
+
+  function menu() {
+    burger.classList.toggle('burger--active')
+    headerNav.classList.toggle('show-nav')
+  }
+
+  function moveElements() {
+    if (window.innerWidth <= 768) {
+      let titleDesctop = document.querySelector('.title__inner');
+      let titleMobsle = document.querySelector('.mobile__title');
+      while (titleDesctop.firstChild) {
+        titleMobsle.appendChild(titleDesctop.firstChild);
+      }
+    }
+  }
+
+  window.onload = moveElements;
+  window.onresize = moveElements;
+
+  $(document).ready(function () {
+    $(".order_click").click(function()
+    {
+      var button = $(".order_click")[0];
+      var b24_product_id = $(button).data("b24id");
+      $.ajax({
+        url: '/services/create_invoice/',
+        type: 'POST',
+        data: {"b24_product_id":b24_product_id},
+        dataType: 'json',
+        success: function(data) {
+          if (data.invoice_id){
+            window.location.href = '/invoices/detail/'+data.invoice_id+"/";
+            alert(data.invoice_id)
+          }else
+          {
+            alert("We have some problem. Please try late")
+          }
+          console.log(data);
+
+        },
+      });
+    });
+  });
+    </script>
     <script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
     <script src="{% static 'js/dynamic_search.js' %}"></script>
     <script src="{% static 'js/services.js' %}"></script>
-    <script src="{% static 'js/main.js' %}"></script>
+
 {% endblock extra_js %}
