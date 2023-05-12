@@ -31,7 +31,6 @@ class Invoice(models.Model):
     due_date = models.DateTimeField(verbose_name='Due date', blank=True, null=True)
     product_title = models.CharField(verbose_name='Product title', max_length=200, blank=True, null=True)
 
-
     def __str__(self):
         return f'Invoice {self.invoice_id}, responsible - {self.responsible}'
 
