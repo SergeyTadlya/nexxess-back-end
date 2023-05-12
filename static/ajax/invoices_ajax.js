@@ -31,6 +31,17 @@ $(document).ready(function () {
         result['local_search'] = document.getElementById('search-input').value;
         result['showing_amount'] = document.getElementById('content__showing-number').textContent;
 
+        let elements = document.querySelectorAll('.content__titles-item');
+
+        for (let i = 0; i < elements.length; i++) {
+            if (elements[i].classList.contains('content__titles-small-to-big')){
+                result['ascending'] = document.getElementsByClassName('content__titles-small-to-big')[0].id;
+            }
+            else if (elements[i].classList.contains('content__titles-big-to-small')){
+                result['descending'] = document.getElementsByClassName('content__titles-big-to-small')[0].id;
+            }
+        }
+
         $.ajax({
             type: 'POST',
             async: true,
@@ -42,7 +53,7 @@ $(document).ready(function () {
                 "X-CSRFToken": csrftoken,
             },
             success: (data) => {
-                console.log(data);
+//                console.log(data);
 
                 var html_invoice = '';
                 var html_showing_invoices = '';
@@ -65,7 +76,6 @@ $(document).ready(function () {
                                             <li class="content__body-title">Total</li>
                                         </ul>
                                         <ul class="content__body-items" id="list">
-                                            <p class="content__body-number">` + data['invoices'][0][invoice].id + `</p>
                                             <li  class="content__body-item style--width">
                                                 <a class="content__body-link" href="invoices/` + data['invoices'][0][invoice].id + `/pdf/" target="_blank">
                                                     <img src="/static/images/invoices/print.svg"  alt="print"></a>
@@ -86,6 +96,9 @@ $(document).ready(function () {
                                             </li>
                                             <li  class="content__body-item style--width">
                                                 <p class="content__body-status style--width font--` + data['invoices'][0][invoice].status_color + `">` + data['invoices'][0][invoice].status_value + `</p>
+                                            </li>
+                                            <li class="content__body-item style--width">
+                                                <a class="button_pay" data-b24invoice="` + data['invoices'][0][invoice].id + `">Pay</a>
                                             </li>
                                         </ul>
                                         <button class="content__body-btn">
