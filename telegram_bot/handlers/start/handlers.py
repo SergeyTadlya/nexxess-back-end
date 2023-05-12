@@ -91,7 +91,7 @@ class AuthenticationHandler:
                 code = randint(100000, 999999)
                 unauthorized_user.verify_code = code
                 unauthorized_user.email = email
-                unauthorized_user.step = 'set_verify_code'
+                unauthorized_user.step = 'SET_VERIFY_CODE'
                 unauthorized_user.save()
 
                 self.bot.sendMessage(chat_id=get_chat_id(self.data),

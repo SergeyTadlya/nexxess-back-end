@@ -35,7 +35,7 @@ class LogOutHandler:
         user.save()
 
         delete_commands(self.bot)
-        remove_reply_keyboard()
 
         self.bot.sendMessage(chat_id=get_chat_id(self.data['callback_query']),
-                             text='You are logged out')
+                             text='You are logged out',
+                             reply_markup=remove_reply_keyboard())

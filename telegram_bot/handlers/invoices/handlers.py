@@ -63,7 +63,7 @@ class InvoiceHandler:
     def show_new_invoices(self, status, current_page=1):
         user = get_user(self.data['callback_query'])
         new_invoices = get_invoices(user.email, status)
-        invoices_pagination = do_pagination(new_invoices, current_page, 2)
+        invoices_pagination = do_pagination(new_invoices, current_page, 8)
 
         if invoices_pagination['quantity'] > 0:
             invoices = invoices_pagination['invoices']
@@ -72,7 +72,7 @@ class InvoiceHandler:
 
             try:
                 self.bot.edit_message_text(
-                    f"New invoices: ",
+                    f"🔵 New invoices: ",
                     chat_id=get_chat_id(self.data['callback_query']),
                     message_id=self.data['callback_query']['message']['message_id'],
                     reply_markup=new_invoices_keyboard(invoices, current_page, all_pages, has_pages)
@@ -81,12 +81,12 @@ class InvoiceHandler:
                 print(e)
         else:
             self.bot.sendMessage(chat_id=get_chat_id(self.data['callback_query']),
-                                 text='You don`t have any invoices')
+                                 text='You don`t have any new invoices')
 
     def show_paid_invoices(self, status, current_page=1):
         user = get_user(self.data['callback_query'])
         paid_invoices = get_invoices(user.email, status)
-        invoices_pagination = do_pagination(paid_invoices, current_page, 2)
+        invoices_pagination = do_pagination(paid_invoices, current_page, 8)
 
         if invoices_pagination['quantity'] > 0:
             invoices = invoices_pagination['invoices']
@@ -95,7 +95,7 @@ class InvoiceHandler:
 
             try:
                 self.bot.edit_message_text(
-                    f"Paid invoices: ",
+                    f"🟢 Paid invoices: ",
                     chat_id=get_chat_id(self.data['callback_query']),
                     message_id=self.data['callback_query']['message']['message_id'],
                     reply_markup=paid_invoices_keyboard(invoices, current_page, all_pages, has_pages)
@@ -104,12 +104,12 @@ class InvoiceHandler:
                 print(e)
         else:
             self.bot.sendMessage(chat_id=get_chat_id(self.data['callback_query']),
-                                 text='You don`t have any invoices')
+                                 text='You don`t have any paid invoices')
 
     def show_unpaid_invoices(self, status, current_page=1):
         user = get_user(self.data['callback_query'])
         unpaid_invoices = get_invoices(user.email, status)
-        invoices_pagination = do_pagination(unpaid_invoices, current_page, 2)
+        invoices_pagination = do_pagination(unpaid_invoices, current_page, 8)
 
         if invoices_pagination['quantity'] > 0:
             invoices = invoices_pagination['invoices']
@@ -118,7 +118,7 @@ class InvoiceHandler:
 
             try:
                 self.bot.edit_message_text(
-                    f"Unpaid invoices: ",
+                    f"🟡 Unpaid invoices: ",
                     chat_id=get_chat_id(self.data['callback_query']),
                     message_id=self.data['callback_query']['message']['message_id'],
                     reply_markup=unpaid_invoices_keyboard(invoices, current_page, all_pages, has_pages)
@@ -127,12 +127,12 @@ class InvoiceHandler:
                 print(e)
         else:
             self.bot.sendMessage(chat_id=get_chat_id(self.data['callback_query']),
-                                 text='You don`t have any invoices')
+                                 text='You don`t have any unpaid invoices')
 
     def show_all_invoices(self, current_page=1):
         user = get_user(self.data['callback_query'])
         all_invoices = get_invoices(user.email)
-        invoices_pagination = do_pagination(all_invoices, current_page, 2)
+        invoices_pagination = do_pagination(all_invoices, current_page, 8)
 
         if invoices_pagination['quantity'] > 0:
             invoices = invoices_pagination['invoices']

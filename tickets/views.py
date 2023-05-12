@@ -1,22 +1,20 @@
-from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse
+from django.shortcuts import render, redirect
 
 from bitrix24 import Bitrix24, BitrixError
+from datetime import datetime
 
 from authentication.helpers.B24Webhook import set_webhook
 from authentication.models import B24keys
+from invoices.views import format_date  # Rework function to import
 
 from .models import Ticket
 from .urls import *
 
 import requests
-from datetime import datetime
 import json
 import time
 
-
-def format_date(date):
-    return date.strftime('%d %b %Y') if date else ''
 
 def check_and_shorten_string(string):
     if len(string) > 20:
@@ -24,13 +22,11 @@ def check_and_shorten_string(string):
     return string
 
 
-
 def tasks(request):
     tasks_list = Ticket.objects.all() if request.user.is_superuser else Ticket.objects.filter(responsible=str(request.user.b24_contact_id))
-    tasks = []
+    tasks = list()
 
     for task in tasks_list:
-
         tasks.append({
             'id': task.task_id,
             'title': check_and_shorten_string(task.ticket_title),
@@ -100,7 +96,7 @@ def create_bitrix_task(request):
         except Exception as e:
             print(e)
 
-    return render(request, 'tickets:tasks')
+    return render(request, 'tickets/tickets.html')
 
 
 def task_data(request):

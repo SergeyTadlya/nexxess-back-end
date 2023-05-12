@@ -21,7 +21,7 @@ def new_invoices_keyboard(new_invoices, current_page, all_pages, has_pages) -> I
         buttons.append(
             [
                 InlineKeyboardButton(
-                    f'ID: #{new_invoice.invoice_id} | Price: {format_price(new_invoice.price)} | Date: {format_date(new_invoice.date)}',
+                    f' #{new_invoice.invoice_id} | {format_price(new_invoice.price)} | {format_date(new_invoice.date)}',
                     callback_data=f'invoices_New_{current_page}_invoiceId_{new_invoice.invoice_id}'
                 )
             ]
@@ -50,7 +50,7 @@ def paid_invoices_keyboard(paid_invoices, current_page, all_pages, has_pages) ->
         buttons.append(
             [
                 InlineKeyboardButton(
-                    f'ID: #{paid_invoice.invoice_id} | Price: {format_price(paid_invoice.price)} | Date: {format_date(paid_invoice.date)}',
+                    f'#{paid_invoice.invoice_id} | {format_price(paid_invoice.price)} | {format_date(paid_invoice.date)}',
                     callback_data=f'invoices_Paid_{current_page}_invoiceId_{paid_invoice.invoice_id}'
                 )
             ]
@@ -79,7 +79,7 @@ def unpaid_invoices_keyboard(unpaid_invoices, current_page, all_pages, has_pages
         buttons.append(
             [
                 InlineKeyboardButton(
-                    f'ID: #{unpaid_invoice.invoice_id} | Price: {format_price(unpaid_invoice.price)} | Date: {format_date(unpaid_invoice.date)}',
+                    f'#{unpaid_invoice.invoice_id} | {format_price(unpaid_invoice.price)} | {format_date(unpaid_invoice.date)}',
                     callback_data=f'invoices_Unpaid_{current_page}_invoiceId_{unpaid_invoice.invoice_id}'
                 )
             ]
@@ -108,7 +108,7 @@ def all_invoices_keyboard(all_invoices, current_page, all_pages, has_pages) -> I
         buttons.append(
             [
                 InlineKeyboardButton(
-                    f'ID: #{invoice.invoice_id} | Price: {format_price(invoice.price)} | Date: {format_date(invoice.date)}',
+                    f'{invoice.status.sticker} #{invoice.invoice_id} | {format_price(invoice.price)} | {format_date(invoice.date)}',
                     callback_data=f'invoices_All_{current_page}_invoiceId_{invoice.invoice_id}'
                 )
             ]

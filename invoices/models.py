@@ -5,6 +5,7 @@ class Status(models.Model):
     abbreviation = models.CharField(verbose_name='Abbreviation', max_length=10)
     value = models.CharField(verbose_name='Value', max_length=10)
     color = models.CharField(verbose_name='Color', max_length=20)
+    sticker = models.CharField(verbose_name='Sticker', max_length=8)
 
     def __str__(self):
         return f'{self.abbreviation} - {self.value}'
@@ -29,7 +30,6 @@ class Invoice(models.Model):
     date = models.DateTimeField(verbose_name='Date', blank=True, null=True)
     due_date = models.DateTimeField(verbose_name='Due date', blank=True, null=True)
     product_title = models.CharField(verbose_name='Product title', max_length=200, blank=True, null=True)
-
 
     def __str__(self):
         return f'Invoice {self.invoice_id}, responsible - {self.responsible}'
