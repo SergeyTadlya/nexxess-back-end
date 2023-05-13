@@ -18,9 +18,9 @@ def main(request):
         data = json.loads(request.body)
 
         if 'message' in data:
-            system_commands.delete_commands(bot)
             message_handler = MessageHandler(bot, data)
             message_handler.handle_request()
+
             if 'text' in data['message'].keys():
                 print('Message from: ' + str(data['message']['from']['id']) + ' - ' + data['message']['text'] + '\n')
             else:
@@ -29,9 +29,10 @@ def main(request):
         elif 'callback_query' in data:
             callback_handler = CallbackHandler(bot, data)
             callback_handler.handle_request()
+
             if 'text' in data['callback_query']['message'].keys():
                 print('Callback from: ' + str(data['callback_query']['from']['id']) + ' - ' + data['callback_query']['data'] + '\n')
             else:
                 print('Callback from: ' + str(data['callback_query']['from']['id']) + ' - Not text\n')
 
-    return HttpResponse('Main worked')
+    return HttpResponse('Main')

@@ -2,9 +2,13 @@ from ..models import User, Authentication
 
 
 def get_chat_id(data):
-    chat_id = data['message']['chat']['id']
+    return data['message']['chat']['id']
 
-    return chat_id
+
+def get_user_step(data):
+    user = User.objects.filter(telegram_id=data['message']['chat']['id'])
+
+    return user.first().step if user.exists() else None
 
 
 def get_user(data):
@@ -18,7 +22,7 @@ def get_user(data):
         unauthorized_user = Authentication.objects.filter(telegram_id=telegram_id)
         unauthorized_user = unauthorized_user.first() if unauthorized_user.exists() else Authentication.objects.create(telegram_id=telegram_id)
 
-        unauthorized_user.step = 'set_email'
+        unauthorized_user.step = 'SET_EMAIL'
         unauthorized_user.save()
         return unauthorized_user
 

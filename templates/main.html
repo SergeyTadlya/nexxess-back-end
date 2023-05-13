@@ -21,13 +21,13 @@
             {{ request.user.last_name }}
           </li>
           <li class="aside-info__box-item">
-            Street road
+            {{ request.user.username}}
           </li>
           <li class="aside-info__box-item">
-            Bedford, Texas, 76021
+            {{ request.user.email }}
           </li>
           <li class="aside-info__box-item">
-            United States
+
           </li>
         </ul>
       </div>
@@ -130,7 +130,7 @@
     <div class="header__inner">
       <a href="{% url 'authentication:main' %}">
         <picture class="header__logo">
-          <source srcset="{% static 'images/logo-mobile.png' %}" media="(max-width: 550px)">
+          <source srcset="{% static 'images/logo.svg' %}" media="(max-width: 550px)">
           <img src="{% static 'images/logo.png' %}" alt="logo">
         </picture>
       </a>

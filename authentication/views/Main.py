@@ -21,7 +21,7 @@ def main(request):
             current_user = "admin"
         else:
             invoice_count = Invoice.objects.filter(responsible=request.user.b24_contact_id, is_opened=False).count()
-            task_count = Ticket.objects.filter(responsible=request.user.b24_contact_id, is_opened=False).count()
+            task_count = Ticket.objects.filter(responsible=str(request.user.b24_contact_id), is_opened=False).count()
             current_user = "not_admin"
 
         method = "crm.product.list"

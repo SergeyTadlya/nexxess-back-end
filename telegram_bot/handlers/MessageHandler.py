@@ -38,37 +38,46 @@ class MessageHandler:
         is_user_authorize = self.get_user()
 
         if is_user_authorize:  # access to commands and keyboard
-            if message == '/start':
+            if message == '/start' and user_step == '':
                 self.bot.sendMessage(chat_id=get_chat_id(self.data),
                                      text='You are authorized.\n'
                                           'This command will be available after you are logging out.\n\n'
                                           'If you want to log out, just write /logout or click it on keyboard.')
-            elif message == '/menu':
+            elif message == '/menu' and user_step == '':
                 set_up_commands(self.bot)
                 StartHandler.show_menu(self.bot, self.data)
-            elif message in ['/invoices', '🧾 Invoices']:
+            elif message in ['/invoices', '🧾 Invoices'] and user_step == '':
                 InvoiceHandler.show_invoices_menu(self.bot, self.data)
-            elif message in ['/services', '👨‍💻 Services']:
+            elif message in ['/services', '👨‍💻 Services'] and user_step == '':
                 ServicesHandler.show_services_menu(self.bot, self.data)
-            elif message in ['/tickets', '📝 Tickets']:
+            elif message in ['/tickets', '📝 Tickets'] and user_step == '':
                 TicketsHandler.show_tickets_menu(self.bot, self.data)
-            elif message in ['/faq', '⁉️ FAQ']:
+            elif message in ['/faq', '⁉️ FAQ'] and user_step == '':
                 FAQHandler.show_faq_menu(self.bot, self.data)
-            elif message in ['/logout', '🚪 Log Out']:
+            elif message in ['/logout', '🚪 Log Out'] and user_step == '':
                 LogOutHandler.show_confirm_keyboard(self.bot, self.data)
             else:
-                # steps users ...
-                self.bot.sendMessage(chat_id=get_chat_id(self.data),
-                                     text='Unknown command, please choose another option',
-                                     reply_markup=StartHandler.main_keyboard())
+                if user_step:  # user_step is not None and not user_step == ''
+                    # steps users ...
+                    tickets: TicketsHandler = TicketsHandler(self.bot, self.data, '')
+                    if 'SET_TICKET_TITLE' in user_step:
+                        tickets.save_ticket_title(message)
+                    elif 'SET_TICKET_DESCRIPTION' in user_step:
+                        tickets.save_ticket_description(message)
+                else:
+                    self.bot.sendMessage(
+                        chat_id=get_chat_id(self.data),
+                        text='Nothing is clear, try again',  # Unknown command, please choose another option
+                        reply_markup=StartHandler.main_keyboard()
+                    )
         else:
             authentication: AuthenticationHandler = AuthenticationHandler(self.bot, self.data)
 
             if message == '/start':
                 StartHandler.start(self.bot, self.data)
-            elif 'set_email' in user_step:
+            elif 'SET_EMAIL' in user_step:
                 authentication.set_user_email(self.data)
-            elif 'set_verify_code' in user_step:
+            elif 'SET_VERIFY_CODE' in user_step:
                 authentication.set_user_verification_code(self.data)
             else:
                 self.bot.sendMessage(chat_id=get_chat_id(self.data),

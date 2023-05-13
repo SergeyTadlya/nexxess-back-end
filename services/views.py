@@ -317,7 +317,7 @@ def create_invoice(request):
                                                    'UF_CONTACT_ID': request.user.b24_contact_id,
                                                    'STATUS_ID': 'N',
                                                    'RESPONSIBLE_ID': 1,
-                                                   'PAY_SYSTEM_ID': 3,
+                                                   'PAY_SYSTEM_ID': 4,
                                                    'DATE_PAY_BEFORE': tomorrow.strftime("%m/%d/%Y"),
                                                    "PRODUCT_ROWS": [
                                                        {"ID": 0,

@@ -1,22 +1,20 @@
-from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse
+from django.shortcuts import render, redirect
 
 from bitrix24 import Bitrix24, BitrixError
+from datetime import datetime
 
 from authentication.helpers.B24Webhook import set_webhook
 from authentication.models import B24keys
+from invoices.views import format_date  # Rework function to import
 
 from .models import Ticket
 from .urls import *
 
 import requests
-from datetime import datetime
 import json
 import time
 
-
-def format_date(date):
-    return date.strftime('%d %b %Y') if date else ''
 
 def check_and_shorten_string(string):
     if len(string) > 20:
@@ -24,42 +22,39 @@ def check_and_shorten_string(string):
     return string
 
 
-
 def tasks(request):
-    if request.user.is_authenticated and request.user.google_auth or request.user.is_superuser:
-        tasks_list = Ticket.objects.all() if request.user.is_superuser else Ticket.objects.filter(responsible=str(request.user.b24_contact_id))
-        tasks = []
+    tasks_list = Ticket.objects.all() if request.user.is_superuser else Ticket.objects.filter(responsible=str(request.user.b24_contact_id))
+    tasks = list()
 
-        for task in tasks_list:
+    for task in tasks_list:
+        tasks.append({
+            'id': task.task_id,
+            'title': check_and_shorten_string(task.ticket_title),
+            'created_at': format_date(task.created_at),
+            'deadline': format_date(task.deadline),
+            'is_opened': task.is_opened,
+            'status': task.status,
 
-            tasks.append({
-                'id': task.task_id,
-                'title': check_and_shorten_string(task.ticket_title),
-                'created_at': format_date(task.created_at),
-                'deadline': format_date(task.deadline),
-                'is_opened': task.is_opened,
-                'status': task.status,
+        })
 
-            })
-
-        context = {
-            "tasks": tasks,
-            'tasks_number': len(tasks),
-        }
-        return render(request, "tickets/tickets.html", context)
-    else: return redirect('authentication:main')
+    context = {
+        "tasks": tasks,  # здесь имя переменной должно совпадать с тем, что используется в шаблоне
+        'tasks_number': len(tasks),
+    }
+    return render(request, "tickets/tickets.html", context)
 
 
 def task_detail(request, id):
-    task = Ticket.objects.get(task_id=str(id))
-    if request.user.is_superuser or task.responsible == str(request.user.b24_contact_id):
+    task = Ticket.objects.get(id=id)
+    if request.user.is_superuser or task.responsible == request.user.b24_contact_id:
+        # апдейт задачі, коли менеджер відкрив її (це щоб на головній сторінці, вона зникла із списка нових задач)
         if not request.user.is_superuser:
             Ticket.objects.filter(id=id).update(is_opened=True)
 
         res = {
             'task': task,
         }
-        return render(request, "tickets/detail.html", res)
+        return render(request, "tickets/tickets.html", res)
     else:
         return redirect('/tickets/')
 
@@ -107,7 +102,7 @@ def create_bitrix_task(request):
 def task_data(request):
     tasks_list = Ticket.objects.all() if request.user.is_superuser else Ticket.objects.filter(
         responsible=str(request.user.b24_contact_id))
-    tasks = []
+    tasks = []  # вместо tasks_array
 
     for task in tasks_list:
         tasks.append({

@@ -1,109 +1,78 @@
 from authentication.helpers.B24Webhook import set_webhook
 from django.views.decorators.csrf import csrf_exempt
-from authentication.models import B24keys
-from invoices.models import Invoice, Status
-from tickets.models import Ticket, Ticket_comments
 from django.http import HttpResponse
 
+from bitrix24 import *
+
+from authentication.models import B24keys
 from invoices.models import Invoice, Status
-from tickets.models import Ticket
+from tickets.models import Ticket, TicketComments
 from datetime import datetime
 
-from bitrix24 import *
 import requests
-import requests
-import logging
-
 
 
 def trim_before(text):
     return text.split('_', 1)[1]
 
+
 def format_date(date):
     return date.strftime('%d %b %Y') if date else ''
+
 
 @csrf_exempt
 def webhook_task(request):
     try:
         if request.method == 'POST':
-            # Do system check is webhook received data from task
             event = request.POST.get('event', "")
 
             if event == "ONTASKADD":
                 entities_id = request.POST.get('data[FIELDS_AFTER][ID]', "")
-                print(f'task id{entities_id}')
             elif event == "ONTASKUPDATE":
                 entities_id = request.POST.get('data[FIELDS_BEFORE][ID]', "")
-                print(f'task id{entities_id}')
 
-            # event = request.POST.get('event', "")
-            # entities_id = request.POST.get('data[FIELDS_AFTER][TASK_ID]', "")
-            b24_domain = request.POST.get('auth[domain]', "")
-            print(b24_domain)
-            b24_member_id = request.POST.get('auth[member_id]', "")
-            print(b24_member_id)
-            b24_application_token = request.POST.get('auth[application_token]', "")
-            print(b24_application_token)
             b24_time = request.POST.get('ts', "")
-            print(b24_time)
-            # With help rest api
-            print(all([entities_id, b24_domain, b24_member_id, b24_application_token, b24_time]))
-            print(([entities_id, b24_domain, b24_member_id, b24_application_token, b24_time]))
+            b24_domain = request.POST.get('auth[domain]', "")
+            b24_member_id = request.POST.get('auth[member_id]', "")
+            b24_application_token = request.POST.get('auth[application_token]', "")
 
-            if all([entities_id, b24_domain, b24_member_id, b24_application_token, b24_time]):
+            if all([entities_id, b24_time, b24_domain, b24_member_id, b24_application_token]):
 
-                task_url = f"{set_webhook()}tasks.task.get/?id={entities_id}"
-                task_crm = f"{set_webhook()}tasks.task.get/?taskId={entities_id}&select%5B0%5D=UF_CRM_TASK"
-                print(f'Contact id{task_crm}')
+                task_url = set_webhook() + 'tasks.task.get/?id=' + entities_id
+                task_crm = set_webhook() + 'tasks.task.get/?taskId=' + entities_id + '&select%5B0%5D=UF_CRM_TASK'
                 task_info = requests.get(task_url).json()['result']['task']
-                ticket_text = task_info["description"]
-                print(ticket_text)
-                print(task_info)
-                deadline = task_info["deadline"]
-                print(f'DEADLINE!! {deadline}')
-                status = task_info["status"]
-                print(f'status {status}')
+                task_info_crm = requests.get(task_crm).json()['result']['task']
 
                 ticket_title = task_info["title"]
-                print(f'title {ticket_title}')
-                task_info_crm = requests.get(task_crm).json()['result']['task']
-                print(task_info_crm)
+                ticket_text = task_info["description"]
+                status = task_info["status"]
+                deadline = datetime.strptime(task_info["deadline"][:11] + '23:59:59', '%Y-%m-%dT%H:%M:%S')
                 created_at = task_info["createdDate"]
 
-
-                # Check avaible about task
-                # if task is avaible do this
                 defaults = {
-                    'b24_domain': b24_domain,
+                    'responsible': trim_before(task_info_crm["ufCrmTask"][0]),
                     'ticket_title': ticket_title,
+                    'ticket_text': ticket_text,
+                    'status': status,
+                    'is_opened': False,
+                    'is_active': True,
+                    'deadline': deadline,
+                    'b24_domain': b24_domain,
                     'b24_member_id': b24_member_id,
                     'b24_application_token': b24_application_token,
                     'b24_time': b24_time,
-                    'ticket_text': ticket_text,
                     'task_info': task_info,
-                    'deadline': created_at,
-                    'status': status,
                     'task_info_crm': task_info_crm,
-                    'is_opened': False,
-                    'responsible': trim_before(task_info_crm["ufCrmTask"][0]),
                     'created_at': created_at,
-                    'is_active': True,
+
                 }
-                try:
-                    Ticket.objects.update_or_create(
-                        task_id=entities_id,
-                        defaults=defaults,
 
-                    )
-                    print('Success')
-                except Exception as e:
-                    print(f'Task created error {e}')
-
+                Ticket.objects.update_or_create(task_id=entities_id, defaults=defaults)
         return HttpResponse('ok')
+
     except Exception as e:
         print(e)
     return HttpResponse('ok')
-
 
 
 @csrf_exempt
@@ -161,7 +130,7 @@ def webhook_task_comment(request):
                 b24_time = request.POST.get('ts', "")
 
                 if all([comment_id, ticket, b24_domain, b24_member_id, b24_application_token, b24_time]):
-                    comment = Ticket_comments.objects.create(
+                    comment = TicketComments.objects.create(
                         ticket=ticket,
                         comment_id=comment_id,
                         text=message_text,

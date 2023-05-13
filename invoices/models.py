@@ -5,6 +5,7 @@ class Status(models.Model):
     abbreviation = models.CharField(verbose_name='Abbreviation', max_length=10)
     value = models.CharField(verbose_name='Value', max_length=10)
     color = models.CharField(verbose_name='Color', max_length=20)
+    sticker = models.CharField(verbose_name='Sticker', max_length=8)
 
     def __str__(self):
         return f'{self.abbreviation} - {self.value}'

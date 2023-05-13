@@ -10,7 +10,7 @@ from random import randint
 
 
 def verification(request):
-    if request.user.is_authenticated:
+    if request.user.is_authenticated and not request.user.google_auth:
         user = User.objects.filter(email=request.user.email)
         if user.exists():
             user = user.first()
@@ -39,6 +39,7 @@ class MyLoginView(LoginView):
                 user = User.objects.filter(email=self.request.user.email)
                 if user.exists():
                     user = user.first()
+
                     user.activation_code = code
                     user.save()
                 send_mail('Secret key',
@@ -46,6 +47,7 @@ class MyLoginView(LoginView):
                           'cutrys69@gmail.com',
                           [self.request.user.email],
                           fail_silently=False)
+
 
             except Exception as e:
                 print(e)
