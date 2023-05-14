@@ -4,13 +4,13 @@ from telegram import Bot, BotCommand
 
 
 def set_up_commands(bot_instance: Bot) -> None:
-    commands: Dict[str, str] = {
+    commands = {
         'menu': 'Menu',
-        'invoices': 'Show the invoices',
-        'services': 'Show my or all services',
-        'tickets': 'Create new or show the history',
-        'faq': 'Do you need help?',
-        'logout': 'Support'
+        'invoices': 'Invoices',  # Show the invoices
+        'services': 'Services',  # Show my or all services
+        'tickets': 'Tickets',  # Create new or show the history
+        'faq': 'FAQ',  # Do you need help?
+        'logout': 'Exit'
     }
 
     bot_instance.delete_my_commands()

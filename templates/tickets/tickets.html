@@ -2,7 +2,6 @@
 {% load static %}
 
 {% block extra_css %}
-
   <link rel="stylesheet" type="text/css" href="{% static 'css/tickets.css' %}">
 {% endblock %}
 
@@ -42,27 +41,22 @@
       </div>
 
       <ul class="aside-filter__accordion-list accordion__list--active">
-        <li class="aside-filter__accordion-item">
-          <label class="aside-filter__accordion-label" for="status1">
-              <input id="status1" class="aside-filter__accordion-check"  name="check" type="checkbox" >
-              Ongoing
-            </label>
-          <p class="aside-filter__accordion-number">0</p>
-        </li>
-        <li class="aside-filter__accordion-item">
-            <label class="aside-filter__accordion-label" for="status2">
-              <input id="status2" class="aside-filter__accordion-check" name="check" type="checkbox">
-              Overdue
-            </label>
-          <p class="aside-filter__accordion-number">0</p>
-        </li>
-        <li class="aside-filter__accordion-item">
-            <label class="aside-filter__accordion-label" for="status3">
-              <input id="status3" class="aside-filter__accordion-check" name="check" type="checkbox">
-              Closed
-            </label>
-          <p class="aside-filter__accordion-number">0</p>
-        </li>
+          {% for task_status in tasks_statuses %}
+          <li class="aside-filter__accordion-item" id="statuses_amount" value="{{ statuses_amount }}">
+            <label class="aside-filter__accordion-label" for="{{ task_status.id }}">
+                <input id="{{ invoice_status.id }}" class="aside-filter__accordion-check" value="{{ task_status.name }}" type="checkbox">
+                {{ task_status.name }}
+              </label>
+            <p class="aside-filter__accordion-number">{{ task_status.number }}</p>
+          </li>
+        {% endfor %}
+<!--        <li class="aside-filter__accordion-item">-->
+<!--          <label class="aside-filter__accordion-label" for="status1">-->
+<!--              <input id="status1" class="aside-filter__accordion-check"  name="check" type="checkbox" >-->
+<!--              Ongoing-->
+<!--            </label>-->
+<!--          <p class="aside-filter__accordion-number">0</p>-->
+<!--        </li>-->
       </ul>
     </div>
 
@@ -182,6 +176,7 @@
       </div>
   </div>
 {% endblock %}
+
 {% block footer %}
 <div class="container">
   <ul class="footer__list">
@@ -267,7 +262,6 @@
     </li>
   </ul>
 </div>
-
 {% endblock footer %}
 
 {% block extra_js %}

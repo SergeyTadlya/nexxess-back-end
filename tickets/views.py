@@ -1,18 +1,11 @@
-from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 
-from bitrix24 import Bitrix24, BitrixError
-from datetime import datetime
-
 from authentication.helpers.B24Webhook import set_webhook
-from authentication.models import B24keys
-from invoices.views import format_date  # Rework function to import
+from invoices.views import format_date
 
 from .models import Ticket
-from .urls import *
 
 import requests
-import json
 import time
 
 
@@ -23,23 +16,25 @@ def check_and_shorten_string(string):
 
 
 def tasks(request):
-    tasks_list = Ticket.objects.all() if request.user.is_superuser else Ticket.objects.filter(responsible=str(request.user.b24_contact_id))
-    tasks = list()
+    all_user_tasks = Ticket.objects.all().order_by('-created_at') if request.user.is_superuser \
+        else Ticket.objects.filter(responsible=str(request.user.b24_contact_id)).order_by('-created_at')
 
-    for task in tasks_list:
-        tasks.append({
+    tasks_array = list()
+    tasks_statuses = list()
+
+    for task in all_user_tasks:
+        tasks_array.append({
             'id': task.task_id,
             'title': check_and_shorten_string(task.ticket_title),
             'created_at': format_date(task.created_at),
             'deadline': format_date(task.deadline),
             'is_opened': task.is_opened,
             'status': task.status,
-
         })
 
     context = {
-        "tasks": tasks,  # здесь имя переменной должно совпадать с тем, что используется в шаблоне
-        'tasks_number': len(tasks),
+        "tasks": tasks_array,
+        'tasks_number': len(tasks_array),
     }
     return render(request, "tickets/tickets.html", context)
 
