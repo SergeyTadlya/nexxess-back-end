@@ -6,7 +6,7 @@ from bitrix24 import *
 
 from authentication.models import B24keys
 from invoices.models import Invoice, Status
-from tickets.models import Ticket, TicketComments
+from tickets.models import Ticket, TicketComments, TicketStatus
 from datetime import datetime
 
 import requests
@@ -45,7 +45,9 @@ def webhook_task(request):
 
                 ticket_title = task_info["title"]
                 ticket_text = task_info["description"]
-                status = task_info["status"]
+                status = TicketStatus.objects.filter(value=task_info["status"])
+                if status.exists():
+                    status = status.first()
                 deadline = datetime.strptime(task_info["deadline"][:11] + '23:59:59', '%Y-%m-%dT%H:%M:%S')
                 created_at = task_info["createdDate"]
 

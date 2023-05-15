@@ -78,9 +78,6 @@ class TicketsHandler:
         if response.status_code == 200:
             TelegramTicket.objects.filter(responsible=user.email).delete()
 
-            user.step = ''
-            user.save()
-
             bot.sendMessage(chat_id=get_chat_id(data['callback_query']),
                             text='Great, ticket successfully created',
                             reply_markup=return_to_menu_keyboard())
@@ -189,6 +186,9 @@ class TicketsHandler:
 
         telegram_ticket.description = description
         telegram_ticket.save()
+
+        user.step = ''
+        user.save()
 
         calendar, step = DetailedTelegramCalendar(calendar_id=1, min_date=date.today()).build()
         self.bot.sendMessage(chat_id=get_chat_id(self.data),

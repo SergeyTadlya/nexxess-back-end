@@ -2,12 +2,26 @@ from django.db import models
 from django.utils import timezone
 
 
+class TicketStatus(models.Model):
+    value = models.CharField(verbose_name='value', max_length=24)
+    name = models.CharField(verbose_name='name', max_length=24)
+    color = models.CharField(verbose_name='color', max_length=24)
+    abbreviation = models.CharField(verbose_name='abbreviation', max_length=24)
+
+    def __str__(self):
+        return self.name + ' - ' + self.color
+
+    class Meta:
+        verbose_name = 'Ticket status'
+        verbose_name_plural = 'Ticket statuses'
+
+
 class Ticket(models.Model):
     responsible = models.CharField(max_length=150, verbose_name='Responsible bitrix ID', blank=True, null=True)
     task_id = models.JSONField(max_length=50, verbose_name='TASK_ID', blank=True, null=True)
     ticket_title = models.CharField(max_length=25,  verbose_name='Ticket title', blank=True, null=True)
     ticket_text = models.TextField(verbose_name='Ticket description', max_length=1200, blank=True, null=True)
-    status = models.CharField(max_length=500, verbose_name='Status', blank=True, null=True)
+    status = models.ForeignKey(TicketStatus, on_delete=models.PROTECT, verbose_name='Status', blank=True, null=True)
     is_opened = models.BooleanField(verbose_name="Opened (yes/no)", default=False, blank=True, null=True)
     is_active = models.BooleanField(default=True, blank=True, null=True)
     updated_time = models.CharField(max_length=500, blank=True, null=True)
@@ -50,17 +64,3 @@ class TelegramTicket(models.Model):
     class Meta:
         verbose_name = 'Telegram ticket'
         verbose_name_plural = 'Telegram tickets'
-
-
-class TicketStatus(models.Model):
-    value = models.CharField(verbose_name='value', max_length=24)
-    name = models.CharField(verbose_name='name', max_length=24)
-    color = models.CharField(verbose_name='color', max_length=24)
-    abbreviation = models.CharField(verbose_name='abbreviation', max_length=24)
-
-    def __str__(self):
-        return self.name + ' - ' + self.color
-
-    class Meta:
-        verbose_name = 'Ticket status'
-        verbose_name_plural = 'Ticket statuses'
