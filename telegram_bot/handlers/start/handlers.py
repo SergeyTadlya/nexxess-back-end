@@ -126,7 +126,7 @@ class AuthenticationHandler:
             return
 
         if verify_code == unauthorized_user.verify_code:
-            unauthorized_user.step = 'Nothing'
+            unauthorized_user.step = ''
             unauthorized_user.save()
 
             authorize_user(data['message'])

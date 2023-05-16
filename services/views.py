@@ -9,6 +9,7 @@ from requests import Response
 from authentication.helpers.B24Webhook import set_webhook
 from authentication.models import B24keys
 from invoices.models import Invoice, StripeSettings, LocalInvoice
+from tickets.models import Ticket, TicketStatus
 from telegram_bot.models import User
 from .models import Service, ServiceCategory
 from . import urls
@@ -126,10 +127,15 @@ def services(request):
                 }
                 sections.append(test)
                 # print(sections)
-
+            status_closed = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Closed').count()
+            status_overdue = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Overdue').count()
+            status_ongoin = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Ongoing').count()
             context = {
                 'sections': sections,
                 'services_count': len(products),
+                'status_closed': status_closed,
+                'status_overdue': status_overdue,
+                'status_ongoin': status_ongoin,
             }
         except:
             context = {}
@@ -203,11 +209,17 @@ def product_detail(request, id):
                 template = "services/consultation.html"
 
         b24_domain = B24keys.objects.order_by("id").first().domain[:-1]
+        status_closed = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Closed').count()
+        status_overdue = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Overdue').count()
+        status_ongoin = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Ongoing').count()
         context = {
             'b24_domain': b24_domain,
             'services': section_products,
             'services_description': description,
-            'section_title': section[0]["NAME"]
+            'section_title': section[0]["NAME"],
+            'status_closed': status_closed,
+            'status_overdue': status_overdue,
+            'status_ongoin': status_ongoin,
         }
         return render(request, template, context=context)
 

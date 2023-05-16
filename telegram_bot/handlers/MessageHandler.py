@@ -43,18 +43,18 @@ class MessageHandler:
                                      text='You are authorized.\n'
                                           'This command will be available after you are logging out.\n\n'
                                           'If you want to log out, just write /logout or click it on keyboard.')
-            elif message == '/menu' and user_step == '':
+            elif message == '/menu' and not user_step:
                 set_up_commands(self.bot)
                 StartHandler.show_menu(self.bot, self.data)
-            elif message in ['/invoices', '🧾 Invoices'] and user_step == '':
+            elif message in ['/invoices', '🧾 Invoices'] and not user_step:
                 InvoiceHandler.show_invoices_menu(self.bot, self.data)
-            elif message in ['/services', '👨‍💻 Services'] and user_step == '':
+            elif message in ['/services', '👨‍💻 Services'] and not user_step:
                 ServicesHandler.show_services_menu(self.bot, self.data)
-            elif message in ['/tickets', '📝 Tickets'] and user_step == '':
+            elif message in ['/tickets', '📝 Tickets'] and not user_step:
                 TicketsHandler.show_tickets_menu(self.bot, self.data)
-            elif message in ['/faq', '⁉️ FAQ'] and user_step == '':
+            elif message in ['/faq', '⁉️ FAQ'] and not user_step:
                 FAQHandler.show_faq_menu(self.bot, self.data)
-            elif message in ['/logout', '🚪 Log Out'] and user_step == '':
+            elif message in ['/logout', '🚪 Log Out'] and not user_step:
                 LogOutHandler.show_confirm_keyboard(self.bot, self.data)
             else:
                 if user_step:  # user_step is not None and not user_step == ''

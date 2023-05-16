@@ -39,20 +39,35 @@
               </div>
 
               <ul class="aside-info__accordion-list">
+                {% if status_closed %}
                 <li class="aside-info__accordion-item">
                   <a class="aside-info__accordion-link" href="#">
-                    <p class="aside-info__accordion-text">Ongoing</p>
-                    <p class="aside-info__accordion-number font--green">2</p>
+                    <p class="aside-info__accordion-text">Closed</p>
+                    <p class="aside-info__accordion-number font--red">{{ status_closed }}</p>
                   </a>
                 </li>
+                {% endif %}
+
+                {% if status_overdue %}
                 <li class="aside-info__accordion-item">
                   <a class="aside-info__accordion-link" href="#">
                     <p class="aside-info__accordion-text">Overdue</p>
-                    <p class="aside-info__accordion-number font--red">8</p>
+                    <p class="aside-info__accordion-number font--red">{{ status_overdue }}</p>
                   </a>
                 </li>
+                {% endif %}
+
+                {% if status_ongoin %}
+                <li class="aside-info__accordion-item">
+                  <a class="aside-info__accordion-link" href="#">
+                    <p class="aside-info__accordion-text">Ongoing</p>
+                    <p class="aside-info__accordion-number font--green">{{ status_ongoin }}</p>
+                  </a>
+                </li>
+                {% endif %}
               </ul>
             </div>
+
           </div>
 
 {% endblock left_menu %}
@@ -99,7 +114,7 @@
                   </div>
 
                   <div class="content__body-descrip">
-                    <h6 class="content__descrip-title">GOLD PACKAGE - $20,000 <br>
+                    <h6 class="content__descrip-title">{{ invoice.product_title }} $ {{ invoice.price }}  <br>
                       Add to Nexxess© Trust Book (total $35,000) <br>
                       or purchase a gold package a la cart
                     </h6>

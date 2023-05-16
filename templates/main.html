@@ -38,18 +38,32 @@
               <img class="aside-info__top-arrow" src="{% static 'images/chevron-down.svg' %}"  alt="icon">
             </div>
             <ul class="aside-info__accordion-list">
+              {% if status_closed %}
               <li class="aside-info__accordion-item">
                 <a class="aside-info__accordion-link" href="{% url 'tickets:tasks'%}">
-                  <p class="aside-info__accordion-text">Ongoing</p>
-                  <p class="aside-info__accordion-number font--green">{{task_count}}</p>
+                  <p class="aside-info__accordion-text">Closed</p>
+                  <p class="aside-info__accordion-number font--red">{{ status_closed }}</p>
                 </a>
               </li>
+              {% endif %}
+
+              {% if status_overdue %}
               <li class="aside-info__accordion-item">
                 <a class="aside-info__accordion-link" href="{% url 'tickets:tasks'%}">
                   <p class="aside-info__accordion-text">Overdue</p>
-                  <p class="aside-info__accordion-number font--red">0</p>
+                  <p class="aside-info__accordion-number font--red">{{ status_overdue }}</p>
                 </a>
               </li>
+              {% endif %}
+
+              {% if status_ongoin %}
+              <li class="aside-info__accordion-item">
+                <a class="aside-info__accordion-link" href="{% url 'tickets:tasks'%}">
+                  <p class="aside-info__accordion-text">Ongoing</p>
+                  <p class="aside-info__accordion-number font--green">{{ status_ongoin }}</p>
+                </a>
+              </li>
+              {% endif %}
             </ul>
         </div>
     </div>
@@ -188,7 +202,7 @@
     <div class="confirmation__email">
       <p class="confirmation__email-text">We have sent an email to you for verification. Follow the link provided to finalize the process. If you do not see the verification email in your main inbox, check your spam folder.
         Please contact us if you do not receive the verification email within a few minutes.</p>
-      <a href="{% url 'account_logout' %}" class="confirmation__email-button">Log out</a>
+      <a href="{% url 'account_logout' %}" class="confirmation__email-button">OK</a>
     </div>
   </div>
 </main>

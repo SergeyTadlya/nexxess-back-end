@@ -195,7 +195,7 @@
     $(document).ready(function () {
       $(".order_click").click(function()
       {
-        var button = $(".order_click")[0];
+        var button = $(this);
         var b24_product_id = $(button).data("b24id");
         $.ajax({
           url: '/services/create_invoice/',

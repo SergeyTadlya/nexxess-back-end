@@ -8,6 +8,7 @@ from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
 
 from .models import Invoice, Status, StripeSettings, LocalInvoice
 from authentication.helpers.B24Webhook import set_webhook
+from tickets.models import Ticket, TicketStatus
 from services.models import Service
 
 from bitrix24 import Bitrix24, BitrixError
@@ -87,6 +88,7 @@ def invoices(request):
             'invoices_statuses': invoices_statuses,
             'statuses_amount': len(invoices_statuses),
             'invoices_number': len(all_user_invoices),
+
         }
 
         return render(request, "invoices/invoices.html", context)
@@ -183,21 +185,28 @@ def ajax_invoice_filter(request):
 @login_required(login_url='/accounts/login/')
 def invoice_detail(request, id):
     if request.user.is_authenticated and request.user.google_auth or request.user.is_superuser:
-        # try:
-        invoice = Invoice.objects.get(id=id)
-        if request.user.is_superuser or int(invoice.responsible) == request.user.b24_contact_id:
-            if not request.user.is_superuser:
-                Invoice.objects.filter(id=id).update(status=Status.objects.get(value='Opened'))
+        try:
             invoice = Invoice.objects.get(id=id)
-            res = {
-                'invoice': invoice,
-            }
-            return render(request, "invoices/detail.html", res)
-        else:
-            return redirect('/invoices/')
-    #     except :
-    #             return redirect('/invoices/')
-    # else: return redirect('authentication:main')
+            if request.user.is_superuser or int(invoice.responsible) == request.user.b24_contact_id:
+                if not request.user.is_superuser:
+                    Invoice.objects.filter(id=id).update(status=Status.objects.get(value='Opened'))
+                invoice = Invoice.objects.get(id=id)
+                status_closed = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Closed').count()
+                status_overdue = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Overdue').count()
+                status_ongoin = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Ongoing').count()
+
+                res = {
+                    'invoice': invoice,
+                    'status_closed': status_closed,
+                    'status_overdue': status_overdue,
+                    'status_ongoin': status_ongoin,
+                }
+                return render(request, "invoices/detail.html", res)
+            else:
+                return redirect('/invoices/')
+        except :
+                return redirect('/invoices/')
+    else: return redirect('authentication:main')
 
 
 def generate_new_pdf(pdf_path, id, invoice, request):

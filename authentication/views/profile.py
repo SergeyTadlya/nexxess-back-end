@@ -5,6 +5,8 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 
 from telegram_bot.models import User
+from tickets.models import Ticket, TicketStatus
+
 
 
 @login_required(login_url='/accounts/login/')
@@ -55,8 +57,15 @@ def profile_view(request):
         user.username = 'Username' if user.username is None else user.username
         user.save()
 
+    status_closed = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Closed').count()
+    status_overdue = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Overdue').count()
+    status_ongoin = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Ongoing').count()
+
     context = {
         'user': user,
+        'status_closed': status_closed,
+        'status_overdue': status_overdue,
+        'status_ongoin': status_ongoin,
     }
 
     return render(request, 'profile.html', context)
