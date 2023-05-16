@@ -11,7 +11,7 @@
     <div class="aside-info aside-info-none">
       <div class="aside-info__box">
         <div class="aside-info__box-top">
-          <img class="aside-info__top-img" src="{% static 'images/important.svg' %}" alt="icon">
+          <img class="aside-info__top-img" src="{% static '/images/alert.svg' %}" alt="icon">
           <h6 class="aside-info__top-title">Important</h6>
           <p class="aside-info__top-number">3</p>
         </div>
@@ -33,7 +33,7 @@
 
       <div class="aside-info__accordion">
         <div id="aside-info__accordion-top" class="aside-info__accordion-top">
-          <img class="aside-info__top-img" src="{% static 'images/tickets.svg' %}" alt="icon">
+          <img class="aside-info__top-img" src="{% static '/images/main/custom-tickets.svg' %}" alt="icon">
           <h6 class="aside-info__top-title">Tickets</h6>
           <img class="aside-info__top-arrow" src="{% static 'images/chevron-down.svg' %}" alt="icon">
         </div>
@@ -90,8 +90,10 @@
                     {% endfor %}
                 </ul>
                 <div class="content__list-box">
-                  <p class="content__list-price"> <span class="content__list-price-text">Start From:</span> ${{ section.min_price }}</p>
-                  <a class="content__list-link" href="{% url 'services:product_detail' section.section_id %}">Detail</a>
+                  {% if section.min_price != 0 %}
+                         <p class="content__list-price"> <span class="content__list-price-text">Start From:</span> ${{ section.min_price }}</p>
+                     {% endif %}
+                     <a class="content__list-link" href="{% url 'services:product_detail' section.section_id %}">Detail</a>
                 </div>
               </li>
             {% endfor %}
@@ -221,6 +223,6 @@
 {% block extra_js %}
     <script src="{% static 'js/dynamic_search.js' %}"></script>
     <script src="{% static 'js/services.js' %}"></script>
-    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/global.js' %}"></script>
 
 {% endblock extra_js %}

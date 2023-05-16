@@ -190,6 +190,9 @@ class TicketsHandler:
         telegram_ticket.description = description
         telegram_ticket.save()
 
+        user.step = ''
+        user.save()
+
         calendar, step = DetailedTelegramCalendar(calendar_id=1, min_date=date.today()).build()
         self.bot.sendMessage(chat_id=get_chat_id(self.data),
                              text=f'Okay, it remains to choose the deadline\n'

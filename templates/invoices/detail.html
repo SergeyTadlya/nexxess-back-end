@@ -75,7 +75,7 @@
                       </ul>
                       <ul class="content__body-items">
                         <li class="content__body-item">
-                          <a class="content__body-link" href="">
+                          <a class="content__body-link" href="{% url 'create_invoice_pdf' invoice.id %}" target="_blank">
                             <img src="{% static 'images/invoices/print.svg' %}" alt="print">
                           </a>
                           <p class="content__body-text">{{ invoice.invoice_id }}</p>
@@ -233,7 +233,7 @@
     {
       var button = $(this);
       var b24_product_id = $(button).data("b24invoice");
-      
+
       $.ajax({
         url: '/invoices/create_payment_link/',
         type: 'POST',
@@ -251,7 +251,7 @@
     });
   });
 </script>
-
+    <script src="{% static 'js/global.js' %}"></script>
     <script src="{% static 'js/about-invoice.js' %}"></script>
     <script src="{% static 'js/invoices.js' %}"></script>
 {% endblock extra_js %}

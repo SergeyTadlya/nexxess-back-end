@@ -23,7 +23,6 @@ class Invoice(models.Model):
     b24_application_token = models.CharField(max_length=500)
     b24_time = models.CharField(max_length=200)
     invoice_info = models.JSONField(verbose_name='Data', blank=True, default=list)
-    is_opened = models.BooleanField(verbose_name="Opened (yes/no)", default=False, null=True)
     price = models.DecimalField(verbose_name='Price', max_digits=10, decimal_places=2, blank=True, null=True)
     created_at = models.DateTimeField(verbose_name='Create date', auto_now_add=True)
     status = models.ForeignKey(Status, on_delete=models.PROTECT, verbose_name='Status', blank=True, null=True)

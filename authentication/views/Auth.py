@@ -9,6 +9,10 @@ from telegram_bot.models import User
 from random import randint
 
 
+
+def csrf_failure(request, reason=""):
+    return redirect('/')
+
 def verification(request):
     if request.user.is_authenticated and not request.user.google_auth:
         user = User.objects.filter(email=request.user.email)

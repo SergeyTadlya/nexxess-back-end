@@ -1,4 +1,4 @@
-п{% extends 'base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block extra_css %}
@@ -169,7 +169,7 @@
 
   <div class="aside-info__accordion">
     <div id="aside-info__accordion-top" class="aside-info__accordion-top">
-      <img class="aside-info__top-img" src="{% static 'images/tickets.svg' %}" alt="icon">
+      <img class="aside-info__top-img" src="{% static '/images/main/custom-tickets.svg' %}" alt="icon">
       <h6 class="aside-info__top-title">Tickets</h6>
       <img class="aside-info__top-arrow" src="{% static 'images/chevron-down.svg' %}" alt="icon">
     </div>
@@ -309,4 +309,5 @@
 {% endblock %}
 {% block extra_js %}
 <script src="{% static 'js/tickets.js' %}"> </script>
+<script src="{% static 'js/global.js' %}"></script>
 {% endblock %}

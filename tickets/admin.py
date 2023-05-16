@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Ticket, TicketComments, TelegramTicket
+from .models import Ticket, TicketComments, TelegramTicket, TicketStatus
 
 
 @admin.register(Ticket)
@@ -17,3 +17,9 @@ class TicketCommentsAdmin(admin.ModelAdmin):
 @admin.register(TelegramTicket)
 class TelegramTicketAdmin(admin.ModelAdmin):
     list_display = ['id', 'responsible', 'title', 'description']
+
+
+@admin.register(TicketStatus)
+class TicketStatusAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name', 'value', 'color']
+    

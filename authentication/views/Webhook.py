@@ -5,8 +5,9 @@ from django.http import HttpResponse
 from bitrix24 import *
 
 from authentication.models import B24keys
+from services.models import ServiceCategory
 from invoices.models import Invoice, Status
-from tickets.models import Ticket, TicketComments
+from tickets.models import Ticket, TicketComments, TicketStatus
 from datetime import datetime
 
 import requests
@@ -45,7 +46,9 @@ def webhook_task(request):
 
                 ticket_title = task_info["title"]
                 ticket_text = task_info["description"]
-                status = task_info["status"]
+                status = TicketStatus.objects.filter(value=task_info["status"])
+                if status.exists():
+                    status = status.first()
                 deadline = datetime.strptime(task_info["deadline"][:11] + '23:59:59', '%Y-%m-%dT%H:%M:%S')
                 created_at = task_info["createdDate"]
 
@@ -56,7 +59,7 @@ def webhook_task(request):
                     'status': status,
                     'is_opened': False,
                     'is_active': True,
-                    'deadline': deadline,
+                    'deadline': deadline ,
                     'b24_domain': b24_domain,
                     'b24_member_id': b24_member_id,
                     'b24_application_token': b24_application_token,
@@ -179,7 +182,6 @@ def webhook_invoice(request):
                 'status': status,
                 'date': datetime.strptime(invoice_load['DATE_BILL'], '%Y-%m-%dT%H:%M:%S%z'),
                 'due_date': datetime.strptime(invoice_load['DATE_PAY_BEFORE'][:11] + '23:59:59', '%Y-%m-%dT%H:%M:%S'),
-                'is_opened': False,
                 'product_title': ', '.join([row['PRODUCT_NAME'] for row in invoice_load['PRODUCT_ROWS']])
             }
 
@@ -192,3 +194,23 @@ def webhook_invoice(request):
             except Exception as e:
                 print(e)
             return HttpResponse()
+
+
+@csrf_exempt
+def webhook_service_section(request):
+    if request.method == 'POST':
+        event = request.POST.get('event', "")
+        entities_id = request.POST.get('data[FIELDS][ID]', "")
+        if event == "ONCRMPRODUCTSECTIONDELETE":
+            ServiceCategory.objects.filter(category_b24_id=entities_id).delete()
+        else:
+            url = set_webhook()
+            bx24 = Bitrix24(url)
+            section = bx24.callMethod('crm.productsection.get', id=entities_id)
+
+            obj, created = ServiceCategory.objects.update_or_create(
+                category_b24_id=section["ID"],
+                defaults={'category_name':section["NAME"]}
+            )
+
+        return HttpResponse('ok')

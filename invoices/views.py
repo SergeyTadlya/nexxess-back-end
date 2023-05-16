@@ -54,7 +54,6 @@ def invoices(request):
                 'id': invoice.id,
                 'invoice_id': invoice.invoice_id,
                 'responsible': invoice.responsible,
-                'is_opened': invoice.is_opened,
                 'price': format_price(invoice.price),
                 'date': format_date(invoice.date),
                 'due_date': format_date(invoice.due_date),
@@ -133,7 +132,6 @@ def ajax_invoice_filter(request):
                     'id': invoice.id,
                     'invoice_id': invoice.invoice_id,
                     'responsible': invoice.responsible,
-                    'is_opened': invoice.is_opened,
                     'price': format_price(invoice.price),
                     'date': format_date(invoice.date),
                     'due_date': format_date(invoice.due_date),
@@ -185,21 +183,21 @@ def ajax_invoice_filter(request):
 @login_required(login_url='/accounts/login/')
 def invoice_detail(request, id):
     if request.user.is_authenticated and request.user.google_auth or request.user.is_superuser:
-        try:
+        # try:
+        invoice = Invoice.objects.get(id=id)
+        if request.user.is_superuser or int(invoice.responsible) == request.user.b24_contact_id:
+            if not request.user.is_superuser:
+                Invoice.objects.filter(id=id).update(status=Status.objects.get(value='Opened'))
             invoice = Invoice.objects.get(id=id)
-            if request.user.is_superuser or int(invoice.responsible) == request.user.b24_contact_id:
-                if not request.user.is_superuser:
-                    Invoice.objects.filter(id=id).update(is_opened=True)
-                invoice = Invoice.objects.get(id=id)
-                res = {
-                    'invoice': invoice,
-                }
-                return render(request, "invoices/detail.html", res)
-            else:
-                return redirect('/invoices/')
-        except :
-                return redirect('/invoices/')
-    else: return redirect('authentication:main')
+            res = {
+                'invoice': invoice,
+            }
+            return render(request, "invoices/detail.html", res)
+        else:
+            return redirect('/invoices/')
+    #     except :
+    #             return redirect('/invoices/')
+    # else: return redirect('authentication:main')
 
 
 def generate_new_pdf(pdf_path, id, invoice, request):
