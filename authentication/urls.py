@@ -16,6 +16,7 @@ urlpatterns = [
     path('profile/', views.profile_view, name='profile'),
     path('accounts/logout/', views.MyLogoutView.as_view(), name='account_logout'),
     path('ajax_errors/', views.ajax_errors),
+    path('webhook/service_section/', views.webhook_service_section),
 ]
 
 if settings.DEBUG:

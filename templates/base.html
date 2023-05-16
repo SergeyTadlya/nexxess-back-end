@@ -57,23 +57,13 @@
                           </div>
 
                             <ul class="nav__sublist">
-                              <li class="nav__subitem">
-                                <a href="{% url 'services:service1' %}" class="nav__subitem-link">
-                                  Hourly Rate Chart for Consultation
-                                </a>
-                              </li>
-
-                              <li class="nav__subitem">
-                                <a href="{% url 'services:service2' %}" class="nav__subitem-link">
-                                  Nexxess Trust Books
-                                </a>
-                              </li>
-                              <li class="nav__subitem">
-                                <a href="{% url 'services:service3' %}" class="nav__subitem-link">
-                                  Nexxess Packages
-                                </a>
-                              </li>
-
+                                {% for category in categories %}
+                                    <li class="nav__subitem">
+                                        <a href="{% url 'services:product_detail' category.category_b24_id %}" class="nav__subitem-link">
+                                          {{category.category_name}}
+                                        </a>
+                                    </li>
+                                {% endfor %}
                               <li class="nav__subitem">
                                 <a href="#" class="nav__subitem-link">
                                   My Services

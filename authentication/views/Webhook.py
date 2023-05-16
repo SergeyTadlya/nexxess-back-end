@@ -1,15 +1,13 @@
 from authentication.helpers.B24Webhook import set_webhook
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
-
 from bitrix24 import *
-
 from authentication.models import B24keys
 from invoices.models import Invoice, Status
 from tickets.models import Ticket, TicketComments
 from datetime import datetime
-
 import requests
+from services.models import ServiceCategory
 
 
 def trim_before(text):
@@ -192,3 +190,23 @@ def webhook_invoice(request):
             except Exception as e:
                 print(e)
             return HttpResponse()
+
+
+@csrf_exempt
+def webhook_service_section(request):
+    if request.method == 'POST':
+        event = request.POST.get('event', "")
+        entities_id = request.POST.get('data[FIELDS][ID]', "")
+        if event == "ONCRMPRODUCTSECTIONDELETE":
+            ServiceCategory.objects.filter(category_b24_id=entities_id).delete()
+        else:
+            url = set_webhook()
+            bx24 = Bitrix24(url)
+            section = bx24.callMethod('crm.productsection.get', id=entities_id)
+
+            obj, created = ServiceCategory.objects.update_or_create(
+                category_b24_id=section["ID"],
+                defaults={'category_name':section["NAME"]}
+            )
+
+        return HttpResponse('ok')
