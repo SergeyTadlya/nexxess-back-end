@@ -94,6 +94,7 @@
             </ul>
             <div class="content__list-box">
               <p class="content__list-price">${{service.PRICE}}</p>
+                                  {{service.ID}}
               <a class="content__list-link order_click" data-b24id="{{ service.ID }}">Order</a>
             </div>
           </li>
@@ -195,7 +196,7 @@
     $(document).ready(function () {
       $(".order_click").click(function()
       {
-        var button = $(".order_click")[0];
+        var button = $(this);
         var b24_product_id = $(button).data("b24id");
         $.ajax({
           url: '/services/create_invoice/',

@@ -79,7 +79,8 @@
                 </p>
                 <div class="content__list-price-box">
                   <p class="content__list-price">${{ product.PRICE }} <span class="content__list-price-text">PER HOUR</span> </p>
-                  <a class="content__list-link order_click" data-b24id="{{ product.ID }}">Order</a>
+                    {{product.ID}}
+                    <a class="content__list-link order_click" data-b24id="{{ product.ID }}">Order</a>
                 </div>
               </li>
             {% endfor %}
@@ -213,7 +214,7 @@
   $(document).ready(function () {
     $(".order_click").click(function()
     {
-      var button = $(".order_click")[0];
+      var button = $(this);
       var b24_product_id = $(button).data("b24id");
       $.ajax({
         url: '/services/create_invoice/',
