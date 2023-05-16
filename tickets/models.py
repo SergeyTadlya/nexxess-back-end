@@ -3,10 +3,11 @@ from django.utils import timezone
 
 
 class TicketStatus(models.Model):
-    value = models.CharField(verbose_name='value', max_length=24)
-    name = models.CharField(verbose_name='name', max_length=24)
-    color = models.CharField(verbose_name='color', max_length=24)
-    abbreviation = models.CharField(verbose_name='abbreviation', max_length=24)
+    value = models.CharField(verbose_name='Value', max_length=24)
+    name = models.CharField(verbose_name='Name', max_length=24)
+    color = models.CharField(verbose_name='Color', max_length=24)
+    abbreviation = models.CharField(verbose_name='Abbreviation', max_length=24)
+    sticker = models.CharField(verbose_name='Sticker', max_length=24, blank=True, null=True)
 
     def __str__(self):
         return self.name + ' - ' + self.color
