@@ -56,7 +56,7 @@ class MessageHandler:
             elif message in ['/tickets', '📝 Tickets'] and not user_step:
                 TicketsHandler.show_tickets_menu(self.bot, self.data)
 
-            elif message in ['/faq', '⁉️ FAQ'] and not user_step :
+            elif message in ['/faq', '⁉️ FAQ'] and not user_step:
                 FAQHandler.show_faq_menu(self.bot, self.data)
 
             elif message in ['/logout', '🚪 Log Out'] and not user_step:

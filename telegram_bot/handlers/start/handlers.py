@@ -98,13 +98,11 @@ class AuthenticationHandler:
                                      text=f'Greate!\n'
                                           f'We have sent a confirmation code to the {unauthorized_user.email}.\n'
                                           f'Check it and write here your code:')
-
                 send_mail('Secret key',
                           f'Your private key for "{unauthorized_user.email}":\n{code}',
                           'cutrys69@gmail.com',
                           [unauthorized_user.email],
                           fail_silently=False)
-
             except Exception as e:
                 print(e)
 
@@ -126,7 +124,7 @@ class AuthenticationHandler:
             return
 
         if verify_code == unauthorized_user.verify_code:
-            unauthorized_user.step = 'Nothing'
+            unauthorized_user.step = ''
             unauthorized_user.save()
 
             authorize_user(data['message'])

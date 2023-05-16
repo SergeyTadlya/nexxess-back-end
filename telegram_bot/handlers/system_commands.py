@@ -1,5 +1,3 @@
-from typing import Dict
-
 from telegram import Bot, BotCommand
 
 

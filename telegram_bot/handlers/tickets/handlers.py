@@ -3,7 +3,7 @@ from datetime import date
 
 from authentication.helpers.B24Webhook import set_webhook
 from invoices.views import format_date
-from tickets.models import Ticket, TelegramTicket
+from tickets.models import Ticket, TelegramTicket, TicketStatus
 
 from .keyboards import *
 from ..utils import *
@@ -24,29 +24,29 @@ class TicketsHandler:
         elif callback_title == 'my':
             self.show_tickets_statuses()
 
-        elif callback_title == 'Ongoing':
-            self.show_ongoing_tickets()
-
-        elif callback_title == 'Overdue':
-            self.show_overdue_tickets()
-
-        elif callback_title == 'Closed':
-            self.show_closed_tickets()
-
-        elif callback_title == 'All':
-            self.show_all_tickets()
-
         elif 'detail' in callback_title:
-            ticket_id = callback_title.split('_')[1]
+            parsed_data = callback_title.split('_')
+            status_name = parsed_data[1]
+            current_page = parsed_data[2]
+            ticket_id = parsed_data[4]
 
-            self.show_ticket_details(ticket_id)
+            self.show_ticket_details(status_name, current_page, ticket_id)
+
+        elif 'status_All' in callback_title:
+            parsed_data = callback_title.split('_')
+            current_page = int(parsed_data[2])
+
+            self.show_all_tickets(current_page)
+
+        elif 'status_' in callback_title:
+            parsed_data = callback_title.split('_')
+            status_name = parsed_data[1]
+            current_page = int(parsed_data[2])
+
+            self.show_ticket_for_selected_status(status_name, current_page)
 
         elif callback_title == 'create':
             self.show_set_ticket_title()
-
-        # elif callback_title == 'changeTitle':
-        #     ticket_id = callback_title.split('_')[2]
-        #     self.save_ticket_title(ticket_id)
 
     @staticmethod
     def create_new_ticket(bot, data, deadline):
@@ -94,40 +94,68 @@ class TicketsHandler:
                         reply_markup=tickets_menu_keyboard())
 
     def show_tickets_statuses(self):
+        tickets = TicketStatus.objects.all()
         self.bot.sendMessage(chat_id=get_chat_id(self.data['callback_query']),
-                             text='Choose tickets status',
-                             reply_markup=tickets_statuses_keyboard())
+                             text='Choose the ticket status',
+                             reply_markup=tickets_statuses_keyboard(tickets))
 
-    def show_ongoing_tickets(self):
+    def show_ticket_for_selected_status(self, status_name, current_page, element_on_page=8):
         user = get_user(self.data['callback_query'])
-        tickets = Ticket.objects.filter(responsible=user.email, filter='Ongoing')
+        ticket_status = TicketStatus.objects.get(name=status_name)
+        tickets = Ticket.objects.filter(responsible=str(user.b24_contact_id), status=ticket_status).order_by('-created_at')
 
-        self.bot.sendMessage(chat_id=get_chat_id(self.data['callback_query']),
-                             text='All tickets for ' + user.email)
+        tickets_quantity = len(tickets)
+        if tickets_quantity == 0:
+            self.bot.sendMessage(chat_id=get_chat_id(self.data['callback_query']),
+                                 text='You don`t have any ' + status_name.lower() + ' invoices')
+            return
 
-    def show_overdue_tickets(self):
-        user = get_user(self.data['callback_query'])
-        tickets = Ticket.objects.filter(responsible=user.email, status='Overdue')
+        all_pages = tickets_quantity // element_on_page if not tickets_quantity % element_on_page else (tickets_quantity // element_on_page) + 1
+        has_pages = False
 
-        self.bot.sendMessage(chat_id=get_chat_id(self.data['callback_query']),
-                             text='All tickets for ' + user.email)
+        if tickets_quantity > element_on_page:
+            has_pages = True
+            tickets = tickets[element_on_page * (current_page - 1):element_on_page*current_page]
 
-    def show_closed_tickets(self):
-        user = get_user(self.data['callback_query'])
-        tickets = Ticket.objects.filter(responsible=user.email, status='Closed')
+        try:
+            message = ticket_status.sticker + ' ' + ticket_status.name + ' tickets: '
+            self.bot.edit_message_text(
+                message,
+                chat_id=get_chat_id(self.data['callback_query']),
+                message_id=self.data['callback_query']['message']['message_id'],
+                reply_markup=tickets_for_selected_status_keyboard(tickets, ticket_status, current_page, all_pages, has_pages)
+            )
+        except Exception as e:
+            print(e)
 
-        self.bot.sendMessage(chat_id=get_chat_id(self.data['callback_query']),
-                             text='All tickets for ' + user.email)
-
-    def show_all_tickets(self):
+    def show_all_tickets(self, current_page, element_on_page=8):
         user = get_user(self.data['callback_query'])
         tickets = Ticket.objects.filter(responsible=user.b24_contact_id)
 
-        self.bot.sendMessage(chat_id=get_chat_id(self.data['callback_query']),
-                             text='All tickets for ' + user.email,
-                             reply_markup=all_tickets_keyboard(tickets))
+        tickets_quantity = len(tickets)
+        if tickets_quantity == 0:
+            self.bot.sendMessage(chat_id=get_chat_id(self.data['callback_query']),
+                                 text='You don`t have any invoices')
+            return
 
-    def show_ticket_details(self, ticket_id):
+        all_pages = tickets_quantity // element_on_page if not tickets_quantity % element_on_page else (tickets_quantity // element_on_page) + 1
+        has_pages = False
+
+        if tickets_quantity > element_on_page:
+            has_pages = True
+            tickets = tickets[element_on_page * (current_page - 1):element_on_page * current_page]
+
+        try:
+            self.bot.edit_message_text(
+                'All tickets: ',
+                chat_id=get_chat_id(self.data['callback_query']),
+                message_id=self.data['callback_query']['message']['message_id'],
+                reply_markup=all_tickets_keyboard(tickets, current_page, all_pages, has_pages)
+            )
+        except Exception as e:
+            print(e)
+
+    def show_ticket_details(self, status_name, current_page, ticket_id):
         ticket = Ticket.objects.filter(task_id=ticket_id)
         if ticket.exists():
             ticket = ticket.first()
@@ -135,17 +163,17 @@ class TicketsHandler:
         open_value = '☑️\n' if ticket.is_opened is True else '❌\n'
         active_value = '☑️' if ticket.is_active is True else '❌'
 
-        ticket_detail = 'Ticket title (#' + ticket_id + '): \n' + \
-                        ticket.ticket_title + '\n\n' + \
+        ticket_detail = 'Ticket #' + ticket_id + '\n' + \
+                        'Title: \n' + ticket.ticket_title + '\n\n' + \
                         'Description: \n' + ticket.ticket_text + '\n\n' + \
-                        'Status: ' + str(ticket.status) + '\n' + \
+                        'Status: ' + str(ticket.status.name) + '\n' + \
                         'Deadline: ' + format_date(ticket.deadline) + '\n' + \
                         'Open: ' + open_value + \
                         'Active: ' + active_value
 
         self.bot.sendMessage(chat_id=get_chat_id(self.data['callback_query']),
                              text=ticket_detail,
-                             reply_markup=ticket_detail_keyboard())
+                             reply_markup=ticket_detail_keyboard(status_name, current_page))
 
     def show_set_ticket_title(self):
         user = get_user(self.data['callback_query'])
@@ -169,7 +197,6 @@ class TicketsHandler:
 
         self.bot.sendMessage(chat_id=get_chat_id(self.data),
                              text='Great, now describe the situation:')
-                            # reply_markup=return_to_set_title_keyboard(ticket.id)
 
     def save_ticket_description(self, description):
         if description == 'None' or description.startswith('/') or description in ['👨‍💻 Services', '🧾 Invoices', '📝 Tickets', '⁉️ FAQ', '🚪 Log Out']:
