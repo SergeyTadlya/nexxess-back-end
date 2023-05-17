@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from bitrix24 import Bitrix24, BitrixError
 from requests import Response
 from authentication.helpers.B24Webhook import set_webhook
-from invoices.models import Invoice, StripeSettings, LocalInvoice
+from invoices.models import Invoice, StripeSettings, LocalInvoice, Status
 from telegram_bot.models import User
 from .models import Service, ServiceCategory
 from . import urls
@@ -16,6 +16,11 @@ import time
 import json
 import re
 from authentication.models import B24keys
+
+
+def remove_html_tags(text):
+    clean = re.compile('<.*?>')
+    return re.sub(clean, '', text)
 
 
 def clean_and_shorten_text(text):
@@ -181,11 +186,14 @@ def product_detail(request, id):
             )
 
             # description convertation for template
-            description_parts = products['DESCRIPTION'].split("•")
-            parts_array = []
-            for description_part in description_parts:
-                if description_part != "":
-                    parts_array.append(description_part.strip().replace('<br>', ''))
+            # description_parts = products['DESCRIPTION'].split("•")
+            # parts_array = []
+            # for description_part in description_parts:
+            #     if description_part != "":
+            #         parts_array.append(description_part.strip().replace('<br>', ''))
+
+            description_parts = products['DESCRIPTION'].split("<br>\n ")
+            parts_array = [remove_html_tags(item) for item in description_parts]
             description.append({
                 "ID": products["ID"],
                 "DESCRIPTION": parts_array,
@@ -247,8 +255,9 @@ def create_invoice(request):
 
 @login_required(login_url='/accounts/login/')
 def my_services(request):
+    paid_invoice_status = Status.objects.get(abbreviation="P", value="Paid")
     b24_contact_id = request.user.b24_contact_id
-    invoices = Invoice.objects.filter(responsible=b24_contact_id)
+    invoices = Invoice.objects.filter(responsible=b24_contact_id, status=paid_invoice_status)
 
     # get purchased services from invoices
     purchased_services_id = []
@@ -261,27 +270,17 @@ def my_services(request):
     property_type = bx24.callMethod("crm.product.property.get", id=100)  # 100 - id custom field "type"
 
     b24_service = []
-    description = []
     for service_id in purchased_services_id:
         section_products = bx24.callMethod('crm.product.list', order={'PRICE': "ASC"},
                                            filter={"ID": service_id},
                                            select=["ID", "NAME", "PROPERTY_98", "PRICE", "CURRENCY_ID", "PROPERTY_100",
                                                    "DESCRIPTION", "SECTION_ID", "PROPERTY_44"])
         for products in section_products:
-            # description convertation for template
-            description_parts = products['DESCRIPTION'].split("•")
-            parts_array = []
-            for description_part in description_parts:
-                if description_part != "":
-                    parts_array.append(description_part.strip().replace('<br>', ''))
+            description_parts = products['DESCRIPTION'].split("<br>\n ")
+            parts_array = [remove_html_tags(item) for item in description_parts]
 
             property_type_id = products['PROPERTY_100']['value']
             property_type_name = property_type["VALUES"][property_type_id]["VALUE"]
-
-            # description.append({
-            #     "ID": products["ID"],
-            #     "DESCRIPTION": parts_array,
-            # })
 
             b24_service.append({
                 "ID": products["ID"],
@@ -291,12 +290,10 @@ def my_services(request):
                 "PRICE": products["PRICE"],
                 "CATEGORY": property_type_name,
             })
-        # b24_service.append(section_products)
 
     b24_domain = B24keys.objects.order_by("id").first().domain[:-1]
     context = {
         'b24_domain': b24_domain,
-        # 'services_description': description,
         'b24_service': b24_service
     }
     return render(request, "services/my_services.html", context=context)

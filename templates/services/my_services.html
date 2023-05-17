@@ -80,19 +80,25 @@
                 <p class="content__list-title">{{service.NAME}}</p>
                 <p class="content__list-title">Section: {{service.CATEGORY}}</p>
               </div>
-              <ul class="content__list-product-description" style="margin-left: 30px">
+              <ul class="content__list-product-description">
                 {% for description_part in service.DESCRIPTION %}
-                    <li class="content__list-product-description-item">
-                      <p class="content__list-product-description-text">
-                        {{description_part}}
-                      </p>
-                    </li>
+                    {% if description_part.0 == '•' %}
+                      <li class="content__list-product-description-item">
+                        <p class="content__list-product-description-text">
+                          {{description_part}}
+                        </p>
+                      </li>
+                    {% else %}
+                        <p class="content__list-product-description-text">
+                          {{description_part}}
+                        </p>
+                    {% endif %}
                 {% endfor %}
               </ul>
               <div class="content__list-box" style="width: 160px">
                 <p class="content__list-price" style="width: 100%">Price: ${{service.PRICE}}</p>
                 {% if service.CATEGORY == 'Consultation' %}
-                  <p class="content__list-price" style="width: 100%">Due Date: some data</p>
+                  <p class="content__list-price" style="width: 100%">Remains, hour: 10</p>
                 {% endif %}
               </div>
             </li>
@@ -188,6 +194,13 @@
 </div>
 {% endblock footer %}
 {% block extra_js %}
+    <script>
+      var items = document.querySelectorAll('.content__list-product-description-item');
+      items.forEach(function(item) {
+        var text = item.querySelector('.content__list-product-description-text');
+        text.innerHTML = text.innerHTML.replace(/•/g, '');
+      });
+    </script>
     <script src="{% static 'js/dynamic_search.js' %}"></script>
     <script src="{% static 'js/services.js' %}"></script>
     <script src="{% static 'js/main.js' %}"></script>

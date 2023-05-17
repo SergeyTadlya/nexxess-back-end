@@ -83,11 +83,13 @@
               {% for description_parts in services_description %}
                 {% if description_parts.ID == service.ID %}
                   {% for description_part in description_parts.DESCRIPTION %}
+                    {% if description_part %}
                       <li class="content__list-product-description-item">
                         <p class="content__list-product-description-text">
                           {{description_part}}
                         </p>
                       </li>
+                    {% endif %}
                   {% endfor %}
                 {% endif %}
               {% endfor %}
@@ -192,6 +194,12 @@
 {% block extra_js %}
     <script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
     <script>
+    var items = document.querySelectorAll('.content__list-product-description-item');
+    items.forEach(function(item) {
+      var text = item.querySelector('.content__list-product-description-text');
+      text.innerHTML = text.innerHTML.replace(/•/g, '');
+    });
+
     $(document).ready(function () {
       $(".order_click").click(function()
       {
