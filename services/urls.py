@@ -11,6 +11,7 @@ urlpatterns = [
     path('', views.services, name='services'),
     path('about_service/<int:id>/', views.product_detail, name='product_detail'),
     path('create_invoice/', views.create_invoice, name='create_invoice'),
+    path('my_services/', views.my_services, name='my_services'),
 ]
 
 if settings.DEBUG:

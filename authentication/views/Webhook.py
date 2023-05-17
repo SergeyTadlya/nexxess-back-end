@@ -172,6 +172,7 @@ def webhook_invoice(request):
                 'b24_member_id': b24_member_id,
                 'b24_application_token': b24_application_token,
                 'b24_time': b24_time,
+                'service_id': invoice_load['PRODUCT_ROWS'][0]['PRODUCT_ID'],
                 'invoice_info': invoice_load,
                 'price': invoice_load['PRICE'],
                 'status': status,

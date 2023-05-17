@@ -223,14 +223,14 @@ def create_invoice(request):
     try:
         invoice_id = bx24.callMethod('crm.invoice.add', fields={'ORDER_TOPIC': "Invoice - " + product.title,
                                                    'PERSON_TYPE_ID': 1,
-                                                   'UF_CONTACT_ID': request.user.b24_contact_id,
+                                                   'UF_CONTACT_ID': request.user.b24_contact_id, #1
                                                    'STATUS_ID': 'N',
                                                    'RESPONSIBLE_ID': 1,
                                                    'PAY_SYSTEM_ID': 4,
                                                    'DATE_PAY_BEFORE': tomorrow.strftime("%m/%d/%Y"),
                                                    "PRODUCT_ROWS": [
                                                        {"ID": 0,
-                                                        "PRODUCT_ID": product.id,
+                                                        "PRODUCT_ID": product.service_id, #product.id
                                                         "PRODUCT_NAME": product.title,
                                                         "QUANTITY": 1,
                                                         "PRICE": product.price},
@@ -243,3 +243,60 @@ def create_invoice(request):
         print(message)
 
     return JsonResponse({'invoice_id': str(invoice.id)})
+
+
+@login_required(login_url='/accounts/login/')
+def my_services(request):
+    b24_contact_id = request.user.b24_contact_id
+    invoices = Invoice.objects.filter(responsible=b24_contact_id)
+
+    # get purchased services from invoices
+    purchased_services_id = []
+    for invoice in invoices:
+        services_list = Service.objects.filter(service_id=invoice.service_id)[0]
+        purchased_services_id.append(services_list.service_id)
+
+    url = set_webhook()
+    bx24 = Bitrix24(url)
+    property_type = bx24.callMethod("crm.product.property.get", id=100)  # 100 - id custom field "type"
+
+    b24_service = []
+    description = []
+    for service_id in purchased_services_id:
+        section_products = bx24.callMethod('crm.product.list', order={'PRICE': "ASC"},
+                                           filter={"ID": service_id},
+                                           select=["ID", "NAME", "PROPERTY_98", "PRICE", "CURRENCY_ID", "PROPERTY_100",
+                                                   "DESCRIPTION", "SECTION_ID", "PROPERTY_44"])
+        for products in section_products:
+            # description convertation for template
+            description_parts = products['DESCRIPTION'].split("•")
+            parts_array = []
+            for description_part in description_parts:
+                if description_part != "":
+                    parts_array.append(description_part.strip().replace('<br>', ''))
+
+            property_type_id = products['PROPERTY_100']['value']
+            property_type_name = property_type["VALUES"][property_type_id]["VALUE"]
+
+            # description.append({
+            #     "ID": products["ID"],
+            #     "DESCRIPTION": parts_array,
+            # })
+
+            b24_service.append({
+                "ID": products["ID"],
+                "NAME": products["NAME"],
+                "DESCRIPTION": parts_array,
+                "IMAGE": products["PROPERTY_44"],
+                "PRICE": products["PRICE"],
+                "CATEGORY": property_type_name,
+            })
+        # b24_service.append(section_products)
+
+    b24_domain = B24keys.objects.order_by("id").first().domain[:-1]
+    context = {
+        'b24_domain': b24_domain,
+        # 'services_description': description,
+        'b24_service': b24_service
+    }
+    return render(request, "services/my_services.html", context=context)
