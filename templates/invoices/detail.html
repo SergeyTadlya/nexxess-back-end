@@ -118,35 +118,13 @@
                       Add to Nexxess© Trust Book (total $35,000) <br>
                       or purchase a gold package a la cart
                     </h6>
-                    <p class="content__descrip-text">INCLUDES:</p>
+                      <p class="content__descrip-text" id="includes">INCLUDE:</p>
                       <ul class="content__descrip-list">
-                        <li class="content__descrip-item">
-                          Forty (40) hours of business consultation for 5 years.
-                        </li>
-                        <li class="content__descrip-item">
-                          Includes up to ten(lO) business entities or real estate properties into trust
-                        </li>
-                        <li class="content__descrip-item">
-                          Trust defense*(TD)
-                        </li>
-                        <li class="content__descrip-item">
-                          Referrals to banks and bookkeeping companies.
-                        </li>
-                        <li class="content__descrip-item">
-                          Access with a Nexxess© Tax Advisors. (6 hours)
-                        </li>
-                        <li class="content__descrip-item">
-                          Access with a Nexxess© Attorney. (10 hours)
-                        </li>
-                        <li class="content__descrip-item">
-                          One Lifetime replacement copy of trust if lost or stolen.
-                        </li>
-                        <li class="content__descrip-item">
-                          Trust completion and activation within 20 days of payment.
-                        </li>
-                        <li class="content__descrip-item">
-                          Survivorship Service*
-                        </li>
+                        {% for description_part in description_parts %}
+                          <li class="content__descrip-item">
+                            {{description_part}}
+                          </li>
+                        {% endfor %}
                       </ul>
                   </div>
                 </div>
@@ -243,6 +221,16 @@
 {% block extra_js %}
 <script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
 <script>
+  var items = document.querySelectorAll('.content__descrip-item');
+    items.forEach(function(item) {
+      if(item.innerText[0] == "•"){
+        item.innerText = item.innerText.replace(/•/g, '');
+      }else{
+        // document.getElementById("includes").innerText = item.innerText;
+        item.remove();
+      }
+    });
+
   $(document).ready(function () {
     $(".button_pay").click(function()
     {
