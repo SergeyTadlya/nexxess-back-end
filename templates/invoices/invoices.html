@@ -306,10 +306,36 @@
 {% endblock footer %}
 
 {% block extra_js %}
+
     <script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
     <script src="{% static 'js/jquery-ui.min.js' %}"></script>
     <script src="{% static 'js/invoices.js' %}"></script>
     <script src="{% static 'js/calendar.js' %}"></script>
     <script src="{% static 'js/global.js' %}"></script>
     <script src="{% static 'ajax/invoices_ajax.js' %}"></script>
+    <script>
+      $(document).ready(function () {
+        $(".button_pay").click(function()
+        {
+          var button = $(this);
+          var b24_product_id = $(button).data("b24invoice");
+
+          $.ajax({
+            url: '/invoices/create_payment_link/',
+            type: 'POST',
+            data: {"b24_invoice_id":b24_product_id},
+            dataType: 'json',
+            success: function(data) {
+              if (data.pay_link){
+                // window.open(data.pay_link, '_blank');
+                window.location.href = data.pay_link;
+              }else
+              {
+                alert("We have some problem. Please try late")
+              }
+            },
+          });
+        });
+      });
+      </script>
 {% endblock extra_js %}

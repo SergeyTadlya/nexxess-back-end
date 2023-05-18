@@ -11,25 +11,32 @@
 
     </div>
     <div class="aside-info">
-      <div class="aside-info__box">
+      <div class="aside-info__box accordion__list--active">
         <div class="aside-info__box-top">
+          <img class="aside-info__top-title-img" src="{% static 'images/aside-main.svg' %}" alt="#">
           <h6 class="aside-info__top-title">Your Info</h6>
+          <img class="aside-info__top-title-arrow accordion__arrow--active" src="{% static 'images/chevron-down.svg' %}"  alt="icon">
         </div>
-        <ul class="aside-info__box-list">
-          <li class="aside-info__box-item">
-            {{ request.user.first_name }}
-            {{ request.user.last_name }}
-          </li>
-          <li class="aside-info__box-item">
-            {{ request.user.username}}
-          </li>
-          <li class="aside-info__box-item">
-            {{ request.user.email }}
-          </li>
-          <li class="aside-info__box-item">
+        <div class="aside-info-content-iiner">
+          <p class="aside-info__top-subtitle">
+            Nexxess International
+          </p>
+          <ul class="aside-info__box-list">
+            <li class="aside-info__box-item">
+              {{ request.user.first_name }}
+              {{ request.user.last_name }}
+            </li>
+            <li class="aside-info__box-item">
+              {{ request.user.username}}
+            </li>
+            <li class="aside-info__box-item">
+              {{ request.user.email }}
+            </li>
+          </ul>
 
-          </li>
-        </ul>
+          <a class="aside-info__top-btn" href="#">Update</a>
+        </div>
+
       </div>
         <div class="aside-info__accordion">
             <div id="aside-info__accordion-top" class="aside-info__accordion-top">

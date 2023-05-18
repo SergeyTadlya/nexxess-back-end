@@ -128,7 +128,7 @@
                       </ul>
                   </div>
                 </div>
-			<a class="content__pay button_pay" data-b24invoice="{{ invoice.invoice_id }}">Pay</a>
+			          <button class="content__pay button_pay" data-b24invoice="{{ invoice.invoice_id }}">Pay</button>
             </div>
 {% endblock content %}
 {% block footer %}
@@ -243,7 +243,8 @@
         dataType: 'json',
         success: function(data) {
           if (data.pay_link){
-            window.open(data.pay_link, '_blank');
+            // window.open(data.pay_link, '_blank');
+            window.location.href = data.pay_link;
           }else
           {
             alert("We have some problem. Please try late")
