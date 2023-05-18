@@ -5,9 +5,10 @@ from django.http import HttpResponse
 from bitrix24 import *
 
 from authentication.models import B24keys
+from services.models import ServiceCategory
 from invoices.models import Invoice, Status
 from tickets.models import Ticket, TicketComments, TicketStatus
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import requests
 
@@ -58,7 +59,7 @@ def webhook_task(request):
                     'status': status,
                     'is_opened': False,
                     'is_active': True,
-                    'deadline': deadline,
+                    'deadline': deadline ,
                     'b24_domain': b24_domain,
                     'b24_member_id': b24_member_id,
                     'b24_application_token': b24_application_token,
@@ -148,7 +149,6 @@ def webhook_task_comment(request):
         return HttpResponse('error')
 
 
-
 @csrf_exempt
 def webhook_invoice(request):
     if request.method == 'POST':
@@ -165,25 +165,37 @@ def webhook_invoice(request):
                 and b24_time != "":
             method = "crm.invoice.get/?id=" + entities_id
             url = set_webhook(method)
+
             invoice_load = requests.get(url).json()['result']
             status = Status.objects.filter(abbreviation=invoice_load['STATUS_ID'])
+            # status = invoice_load['STATUS_ID']
             if status.exists():
                 status = status.first()
+            current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            future_time = datetime.now() + timedelta(days=1)
             # Check avaible to write in database
+            try:
+                date_bill = datetime.strptime(invoice_load['DATE_BILL'], '%Y-%m-%dT%H:%M:%S%z')
+                # due_time = datetime.strptime(invoice_load['DATE_PAY_BEFORE'][:11] + '23:59:59', '%Y-%m-%dT%H:%M:%S')
+                due_time = datetime.strptime(invoice_load['DATE_PAY_BEFORE'][:11] + future_time, '%Y-%m-%dT%H:%M:%S')
+            except:
+                date_bill = current_time
+                due_time = future_time
 
             defaults = {
                 'b24_domain': b24_domain,
                 'b24_member_id': b24_member_id,
                 'b24_application_token': b24_application_token,
                 'b24_time': b24_time,
+                'service_id': invoice_load['PRODUCT_ROWS'][0]['PRODUCT_ID'],
                 'invoice_info': invoice_load,
                 'price': invoice_load['PRICE'],
                 'status': status,
-                'date': datetime.strptime(invoice_load['DATE_BILL'], '%Y-%m-%dT%H:%M:%S%z'),
-                'due_date': datetime.strptime(invoice_load['DATE_PAY_BEFORE'][:11] + '23:59:59', '%Y-%m-%dT%H:%M:%S'),
-                'is_opened': False,
+                'date': date_bill,
+                'due_date': due_time,
                 'product_title': ', '.join([row['PRODUCT_NAME'] for row in invoice_load['PRODUCT_ROWS']])
             }
+
 
             try:
                 Invoice.objects.update_or_create(
@@ -194,3 +206,24 @@ def webhook_invoice(request):
             except Exception as e:
                 print(e)
             return HttpResponse()
+
+
+
+@csrf_exempt
+def webhook_service_section(request):
+    if request.method == 'POST':
+        event = request.POST.get('event', "")
+        entities_id = request.POST.get('data[FIELDS][ID]', "")
+        if event == "ONCRMPRODUCTSECTIONDELETE":
+            ServiceCategory.objects.filter(category_b24_id=entities_id).delete()
+        else:
+            url = set_webhook()
+            bx24 = Bitrix24(url)
+            section = bx24.callMethod('crm.productsection.get', id=entities_id)
+
+            obj, created = ServiceCategory.objects.update_or_create(
+                category_b24_id=section["ID"],
+                defaults={'category_name':section["NAME"]}
+            )
+
+        return HttpResponse('ok')

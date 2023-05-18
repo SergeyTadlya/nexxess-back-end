@@ -13,8 +13,6 @@ urlpatterns = [
     path('create-task/', views.create_bitrix_task, name='create_task'),
     path('list', views.task_data, name='list'),
     path('ajax_tasks_filter/', views.ajax_tasks_filter)
-
-
 ]
 
 if settings.DEBUG:

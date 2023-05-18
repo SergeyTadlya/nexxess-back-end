@@ -60,126 +60,53 @@
 {% block content %}
     <div class="content__inner">
         <div class="content__top">
-            <h1 class="title content__top-title">Hourly Rate Chart for Consultation</h1>
+            <h1 class="title content__top-title">My Services</h1>
             <div class="content__top-search">
                 <img class="content__top-img" src="{% static 'images/main/Search.svg' %}" alt="Search">
                 <input class="content__top-input" type="text" id="search-input" placeholder="Search">
             </div>
         </div>
         <ul class="content__list">
-          <li class="content__list-item content__list-item-hourly">
-            <div class="content__list-box">
-              <p class="content__list-title">STANDARD RATE</p>
-            </div>
-            <p class="content__list-text">
-              1 HOUR
-            </p>
-            <div class="content__list-price-box">
-              <p class="content__list-price">$1000 <span class="content__list-price-text">PER HOUR</span> </p>
-              <a class="content__list-link" href="#">Order</a>
-            </div>
-          </li>
-
-          <li class="content__list-item content__list-item-hourly">
-            <div class="content__list-box">
-              <p class="content__list-title">BRONZE PACKAGE</p>
-            </div>
-            <p class="content__list-text">
-              10 HOUR
-            </p>
-            <div class="content__list-price-box">
-              <p class="content__list-price">$700 <span class="content__list-price-text">PER HOUR</span> </p>
-              <a class="content__list-link" href="#">Order</a>
-            </div>
-          </li>
-
-          <li class="content__list-item content__list-item-hourly">
-            <div class="content__list-box">
-              <p class="content__list-title">SILVER PACKAGE</p>
-            </div>
-            <p class="content__list-text">
-              20 HOUR
-            </p>
-            <div class="content__list-price-box">
-              <p class="content__list-price">$600 <span class="content__list-price-text">PER HOUR</span> </p>
-              <a class="content__list-link" href="#">Order</a>
-            </div>
-          </li>
-
-          <li class="content__list-item content__list-item-hourly">
-            <div class="content__list-box">
-              <p class="content__list-title">GOLD PACKAGE</p>
-            </div>
-            <p class="content__list-text">
-              40 HOUR
-            </p>
-            <div class="content__list-price-box">
-              <p class="content__list-price">$500 <span class="content__list-price-text">PER HOUR</span> </p>
-              <a class="content__list-link" href="#">Order</a>
-            </div>
-          </li>
-
-          <li class="content__list-item content__list-item-hourly">
-            <div class="content__list-box">
-              <p class="content__list-title">PLATINUM PACKAGE</p>
-            </div>
-            <p class="content__list-text">
-              60 HOUR
-            </p>
-            <div class="content__list-price-box">
-              <p class="content__list-price">$400 <span class="content__list-price-text">PER HOUR</span> </p>
-              <a class="content__list-link" href="#">Order</a>
-            </div>
-          </li>
-
-          <li class="content__list-item content__list-item-hourly">
-            <div class="content__list-box">
-              <p class="content__list-title">BLUE DIAMOND PACKAGE</p>
-            </div>
-            <p class="content__list-text">
-              120 HOUR
-            </p>
-            <div class="content__list-price-box">
-              <p class="content__list-price">$350 <span class="content__list-price-text">PER HOUR</span> </p>
-              <a class="content__list-link" href="#">Order</a>
-            </div>
-          </li>
+          {% for service in b24_service %}
+            <li class="content__list-item">
+              <div class="content__list-box">
+                <div class="content__list-img">
+                 {% if product.image %} <!-- if service.IMAGE != 'None'-->
+                      <img src="{{b24_domain}}{{ service.IMAGE.0.value.showUrl }}" alt="{{ service.IMAGE.0.value.id }}">
+                  {% else %}
+                      <img src="{% static 'images/service.jpg' %}" alt="images">
+                  {% endif %}
+                </div>
+                <p class="content__list-title">{{service.NAME}}</p>
+                <p class="content__list-title">Section: {{service.CATEGORY}}</p>
+              </div>
+              <ul class="content__list-product-description">
+                {% for description_part in service.DESCRIPTION %}
+                    {% if description_part.0 == '•' %}
+                      <li class="content__list-product-description-item">
+                        <p class="content__list-product-description-text">
+                          {{description_part}}
+                        </p>
+                      </li>
+                    {% else %}
+                        <p class="content__list-product-description-text">
+                          {{description_part}}
+                        </p>
+                    {% endif %}
+                {% endfor %}
+              </ul>
+              <div class="content__list-box" style="width: 160px">
+                <p class="content__list-price" style="width: 100%">Price: ${{service.PRICE}}</p>
+                {% if service.CATEGORY == 'Consultation' %}
+                  <p class="content__list-price" style="width: 100%">Remains, hour: 10</p>
+                {% endif %}
+              </div>
+            </li>
+          {% endfor %}
         </ul>
-
-{% for product in services_info %}
-    <li class="content__list-item">
-        <div class="content__list-box">
-            <div class="content__list-img">
-                {% if product.image %}
-                    <img src="{{ product.image.url }}" alt="{{ product.title }}">
-                {% else %}
-                    <img src="{% static 'images/service.jpg' %}" alt="images">
-                {% endif %}
-            </div>
-            <p class="content__list-title">{{ product.title }}</p>
-        </div>
-        <p class="content__list-text">{{ product.title_description }}</p>
-        <div class="content__list-box">
-            <p class="content__list-price">
-                {% if product.currency == "EUR" %}
-                    {% with '€' as currency %}
-                        {{ currency }}
-                    {% endwith %}
-                {% elif product.currency == "USD" %}
-                    {% with '$' as currency %}
-                        {{ currency }}
-                    {% endwith %}
-                {% endif %}
-                {{ product.price }}
-            </p>
-            <a class="content__list-link" href="{% url 'services:product_detail' product.id %}">Detail</a>
-        </div>
-    </li>
-{% endfor %}
-</ul>
-
     </div>
 {% endblock content %}
+
 {% block footer %}
 <div class="container">
   <ul class="footer__list">
@@ -265,11 +192,16 @@
     </li>
   </ul>
 </div>
-
 {% endblock footer %}
 {% block extra_js %}
+    <script>
+      var items = document.querySelectorAll('.content__list-product-description-item');
+      items.forEach(function(item) {
+        var text = item.querySelector('.content__list-product-description-text');
+        text.innerHTML = text.innerHTML.replace(/•/g, '');
+      });
+    </script>
     <script src="{% static 'js/dynamic_search.js' %}"></script>
     <script src="{% static 'js/services.js' %}"></script>
-    <script src="{% static 'js/global.js' %}"></script>
-
+    <script src="{% static 'js/main.js' %}"></script>
 {% endblock extra_js %}

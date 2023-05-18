@@ -198,6 +198,7 @@ class TicketsHandler:
 
         self.bot.sendMessage(chat_id=get_chat_id(self.data),
                              text='Great, now describe the situation:')
+                            # reply_markup=return_to_set_title_keyboard(ticket.id)
 
     def save_ticket_description(self, description):
         if description == 'None' or description.startswith('/') or description in ['👨‍💻 Services', '🧾 Invoices', '📝 Tickets', '⁉️ FAQ', '🚪 Log Out']:

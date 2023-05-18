@@ -176,16 +176,21 @@ def ajax_tasks_filter(request):
 
 
 def task_detail(request, id):
-    task = Ticket.objects.get(id=id)
-    if request.user.is_superuser or task.responsible == request.user.b24_contact_id:
-        # апдейт задачі, коли менеджер відкрив її (це щоб на головній сторінці, вона зникла із списка нових задач)
+    task = Ticket.objects.get(task_id=str(id))
+    if request.user.is_superuser or int(task.responsible) == request.user.b24_contact_id:
         if not request.user.is_superuser:
             Ticket.objects.filter(id=id).update(is_opened=True)
+            status_closed = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Closed').count()
+            status_overdue = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Overdue').count()
+            status_ongoin = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Ongoing').count()
 
         res = {
             'task': task,
+            'status_closed': status_closed,
+            'status_overdue': status_overdue,
+            'status_ongoin': status_ongoin,
         }
-        return render(request, "tickets/tickets.html", res)
+        return render(request, "tickets/detail.html", res)
     else:
         return redirect('/tickets/')
 
@@ -195,7 +200,10 @@ def create_bitrix_task(request):
         responsible = str(request.user.b24_contact_id)
         task_name = request.POST.get('task_name')
         task_description = request.POST.get('task_description')
-        task_deadline = request.POST.get('task_deadline')
+        task_deadline = request.POST.get('task_deadline') if not 'NoneType' else datetime.today().strftime("%b.%d.%Y")
+        print('type >>>>>', type(task_deadline))
+        print('date>>>>>>>>', task_deadline)
+
         try:
 
             method = "tasks.task.add"
@@ -230,7 +238,7 @@ def create_bitrix_task(request):
 def task_data(request):
     tasks_list = Ticket.objects.all() if request.user.is_superuser else Ticket.objects.filter(
         responsible=str(request.user.b24_contact_id))
-    tasks = []  # вместо tasks_array
+    tasks = []
 
     for task in tasks_list:
         tasks.append({
@@ -239,7 +247,7 @@ def task_data(request):
             'created_at': format_date(task.created_at),
             'deadline': format_date(task.deadline),
             'is_opened': task.is_opened,
-            'status': task.status,
+            'status': task.status.name,
 
         })
 
