@@ -65,17 +65,3 @@ class TelegramTicket(models.Model):
     class Meta:
         verbose_name = 'Telegram ticket'
         verbose_name_plural = 'Telegram tickets'
-
-
-class TicketStatus(models.Model):
-    value = models.CharField(verbose_name='value', max_length=24)
-    name = models.CharField(verbose_name='name', max_length=24)
-    color = models.CharField(verbose_name='color', max_length=24)
-    abbreviation = models.CharField(verbose_name='abbreviation', max_length=24)
-
-    def __str__(self):
-        return self.name + ' - ' + self.color
-
-    class Meta:
-        verbose_name = 'Ticket status'
-        verbose_name_plural = 'Ticket statuses'
