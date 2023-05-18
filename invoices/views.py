@@ -6,10 +6,11 @@ from django.shortcuts import render, redirect
 from django.db.models import Q
 from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
 
-from .models import Invoice, Status, StripeSettings, LocalInvoice
 from authentication.helpers.B24Webhook import set_webhook
-from tickets.models import Ticket, TicketStatus
 from services.models import Service
+from tickets.models import Ticket, TicketStatus
+
+from .models import Invoice, Status, StripeSettings, LocalInvoice
 
 from bitrix24 import Bitrix24, BitrixError
 from datetime import datetime
@@ -44,7 +45,6 @@ def invoices(request):
         invoices_dates = list()
         statuses_number = {key: value for key, value in zip(statuses, statuses_quantity)}
         invoices_statuses = list()
-
 
         for invoice in all_user_invoices:
 
@@ -188,7 +188,7 @@ def invoice_detail(request, id):
         try:
             invoice = Invoice.objects.get(id=id)
             if request.user.is_superuser or int(invoice.responsible) == request.user.b24_contact_id:
-                if not request.user.is_superuser:
+                if not request.user.is_superuser and invoice.status.value != 'Paid':
                     Invoice.objects.filter(id=id).update(status=Status.objects.get(value='Opened'))
                 invoice = Invoice.objects.get(id=id)
                 status_closed = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Closed').count()

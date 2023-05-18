@@ -182,9 +182,15 @@ def task_detail(request, id):
     if request.user.is_superuser or int(task.responsible) == request.user.b24_contact_id:
         if not request.user.is_superuser:
             Ticket.objects.filter(id=id).update(is_opened=True)
+            status_closed = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Closed').count()
+            status_overdue = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Overdue').count()
+            status_ongoin = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Ongoing').count()
 
         res = {
             'task': task,
+            'status_closed': status_closed,
+            'status_overdue': status_overdue,
+            'status_ongoin': status_ongoin,
         }
         return render(request, "tickets/detail.html", res)
     else:

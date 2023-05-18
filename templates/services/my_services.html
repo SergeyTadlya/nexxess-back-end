@@ -2,239 +2,111 @@
 {% load static %}
 
 {% block extra_css %}
-<style>
-  .header {
-    background-color: #FFFFFF;
-    padding: 20px;
-  }
+ <link rel="stylesheet" type="text/css" href="{% static 'css/services.css' %}">
+{% endblock %}
 
-  .header h1 {
-    margin: 0;
-    font-size: 24px;
-    font-weight: bold;
-    color: #333333;
-  }
+{% block title %} Services {% endblock %}
 
-  .header p {
-    margin: 10px 0 0;
-    font-size: 14px;
-    color: #666666;
-  }
-
-  .conversation {
-    background-color: #F5F5F5;
-    width: 650px;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-  }
-
-  .conversation .message {
-    background-color: #FFFFFF;
-    margin-bottom: 20px;
-    padding: 10px 20px;
-    border-radius: 10px;
-
-  }
-
-  .conversation .message.your-manager {
-    background-color: #9b8fff;
-    color: #FFFFFF;
-    align-self: flex-start;
-  }
-
-  .conversation .message.you {
-    background-color: #EAEAEA;
-    align-self: flex-end;
-  }
-
-  .conversation .message p {
-    margin: 0;
-    font-size: 16px;
-    line-height: 24px;
-  }
-
-  .conversation .message .time {
-    margin-top: 5px;
-    font-size: 12px;
-
-  }
-
-  /* Problem Block */
-  .problem {
-    background-color: #F5F5F5;
-    padding: 20px;
-  }
-
-  @media (max-width: 767px) {
-    .problem {
-      padding: 20px 10px;
-    }
-  }
-
-  /* Ticket Title */
-  .ticket-title {
-    margin: 5px 0 30px;
-    font-size: 36px;
-    font-weight: bold;
-    text-align: center;
-    color: #333333;
-  }
-
-  @media (max-width: 767px) {
-    .ticket-title {
-      font-size: 24px;
-      margin-bottom: 20px;
-    }
-  }
-
-  /* Problem Description */
-  .problem-description {
-    margin: 0 0 30px;
-    text-align: center;
-  }
-
-  /* Problem Description */
-  .title {
-    font-size: 20px;
-    font-weight: bold;
-    color: #333333;
-    margin-bottom: 5px;
-  }
-
-  .problem-description-title {
-    margin: 0 0 10px;
-    font-size: 24px;
-    font-weight: bold;
-    color: #333333;
-  }
-
-  @media (max-width: 767px) {
-    .problem-description-title {
-      font-size: 18px;
-    }
-  }
-
-  .problem-description-text {
-    line-height: 1.5;
-    font-size: xx-large;
-    font-weight: bold;
-    color: #333333;
-    margin-bottom: 5px;
-  }
-
-  @media (max-width: 767px) {
-    .problem-description-text {
-      font-size: 16px;
-    }
-  }
-  .deadline {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  background-color: #333333;
-  color: #FFFFFF;
-  padding: 10px;
-  border-radius: 5px;
-  font-size: 16px;
-  font-weight: bold;
-}
-</style>
-{% endblock extra_css %}
 {% block left_menu %}
-<div class="aside-info">
-  <div class="aside-info__box">
-    <div class="aside-info__box-top">
-      <img class="aside-info__top-img" src="{% static 'images/alert.svg' %}" alt="icon">
-      <h6 class="aside-info__top-title">Important</h6>
-      <p class="aside-info__top-number">2</p>
-    </div>
-    <ul class="aside-info__box-list">
-      <li class="aside-info__box-item">
-        <p class="aside-info__box-text">Your current service:</p>
-        <p class="aside-info__box-money">Gold</p>
-      </li>
-      <li class="aside-info__box-item">
-        <p class="aside-info__box-text">New servises this month:</p>
-        <p class="aside-info__box-money">2</p>
-      </li>
-      <li class="aside-info__box-item">
-        <p class="aside-info__box-text">Actual discounts:</p>
-        <p class="aside-info__box-money">10%</p>
-      </li>
-    </ul>
-  </div>
+    <div class="aside-info aside-info-none">
+      <div class="aside-info__box">
+        <div class="aside-info__box-top">
+          <img class="aside-info__top-img" src="{% static 'images/alert.svg' %}" alt="icon">
+          <h6 class="aside-info__top-title">Important</h6>
+          <p class="aside-info__top-number">3</p>
+        </div>
+        <ul class="aside-info__box-list">
+          <li class="aside-info__box-item">
+            <p class="aside-info__box-text">My current service:</p>
+            <p class="aside-info__box-money">Services Name</p>
+          </li>
+          <li class="aside-info__box-item">
+            <p class="aside-info__box-text">New servises this month:</p>
+            <p class="aside-info__box-money">2</p>
+          </li>
+          <li class="aside-info__box-item">
+            <p class="aside-info__box-text">Actual discounts:</p>
+            <p class="aside-info__box-money">10%</p>
+          </li>
+        </ul>
+      </div>
 
-  <div class="aside-info__accordion">
-    <div id="aside-info__accordion-top" class="aside-info__accordion-top">
-      <img class="aside-info__top-img" src="{% static '/images/main/custom-tickets.svg' %}" alt="icon">
-      <h6 class="aside-info__top-title">Tickets</h6>
-      <img class="aside-info__top-arrow" src="{% static 'images/chevron-down.svg' %}" alt="icon">
-    </div>
+      <div class="aside-info__accordion">
+        <div id="aside-info__accordion-top" class="aside-info__accordion-top">
+          <img class="aside-info__top-img" src="{% static 'images/main/custom-tickets.svg' %}" alt="icon">
+          <h6 class="aside-info__top-title">Tickets</h6>
+          <img class="aside-info__top-arrow" src="{% static 'images/chevron-down.svg' %}" alt="icon">
+        </div>
 
-    <ul class="aside-info__accordion-list">
-      {% if status_closed %}
-      <li class="aside-info__accordion-item">
-        <a class="aside-info__accordion-link" href="#">
-          <p class="aside-info__accordion-text">Closed</p>
-          <p class="aside-info__accordion-number font--red">{{ status_closed }}</p>
-        </a>
-      </li>
-      {% endif %}
-
-      {% if status_overdue %}
-      <li class="aside-info__accordion-item">
-        <a class="aside-info__accordion-link" href="#">
-          <p class="aside-info__accordion-text">Overdue</p>
-          <p class="aside-info__accordion-number font--red">{{ status_overdue }}</p>
-        </a>
-      </li>
-      {% endif %}
-
-      {% if status_ongoin %}
-      <li class="aside-info__accordion-item">
-        <a class="aside-info__accordion-link" href="#">
-          <p class="aside-info__accordion-text">Ongoing</p>
-          <p class="aside-info__accordion-number font--green">{{ status_ongoin }}</p>
-        </a>
-      </li>
-      {% endif %}
-    </ul>
-  </div>
-</div>
-{% endblock %}
-{% block task %}
-<div class="ticket-container">
-  <h1 class="ticket-title">Ticket #{{ task.task_id }}: {{ task.ticket_title }}📝 </h1>
-  <div class="problem-description">
-    <h2 class="problem-description-title">Your ticket Description📋:</h2>
-    <p class="problem-description-text">{{ task.ticket_text }}</p>
-  </div>
-</div>
-<div class="deadline">
-  Deadline: {{ task.deadline }}
-</div>
-
-  <div class="conversation">
-    <div class="message your-manager">
-      <p class="title">Your personal manager👩‍💻</p>
-      <p>Hello, its Nexxess bot🤖, your ticket is being processed, I will answer you soon📲</p>
-      <div class="time">10:00 AM</div>
+        <ul class="aside-info__accordion-list">
+          <li class="aside-info__accordion-item">
+            <a class="aside-info__accordion-link" href="#">
+              <p class="aside-info__accordion-text">Ongoing</p>
+              <p class="aside-info__accordion-number font--green">{{task_count}}</p>
+            </a>
+          </li>
+          <li class="aside-info__accordion-item">
+            <a class="aside-info__accordion-link" href="#">
+              <p class="aside-info__accordion-text">Overdue</p>
+              <p class="aside-info__accordion-number font--red">0</p>
+            </a>
+          </li>
+        </ul>
+      </div>
+        <button class="aside-filter__accordion-btn" id="search-btn">Search</button>
     </div>
-    <div class="message you">
-      <p class="title">You</p>
-      <p>you wrote.....</p>
-      <div class="time">10:05 AM</div>
+{% endblock left_menu %}
+
+{% block content %}
+    <div class="content__inner">
+        <div class="content__top">
+            <h1 class="title content__top-title">My Services</h1>
+            <div class="content__top-search">
+                <img class="content__top-img" src="{% static 'images/main/Search.svg' %}" alt="Search">
+                <input class="content__top-input" type="text" id="search-input" placeholder="Search">
+            </div>
+        </div>
+        <ul class="content__list">
+          {% for service in b24_service %}
+            <li class="content__list-item">
+              <div class="content__list-box">
+                <div class="content__list-img">
+                 {% if product.image %} <!-- if service.IMAGE != 'None'-->
+                      <img src="{{b24_domain}}{{ service.IMAGE.0.value.showUrl }}" alt="{{ service.IMAGE.0.value.id }}">
+                  {% else %}
+                      <img src="{% static 'images/service.jpg' %}" alt="images">
+                  {% endif %}
+                </div>
+                <p class="content__list-title">{{service.NAME}}</p>
+                <p class="content__list-title">Section: {{service.CATEGORY}}</p>
+              </div>
+              <ul class="content__list-product-description">
+                {% for description_part in service.DESCRIPTION %}
+                    {% if description_part.0 == '•' %}
+                      <li class="content__list-product-description-item">
+                        <p class="content__list-product-description-text">
+                          {{description_part}}
+                        </p>
+                      </li>
+                    {% else %}
+                        <p class="content__list-product-description-text">
+                          {{description_part}}
+                        </p>
+                    {% endif %}
+                {% endfor %}
+              </ul>
+              <div class="content__list-box" style="width: 160px">
+                <p class="content__list-price" style="width: 100%">Price: ${{service.PRICE}}</p>
+                {% if service.CATEGORY == 'Consultation' %}
+                  <p class="content__list-price" style="width: 100%">Remains, hour: 10</p>
+                {% endif %}
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
     </div>
-    <div class="message your-manager">
-      <p class="title">Your personal manager👩‍💻</p>
-      <p>.....</p>
-      <div class="time">10:07 AM</div>
-    </div>
-  </div>
-{% endblock %}
+{% endblock content %}
+
 {% block footer %}
 <div class="container">
   <ul class="footer__list">
@@ -320,8 +192,16 @@
     </li>
   </ul>
 </div>
-{% endblock %}
+{% endblock footer %}
 {% block extra_js %}
-<script src="{% static 'js/tickets.js' %}"> </script>
-<script src="{% static 'js/global.js' %}"></script>
-{% endblock %}
+    <script>
+      var items = document.querySelectorAll('.content__list-product-description-item');
+      items.forEach(function(item) {
+        var text = item.querySelector('.content__list-product-description-text');
+        text.innerHTML = text.innerHTML.replace(/•/g, '');
+      });
+    </script>
+    <script src="{% static 'js/dynamic_search.js' %}"></script>
+    <script src="{% static 'js/services.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+{% endblock extra_js %}

@@ -28,10 +28,11 @@ def main(request):
             status_ongoin = Ticket.objects.filter(tatus__name='Ongoing').count()
 
         else:
-            invoice_count = Invoice.objects.filter(responsible=request.user.b24_contact_id).exclude(status__value='Opened').count()
+            invoice_count = Invoice.objects.filter(responsible=request.user.b24_contact_id).exclude(status__value='Paid').count()
             task_count = Ticket.objects.filter(responsible=str(request.user.b24_contact_id), is_opened=False).count()
             current_user = "not_admin"
             ticket_statuses = TicketStatus.objects.filter(ticket__responsible=str(request.user.b24_contact_id)).distinct()
+            b_services = Invoice.objects.filter(responsible=request.user.b24_contact_id).exclude(status__value='Opened').count()
             status_closed = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Closed').count()
             status_overdue = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Overdue').count()
             status_ongoin = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Ongoing').count()
@@ -50,6 +51,7 @@ def main(request):
             'services_all_count': product_count,
             'current_user': current_user,
             'ticket_statuses': ticket_statuses,
+            'b_services': b_services,
             'status_closed': status_closed,
             'status_overdue': status_overdue,
             'status_ongoin': status_ongoin,

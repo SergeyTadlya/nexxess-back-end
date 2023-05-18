@@ -149,7 +149,6 @@ def webhook_task_comment(request):
         return HttpResponse('error')
 
 
-
 @csrf_exempt
 def webhook_invoice(request):
     if request.method == 'POST':
@@ -166,24 +165,38 @@ def webhook_invoice(request):
                 and b24_time != "":
             method = "crm.invoice.get/?id=" + entities_id
             url = set_webhook(method)
+
             invoice_load = requests.get(url).json()['result']
             status = Status.objects.filter(abbreviation=invoice_load['STATUS_ID'])
+            print('status>>>>>', status)
+            # status = invoice_load['STATUS_ID']
+            print('type', type(status))
+            print('status len>>>>>', len(status))
             if status.exists():
                 status = status.first()
+            current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             # Check avaible to write in database
+            try:
+                date_bill = datetime.strptime(invoice_load['DATE_BILL'], '%Y-%m-%dT%H:%M:%S%z')
+                due_time = datetime.strptime(invoice_load['DATE_PAY_BEFORE'][:11] + '23:59:59', '%Y-%m-%dT%H:%M:%S')
+            except:
+                date_bill = current_time
+                due_time = current_time
 
             defaults = {
                 'b24_domain': b24_domain,
                 'b24_member_id': b24_member_id,
                 'b24_application_token': b24_application_token,
                 'b24_time': b24_time,
+                'service_id': invoice_load['PRODUCT_ROWS'][0]['PRODUCT_ID'],
                 'invoice_info': invoice_load,
                 'price': invoice_load['PRICE'],
                 'status': status,
-                'date': datetime.strptime(invoice_load['DATE_BILL'], '%Y-%m-%dT%H:%M:%S%z'),
-                'due_date': datetime.strptime(invoice_load['DATE_PAY_BEFORE'][:11] + '23:59:59', '%Y-%m-%dT%H:%M:%S'),
+                'date': date_bill,
+                'due_date': due_time,
                 'product_title': ', '.join([row['PRODUCT_NAME'] for row in invoice_load['PRODUCT_ROWS']])
             }
+
 
             try:
                 Invoice.objects.update_or_create(
@@ -194,6 +207,7 @@ def webhook_invoice(request):
             except Exception as e:
                 print(e)
             return HttpResponse()
+
 
 
 @csrf_exempt
