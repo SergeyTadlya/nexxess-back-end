@@ -166,7 +166,6 @@ def webhook_invoice(request):
             if status.exists():
                 status = status.first()
             # Check avaible to write in database
-
             defaults = {
                 'b24_domain': b24_domain,
                 'b24_member_id': b24_member_id,
