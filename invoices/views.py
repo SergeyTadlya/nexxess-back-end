@@ -195,11 +195,18 @@ def invoice_detail(request, id):
                 status_overdue = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Overdue').count()
                 status_ongoin = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Ongoing').count()
 
+                # product description
+                url = set_webhook()
+                bx24 = Bitrix24(url)
+                product = bx24.callMethod('crm.product.get', id=invoice.service_id)
+                description_parts = product['DESCRIPTION'].split("<br>")
+
                 res = {
                     'invoice': invoice,
                     'status_closed': status_closed,
                     'status_overdue': status_overdue,
                     'status_ongoin': status_ongoin,
+                    'description_parts': description_parts,
                 }
                 return render(request, "invoices/detail.html", res)
             else:

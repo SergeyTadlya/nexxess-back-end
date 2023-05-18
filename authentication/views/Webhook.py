@@ -8,7 +8,7 @@ from authentication.models import B24keys
 from services.models import ServiceCategory
 from invoices.models import Invoice, Status
 from tickets.models import Ticket, TicketComments, TicketStatus
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import requests
 
@@ -168,20 +168,19 @@ def webhook_invoice(request):
 
             invoice_load = requests.get(url).json()['result']
             status = Status.objects.filter(abbreviation=invoice_load['STATUS_ID'])
-            print('status>>>>>', status)
             # status = invoice_load['STATUS_ID']
-            print('type', type(status))
-            print('status len>>>>>', len(status))
             if status.exists():
                 status = status.first()
             current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            future_time = datetime.now() + timedelta(days=1)
             # Check avaible to write in database
             try:
                 date_bill = datetime.strptime(invoice_load['DATE_BILL'], '%Y-%m-%dT%H:%M:%S%z')
-                due_time = datetime.strptime(invoice_load['DATE_PAY_BEFORE'][:11] + '23:59:59', '%Y-%m-%dT%H:%M:%S')
+                # due_time = datetime.strptime(invoice_load['DATE_PAY_BEFORE'][:11] + '23:59:59', '%Y-%m-%dT%H:%M:%S')
+                due_time = datetime.strptime(invoice_load['DATE_PAY_BEFORE'][:11] + future_time, '%Y-%m-%dT%H:%M:%S')
             except:
                 date_bill = current_time
-                due_time = current_time
+                due_time = future_time
 
             defaults = {
                 'b24_domain': b24_domain,
