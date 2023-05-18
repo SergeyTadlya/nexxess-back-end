@@ -88,4 +88,4 @@ class MessageHandler:
             else:
                 self.bot.sendMessage(chat_id=get_chat_id(self.data),
                                      text='Authorization first 🙃\n'
-                                          'Use /start and write an email 👇')
+                                          'Use /start and then write your email 👇')

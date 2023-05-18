@@ -75,7 +75,7 @@ class AuthenticationHandler:
         if email is None:
             return
 
-        if email.count('@') == 1:
+        if email.count('@') >= 1:
             if not User.objects.filter(email=email):
                 self.bot.sendMessage(chat_id=get_chat_id(data),
                                      text='The user with this email does not exist on the site.\n'
@@ -99,7 +99,7 @@ class AuthenticationHandler:
                                           f'We have sent a confirmation code to the {unauthorized_user.email}.\n'
                                           f'Check it and write here your code:')
                 send_mail('Secret key',
-                          f'Your private key for "{unauthorized_user.email}":\n{code}',
+                          f'Your private key for {unauthorized_user.email}:\n\n{code}',
                           'cutrys69@gmail.com',
                           [unauthorized_user.email],
                           fail_silently=False)
