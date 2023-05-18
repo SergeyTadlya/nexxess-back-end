@@ -4,8 +4,8 @@ from .models import Invoice, Status, StripeSettings, LocalInvoice
 
 @admin.register(Invoice)
 class InvoiceAdmin(admin.ModelAdmin):
-    list_display = ['id', 'invoice_id', 'responsible', 'status', 'is_opened']
-    list_filter = ['responsible', 'is_opened']
+    list_display = ['id', 'invoice_id', 'responsible', 'status']
+    list_filter = ['responsible']
 
 
 @admin.register(Status)

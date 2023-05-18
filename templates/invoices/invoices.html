@@ -142,9 +142,14 @@
                                         <li  class="content__body-item style--width">
                                             <p class="content__body-status style--width font--{{ invoice.status.color }}">{{ invoice.status.value }}</p>
                                         </li>
-                                            <li class="content__body-item style--width">
+
+                                        <li class="content__body-item style--width">
+                                          {% if invoice.status.value == 'Paid' %}
+                                            <a class="button_pay" "></a>
+                                            {% else %}
                                             <a class="button_pay" data-b24invoice="{{ invoice.invoice_id }}">Pay</a>
                                         </li>
+                                        {% endif %}
                                     </ul>
                                     <button class="content__body-btn">
                                         <img class="content__body-img" src="{% static 'images/chevron.svg' %}" alt="arrow">
@@ -159,7 +164,7 @@
     </div>
     <div id="content__showing-box" class="content__showing-box">
         <p class="content__showing-text">Showing</p>
-        <p id="content__showing-number" class="content__showing-number">10</p>
+        <p id="content__showing-number" class="content__showing-number">{{ invoices_number }}</p>
         <img class="content__showing-img" src="{% static 'images/invoices/arrow-drop-down.svg' %}" alt="icon">
         <p class="content__showing-numbers">of {{ invoices_number }}</p>
         <ul id="content__showing-list" class="content__showing-list">
@@ -305,5 +310,6 @@
     <script src="{% static 'js/jquery-ui.min.js' %}"></script>
     <script src="{% static 'js/invoices.js' %}"></script>
     <script src="{% static 'js/calendar.js' %}"></script>
+    <script src="{% static 'js/global.js' %}"></script>
     <script src="{% static 'ajax/invoices_ajax.js' %}"></script>
 {% endblock extra_js %}

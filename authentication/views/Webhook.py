@@ -3,8 +3,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from bitrix24 import *
 from authentication.models import B24keys
+from services.models import ServiceCategory
 from invoices.models import Invoice, Status
-from tickets.models import Ticket, TicketComments
+from tickets.models import Ticket, TicketComments, TicketStatus
 from datetime import datetime
 import requests
 from services.models import ServiceCategory
@@ -43,7 +44,9 @@ def webhook_task(request):
 
                 ticket_title = task_info["title"]
                 ticket_text = task_info["description"]
-                status = task_info["status"]
+                status = TicketStatus.objects.filter(value=task_info["status"])
+                if status.exists():
+                    status = status.first()
                 deadline = datetime.strptime(task_info["deadline"][:11] + '23:59:59', '%Y-%m-%dT%H:%M:%S')
                 created_at = task_info["createdDate"]
 
@@ -54,7 +57,7 @@ def webhook_task(request):
                     'status': status,
                     'is_opened': False,
                     'is_active': True,
-                    'deadline': deadline,
+                    'deadline': deadline ,
                     'b24_domain': b24_domain,
                     'b24_member_id': b24_member_id,
                     'b24_application_token': b24_application_token,
@@ -144,7 +147,6 @@ def webhook_task_comment(request):
         return HttpResponse('error')
 
 
-
 @csrf_exempt
 def webhook_invoice(request):
     if request.method == 'POST':
@@ -161,11 +163,25 @@ def webhook_invoice(request):
                 and b24_time != "":
             method = "crm.invoice.get/?id=" + entities_id
             url = set_webhook(method)
+
             invoice_load = requests.get(url).json()['result']
             status = Status.objects.filter(abbreviation=invoice_load['STATUS_ID'])
+            print('status>>>>>', status)
+            # status = invoice_load['STATUS_ID']
+            print('type', type(status))
+            print('status len>>>>>', len(status))
             if status.exists():
                 status = status.first()
+            current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
             # Check avaible to write in database
+            try:
+                date_bill = datetime.strptime(invoice_load['DATE_BILL'], '%Y-%m-%dT%H:%M:%S%z')
+                due_time = datetime.strptime(invoice_load['DATE_PAY_BEFORE'][:11] + '23:59:59', '%Y-%m-%dT%H:%M:%S')
+            except:
+                date_bill = current_time
+                due_time = current_time
+
             defaults = {
                 'b24_domain': b24_domain,
                 'b24_member_id': b24_member_id,
@@ -175,9 +191,8 @@ def webhook_invoice(request):
                 'invoice_info': invoice_load,
                 'price': invoice_load['PRICE'],
                 'status': status,
-                'date': datetime.strptime(invoice_load['DATE_BILL'], '%Y-%m-%dT%H:%M:%S%z'),
-                'due_date': datetime.strptime(invoice_load['DATE_PAY_BEFORE'][:11] + '23:59:59', '%Y-%m-%dT%H:%M:%S'),
-                'is_opened': False,
+                'date': date_bill,
+                'due_date': due_time,
                 'product_title': ', '.join([row['PRODUCT_NAME'] for row in invoice_load['PRODUCT_ROWS']])
             }
 
@@ -208,5 +223,4 @@ def webhook_service_section(request):
                 category_b24_id=section["ID"],
                 defaults={'category_name':section["NAME"]}
             )
-
         return HttpResponse('ok')

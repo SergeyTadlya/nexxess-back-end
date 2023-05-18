@@ -10,32 +10,76 @@ def tickets_menu_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(buttons)
 
 
-def tickets_statuses_keyboard() -> InlineKeyboardMarkup:
-    buttons = [
-        [InlineKeyboardButton('Ongoing', callback_data='tickets_ongoing')],
-        [InlineKeyboardButton('Overdue', callback_data='tickets_Overdue')],
-        [InlineKeyboardButton('Closed', callback_data='tickets_Closed')],
-        [InlineKeyboardButton('All', callback_data='tickets_All')],
-        [InlineKeyboardButton('⬅️ Back to tickets menu', callback_data='tickets_menu')]
-    ]
+def tickets_statuses_keyboard(tickets_statuses) -> InlineKeyboardMarkup:
+    buttons = []
+    for ticket_status in tickets_statuses:
+        buttons.append(
+            [InlineKeyboardButton(ticket_status.sticker + ' ' + ticket_status.name, callback_data='tickets_status_' + ticket_status.name + '_1')]
+        )
+
+    buttons.append([InlineKeyboardButton('All tickets', callback_data='tickets_status_All_1')])
+    buttons.append([InlineKeyboardButton('⬅️ Back to tickets menu', callback_data='tickets_menu')])
 
     return InlineKeyboardMarkup(buttons)
 
 
-def all_tickets_keyboard(tickets) -> InlineKeyboardMarkup:
+def all_tickets_keyboard(tickets, current_page, all_pages, has_pages) -> InlineKeyboardMarkup:
     buttons = list()
 
     for ticket in tickets:
+        ticket_detail = '#' + ticket.task_id + ' | ' + ticket.ticket_title
+        ticket_callback_data = 'tickets_status_All_' + str(current_page) + '_detail_' + ticket.task_id
+
+        buttons.append([InlineKeyboardButton(ticket_detail, callback_data=ticket_callback_data)])
+
+    if has_pages:
+        callback_data_right = 'tickets_status_All_' + str(current_page - 1) if not current_page == 1 else 'Stop'
+        callback_data_left = 'tickets_status_All_' + str(current_page + 1) if not current_page == all_pages else 'Stop'
+        right = '⬅️' if not current_page == 1 else '🚫'
+        left = '➡️' if not current_page == all_pages else '🚫'
+
         buttons.append([
-            InlineKeyboardButton('#' + ticket.task_id + ' | ' + ticket.ticket_title, callback_data='tickets_detail_' + ticket.task_id)
+            InlineKeyboardButton(right, callback_data=callback_data_right),
+            InlineKeyboardButton(str(current_page) + '/' + str(all_pages), callback_data='Stop'),
+            InlineKeyboardButton(left, callback_data=callback_data_left)
         ])
+
     buttons.append([InlineKeyboardButton('⬅️ Back to tickets statuses', callback_data='tickets_my')])
 
     return InlineKeyboardMarkup(buttons)
 
 
-def ticket_detail_keyboard() -> InlineKeyboardMarkup:
-    buttons = [[InlineKeyboardButton('⬅️ Back to all tickets', callback_data='tickets_All')]]
+def tickets_for_selected_status_keyboard(tickets, status, current_page, all_pages, has_pages=False) -> InlineKeyboardMarkup:
+    buttons = list()
+
+    for ticket in tickets:
+        ticket_detail = '#' + ticket.task_id + ' | ' + ticket.ticket_title
+        ticket_callback_data = 'tickets_status_' + status.name + '_' + str(current_page) + '_detail_' + ticket.task_id
+
+        buttons.append([InlineKeyboardButton(ticket_detail, callback_data=ticket_callback_data)])
+
+    if has_pages:
+        callback_data_right = 'tickets_status_' + status.name + '_' + str(current_page - 1) if not current_page == 1 else 'Stop'
+        callback_data_left = 'tickets_status_' + status.name + '_' + str(current_page + 1) if not current_page == all_pages else 'Stop'
+        right = '⬅️' if not current_page == 1 else '🚫'
+        left = '➡️' if not current_page == all_pages else '🚫'
+
+        buttons.append([
+            InlineKeyboardButton(right, callback_data=callback_data_right),
+            InlineKeyboardButton(str(current_page) + '/' + str(all_pages), callback_data='Stop'),
+            InlineKeyboardButton(left, callback_data=callback_data_left)
+        ])
+
+    buttons.append([InlineKeyboardButton('⬅️ Back to tickets statuses', callback_data='tickets_my')])
+
+    return InlineKeyboardMarkup(buttons)
+
+
+def ticket_detail_keyboard(status_name, current_page) -> InlineKeyboardMarkup:
+    buttons = [
+        [InlineKeyboardButton('⬅️ Back to ' + status_name.lower() + ' tickets', callback_data='tickets_status_' + status_name + '_' + current_page)],
+        [InlineKeyboardButton('⏪ Back to tickets menu', callback_data='tickets_menu')]
+    ]
 
     return InlineKeyboardMarkup(buttons)
 
@@ -44,15 +88,3 @@ def return_to_menu_keyboard() -> InlineKeyboardMarkup:
     button = [[InlineKeyboardButton('⬅️ Back to tickets menu', callback_data='tickets_menu')]]
 
     return InlineKeyboardMarkup(button)
-
-
-def return_to_set_title_keyboard(ticket_id) -> InlineKeyboardMarkup:
-    button = [[InlineKeyboardButton('⬅️ Change ticket title', callback_data='tickets_changeTitle_' + str(ticket_id))]]
-
-    return InlineKeyboardMarkup(button)
-
-
-# def return_to_set_description_keyboard(ticket_id) -> InlineKeyboardMarkup:
-#     button = [[InlineKeyboardButton('⬅️ Change ticket description', callback_data='tickets_changeDescription_' + ticket_id)]]
-#
-#     return InlineKeyboardMarkup(button)

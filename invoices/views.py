@@ -6,9 +6,11 @@ from django.shortcuts import render, redirect
 from django.db.models import Q
 from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
 
-from .models import Invoice, Status, StripeSettings, LocalInvoice
 from authentication.helpers.B24Webhook import set_webhook
 from services.models import Service
+from tickets.models import Ticket, TicketStatus
+
+from .models import Invoice, Status, StripeSettings, LocalInvoice
 
 from bitrix24 import Bitrix24, BitrixError
 from datetime import datetime
@@ -44,7 +46,6 @@ def invoices(request):
         statuses_number = {key: value for key, value in zip(statuses, statuses_quantity)}
         invoices_statuses = list()
 
-
         for invoice in all_user_invoices:
 
             statuses_number[invoice.status.value] = 1 if invoice.status.value not in statuses_number.keys() \
@@ -54,7 +55,6 @@ def invoices(request):
                 'id': invoice.id,
                 'invoice_id': invoice.invoice_id,
                 'responsible': invoice.responsible,
-                'is_opened': invoice.is_opened,
                 'price': format_price(invoice.price),
                 'date': format_date(invoice.date),
                 'due_date': format_date(invoice.due_date),
@@ -88,6 +88,7 @@ def invoices(request):
             'invoices_statuses': invoices_statuses,
             'statuses_amount': len(invoices_statuses),
             'invoices_number': len(all_user_invoices),
+
         }
 
         return render(request, "invoices/invoices.html", context)
@@ -133,7 +134,6 @@ def ajax_invoice_filter(request):
                     'id': invoice.id,
                     'invoice_id': invoice.invoice_id,
                     'responsible': invoice.responsible,
-                    'is_opened': invoice.is_opened,
                     'price': format_price(invoice.price),
                     'date': format_date(invoice.date),
                     'due_date': format_date(invoice.due_date),
@@ -187,11 +187,18 @@ def invoice_detail(request, id):
         try:
             invoice = Invoice.objects.get(id=id)
             if request.user.is_superuser or int(invoice.responsible) == request.user.b24_contact_id:
-                if not request.user.is_superuser:
-                    Invoice.objects.filter(id=id).update(is_opened=True)
+                if not request.user.is_superuser and invoice.status.value != 'Paid':
+                    Invoice.objects.filter(id=id).update(status=Status.objects.get(value='Opened'))
                 invoice = Invoice.objects.get(id=id)
+                status_closed = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Closed').count()
+                status_overdue = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Overdue').count()
+                status_ongoin = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Ongoing').count()
+
                 res = {
                     'invoice': invoice,
+                    'status_closed': status_closed,
+                    'status_overdue': status_overdue,
+                    'status_ongoin': status_ongoin,
                 }
                 return render(request, "invoices/detail.html", res)
             else:

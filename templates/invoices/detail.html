@@ -39,20 +39,35 @@
               </div>
 
               <ul class="aside-info__accordion-list">
+                {% if status_closed %}
                 <li class="aside-info__accordion-item">
                   <a class="aside-info__accordion-link" href="#">
-                    <p class="aside-info__accordion-text">Ongoing</p>
-                    <p class="aside-info__accordion-number font--green">2</p>
+                    <p class="aside-info__accordion-text">Closed</p>
+                    <p class="aside-info__accordion-number font--red">{{ status_closed }}</p>
                   </a>
                 </li>
+                {% endif %}
+
+                {% if status_overdue %}
                 <li class="aside-info__accordion-item">
                   <a class="aside-info__accordion-link" href="#">
                     <p class="aside-info__accordion-text">Overdue</p>
-                    <p class="aside-info__accordion-number font--red">8</p>
+                    <p class="aside-info__accordion-number font--red">{{ status_overdue }}</p>
                   </a>
                 </li>
+                {% endif %}
+
+                {% if status_ongoin %}
+                <li class="aside-info__accordion-item">
+                  <a class="aside-info__accordion-link" href="#">
+                    <p class="aside-info__accordion-text">Ongoing</p>
+                    <p class="aside-info__accordion-number font--green">{{ status_ongoin }}</p>
+                  </a>
+                </li>
+                {% endif %}
               </ul>
             </div>
+
           </div>
 
 {% endblock left_menu %}
@@ -60,7 +75,7 @@
           <div class="content__inner">
             <div class="content__top">
               <div class="content__top-body">
-                <h1 class="title content__top-title">About invoice {{invoice.id}}</h1>
+                <h1 class="title content__top-title">About invoice {{ invoice.invoice_id }}</h1>
               </div>
             </div>
               <div class="content__body">
@@ -75,7 +90,7 @@
                       </ul>
                       <ul class="content__body-items">
                         <li class="content__body-item">
-                          <a class="content__body-link" href="">
+                          <a class="content__body-link" href="{% url 'create_invoice_pdf' invoice.id %}" target="_blank">
                             <img src="{% static 'images/invoices/print.svg' %}" alt="print">
                           </a>
                           <p class="content__body-text">{{ invoice.invoice_id }}</p>
@@ -99,7 +114,7 @@
                   </div>
 
                   <div class="content__body-descrip">
-                    <h6 class="content__descrip-title">GOLD PACKAGE - $20,000 <br>
+                    <h6 class="content__descrip-title">{{ invoice.product_title }} $ {{ invoice.price }}  <br>
                       Add to Nexxess© Trust Book (total $35,000) <br>
                       or purchase a gold package a la cart
                     </h6>
@@ -233,7 +248,7 @@
     {
       var button = $(this);
       var b24_product_id = $(button).data("b24invoice");
-      
+
       $.ajax({
         url: '/invoices/create_payment_link/',
         type: 'POST',
@@ -251,7 +266,7 @@
     });
   });
 </script>
-
+    <script src="{% static 'js/global.js' %}"></script>
     <script src="{% static 'js/about-invoice.js' %}"></script>
     <script src="{% static 'js/invoices.js' %}"></script>
 {% endblock extra_js %}

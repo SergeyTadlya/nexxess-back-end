@@ -24,127 +24,132 @@
             <div class="header__inner">
               <a href="{% url 'authentication:main'%}">
                 <img class="header__logo-img" src="{% static 'images/logo.svg' %}" alt="logo">
-                  <!-- <picture class="header__logo">
-                    <source srcset="{% static 'images/logo-mobile.svg' %}" media="(max-width: 550px)">
-                    
-                  </picture> -->
               </a>
-                <nav class="nav">
-                    <a class="nav__burger">
-                        <span class="nav__burger-line"></span>
-
-                    </a>
-                    <ul class="nav__list">
-                        <li class="nav__list-item">
-                          <a class="{% if "/support/" == request.path %} nav__item-link {% else %} nav__item-link{% endif %}" href="{% url 'authentication:main' %}">Home</a>
-                        </li>
-                        <li class="nav__list-item">
-                          <div class="nav__list-item-link-inner">
-                            <a class="{% if "/services/" == request.path %} nav__item-link {% else %} nav__item-link{% endif %}" href="{% url 'services:services' %}">
-                              Services
-                            </a>
-                            <span class="nav__item-link-arrow">
-                              <svg width="15px" height="15px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-
-                                <g id="SVGRepo_bgCarrier" stroke-width="0"/>
-
-                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
-
-                                <g id="SVGRepo_iconCarrier"> <path d="M17.9188 8.17969H11.6888H6.07877C5.11877 8.17969 4.63877 9.33969 5.31877 10.0197L10.4988 15.1997C11.3288 16.0297 12.6788 16.0297 13.5088 15.1997L15.4788 13.2297L18.6888 10.0197C19.3588 9.33969 18.8788 8.17969 17.9188 8.17969Z" fill="#7C48EE"/> </g>
-
-                                </svg>
-                            </span>
-                          </div>
-
-                            <ul class="nav__sublist">
-                                {% for category in categories %}
-                                    <li class="nav__subitem">
-                                        <a href="{% url 'services:product_detail' category.category_b24_id %}" class="nav__subitem-link">
-                                          {{category.category_name}}
-                                        </a>
-                                    </li>
-                                {% endfor %}
-                              <li class="nav__subitem">
-                                <a href="{% url 'services:my_services' %}" class="nav__subitem-link">
-                                  My Services
-                                </a>
-                              </li>
-                            </ul>
-                        </li>
-                        <li class="nav__list-item">
-                            <a class="{% if "/invoices/" == request.path %} nav__item-link {% else %} nav__item-link{% endif %}"
-                              href="{% url 'invoices' %}">
-                              Invoices
-
-                            </a>
-                        </li>
-                        <li class="nav__list-item">
-                          <div class="nav__list-item-link-inner">
-                            <a class="{% if "/tickets/" == request.path %} nav__item-link {% else %} nav__item-link{% endif %}" href="{% url 'tickets:list' %}">Tickets
-                            </a>
-                            <span class="nav__item-link-arrow">
-                              <svg width="15px" height="15px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-
-                                <g id="SVGRepo_bgCarrier" stroke-width="0"/>
-
-                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
-
-                                <g id="SVGRepo_iconCarrier"> <path d="M17.9188 8.17969H11.6888H6.07877C5.11877 8.17969 4.63877 9.33969 5.31877 10.0197L10.4988 15.1997C11.3288 16.0297 12.6788 16.0297 13.5088 15.1997L15.4788 13.2297L18.6888 10.0197C19.3588 9.33969 18.8788 8.17969 17.9188 8.17969Z" fill="#7C48EE"/> </g>
-
-                                </svg>
-                            </span>
-                          </div>
-
-                            <ul class="nav__sublist">
-                              <li class="nav__subitem">
-                                <a href="{% url 'tickets:tasks' %}" class="nav__subitem-link">
-                                  My Tickets
-                                </a>
-                              </li>
-
-                              <li class="nav__subitem">
-                                <a href="{% url 'tickets:list' %}"  class="nav__subitem-link">
-                                  Create a Ticket
-                                </a>
-                              </li>
-                            </ul>
-
-                        </li>
-                        <li class="nav__list-item">
-                            <a class="{% if "/support/" == request.path %} nav__item-link {% else %} nav__item-link{% endif %}" href="{% url 'support' %}">FAQ</a>
-                        </li>
-                        <li class="nav__list-item">
-                          <a class="{% if "/support/" == request.path %} nav__item-link {% else %} nav__item-link{% endif %}" href="{% url 'support' %}">Refer a Friend</a>
+        
+              <div class="content__top-search">
+                <img class="content__top-img" src="{% static 'images/main/Search.svg' %}" alt="Search">
+                <input class="content__top-input" type="text" placeholder="Search">
+              </div>
+        
+              <nav class="nav">
+                <ul class="nav__list">
+                  <li class="nav__list-item">
+                    <div class="nav__list-item-link-inner">
+                      <a class="{% if "/services/" == request.path %} nav__item-link {% else %} nav__item-link{% endif %}" href="{% url 'services:services' %}">
+                        Services
+                      </a>
+                      <span class="nav__item-link-arrow">
+                        <svg width="15px" height="15px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        
+                          <g id="SVGRepo_bgCarrier" stroke-width="0" />
+        
+                          <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" />
+        
+                          <g id="SVGRepo_iconCarrier">
+                            <path
+                              d="M17.9188 8.17969H11.6888H6.07877C5.11877 8.17969 4.63877 9.33969 5.31877 10.0197L10.4988 15.1997C11.3288 16.0297 12.6788 16.0297 13.5088 15.1997L15.4788 13.2297L18.6888 10.0197C19.3588 9.33969 18.8788 8.17969 17.9188 8.17969Z"
+                              fill="#7C48EE" />
+                          </g>
+        
+                        </svg>
+                      </span>
+                    </div>
+        
+                    <ul class="nav__sublist">
+                      {% for category in categories %}
+                      <li class="nav__subitem">
+                        <a href="{% url 'services:product_detail' category.category_b24_id %}" class="nav__subitem-link">
+                          {{category.category_name}}
+                        </a>
+                      </li>
+                      {% endfor %}
+        
+                      <li class="nav__subitem">
+                        <a href="{% url 'services:my_services' %}" class="nav__subitem-link">
+                          My Services
+                        </a>
                       </li>
                     </ul>
-                </nav>
+                  </li>
+                  <li class="nav__list-item">
+                    <a class="{% if "/invoices/" == request.path %} nav__item-link {% else %} nav__item-link{% endif %}"
+                      href="{% url 'invoices' %}">
+                      Invoices
+        
+                    </a>
+                  </li>
+                  <li class="nav__list-item">
+                    <div class="nav__list-item-link-inner">
+                      <a class="{% if " /tickets/" == request.path %} nav__item-link {% else %} nav__item-link{% endif %}"
+                        href="{% url 'tickets:list' %}">Tickets
+                      </a>
+                      <span class="nav__item-link-arrow">
+                        <svg width="15px" height="15px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        
+                          <g id="SVGRepo_bgCarrier" stroke-width="0" />
+        
+                          <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" />
+        
+                          <g id="SVGRepo_iconCarrier">
+                            <path
+                              d="M17.9188 8.17969H11.6888H6.07877C5.11877 8.17969 4.63877 9.33969 5.31877 10.0197L10.4988 15.1997C11.3288 16.0297 12.6788 16.0297 13.5088 15.1997L15.4788 13.2297L18.6888 10.0197C19.3588 9.33969 18.8788 8.17969 17.9188 8.17969Z"
+                              fill="#7C48EE" />
+                          </g>
+        
+                        </svg>
+                      </span>
+                    </div>
+        
+                    <ul class="nav__sublist">
+                      <li class="nav__subitem">
+                        <a href="{% url 'tickets:tasks' %}" class="nav__subitem-link">
+                          My Tickets
+                        </a>
+                      </li>
+        
+                      <li class="nav__subitem">
+                        <a href="{% url 'tickets:list' %}" class="nav__subitem-link">
+                          Create a Ticket
+                        </a>
+                      </li>
+                    </ul>
+        
+                  </li>
+                  <li class="nav__list-item">
+                    <a class="{% if " /support/" == request.path %} nav__item-link {% else %} nav__item-link{% endif %}"
+                      href="{% url 'support' %}">FAQ</a>
+                  </li>
+                  <li class="nav__list-item">
+                    <a class="{% if " /support/" == request.path %} nav__item-link {% else %} nav__item-link{% endif %}"
+                      href="{% url 'support' %}">Refer a Friend</a>
+                  </li>
+                </ul>
+              </nav>
               <div class="header__box">
-                  <span class="header__box-link header__box-link-sublist" href="{% url 'authentication:profile'%}">
-                      <img class="header__box-img" src="{% static 'images/user.svg' %}" alt="user">
-                      <ul class="header__box-link-list">
-                        <li class="header__box-link-item">
-                          <a href="{% url 'authentication:profile' %}" class="header__box-link-sublink">
-                            Settings
-                          </a>
-                        </li>
-
-                        <li class="header__box-link-item">
-                          <a href="{% url 'account_logout'%}" class="header__box-link-sublink">
-                            Logout
-                          </a>
-                        </li>
-                      </ul>
-                  </span>
-                  <a class="header__box-link" href="https://t.me/Nexxess_Avivi_bot">
-                      <img class="header__box-img" title="Go to Telegram bot" src="{% static 'images/telegram.svg' %}" alt="user">
-                  </a>
-                  <a class="burger">
-                    <span class="burger-line"></span>
-                  </a>
+                <span class="header__box-link header__box-link-sublist">
+                  <img class="header__box-img" src="{% static 'images/user.svg' %}" alt="user">
+                  <ul class="header__box-link-list">
+                    <li class="header__box-link-item">
+                      <a href="{% url 'authentication:profile' %}" class="header__box-link-sublink">
+                        Settings
+                      </a>
+                    </li>
+      
+                    <li class="header__box-link-item">
+                      <a href="{% url 'account_logout'%}" class="header__box-link-sublink">
+                        Logout
+                      </a>
+                    </li>
+                  </ul>
+                </span>
+                <a class="header__box-link" href="https://t.me/Nexxess_Avivi_bot">
+                  <img class="header__box-img" title="Go to Telegram bot" src="{% static 'images/telegram.svg' %}" alt="user">
+                </a>
+                <a class="burger">
+                  <span class="burger-line"></span>
+                </a>
               </div>
-
             </div>
-          </div>
         </header>
         <main class="main">
           <div class="container">
