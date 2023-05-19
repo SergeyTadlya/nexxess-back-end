@@ -46,7 +46,8 @@ def invoices(request):
         statuses_number = {key: value for key, value in zip(statuses, statuses_quantity)}
         invoices_statuses = list()
 
-        for invoice in all_user_invoices:
+        date_count = 0
+        for index, invoice in enumerate(all_user_invoices):
 
             statuses_number[invoice.status.value] = 1 if invoice.status.value not in statuses_number.keys() \
                 else statuses_number[invoice.status.value] + 1
@@ -61,6 +62,12 @@ def invoices(request):
                 'status': invoice.status,
                 'title': invoice.product_title,
             })
+
+            if not invoices_array[date_count]['date'] == format_date(invoice.date) or index == 0:
+                date_count = index
+                invoices_array[index]['more_one'] = True
+            else:
+                invoices_array[index]['more_one'] = False
 
             if format_date(invoice.date) not in invoices_dates:
                 invoices_dates.append(format_date(invoice.date))
@@ -129,7 +136,8 @@ def ajax_invoice_filter(request):
                     Q(due_date__icontains=data['local_search'])
                 )
 
-            for invoice in all_user_invoices:
+            date_count = 0
+            for index, invoice in enumerate(all_user_invoices):
                 invoices_array.append({
                     'id': invoice.id,
                     'invoice_id': invoice.invoice_id,
@@ -140,6 +148,12 @@ def ajax_invoice_filter(request):
                     'status_value': invoice.status.value,
                     'status_color': invoice.status.color
                 })
+
+                if not invoices_array[date_count]['date'] == format_date(invoice.date) or index == 0:
+                    date_count = index
+                    invoices_array[index]['more_one'] = True
+                else:
+                    invoices_array[index]['more_one'] = False
 
                 if format_date(invoice.date) not in invoices_dates:
                     invoices_dates.append(format_date(invoice.date))

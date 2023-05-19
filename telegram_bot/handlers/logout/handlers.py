@@ -31,6 +31,7 @@ class LogOutHandler:
         if user.exists():
             user = user.first()
 
+        user.telegram_id = None
         user.telegram_is_authenticate = False
         user.save()
 
