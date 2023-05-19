@@ -121,9 +121,9 @@
                       <p class="content__descrip-text" id="includes">INCLUDE:</p>
                       <ul class="content__descrip-list">
                         {% for description_part in description_parts %}
-                          <li class="content__descrip-item">
-                            {{description_part}}
-                          </li>
+                            <li class="content__descrip-item" style="list-style: none">
+                              {{description_part}}
+                            </li>
                         {% endfor %}
                       </ul>
                   </div>
@@ -223,9 +223,12 @@
 <script>
   var items = document.querySelectorAll('.content__descrip-item');
     items.forEach(function(item) {
+
       if(item.innerText[0] == "•"){
         item.innerText = item.innerText.replace(/•/g, '');
-      }else{
+        item.style = "list-style: disc";
+      }
+      if(item.innerText == "INCLUDES:"){
         // document.getElementById("includes").innerText = item.innerText;
         item.remove();
       }

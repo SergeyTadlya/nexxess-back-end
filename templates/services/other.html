@@ -84,11 +84,17 @@
                 {% if description_parts.ID == service.ID %}
                   {% for description_part in description_parts.DESCRIPTION %}
                     {% if description_part %}
-                      <li class="content__list-product-description-item">
-                        <p class="content__list-product-description-text">
-                          {{description_part}}
-                        </p>
-                      </li>
+                      {% if description_part.0 == "•" %}
+                        <li class="content__list-product-description-item">
+                          <p class="content__list-product-description-text">
+                            {{description_part}}
+                          </p>
+                        </li>
+                      {% else %}
+                          <p class="content__list-product-description-text">
+                            {{description_part}}
+                          </p>
+                      {% endif %}
                     {% endif %}
                   {% endfor %}
                 {% endif %}
