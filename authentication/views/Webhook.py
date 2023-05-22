@@ -1,12 +1,15 @@
 from authentication.helpers.B24Webhook import set_webhook
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
+
 from bitrix24 import *
+
 from authentication.models import B24keys
 from services.models import ServiceCategory
 from invoices.models import Invoice, Status
 from tickets.models import Ticket, TicketComments, TicketStatus
 from datetime import datetime, timedelta
+
 import requests
 from services.models import ServiceCategory
 

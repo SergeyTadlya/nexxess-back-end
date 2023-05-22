@@ -79,8 +79,8 @@ class AuthenticationHandler:
             if not User.objects.filter(email=email):
                 self.bot.sendMessage(chat_id=get_chat_id(data),
                                      text='The user with this email does not exist on the site.\n'
-                                          'Log in first on the site to use the Telegram bot.\n\n'
-                                          'Here is a link to our site:\n'
+                                          'Log in first on the site to use the Telegram bot.\n'
+                                          'Here is a link to our site:\n\n'
                                           'https://dev1.nexxess.com/')
                 return
             unauthorized_user = Authentication.objects.filter(telegram_id=self.data['message']['from']['id'])
@@ -98,13 +98,11 @@ class AuthenticationHandler:
                                      text=f'Greate!\n'
                                           f'We have sent a confirmation code to the {unauthorized_user.email}.\n'
                                           f'Check it and write here your code:')
-
                 send_mail('Secret key',
-                          f'Your private key for "{unauthorized_user.email}":\n{code}',
+                          f'Your private key for {unauthorized_user.email}:\n\n{code}',
                           'cutrys69@gmail.com',
                           [unauthorized_user.email],
                           fail_silently=False)
-
             except Exception as e:
                 print(e)
 

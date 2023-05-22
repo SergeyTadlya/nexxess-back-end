@@ -265,11 +265,13 @@ def task_data(request):
         "tasks": tasks,
         'tasks_number': len(tasks),
     }
+
+    # script for tags in b24 task
     # url = set_webhook()
     # bx24 = Bitrix24(url)
     # ticket = bx24.callMethod('tasks.task.list', order={'ID': "ASC"},
-    #                                        filter={"ID": 550, "LOAD_TAGS": "Y"},
-    #                                        select=["ID", "LOAD_TAGS"])
+    #                           filter={"ID": 550, "LOAD_TAGS": "Y"},
+    #                           select=["ID", "LOAD_TAGS"])
 
     # url = set_webhook("task.item.gettags.xml?TASK_ID=550")
     # response = requests.get(url)

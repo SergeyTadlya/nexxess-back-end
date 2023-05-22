@@ -4,10 +4,10 @@ from telegram import Bot, BotCommand
 def set_up_commands(bot_instance: Bot) -> None:
     commands = {
         'menu': 'Menu',
-        'invoices': 'Invoices',
-        'services': 'Services',
-        'tickets': 'Tickets',
-        'faq': 'FAQ',
+        'invoices': 'Invoices',  # Show the invoices
+        'services': 'Services',  # Show my or all services
+        'tickets': 'Tickets',  # Create new or show the history
+        'faq': 'FAQ',  # Do you need help?
         'logout': 'Exit'
     }
 

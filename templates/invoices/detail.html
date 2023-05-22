@@ -118,19 +118,34 @@
                       Add to Nexxess© Trust Book (total $35,000) <br>
                       or purchase a gold package a la cart
                     </h6>
+<<<<<<< HEAD
                       <p class="content__descrip-text" id="includes">INCLUDE:</p>
                       <ul class="content__descrip-list">
                         {% for description_part in description_parts %}
                             <li class="content__descrip-item" style="list-style: none">
                               {{description_part}}
                             </li>
+=======
+                    <p class="content__descrip-text" id="includes">INCLUDE:</p>
+                      <ul class="content__descrip-list">
+                        {% for description_part in description_parts %}
+                          <li class="content__descrip-item" style="list-style: none">
+                            {{description_part}}
+                          </li>
+>>>>>>> 99dafe045a4d8a65a7291a24a144a5170676a4c5
                         {% endfor %}
                       </ul>
                   </div>
                 </div>
+<<<<<<< HEAD
             {% if invoice.status.value != "Paid" %}
               <a class="content__pay button_pay" data-b24invoice="{{ invoice.invoice_id }}">Pay</a>
             {% endif %}
+=======
+                {% if invoice.status.value != "Paid" %}
+			          <button class="content__pay button_pay" data-b24invoice="{{ invoice.invoice_id }}">Pay</button>
+                {% endif %}
+>>>>>>> 99dafe045a4d8a65a7291a24a144a5170676a4c5
             </div>
 {% endblock content %}
 {% block footer %}
@@ -225,7 +240,10 @@
 <script>
   var items = document.querySelectorAll('.content__descrip-item');
     items.forEach(function(item) {
+<<<<<<< HEAD
 
+=======
+>>>>>>> 99dafe045a4d8a65a7291a24a144a5170676a4c5
       if(item.innerText[0] == "•"){
         item.innerText = item.innerText.replace(/•/g, '');
         item.style = "list-style: disc";
@@ -235,7 +253,10 @@
         item.remove();
       }
     });
+<<<<<<< HEAD
 
+=======
+>>>>>>> 99dafe045a4d8a65a7291a24a144a5170676a4c5
   $(document).ready(function () {
     $(".button_pay").click(function()
     {
@@ -249,7 +270,8 @@
         dataType: 'json',
         success: function(data) {
           if (data.pay_link){
-            window.open(data.pay_link, '_blank');
+            // window.open(data.pay_link, '_blank');
+            window.location.href = data.pay_link;
           }else
           {
             alert("We have some problem. Please try late")

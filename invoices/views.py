@@ -200,6 +200,7 @@ def invoice_detail(request, id):
                 bx24 = Bitrix24(url)
                 product = bx24.callMethod('crm.product.get', id=invoice.service_id)
                 description_parts = product['DESCRIPTION'].split("<br>")
+
                 res = {
                     'invoice': invoice,
                     'status_closed': status_closed,
