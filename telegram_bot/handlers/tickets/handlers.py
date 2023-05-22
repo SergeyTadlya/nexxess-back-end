@@ -96,7 +96,7 @@ class TicketsHandler:
     def show_tickets_statuses(self):
         user = get_user(self.data['callback_query'])
         tickets_statuses = TicketStatus.objects.all()
-        tickets = Ticket.objects.filter(responsible=str(user.b24_contact_id)).order_by('-created_at')
+        tickets = Ticket.objects.filter(responsible=str(user.b24_contact_id))
 
         self.bot.sendMessage(chat_id=get_chat_id(self.data['callback_query']),
                              text='Choose the ticket status',
@@ -133,7 +133,7 @@ class TicketsHandler:
 
     def show_all_tickets(self, current_page, element_on_page=8):
         user = get_user(self.data['callback_query'])
-        tickets = Ticket.objects.filter(responsible=user.b24_contact_id).order_by('created_at')
+        tickets = Ticket.objects.filter(responsible=user.b24_contact_id).order_by('-created_at')
 
         tickets_quantity = len(tickets)
         if tickets_quantity == 0:
@@ -198,6 +198,7 @@ class TicketsHandler:
 
         self.bot.sendMessage(chat_id=get_chat_id(self.data),
                              text='Great, now describe the situation:')
+                            # reply_markup=return_to_set_title_keyboard(ticket.id)
 
     def save_ticket_description(self, description):
         if description == 'None' or description.startswith('/') or description in ['👨‍💻 Services', '🧾 Invoices', '📝 Tickets', '⁉️ FAQ', '🚪 Log Out']:

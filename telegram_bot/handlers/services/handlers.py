@@ -1,62 +1,45 @@
-from services.models import Service
-from invoices.views import format_price
-
-from .keyboards import *
-from ..utils import *
+from telegram import InlineKeyboardMarkup, InlineKeyboardButton
+from invoices.views import format_date, format_price
 
 
-class ServicesHandler:
-    def __init__(self, bot, data, callback_title):
-        self.bot = bot
-        self.data = data
+def services_menu_keyboard() -> InlineKeyboardMarkup:
+    buttons = [
+        [InlineKeyboardButton('My services', callback_data='services_my')],
+        [InlineKeyboardButton('All services', callback_data='services_all')]
+    ]
+    return InlineKeyboardMarkup(buttons)
 
-        callback_title = callback_title.replace('services_', '')
 
-        if callback_title == 'menu':
-            self.show_services_menu(self.bot, self.data['callback_query'])
+def all_services_keyboard() -> InlineKeyboardMarkup:
+    buttons = [
+        [InlineKeyboardButton('👥 Hourly rate chart for consultation', callback_data='services_ctg_C')],
+        [InlineKeyboardButton('📚 Nexxess trust books', callback_data='services_ctg_B')],
+        [InlineKeyboardButton('📦 Nexxess packages', callback_data='services_ctg_P')],
+        [InlineKeyboardButton('⬅️ Back to services menu', callback_data='services_menu')]
+    ]
 
-        elif callback_title == 'my':
-            self.show_user_services()
+    return InlineKeyboardMarkup(buttons)
 
-        elif callback_title == 'all':
-            self.show_all_services_type()
 
-        elif callback_title == 'consultations':
-            pass
+def selected_category_keyboard(services, category_name) -> InlineKeyboardMarkup:
+    buttons = list()
 
-        elif callback_title == 'books':
-            pass
+    for service in services:
+        service_text = service.title + ' - ' + format_price(service.price)
+        service_callback_data = 'services_detail_' + service.service_id
 
-        elif callback_title == 'packages':
-            pass
+        buttons.append([InlineKeyboardButton(service_text, callback_data=service_callback_data)])
+    buttons.append([InlineKeyboardButton('⬅️ Back to category menu', callback_data='services_all')])
 
-        elif callback_title[:2] == 'id':
-            service_id = callback_title[3:]
+    return InlineKeyboardMarkup(buttons)
 
-            self.show_service_details(service_id)
 
-    @staticmethod
-    def show_services_menu(bot, data):
-        bot.sendMessage(chat_id=get_chat_id(data),
-                        text='Choose the option',
-                        reply_markup=services_menu_keyboard())
+def service_detail_keyboard(service) -> InlineKeyboardMarkup:
+    button = [
+        [InlineKeyboardButton('⬅️ Choose another', callback_data='services_ctg_' + service.category.category_name[0]),
+         InlineKeyboardButton('Order', callback_data=f'services_order_{service.service_id}')],
 
-    def show_all_services_type(self):
-        self.bot.sendMessage(chat_id=get_chat_id(self.data['callback_query']),
-                             text='Choose the type of services',
-                             reply_markup=all_services_keyboard())
+        [InlineKeyboardButton('⏪ Back to services', callback_data='services_all')]
+    ]
 
-    def show_user_services(self):
-        self.bot.sendMessage(chat_id=get_chat_id(self.data['callback_query']),
-                             text='You have no services')
-
-    def show_service_details(self, service_id):
-        service = Service.objects.filter(service_id=service_id)
-        if service.exists():
-            service = service.first()
-
-        self.bot.sendPhoto(chat_id=get_chat_id(self.data['callback_query']),
-                           photo=service.image,
-                           caption=f'{format_price(service.price)} | {service.title}\n\n'
-                                   f'{service.title_description}',
-                           reply_markup=service_detail_keyboard(service))
+    return InlineKeyboardMarkup(button)

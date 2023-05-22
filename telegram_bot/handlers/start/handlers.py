@@ -1,10 +1,10 @@
 from django.core.mail import send_mail
+from django.db.models import Q
 
 from .keyboards import *
 from ..utils import *
 from ..system_commands import *
 from ...models import Authentication, User
-
 from random import randint
 
 
@@ -70,47 +70,47 @@ class AuthenticationHandler:
         self.data = data
 
     def set_user_email(self, data):
-        email = StartHandler.message_validation(data['message'], self.bot, self.data)
-
-        if email is None:
+        email_or_username = StartHandler.message_validation(data['message'], self.bot, self.data)
+        if email_or_username is None:
             return
 
-        if email.count('@') >= 1:
-            if not User.objects.filter(email=email):
+        user = User.objects.filter(Q(email=email_or_username) | Q(username=email_or_username))
+
+        if user.exists():
+            user = user.first()
+            if user.telegram_is_authenticate:
                 self.bot.sendMessage(chat_id=get_chat_id(data),
-                                     text='The user with this email does not exist on the site.\n'
-                                          'Log in first on the site to use the Telegram bot.\n'
-                                          'Here is a link to our site:\n\n'
-                                          'https://dev1.nexxess.com/')
-                return
-            unauthorized_user = Authentication.objects.filter(telegram_id=self.data['message']['from']['id'])
-            if unauthorized_user.exists():
-                unauthorized_user = unauthorized_user.first()
-
-            try:
-                code = randint(100000, 999999)
-                unauthorized_user.verify_code = code
-                unauthorized_user.email = email
-                unauthorized_user.step = 'SET_VERIFY_CODE'
-                unauthorized_user.save()
-
-                self.bot.sendMessage(chat_id=get_chat_id(self.data),
-                                     text=f'Greate!\n'
-                                          f'We have sent a confirmation code to the {unauthorized_user.email}.\n'
-                                          f'Check it and write here your code:')
-                send_mail('Secret key',
-                          f'Your private key for {unauthorized_user.email}:\n\n{code}',
-                          'cutrys69@gmail.com',
-                          [unauthorized_user.email],
-                          fail_silently=False)
-            except Exception as e:
-                print(e)
-
+                                     text='It seems that the user is already authenticated in Telegram')
         else:
+            self.bot.sendMessage(chat_id=get_chat_id(data),
+                                 text='The user with this email does not exist on the site.\n'
+                                      'Log in first on the site to use the Telegram bot.\n\n'
+                                      'Here is a link to our site:\n'
+                                      'https://dev1.nexxess.com/')
+            return
+
+        unauthorized_user = Authentication.objects.filter(telegram_id=self.data['message']['from']['id'])
+        if unauthorized_user.exists():
+            unauthorized_user = unauthorized_user.first()
+
+        try:
+            code = randint(100000, 999999)
+            unauthorized_user.verify_code = code
+            unauthorized_user.email = user.email
+            unauthorized_user.step = 'SET_VERIFY_CODE'
+            unauthorized_user.save()
+
             self.bot.sendMessage(chat_id=get_chat_id(self.data),
-                                 text='🤔 Hmmm...\n'
-                                      'Maybe you forgot to use the "@" symbol?\n'
-                                      'Try again 👇')
+                                 text=f'Greate!\n'
+                                      f'We have sent a confirmation code to the {unauthorized_user.email}.\n'
+                                      f'Check it and write here your code:')
+            send_mail('Secret key',
+                      f'Your private key for {unauthorized_user.email}:\n\n{code}',
+                      'cutrys69@gmail.com',
+                      [unauthorized_user.email],
+                      fail_silently=False)
+        except Exception as e:
+            print(e)
 
     def set_user_verification_code(self, data):
         unauthorized_user = Authentication.objects.filter(telegram_id=self.data['message']['from']['id'])
