@@ -107,6 +107,7 @@ def webhook_task_comment(request):
             )
             manager_name = user[0]['EMAIL']
             message_text = comments[-1]['POST_MESSAGE']
+            print('message_text', message_text)
             ticket = Ticket.objects.get(task_id=entities_id)
 
             # Get Bitrix24 webhook information
