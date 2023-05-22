@@ -1,0 +1,312 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+{% endblock %}
+
+{% block left_menu %}
+
+    <div class="mobile__title">
+
+    </div>
+    <div class="aside-info">
+      <div class="aside-info__box ">
+        <div class="aside-info__box-top">
+          <img class="aside-info__top-title-img" src="{% static 'images/aside-main.svg' %}" alt="#">
+          <h6 class="aside-info__top-title">Your Info</h6>
+          <img class="aside-info__top-title-arrow accordion__arrow--active" src="{% static 'images/chevron-down.svg' %}"  alt="icon">
+        </div>
+        <div class="aside-info-content-iiner accordion__list--active">
+          <p class="aside-info__top-subtitle">
+            Nexxess International
+          </p>
+          <ul class="aside-info__box-list">
+            <li class="aside-info__box-item">
+              {{ request.user.first_name }}
+              {{ request.user.last_name }}
+            </li>
+            <li class="aside-info__box-item">
+              {{ request.user.username}}
+            </li>
+            <li class="aside-info__box-item">
+              {{ request.user.email }}
+            </li>
+          </ul>
+          <a class="aside-info__top-btn" href="{% url 'authentication:profile' %}">Update</a>
+        </div>
+      </div>
+
+      <div class="aside-info__accordion">
+            <div id="aside-info__accordion-top" class="aside-info__accordion-top">
+              <img class="aside-info__top-img" src="{% static 'images/main/custom-tickets.svg' %}" alt="icon">
+              <h6 class="aside-info__top-title">Tickets</h6>
+              <img class="aside-info__top-arrow" src="{% static 'images/chevron-down.svg' %}"  alt="icon">
+            </div>
+            <ul class="aside-info__accordion-list">
+              {% if status_closed %}
+              <li class="aside-info__accordion-item">
+                <a class="aside-info__accordion-link" href="{% url 'tickets:tasks'%}">
+                  <p class="aside-info__accordion-text">Closed</p>
+                  <p class="aside-info__accordion-number font--red">{{ status_closed }}</p>
+                </a>
+              </li>
+              {% endif %}
+
+              {% if status_overdue %}
+              <li class="aside-info__accordion-item">
+                <a class="aside-info__accordion-link" href="{% url 'tickets:tasks'%}">
+                  <p class="aside-info__accordion-text">Overdue</p>
+                  <p class="aside-info__accordion-number font--red">{{ status_overdue }}</p>
+                </a>
+              </li>
+              {% endif %}
+
+              {% if status_ongoin %}
+              <li class="aside-info__accordion-item">
+                <a class="aside-info__accordion-link" href="{% url 'tickets:tasks'%}">
+                  <p class="aside-info__accordion-text">Ongoing</p>
+                  <p class="aside-info__accordion-number font--green">{{ status_ongoin }}</p>
+                </a>
+              </li>
+              {% endif %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+  <div class="content__inner">
+      <div class="title__inner title__inner-main">
+        <div class="title__date">
+          <span id="date"></span> <span id="month"></span> <span id="day"></span>
+        </div>
+        <h1 class="title content__top-title">Welcome Back, <span id="name">{{ request.user.first_name }}</span></h1>
+      </div>
+      <ul class="content__list">
+        <li class="content__list-item" id="services">
+          <a class="content__list-link" href="{% url 'services:services'%}">
+              <p class="content__list-link-title content__list-link-title-services">
+                Services
+                <span class="content__list-link-title-dots">...</span>
+              </p>
+            <div class="content__list-body">
+                <div class="content__list-info">
+                    <p class="content__info-number">{{services_all_count}}</p>
+                    <p class="content__info-text">available</p>
+                </div>
+            </div>
+          </a>
+        </li>
+            <li class="content__list-item">
+              <a class="content__list-link" href="{% url 'services:my_services' %}">
+                <p class="content__list-link-title content__list-link-title-myservices">
+                  My Services
+                  <span class="content__list-link-title-dots">...</span>
+                </p>
+                <div class="content__list-body">
+                    <div class="content__list-info">
+                        <p class="content__info-number">{{b_services}}</p>
+                        <p class="content__info-text">are used</p>
+                    </div>
+                </div>
+              </a>
+            </li>
+            <li class="content__list-item">
+              <a class="content__list-link" href="{% url 'tickets:tasks'%}">
+                <p class="content__list-link-title content__list-link-title-tickets">
+                  Tickets
+                  <span class="content__list-link-title-dots">...</span>
+                </p>
+                <div class="content__list-body">
+                  <div class="content__list-info">
+                    <p class="content__info-number">{{task_count}}</p>
+                    <p class="content__info-text">new reply</p>
+                  </div>
+                </div>
+              </a>
+            </li>
+            <li class="content__list-item">
+              <a class="content__list-link" href="{% url 'invoices'%}">
+                <p class="content__list-link-title content__list-link-title-invoices">
+                  Invoices
+                  <span class="content__list-link-title-dots">...</span>
+                </p>
+                <div class="content__list-body">
+                  <div class="content__list-info">
+                    <p class="content__info-number">{{invoice_count}}</p>
+                    <p class="content__info-text">new invoices</p>
+                  </div>
+                </div>
+              </a>
+            </li>
+      </ul>
+  </div>
+{% endblock %}
+{% block  after_sign_up %}
+{% if not user.is_superuser and not user.google_auth %}
+<header class="header">
+  <div class="container">
+    <div class="header__inner">
+      <a href="{% url 'authentication:main' %}">
+        <picture class="header__logo">
+          <source srcset="{% static 'images/logo.svg' %}" media="(max-width: 550px)">
+          <img src="{% static 'images/logo.png' %}" alt="logo">
+        </picture>
+      </a>
+    </div>
+  </div>
+</header>
+<style>
+
+  .confirmation__email {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+
+  .confirmation__email-text {
+    text-align: center;
+    width: 50%;
+  }
+
+  .confirmation__email-button {
+    margin-top: 30px;
+    text-align: center;
+    text-decoration: none;
+    background: -webkit-gradient(linear, left bottom, left top, from(#7842F6), to(#509CE9));
+    background: -o-linear-gradient(bottom, #7842F6 0%, #509CE9 100%);
+    background: linear-gradient(360deg, #7842F6 0%, #509CE9 100%);
+    border-radius: 4px;
+    outline: 1px solid transparent;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 10px;
+    letter-spacing: 0.15px;
+    color: #fff;
+    text-transform: uppercase;
+    transition: all 0.3s;
+    padding: 16px 32px;
+  }
+
+  .confirmation__email-button:hover {
+    outline-color: #7842F6;
+    background: transparent;
+    color: #7842F6;
+  }
+
+  @media (max-width: 550px) {
+    .confirmation__email-text {
+      width: 100%;
+    }
+  }
+</style>
+<main class="main">
+  <div class="container">
+    <div class="confirmation__email">
+      <p class="confirmation__email-text">We have sent an email to you for verification. Follow the link provided to finalize the process. If you do not see the verification email in your main inbox, check your spam folder.
+        Please contact us if you do not receive the verification email within a few minutes.</p>
+      <a href="{% url 'account_logout' %}" class="confirmation__email-button">OK</a>
+    </div>
+  </div>
+</main>
+
+
+{% endif %}
+{% endblock after_sign_up%}
+
+{% block footer %}
+<div class="container">
+  <ul class="footer__list">
+    <li class="footer__item">
+      <div class="footer__social">
+        <a class="footer__social-link" href="https://www.facebook.com/nexxesstrust">
+          <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="26.4583mm" height="26.4584mm" version="1.1"
+            style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+            viewBox="0 0 2646 2646" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <defs>
+              <style type="text/css">
+                <![CDATA[
+                .fil0 {
+                  fill: white
+                }
+                ]]>
+              </style>
+            </defs>
+            <g id="Layer_x0020_1">
+              <metadata id="CorelCorpID_0Corel-Layer" />
+              <path class="fil0"
+                d="M0 1324c0,333 108,605 299,847 13,17 24,27 37,43 22,28 48,50 73,76 13,13 24,26 38,37 90,72 119,101 228,161 19,10 28,17 48,27 100,50 231,95 342,117 14,3 53,9 65,15l0 -954 -299 0 0 -368 299 0c0,-170 -15,-406 53,-544 63,-126 151,-198 290,-238 50,-14 99,-16 153,-23 52,-6 302,26 324,26l0 325 -240 0c-59,0 -114,17 -146,46 -20,18 -29,32 -41,55 -11,22 -21,48 -21,80l0 256c0,12 4,16 16,16l373 0c-1,27 -9,64 -14,93l-36 235c-3,22 1,39 -19,39l-245 0 0 954c59,-28 174,-22 418,-168 123,-73 226,-166 322,-270 11,-12 20,-25 31,-38l94 -130c284,-453 269,-1041 -44,-1483 -75,-106 -108,-131 -193,-217 -16,-16 -26,-22 -43,-37l-95 -71c-32,-21 -66,-46 -101,-64 -155,-80 -320,-148 -501,-160 -116,-8 -188,-13 -302,2 -132,18 -274,50 -388,108 -184,93 -338,198 -468,358 -26,32 -46,60 -71,94 -25,34 -42,65 -64,101 -20,32 -41,75 -56,109 -64,143 -117,337 -117,544z" />
+            </g>
+          </svg>
+        </a>
+        <a class="footer__social-link" href="https://twitter.com/nexxessintl">
+          <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="26.4582mm" height="26.4579mm" version="1.1"
+            style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+            viewBox="0 0 2646 2646" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <defs>
+              <style type="text/css">
+                <![CDATA[
+                .fil0 {
+                  fill: white
+                }
+                ]]>
+              </style>
+            </defs>
+            <g id="Layer_x0020_1">
+              <metadata id="CorelCorpID_0Corel-Layer" />
+              <path class="fil0"
+                d="M0 1228c0,447 69,713 383,1028 618,620 1682,495 2130,-339 131,-243 133,-427 133,-689 0,-348 -204,-659 -383,-838 -618,-620 -1682,-495 -2130,339 -63,117 -133,328 -133,499zm1306 -162c-397,-30 -493,-184 -701,-343 -98,218 -8,313 90,438l-126 -29c-10,159 96,269 218,307l-102 31c59,171 129,173 293,237 -128,115 -263,118 -467,142 660,354 1381,35 1467,-791 14,-137 82,-110 152,-232l-136 29c35,-54 78,-88 100,-170 -178,76 -159,86 -249,40 -91,-46 -121,-91 -269,-67 -194,31 -285,182 -272,407z" />
+            </g>
+          </svg>
+        </a>
+        <a class="footer__social-link" href="#">
+          <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="26.4584mm" height="26.4581mm" version="1.1"
+            style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+            viewBox="0 0 2646 2646" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <defs>
+              <style type="text/css">
+                <![CDATA[
+                .fil0 {
+                  fill: white
+                }
+                ]]>
+              </style>
+            </defs>
+            <g id="Layer_x0020_1">
+              <metadata id="CorelCorpID_0Corel-Layer" />
+              <g id="_1943331531584">
+                <path class="fil0"
+                  d="M1267 2646c160,0 228,2 388,-40 147,-38 308,-110 430,-199 33,-24 101,-75 130,-105 16,-17 27,-22 42,-38 224,-227 388,-564 388,-888 0,-195 -9,-323 -77,-505 -27,-72 -39,-100 -73,-164 -64,-119 -79,-135 -161,-241 -41,-53 -80,-83 -116,-120 -14,-15 -27,-24 -42,-38 -51,-46 -128,-94 -186,-130 -34,-21 -68,-36 -105,-55 -116,-60 -337,-124 -509,-124 -160,0 -224,0 -383,40 -101,25 -254,88 -342,142 -70,44 -147,97 -208,152 -62,56 -126,124 -175,191 -84,115 -153,233 -197,372 -91,283 -96,557 -4,841 60,184 172,371 307,508 228,233 572,400 894,400zm-173 -2191c-228,9 -470,33 -569,288 -70,181 -57,604 -49,819 8,231 34,480 282,580 180,72 585,58 797,50 135,-5 250,-9 361,-64 95,-47 165,-117 207,-225 68,-173 56,-610 49,-816 -9,-238 -33,-477 -282,-582 -169,-71 -593,-58 -796,-50z" />
+                <path class="fil0"
+                  d="M1210 608c-227,6 -448,0 -534,172 -65,131 -54,494 -50,662 5,226 0,459 170,544 136,69 480,56 650,52 229,-5 440,2 527,-174 67,-135 54,-492 50,-664 -5,-234 2,-451 -169,-541 -128,-67 -479,-56 -643,-52zm53 279c-236,34 -410,219 -369,501 20,136 79,231 152,286 88,67 200,107 341,84 227,-37 406,-224 367,-499 -37,-265 -253,-405 -491,-371zm496 -137c-55,11 -102,39 -92,105 9,60 46,100 111,96 141,-9 106,-227 -19,-201z" />
+                <path class="fil0"
+                  d="M1311 1033c-400,42 -322,606 31,578 160,-13 275,-129 263,-306 -11,-156 -128,-289 -294,-272z" />
+              </g>
+            </g>
+          </svg>
+        </a>
+      </div>
+    </li>
+    <li class="footer__item">
+      <p class="footer__item-text">
+        Copyright 2000-2023, Nexxess International, All Rights Reserved
+      </p>
+    </li>
+    <li class="footer__item">
+      <a class="footer__btn-link" href="{% url 'account_logout' %}">
+        consultation
+      </a>
+    </li>
+  </ul>
+</div>
+
+{% endblock footer %}
+{% block extra_js %}
+<script src="{% static 'js/global.js' %}"></script>
+ <script src="{% static 'js/main.js' %}"></script>
+
+
+{% endblock %}
