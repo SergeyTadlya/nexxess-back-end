@@ -32,9 +32,9 @@ const contentTopNumber = document.querySelector('#content__showing-number')
 
 const contentTopItem = document.querySelectorAll('.content__showing-item')
 
-contentTopBox.addEventListener('click', () => {
-  contentTopList.classList.toggle('content__showing--active')
-})
+// contentTopBox.addEventListener('click', () => {
+//   contentTopList.classList.toggle('content__showing--active')
+// })
 
 contentTopItem.forEach((item) => {
   item.addEventListener('click', () => {
@@ -53,7 +53,6 @@ cteareBtn.addEventListener('click', () => {
 //_________________POPUP *NEW TAG*_________________
 
 const btnNewTag = document.querySelector('#form__new-tag')
-
 const popup = document.querySelector('.popup')
 const popupClose = document.querySelector('.popup__close')
 const popupInput = document.querySelector('#popup__input')
@@ -61,7 +60,7 @@ const popupInput = document.querySelector('#popup__input')
 // ----------OPEN POPUP----------
 btnNewTag.addEventListener('click', (e) => {
   // if (navList.classList.contains('header__menu--active')) menu()
-  popup.classList.add('show')
+  popup.classList.add('show');
   document.body.style.cssText = `overflow: hidden;`
 })
 

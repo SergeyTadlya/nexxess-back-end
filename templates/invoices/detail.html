@@ -128,7 +128,9 @@
                       </ul>
                   </div>
                 </div>
-			<a class="content__pay button_pay" data-b24invoice="{{ invoice.invoice_id }}">Pay</a>
+            {% if invoice.status.value != "Paid" %}
+              <a class="content__pay button_pay" data-b24invoice="{{ invoice.invoice_id }}">Pay</a>
+            {% endif %}
             </div>
 {% endblock content %}
 {% block footer %}

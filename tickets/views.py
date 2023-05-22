@@ -14,6 +14,9 @@ import requests
 import json
 import time
 
+from bitrix24 import Bitrix24
+import xml.etree.ElementTree as ET
+
 
 def check_and_shorten_string(string):
     if len(string) > 20:
@@ -183,6 +186,10 @@ def task_detail(request, id):
             status_closed = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Closed').count()
             status_overdue = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Overdue').count()
             status_ongoin = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Ongoing').count()
+        else:
+            status_closed = 0
+            status_overdue = 0
+            status_ongoin = 0
 
         res = {
             'task': task,
@@ -208,7 +215,6 @@ def create_bitrix_task(request):
 
             method = "tasks.task.add"
             url = set_webhook(method)
-
             payload = {
                 'fields': {
                     'TITLE': task_name,
@@ -224,6 +230,10 @@ def create_bitrix_task(request):
                     }
                 }
             response = requests.post(url, json=payload)
+            print('test123 create task')
+            response_data = json.loads(response.content)
+            task_id = response_data['result']['task']['id']
+            print('response task_id', task_id)
 
             if response.status_code == 200:
                 time.sleep(5)
@@ -255,4 +265,20 @@ def task_data(request):
         "tasks": tasks,
         'tasks_number': len(tasks),
     }
+    # url = set_webhook()
+    # bx24 = Bitrix24(url)
+    # ticket = bx24.callMethod('tasks.task.list', order={'ID': "ASC"},
+    #                                        filter={"ID": 550, "LOAD_TAGS": "Y"},
+    #                                        select=["ID", "LOAD_TAGS"])
+
+    # url = set_webhook("task.item.gettags.xml?TASK_ID=550")
+    # response = requests.get(url)
+    # root = ET.fromstring(response.content)
+    # items = root.findall('.//item')
+    # item_values = [item.text for item in items]
+    # print('response_data 550', item_values)
+
+    # url = set_webhook("tasks.task.update?taskId=556&fields[TAGS]=tag_one,tag_two")
+    # response = requests.post(url)
+    # print('response', response)
     return render(request, 'tickets/list.html', context)
