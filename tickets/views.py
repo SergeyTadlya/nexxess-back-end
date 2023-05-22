@@ -6,7 +6,7 @@ from django.http import JsonResponse
 
 from authentication.helpers.B24Webhook import set_webhook
 from invoices.views import format_date
-from .models import Ticket, TicketStatus
+from .models import Ticket, TicketStatus, TicketComments
 
 from datetime import datetime
 
@@ -43,6 +43,8 @@ def tasks(request):
         statuses_number[task.status.name] = 1 if task.status.name not in statuses_number.keys() \
             else statuses_number[task.status.name] + 1
 
+        ticket = Ticket.objects.get(task_id=task.task_id)
+        new_comment = TicketComments.objects.filter(ticket=ticket, is_opened=False).count()
         tasks_array.append({
             'id': task.task_id,
             'title': check_and_shorten_string(task.ticket_title),
@@ -50,6 +52,7 @@ def tasks(request):
             'created_at': format_date(task.created_at),
             'deadline': format_date(task.deadline),
             'is_opened': task.is_opened,
+            'new_comment': new_comment,
         })
 
         if not tasks_array[date_count]['created_at'] == format_date(task.created_at) or index == 0:

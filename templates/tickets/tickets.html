@@ -139,13 +139,15 @@
                                   </a>
                               </li>
                           </ul>
-                          <div class="content__body-messages">
-                              <p>1</p>
-                              <img src="{% static 'images/mail.svg' %}" alt="print">
-                          </div>
-                          <button class="content__body-btn">
-                              <img class="content__body-img" src="{% static 'images/chevron.svg' %}" alt="arrow">
-                          </button>
+                          {% if task.new_comment != 0 %}
+                              <div class="content__body-messages">
+                                  <p>{{task.new_comment}}</p>
+                                  <img src="{% static 'images/mail.svg' %}" alt="print">
+                              </div>
+                              <button class="content__body-btn">
+                                  <img class="content__body-img" src="{% static 'images/chevron.svg' %}" alt="arrow">
+                              </button>
+                          {% endif %}
                       </li>
                   </ul>
                     {% if task.more_one %}

@@ -279,6 +279,10 @@
   
 }
 
+.content__list-product-description-text-small .content__list-product-description-text {
+  font-size: 18px;
+}
+
 .content__list-product-description-text {
   font-size: 20px;
 }
@@ -477,6 +481,22 @@
             justify-content: center;
   }
   .content__list-product-description {
-    padding: 0 10px;
+    padding: 0 15px;
+  }
+
+  .content__list-product-description-item {
+    font-size: 16px;
+  }
+
+  .content__list-product-description-text {
+    font-size: 16px;
+  }
+
+  .content__list-product-description-hour {
+    font-size: 16px;
+  }
+
+  .content__list-product-description-text-small .content__list-product-description-text {
+    font-size: 16px;
   }
 }

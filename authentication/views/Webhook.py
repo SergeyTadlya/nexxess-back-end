@@ -86,53 +86,36 @@ def webhook_task_comment(request):
             b24keys = B24keys.objects.first()
 
             event = request.POST.get('event', "")
+            entities_id = request.POST.get('data[FIELDS_AFTER][TASK_ID]', "")
+            comment_id = request.POST.get('data[FIELDS_AFTER][ID]', "")
+
+            domain = b24keys.domain
+            rest_key = b24keys.rest_key
+            b24Comments = 'task.commentitem.getlist'
+            bx24 = Bitrix24(domain + rest_key)
+
+            comments = bx24.callMethod(
+                b24Comments,
+                taskId=int(entities_id),
+            )
+            # get user email
+            userId = comments[0]['AUTHOR_ID']
+            b24User = 'user.get'
+            user = bx24.callMethod(
+                b24User,
+                FILTER={'ID': userId},
+            )
+            manager_name = user[0]['EMAIL']
+            message_text = comments[-1]['POST_MESSAGE']
+            ticket = Ticket.objects.get(task_id=entities_id)
+
+            # Get Bitrix24 webhook information
+            b24_domain = request.POST.get('auth[domain]', "")
+            b24_member_id = request.POST.get('auth[member_id]', "")
+            b24_application_token = request.POST.get('auth[application_token]', "")
+            b24_time = request.POST.get('ts', "")
 
             if event == "ONTASKCOMMENTADD":
-                entities_id = request.POST.get('data[FIELDS_AFTER][TASK_ID]', "")
-                print(entities_id)
-                comment_id = request.POST.get('data[FIELDS_AFTER][ID]', "")
-                print(comment_id)
-                ######
-                # print(set_webhook.domain)
-                # print(set_webhook.rest_key)
-                domain = b24keys.domain
-                print(f'domain{domain}')
-                rest_key = b24keys.rest_key
-                print(f'rest_key{rest_key}')
-                method = 'task.commentitem.getlist'
-
-                b24Comments = 'task.commentitem.getlist'
-                bx24 = Bitrix24(domain + rest_key)
-
-                comments = bx24.callMethod(
-                    b24Comments,
-                    taskId=int(entities_id),
-                )
-                print(comments)
-                # get user email
-                userId = comments[0]['AUTHOR_ID']
-                b24User = 'user.get'
-                user = bx24.callMethod(
-                    b24User,
-                    FILTER={'ID': userId},
-                )
-                print(user[0]['EMAIL'])
-                manager_name = user[0]['EMAIL']
-                print(f'manager name {manager_name}')
-                message_text = comments[-1]['POST_MESSAGE']
-                print(f'message text {message_text}')
-                #######
-                ticket = Ticket.objects.get(task_id=entities_id)
-                print(ticket)
-
-
-
-                # Get Bitrix24 webhook information
-                b24_domain = request.POST.get('auth[domain]', "")
-                b24_member_id = request.POST.get('auth[member_id]', "")
-                b24_application_token = request.POST.get('auth[application_token]', "")
-                b24_time = request.POST.get('ts', "")
-
                 if all([comment_id, ticket, b24_domain, b24_member_id, b24_application_token, b24_time]):
                     comment = TicketComments.objects.create(
                         ticket=ticket,
@@ -143,7 +126,23 @@ def webhook_task_comment(request):
                         added_documents=None,  # you can add the documents here
                         is_active=True,
                     )
-                    print(f"New comment added to ticket {ticket.task_id} with comment id {comment.comment_id}")
+            elif event == "ONTASKCOMMENTUPDATE":
+                TicketComments.objects.filter(
+                    ticket=ticket,
+                    comment_id=comment_id,
+                ).update(
+                    text=message_text,
+                    manager_name=manager_name,
+                    is_opened=ticket.is_opened,
+                    added_documents=None,  # you can add the documents here
+                    is_active=True,
+                )
+            else:
+                TicketComments.objects.filter(
+                    ticket=ticket,
+                    comment_id=comment_id,
+                ).delete()
+
         return HttpResponse('ok')
     except Exception as e:
         print(e)
