@@ -3,5 +3,5 @@ __pycache__/
 *.sqlite3
 .idea
 */migrations/*
-templates_old
-pdf_client/*
+*/templates_old/*
+/pdf_client/*
