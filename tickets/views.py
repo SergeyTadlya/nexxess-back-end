@@ -261,4 +261,22 @@ def task_data(request):
         "tasks": tasks,
         'tasks_number': len(tasks),
     }
+
+    # script for tags in b24 task
+    # url = set_webhook()
+    # bx24 = Bitrix24(url)
+    # ticket = bx24.callMethod('tasks.task.list', order={'ID': "ASC"},
+    #                           filter={"ID": 550, "LOAD_TAGS": "Y"},
+    #                           select=["ID", "LOAD_TAGS"])
+
+    # url = set_webhook("task.item.gettags.xml?TASK_ID=550")
+    # response = requests.get(url)
+    # root = ET.fromstring(response.content)
+    # items = root.findall('.//item')
+    # item_values = [item.text for item in items]
+    # print('response_data 550', item_values)
+
+    # url = set_webhook("tasks.task.update?taskId=556&fields[TAGS]=tag_one,tag_two")
+    # response = requests.post(url)
+    # print('response', response)
     return render(request, 'tickets/list.html', context)
