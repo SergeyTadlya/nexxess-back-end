@@ -2,51 +2,46 @@
 {% load static %}
 
 {% block extra_css %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+ <link rel="stylesheet" type="text/css" href="{% static 'css/services.css' %}">
 {% endblock %}
 
+{% block title %} Services {% endblock %}
+
 {% block left_menu %}
-
-    <div class="mobile__title">
-
-    </div>
-    <div class="aside-info">
-      <div class="aside-info__box accordion__list--active">
+    <div class="aside-info aside-info-none">
+      <div class="aside-info__box">
         <div class="aside-info__box-top">
-          <img class="aside-info__top-title-img" src="{% static 'images/aside-main.svg' %}" alt="#">
-          <h6 class="aside-info__top-title">Your Info</h6>
-          <img class="aside-info__top-title-arrow accordion__arrow--active" src="{% static 'images/chevron-down.svg' %}"  alt="icon">
+          <img class="aside-info__top-img" src="{% static '/images/main/custom-tickets.svg' %}" alt="icon">
+          <h6 class="aside-info__top-title">Important</h6>
+          <p class="aside-info__top-number">3</p>
         </div>
-        <div class="aside-info-content-iiner">
-          <p class="aside-info__top-subtitle">
-            Nexxess International
-          </p>
-          <ul class="aside-info__box-list">
-            <li class="aside-info__box-item">
-              {{ request.user.first_name }}
-              {{ request.user.last_name }}
-            </li>
-            <li class="aside-info__box-item">
-              {{ request.user.username}}
-            </li>
-            <li class="aside-info__box-item">
-              {{ request.user.email }}
-            </li>
-          </ul>
-        </div>
-          <a class="aside-info__top-btn" href="#">Update</a>
-        </div>
+        <ul class="aside-info__box-list">
+          <li class="aside-info__box-item">
+            <p class="aside-info__box-text">My current service:</p>
+            <p class="aside-info__box-money">Services Name</p>
+          </li>
+          <li class="aside-info__box-item">
+            <p class="aside-info__box-text">New servises this month:</p>
+            <p class="aside-info__box-money">2</p>
+          </li>
+          <li class="aside-info__box-item">
+            <p class="aside-info__box-text">Actual discounts:</p>
+            <p class="aside-info__box-money">10%</p>
+          </li>
+        </ul>
+      </div>
 
-      <div class="aside-info__accordion">
+              <div class="aside-info__accordion">
           <div id="aside-info__accordion-top" class="aside-info__accordion-top">
             <img class="aside-info__top-img" src="{% static 'images/main/custom-tickets.svg' %}" alt="icon">
             <h6 class="aside-info__top-title">Tickets</h6>
-            <img class="aside-info__top-arrow" src="{% static 'images/chevron-down.svg' %}"  alt="icon">
+            <img class="aside-info__top-arrow" src="{% static 'images/chevron-down.svg' %}" alt="icon">
           </div>
+
           <ul class="aside-info__accordion-list">
             {% if status_closed %}
             <li class="aside-info__accordion-item">
-              <a class="aside-info__accordion-link" href="{% url 'tickets:tasks'%}">
+              <a class="aside-info__accordion-link" href="#">
                 <p class="aside-info__accordion-text">Closed</p>
                 <p class="aside-info__accordion-number font--red">{{ status_closed }}</p>
               </a>
@@ -55,7 +50,7 @@
 
             {% if status_overdue %}
             <li class="aside-info__accordion-item">
-              <a class="aside-info__accordion-link" href="{% url 'tickets:tasks'%}">
+              <a class="aside-info__accordion-link" href="#">
                 <p class="aside-info__accordion-text">Overdue</p>
                 <p class="aside-info__accordion-number font--red">{{ status_overdue }}</p>
               </a>
@@ -64,159 +59,87 @@
 
             {% if status_ongoin %}
             <li class="aside-info__accordion-item">
-              <a class="aside-info__accordion-link" href="{% url 'tickets:tasks'%}">
+              <a class="aside-info__accordion-link" href="#">
                 <p class="aside-info__accordion-text">Ongoing</p>
                 <p class="aside-info__accordion-number font--green">{{ status_ongoin }}</p>
               </a>
             </li>
             {% endif %}
           </ul>
-      </div>
-  </div>
-{% endblock %}
+        </div>
+
+        <!-- <button class="aside-filter__accordion-btn" id="search-btn">Search</button> -->
+    </div>
+{% endblock left_menu %}
 
 {% block content %}
-  <div class="content__inner">
-      <div class="title__inner">
-        <div class="title__date">
-          <span id="date"></span> <span id="month"></span> <span id="day"></span>
-        </div>
-        <h1 class="title content__top-title">Welcome Back, <span id="name">{{ request.user.first_name }}</span></h1>
-      </div>
-      <ul class="content__list">
-        <li class="content__list-item" id="services">
-          <a class="content__list-link content__list-link-services" href="{% url 'services:services'%}">
-              <span class="content__list-link-title">Services</span>
-            <div class="content__list-body">
-                <p class="content__list-text">Learn more about products and offers in the specialized section of our services.</p>
-                <div class="content__list-info">
-                    <p class="content__info-number">{{services_all_count}}</p>
-                    <p class="content__info-text">available</p>
-                </div>
+    <div class="content__inner">
+        <div class="content__top">
+            <h1 class="title content__top-title">{{ section_title}}</h1>
+            <div class="content__top-search">
+                <img class="content__top-img" src="{% static 'images/main/Search.svg' %}" alt="Search">
+                <input class="content__top-input" type="text" id="search-input" placeholder="Search">
             </div>
-          </a>
-        </li>
-        {% if not user.is_superuser %}
-            <li class="content__list-item">
-              <a class="content__list-link content__list-link-myservices" href="{% url 'services:my_services' %}">
-                <span class="content__list-link-title">My Services</span>
-                <div class="content__list-body">
-                    <p class="content__list-text">Manage your services</p>
-                    <div class="content__list-info">
-                        <p class="content__info-number">{{ b_services }}</p>
-                        <p class="content__info-text">are used</p>
-                    </div>
+        </div>
+        <ul class="content__list">
+            {% for product in services %}
+              <li class="content__list-item content__list-item-hourly">
+                <div class="content__list-box">
+                  <p class="content__list-title">{{ product.NAME }}</p>
                 </div>
-              </a>
-            </li>
-        {% endif %}
-            <li class="content__list-item">
-              <a class="content__list-link content__list-link-tickets" href="{% url 'tickets:tasks'%}">
-                <span class="content__list-link-title">Tickets</span>
-                <div class="content__list-body">
-                  <p class="content__list-text">Get qualified support from experienced specialists</p>
-                  <div class="content__list-info">
-                    <p class="content__info-number">{{task_count}}</p>
-                    <p class="content__info-text">new reply</p>
-                  </div>
+                <p class="content__list-text">
+                    {% if product.PROPERTY_98 != None %}
+                        {{ product.PROPERTY_98.value }}
+                    {% endif %}
+                </p>
+                <div class="content__list-price-box">
+                  <p class="content__list-price">${{ product.PRICE }} <span class="content__list-price-text">PER HOUR</span> </p>
+                  <a class="content__list-link order_click" data-b24id="{{ product.ID }}">Order</a>
                 </div>
-              </a>
-            </li>
-            <li class="content__list-item">
-              <a class="content__list-link content__list-link-invoices" href="{% url 'invoices'%}">
-                <span class="content__list-link-title">Invoices</span>
-                <div class="content__list-body">
-                  <p class="content__list-text">Manage invoices and check in your personal account</p>
-                  <div class="content__list-info">
-                    <p class="content__info-number">{{invoice_count}}</p>
-                    <p class="content__info-text">new invoices</p>
-                  </div>
-                </div>
-              </a>
-            </li>
-      </ul>
-  </div>
-{% endblock %}
-{% block  after_sign_up %}
-{% if not user.is_superuser and not user.google_auth %}
-<header class="header">
-  <div class="container">
-    <div class="header__inner">
-      <a href="{% url 'authentication:main' %}">
-        <picture class="header__logo">
-          <source srcset="{% static 'images/logo.svg' %}" media="(max-width: 550px)">
-          <img src="{% static 'images/logo.png' %}" alt="logo">
-        </picture>
-      </a>
+              </li>
+            {% endfor %}
+        </ul>
+
+{% for product in services_info %}
+    <li class="content__list-item">
+        <div class="content__list-box">
+            <div class="content__list-img">
+                {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.title }}">
+                {% else %}
+                    <img src="{% static 'images/service.jpg' %}" alt="images">
+                {% endif %}
+            </div>
+            <p class="content__list-title">{{ product.title }}</p>
+        </div>
+        <p class="content__list-text">{{ product.title_description }}</p>
+        <div class="content__list-box">
+            <p class="content__list-price">
+                {% if product.currency == "EUR" %}
+                    {% with '€' as currency %}
+                        {{ currency }}
+                    {% endwith %}
+                {% elif product.currency == "USD" %}
+                    {% with '$' as currency %}
+                        {{ currency }}
+                    {% endwith %}
+                {% endif %}
+                {{ product.price }}
+            </p>
+            <a class="content__list-link" href="{% url 'services:product_detail' product.id %}">Detail</a>
+        </div>
+    </li>
+{% endfor %}
+</ul>
+
     </div>
-  </div>
-</header>
-<style>
-
-  .confirmation__email {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-  }
-
-  .confirmation__email-text {
-    text-align: center;
-    width: 50%;
-  }
-
-  .confirmation__email-button {
-    margin-top: 30px;
-    text-align: center;
-    text-decoration: none;
-    background: -webkit-gradient(linear, left bottom, left top, from(#7842F6), to(#509CE9));
-    background: -o-linear-gradient(bottom, #7842F6 0%, #509CE9 100%);
-    background: linear-gradient(360deg, #7842F6 0%, #509CE9 100%);
-    border-radius: 4px;
-    outline: 1px solid transparent;
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 10px;
-    letter-spacing: 0.15px;
-    color: #fff;
-    text-transform: uppercase;
-    transition: all 0.3s;
-    padding: 16px 32px;
-  }
-
-  .confirmation__email-button:hover {
-    outline-color: #7842F6;
-    background: transparent;
-    color: #7842F6;
-  }
-
-  @media (max-width: 550px) {
-    .confirmation__email-text {
-      width: 100%;
-    }
-  }
-</style>
-<main class="main">
-  <div class="container">
-    <div class="confirmation__email">
-      <p class="confirmation__email-text">We have sent an email to you for verification. Follow the link provided to finalize the process. If you do not see the verification email in your main inbox, check your spam folder.
-        Please contact us if you do not receive the verification email within a few minutes.</p>
-      <a href="{% url 'account_logout' %}" class="confirmation__email-button">OK</a>
-    </div>
-  </div>
-</main>
-
-
-{% endif %}
-{% endblock after_sign_up%}
-
+{% endblock content %}
 {% block footer %}
 <div class="container">
   <ul class="footer__list">
     <li class="footer__item">
       <div class="footer__social">
-        <a class="footer__social-link" href="https://www.facebook.com/nexxesstrust">
+        <a class="footer__social-link" href="#">
           <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="26.4583mm" height="26.4584mm" version="1.1"
             style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
             viewBox="0 0 2646 2646" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -236,7 +159,7 @@
             </g>
           </svg>
         </a>
-        <a class="footer__social-link" href="https://twitter.com/nexxessintl">
+        <a class="footer__social-link" href="#">
           <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="26.4582mm" height="26.4579mm" version="1.1"
             style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
             viewBox="0 0 2646 2646" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -290,7 +213,7 @@
       </p>
     </li>
     <li class="footer__item">
-      <a class="footer__btn-link" href="{% url 'account_logout' %}">
+      <a class="footer__btn-link" href="#">
         consultation
       </a>
     </li>
@@ -299,8 +222,38 @@
 
 {% endblock footer %}
 {% block extra_js %}
-<script src="{% static 'js/global.js' %}"></script>
- <script src="{% static 'js/main.js' %}"></script>
+<script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
 
+    <script>
+  $(document).ready(function () {
+    $(".order_click").click(function()
+    {
+      var button = $(this);
+      var b24_product_id = $(button).data("b24id");
+      $.ajax({
+        url: '/services/create_invoice/',
+        type: 'POST',
+        data: {"b24_product_id":b24_product_id},
+        dataType: 'json',
+        success: function(data) {
+          if (data.invoice_id){
+            window.location.href = '/invoices/detail/'+data.invoice_id+"/";
 
-{% endblock %}
+          }else
+          {
+            alert("We have some problem. Please try late")
+          }
+          console.log(data);
+
+        },
+      });
+    });
+  });
+
+    </script>
+
+    <script src="{% static 'js/dynamic_search.js' %}"></script>
+    <script src="{% static 'js/services.js' %}"></script>
+    <script src="{% static 'js/global.js' %}"></script>
+
+{% endblock extra_js %}

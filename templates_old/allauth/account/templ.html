@@ -1,0 +1,45 @@
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NEXXESS</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/template.css' %}"  />
+  </head>
+
+  <body>
+    <header class="header">
+      <div class="container">
+        <div class="header__inner">
+          <a class="header__link" href="./main.html">
+            <picture class="header__logo">
+            <source srcset="{% static 'images/logo-mobile.png' %}" media="(max-width: 550px)">
+            <img src="{% static 'images/logo.png' %}" alt="logo">
+          </picture>
+          </a>
+        </div>
+      </div>
+    </header>
+
+        <main class="main">
+      <div class="container">
+        <div class="main__inner">
+
+          <section class="content">
+  {% block content %}
+
+
+<!--              <p class="content__text">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Officia laboriosam deleniti illo possimus laudantium, nam optio, adipisci dignissimos repudiandae quibusdam libero quae nemo? Illo eius ducimus reprehenderit rem sapiente! Molestiae voluptatem iure sunt eius, voluptas laboriosam minima, sint adipisci accusantium architecto nobis. Placeat magni eius corrupti nostrum vero at magnam, doloremque eligendi, blanditiis repellendus deleniti error quod enim dignissimos, aut consectetur officia non quasi maiores impedit minus consequuntur</p>-->
+
+<!--              <a class="content__pay" href="#">Button</a>-->
+
+      {% endblock content %}
+            </section>
+        </div>
+      </div>
+    </main>
+    <!-- <script src="js/main.js"></script> -->
+  </body>
+</html>

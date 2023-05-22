@@ -1,3 +1,5 @@
+from telegram_bot_calendar import DetailedTelegramCalendar, LSTEP
+
 from ..models import User, Authentication
 
 
@@ -45,6 +47,21 @@ def authorize_user(data):
         user.telegram_first_name = data['from']['first_name'] if 'first_name' in data['from'].keys() else ''
         user.telegram_last_name = data['from']['last_name'] if 'last_name' in data['from'].keys() else ''
         user.telegram_is_authenticate = True
+        user.step = ''
         user.save()
     except Exception as e:
         print(e)
+
+
+class MyStyleCalendar(DetailedTelegramCalendar):
+    prev_button = "⬅️"
+    next_button = "➡️"
+
+    middle_button_year = "➖"
+
+    empty_nav_button = "🚫"
+    empty_day_button = "➖"
+    empty_month_button = "➖"
+
+    size_year = 1
+    size_year_column = 2

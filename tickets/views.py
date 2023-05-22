@@ -185,6 +185,10 @@ def task_detail(request, id):
             status_closed = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Closed').count()
             status_overdue = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Overdue').count()
             status_ongoin = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Ongoing').count()
+        else:
+            status_closed = 0
+            status_overdue = 0
+            status_ongoin = 0
 
         res = {
             'task': task,

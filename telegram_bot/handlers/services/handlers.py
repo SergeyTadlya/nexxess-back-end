@@ -16,7 +16,7 @@ class ServicesHandler:
             self.show_services_menu(self.bot, self.data['callback_query'])
 
         elif callback_title == 'my':
-            pass
+            self.show_user_services()
 
         elif callback_title == 'all':
             self.show_all_services_type()
@@ -45,6 +45,10 @@ class ServicesHandler:
         self.bot.sendMessage(chat_id=get_chat_id(self.data['callback_query']),
                              text='Choose the type of services',
                              reply_markup=all_services_keyboard())
+
+    def show_user_services(self):
+        self.bot.sendMessage(chat_id=get_chat_id(self.data['callback_query']),
+                             text='You have no services')
 
     def show_service_details(self, service_id):
         service = Service.objects.filter(service_id=service_id)

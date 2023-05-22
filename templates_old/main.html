@@ -11,13 +11,13 @@
 
     </div>
     <div class="aside-info">
-      <div class="aside-info__box accordion__list--active">
+      <div class="aside-info__box ">
         <div class="aside-info__box-top">
           <img class="aside-info__top-title-img" src="{% static 'images/aside-main.svg' %}" alt="#">
           <h6 class="aside-info__top-title">Your Info</h6>
           <img class="aside-info__top-title-arrow accordion__arrow--active" src="{% static 'images/chevron-down.svg' %}"  alt="icon">
         </div>
-        <div class="aside-info-content-iiner">
+        <div class="aside-info-content-iiner accordion__list--active">
           <p class="aside-info__top-subtitle">
             Nexxess International
           </p>
@@ -33,51 +33,51 @@
               {{ request.user.email }}
             </li>
           </ul>
+          <a class="aside-info__top-btn" href="{% url 'authentication:profile' %}">Update</a>
         </div>
-          <a class="aside-info__top-btn" href="#">Update</a>
-        </div>
+      </div>
 
       <div class="aside-info__accordion">
-          <div id="aside-info__accordion-top" class="aside-info__accordion-top">
-            <img class="aside-info__top-img" src="{% static 'images/main/custom-tickets.svg' %}" alt="icon">
-            <h6 class="aside-info__top-title">Tickets</h6>
-            <img class="aside-info__top-arrow" src="{% static 'images/chevron-down.svg' %}"  alt="icon">
-          </div>
-          <ul class="aside-info__accordion-list">
-            {% if status_closed %}
-            <li class="aside-info__accordion-item">
-              <a class="aside-info__accordion-link" href="{% url 'tickets:tasks'%}">
-                <p class="aside-info__accordion-text">Closed</p>
-                <p class="aside-info__accordion-number font--red">{{ status_closed }}</p>
-              </a>
-            </li>
-            {% endif %}
+            <div id="aside-info__accordion-top" class="aside-info__accordion-top">
+              <img class="aside-info__top-img" src="{% static 'images/main/custom-tickets.svg' %}" alt="icon">
+              <h6 class="aside-info__top-title">Tickets</h6>
+              <img class="aside-info__top-arrow" src="{% static 'images/chevron-down.svg' %}"  alt="icon">
+            </div>
+            <ul class="aside-info__accordion-list">
+              {% if status_closed %}
+              <li class="aside-info__accordion-item">
+                <a class="aside-info__accordion-link" href="{% url 'tickets:tasks'%}">
+                  <p class="aside-info__accordion-text">Closed</p>
+                  <p class="aside-info__accordion-number font--red">{{ status_closed }}</p>
+                </a>
+              </li>
+              {% endif %}
 
-            {% if status_overdue %}
-            <li class="aside-info__accordion-item">
-              <a class="aside-info__accordion-link" href="{% url 'tickets:tasks'%}">
-                <p class="aside-info__accordion-text">Overdue</p>
-                <p class="aside-info__accordion-number font--red">{{ status_overdue }}</p>
-              </a>
-            </li>
-            {% endif %}
+              {% if status_overdue %}
+              <li class="aside-info__accordion-item">
+                <a class="aside-info__accordion-link" href="{% url 'tickets:tasks'%}">
+                  <p class="aside-info__accordion-text">Overdue</p>
+                  <p class="aside-info__accordion-number font--red">{{ status_overdue }}</p>
+                </a>
+              </li>
+              {% endif %}
 
-            {% if status_ongoin %}
-            <li class="aside-info__accordion-item">
-              <a class="aside-info__accordion-link" href="{% url 'tickets:tasks'%}">
-                <p class="aside-info__accordion-text">Ongoing</p>
-                <p class="aside-info__accordion-number font--green">{{ status_ongoin }}</p>
-              </a>
-            </li>
-            {% endif %}
-          </ul>
-      </div>
-  </div>
+              {% if status_ongoin %}
+              <li class="aside-info__accordion-item">
+                <a class="aside-info__accordion-link" href="{% url 'tickets:tasks'%}">
+                  <p class="aside-info__accordion-text">Ongoing</p>
+                  <p class="aside-info__accordion-number font--green">{{ status_ongoin }}</p>
+                </a>
+              </li>
+              {% endif %}
+            </ul>
+        </div>
+    </div>
 {% endblock %}
 
 {% block content %}
   <div class="content__inner">
-      <div class="title__inner">
+      <div class="title__inner title__inner-main">
         <div class="title__date">
           <span id="date"></span> <span id="month"></span> <span id="day"></span>
         </div>
@@ -85,10 +85,12 @@
       </div>
       <ul class="content__list">
         <li class="content__list-item" id="services">
-          <a class="content__list-link content__list-link-services" href="{% url 'services:services'%}">
-              <span class="content__list-link-title">Services</span>
+          <a class="content__list-link" href="{% url 'services:services'%}">
+              <p class="content__list-link-title content__list-link-title-services">
+                Services
+                <span class="content__list-link-title-dots">...</span>
+              </p>
             <div class="content__list-body">
-                <p class="content__list-text">Learn more about products and offers in the specialized section of our services.</p>
                 <div class="content__list-info">
                     <p class="content__info-number">{{services_all_count}}</p>
                     <p class="content__info-text">available</p>
@@ -96,25 +98,27 @@
             </div>
           </a>
         </li>
-        {% if not user.is_superuser %}
             <li class="content__list-item">
-              <a class="content__list-link content__list-link-myservices" href="{% url 'services:my_services' %}">
-                <span class="content__list-link-title">My Services</span>
+              <a class="content__list-link" href="{% url 'services:my_services' %}">
+                <p class="content__list-link-title content__list-link-title-myservices">
+                  My Services
+                  <span class="content__list-link-title-dots">...</span>
+                </p>
                 <div class="content__list-body">
-                    <p class="content__list-text">Manage your services</p>
                     <div class="content__list-info">
-                        <p class="content__info-number">{{ b_services }}</p>
+                        <p class="content__info-number">{{b_services}}</p>
                         <p class="content__info-text">are used</p>
                     </div>
                 </div>
               </a>
             </li>
-        {% endif %}
             <li class="content__list-item">
-              <a class="content__list-link content__list-link-tickets" href="{% url 'tickets:tasks'%}">
-                <span class="content__list-link-title">Tickets</span>
+              <a class="content__list-link" href="{% url 'tickets:tasks'%}">
+                <p class="content__list-link-title content__list-link-title-tickets">
+                  Tickets
+                  <span class="content__list-link-title-dots">...</span>
+                </p>
                 <div class="content__list-body">
-                  <p class="content__list-text">Get qualified support from experienced specialists</p>
                   <div class="content__list-info">
                     <p class="content__info-number">{{task_count}}</p>
                     <p class="content__info-text">new reply</p>
@@ -123,10 +127,12 @@
               </a>
             </li>
             <li class="content__list-item">
-              <a class="content__list-link content__list-link-invoices" href="{% url 'invoices'%}">
-                <span class="content__list-link-title">Invoices</span>
+              <a class="content__list-link" href="{% url 'invoices'%}">
+                <p class="content__list-link-title content__list-link-title-invoices">
+                  Invoices
+                  <span class="content__list-link-title-dots">...</span>
+                </p>
                 <div class="content__list-body">
-                  <p class="content__list-text">Manage invoices and check in your personal account</p>
                   <div class="content__list-info">
                     <p class="content__info-number">{{invoice_count}}</p>
                     <p class="content__info-text">new invoices</p>

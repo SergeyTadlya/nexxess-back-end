@@ -1,47 +1,19 @@
-from invoices.models import Invoice
+from invoices.models import Invoice, Status
 from invoices.views import format_date, format_price
 
 import fitz
 
 
-def get_invoice_by_id(invoice_id):
+def get_invoice_by_id(invoice_id, status_name):
     invoice = Invoice.objects.filter(invoice_id=invoice_id)
     if invoice.exists():
         invoice = invoice.first()
+
+    if invoice.status.value == 'New':
+        invoice.status = Status.objects.get(value='Opened')
+        invoice.save()
+
     return invoice
-
-
-def get_invoices(user_email, status=None):
-    all_invoices = Invoice.objects.filter(responsible=user_email).order_by('-date')
-
-    return all_invoices if status is None else all_invoices.filter(status__value=status)
-
-
-def get_current_page(callback_title):
-    parsed_data = callback_title.split('_')
-    if len(parsed_data) == 1:
-        return len(parsed_data)
-
-    return int(parsed_data[1])  # Current page
-
-
-def do_pagination(invoices, current_page, elements_on_page=10):
-
-    current_page = int(current_page)
-
-    invoices_quantity = len(invoices)
-    all_pages = elements_on_page if invoices_quantity % elements_on_page == 0 else (invoices_quantity // elements_on_page) + 1
-    invoices = invoices[(current_page - 1) * elements_on_page: current_page * elements_on_page]
-    has_pages = True if invoices_quantity > elements_on_page else False
-
-    result = {
-        'quantity': invoices_quantity,
-        'all_pages': all_pages,
-        'invoices': invoices,
-        'has_pages': has_pages,
-    }
-
-    return result
 
 
 # def set_file_path(invoice):

@@ -10,14 +10,16 @@ def tickets_menu_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(buttons)
 
 
-def tickets_statuses_keyboard(tickets_statuses) -> InlineKeyboardMarkup:
+def tickets_statuses_keyboard(tickets, tickets_statuses) -> InlineKeyboardMarkup:
     buttons = []
-    for ticket_status in tickets_statuses:
-        buttons.append(
-            [InlineKeyboardButton(ticket_status.sticker + ' ' + ticket_status.name, callback_data='tickets_status_' + ticket_status.name + '_1')]
-        )
 
-    buttons.append([InlineKeyboardButton('All tickets', callback_data='tickets_status_All_1')])
+    for ticket_status in tickets_statuses:
+        text = ticket_status.sticker + ' ' + ticket_status.name + ' (' + str(tickets.filter(status__name=ticket_status.name).count()) + ')'
+        callback_data = 'tickets_status_' + ticket_status.name + '_1'
+
+        buttons.append([InlineKeyboardButton(text, callback_data=callback_data)])
+
+    buttons.append([InlineKeyboardButton('All tickets (' + str(len(tickets)) + ')', callback_data='tickets_status_All_1')])
     buttons.append([InlineKeyboardButton('⬅️ Back to tickets menu', callback_data='tickets_menu')])
 
     return InlineKeyboardMarkup(buttons)
@@ -27,7 +29,7 @@ def all_tickets_keyboard(tickets, current_page, all_pages, has_pages) -> InlineK
     buttons = list()
 
     for ticket in tickets:
-        ticket_detail = '#' + ticket.task_id + ' | ' + ticket.ticket_title
+        ticket_detail = ticket.status.sticker + ' #' + ticket.task_id + ' | ' + ticket.ticket_title
         ticket_callback_data = 'tickets_status_All_' + str(current_page) + '_detail_' + ticket.task_id
 
         buttons.append([InlineKeyboardButton(ticket_detail, callback_data=ticket_callback_data)])

@@ -105,61 +105,60 @@
           <li class="content__titles-item">Action</li>
         </ul>
         <div id="div-invoices">
-            {% for invoice in invoices %}
-                {% if invoice.more_one %}
-                    <div class="content__body">
-                        <p class="content__body-titleDate">{{ invoice.date }}</p>
-                {% endif %}
-                        <ul class="content__body-list">
-                            <li  class="content__body-box" >
-                                <ul class="content__body-titles">
-                                    <li class="content__body-title">Invoice</li>
-                                    <li class="content__body-title">Status</li>
-                                    <li class="content__body-title">Invoice Date</li>
-                                    <li class="content__body-title">Due Date</li>
-                                    <li class="content__body-title">Total</li>
-                                </ul>
-                                <ul class="content__body-items">
-                                    <li  class="content__body-item style--width">
-                                        <a class="content__body-link" href="{% url 'create_invoice_pdf' invoice.id %}" target="_blank">
-                                            <img src="{% static 'images/invoices/print.svg' %}"  alt="print">
-                                        </a>
-                                        <a href="{% url 'invoice_detail' invoice.id %}">
-                                              <p class="content__body-invoice" >{{ invoice.invoice_id }}</p>
-                                        </a>
-                                    </li>
-                                    <li  class="content__body-item style--width">
-                                        <a class="content__body-link" href="{% url 'create_invoice_pdf' invoice.id %}"  target="_blank">
-                                            <p class="content__body-date">{{ invoice.date }}</p></a>
-                                    </li>
-                                    <li class="content__body-item style--width">
-                                        <a class="content__body-link" href="{% url 'create_invoice_pdf' invoice.id %}"  target="_blank">
-                                            <p class="content__body-date">{{ invoice.due_date }}</p></a>
-                                    </li>
-                                    <li  class="content__body-item style--width">
-                                        <a class="content__body-link" href="{% url 'create_invoice_pdf' invoice.id %}"  target="_blank">
-                                        <p class="content__body-money">{{ invoice.price }}</p></a>
-                                    </li>
-                                    <li  class="content__body-item style--width">
-                                        <p class="content__body-status style--width font--{{ invoice.status.color }}">{{ invoice.status.value }}</p>
-                                    </li>
+            {% for invoice_date in invoices_dates %}
+                <div class="content__body">
+                    <p class="content__body-titleDate">{{ invoice_date }}</p>
+                    {% for invoice in invoices %}
+                        {% if invoice.date == invoice_date %}
+                            <ul class="content__body-list">
+                                <li  class="content__body-box" >
+                                    <ul class="content__body-titles">
+                                        <li class="content__body-title">Invoice</li>
+                                        <li class="content__body-title">Status</li>
+                                        <li class="content__body-title">Invoice Date</li>
+                                        <li class="content__body-title">Due Date</li>
+                                        <li class="content__body-title">Total</li>
+                                    </ul>
+                                    <ul class="content__body-items">
 
-                                    <li class="content__body-item style--width">
-                                        {% if invoice.status.value == 'Paid' %}
-                                            <a class="button_pay"></a>
-                                        {% else %}
+                                        <li  class="content__body-item style--width">
+                                            <a class="content__body-link" href="{% url 'create_invoice_pdf' invoice.id %}" target="_blank">
+                                                <img src="{% static 'images/invoices/print.svg' %}"  alt="print"></a>
+
+                                              <a href="{% url 'invoice_detail' invoice.id %}"><p class="content__body-invoice" >{{ invoice.invoice_id }}</p></a></a>
+                                        </li>
+                                        <li  class="content__body-item style--width">
+                                            <a class="content__body-link" href="{% url 'create_invoice_pdf' invoice.id %}"  target="_blank">
+                                                <p class="content__body-date">{{ invoice.date }}</p></a>
+                                        </li>
+                                        <li class="content__body-item style--width">
+                                            <a class="content__body-link" href="{% url 'create_invoice_pdf' invoice.id %}"  target="_blank">
+                                                <p class="content__body-date">{{ invoice.due_date }}</p></a>
+                                        </li>
+                                        <li  class="content__body-item style--width">
+                                            <a class="content__body-link" href="{% url 'create_invoice_pdf' invoice.id %}"  target="_blank">
+                                            <p class="content__body-money">{{ invoice.price }}</p></a>
+                                        </li>
+                                        <li  class="content__body-item style--width">
+                                            <p class="content__body-status style--width font--{{ invoice.status.color }}">{{ invoice.status.value }}</p>
+                                        </li>
+
+                                        <li class="content__body-item style--width">
+                                          {% if invoice.status.value == 'Paid' %}
+                                            <a class="button_pay" "></a>
+                                            {% else %}
                                             <a class="button_pay" data-b24invoice="{{ invoice.invoice_id }}">Pay</a>
+                                        </li>
                                         {% endif %}
-                                    </li>
-                                </ul>
-                                <button class="content__body-btn">
-                                    <img class="content__body-img" src="{% static 'images/chevron.svg' %}" alt="arrow">
-                                </button>
-                            </li>
-                        </ul>
-                {% if invoice.more_one %}
-                    </div>
-                {% endif %}
+                                    </ul>
+                                    <button class="content__body-btn">
+                                        <img class="content__body-img" src="{% static 'images/chevron.svg' %}" alt="arrow">
+                                    </button>
+                                </li>
+                            </ul>
+                        {% endif %}
+                    {% endfor %}
+                </div>
             {% endfor %}
         </div>
     </div>
@@ -307,10 +306,36 @@
 {% endblock footer %}
 
 {% block extra_js %}
+
     <script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
     <script src="{% static 'js/jquery-ui.min.js' %}"></script>
     <script src="{% static 'js/invoices.js' %}"></script>
     <script src="{% static 'js/calendar.js' %}"></script>
     <script src="{% static 'js/global.js' %}"></script>
     <script src="{% static 'ajax/invoices_ajax.js' %}"></script>
+    <script>
+      $(document).ready(function () {
+        $(".button_pay").click(function()
+        {
+          var button = $(this);
+          var b24_product_id = $(button).data("b24invoice");
+
+          $.ajax({
+            url: '/invoices/create_payment_link/',
+            type: 'POST',
+            data: {"b24_invoice_id":b24_product_id},
+            dataType: 'json',
+            success: function(data) {
+              if (data.pay_link){
+                // window.open(data.pay_link, '_blank');
+                window.location.href = data.pay_link;
+              }else
+              {
+                alert("We have some problem. Please try late")
+              }
+            },
+          });
+        });
+      });
+      </script>
 {% endblock extra_js %}

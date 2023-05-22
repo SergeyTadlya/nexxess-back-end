@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% load account socialaccount %}
+{% block head_title %}{% trans "Sign In" %}{% endblock %}
+
+{% block  extra_css %}
+      <link rel="stylesheet" type="text/css" href="{% static 'css/authentication.css' %}">
+      <style>
+      .footer {padding: 0;}
+    </style>
+{% endblock  %}
+{% block auth %}
+<head>
+  <style>
+    ul.errorlist {
+      color: red;
+      font-size: 1.1em;
+      margin-bottom: 6px;
+    }
+  </style>
+</head>
+<main>
+   <section class="authentication">
+        <div class="authentication__body">
+            <form class="authentication__login" method="POST" action="{% url 'account_login' %}">
+                {% csrf_token %}
+                <div class="authentication__login-img">
+                    <img src="{% static 'images/logo.png' %}" alt="logo">
+                </div>
+                <ul class="errorlist" >
+                    {% for key, value in form.errors.items %}
+                        <li>{% if key != '__all__' %}{{ key }} {% endif %}{{ value }}</li>
+                    {% endfor %}
+                </ul>
+                <div class="authentication__box">
+                    {{ form.login }}
+                    <label class="authentication__box-label">Username or e-mail</label>
+                </div>
+                <div class="authentication__box">
+                    {{ form.password }}
+                    <label class="authentication__box-label">Password</label>
+                    {% if redirect_field_value %}
+                        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                    {% endif %}
+                </div>
+                <a id="authentication__login-forgot" class="authentication__login-forgot" type="button" href="{% url 'account_reset_password' %}">Forgot password?</a>
+                <button id="authentication__login-button" class="authentication__button" type="submit">Log in</button>
+		<p class="authentication__registration-or" style="text-align: center;">or</p>
+                <a href="{% provider_login_url 'google' %}" class="authentication__button authentication__registration-button">
+                    <img src="{% static 'images/authentication/icons_google.svg' %}"  style="width: 30px; height: 20px;" alt="logo"> Login with Google
+                </a>
+                <div class="authentication__login-bottom">
+                    <p class="authentication__login-text">Don't have an account?</p>
+                    <a id="authentication__login-registration" class="authentication__login-registration" type="button" href="{{ signup_url }}" style="margin-left: 6px; color: #7C48EE;">Registration</a>
+                </div>
+                {% if redirect_field_value %}
+                    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                {% endif %}
+            </form>
+        </div>
+    </section>
+</main>
+{% endblock %}
+{% block extra_js %}
+    <script src="{% static 'js/authentication.js' %}"></script>
+    <script src="{% static 'js/my-account.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,128 @@
+{% extends "account/base.html" %}
+{% load static %}
+{% load i18n %}
+{% block head_title %}{% trans "Change Password" %}{% endblock %}
+
+
+{% block content %}
+<style>
+  h1 {
+  font-family: "Roboto", sans-serif;
+  font-weight: 600;
+  color: #7842F6;
+}
+
+.reset-text {
+  font-family: "Roboto", sans-serif;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 30%;
+  text-align: center;
+}
+
+.reset-link {
+  font-family: "Roboto", sans-serif;
+  display: block;
+  text-decoration: none;
+  margin-top: 30px;
+  border-radius: 4px;
+  outline: 1px solid transparent;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 24px;
+  letter-spacing: 0.15px;
+  color: #7842F6;
+  padding: 18px 14px;
+  text-transform: uppercase;
+  -webkit-transition: all 0.3s;
+  -o-transition: all 0.3s;
+  transition: all 0.3s;
+}
+
+.reset-link:hover {
+  background: transparent;
+  outline-color: #7842F6;
+  color: #7842F6;
+}
+
+.change-password {
+  margin-top: 30px;
+  border: none;
+  background: -o-linear-gradient(bottom, #7842F6 0%, #509CE9 100%);
+  background: -webkit-gradient(linear, left bottom, left top, from(#7842F6), to(#509CE9));
+  background: linear-gradient(360deg, #7842F6 0%, #509CE9 100%);
+  border-radius: 4px;
+  outline: 1px solid transparent;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 10px;
+  letter-spacing: 0.15px;
+  color: #fff;
+  padding: 18px 20px;
+  text-transform: uppercase;
+  -webkit-transition: all 0.3s;
+  -o-transition: all 0.3s;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.change-password:hover {
+  background: transparent;
+  outline-color: #7842F6;
+  color: #7842F6;
+}
+
+form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+form p {
+  margin: 0;
+  padding: 0;
+}
+
+label {
+  font-family: "Roboto", sans-serif;
+  display: block;
+  margin-bottom: 8px;
+}
+
+input {
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 10px 15px;
+}
+</style>
+    <h1>"Change Password" </h1>
+
+
+
+        <p class="reset-text">The link was invalid, possibly because it has already been used.  Please request a 
+          <a class="reset-link" href="{{ passwd_reset_url }}">
+            new password reset
+          </a>
+        </p>
+
+
+        <form method="POST" action="{{ action_url }}">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <input class="change-password" type="submit" name="action" value="{% trans 'change password' %}"/>
+        </form>
+
+{% endblock %}

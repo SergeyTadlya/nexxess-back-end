@@ -38,7 +38,7 @@ class MessageHandler:
         is_user_authorize = self.get_user()
 
         if is_user_authorize:  # access to commands and keyboard
-            if message == '/start' and user_step == '':
+            if message == '/start' and not user_step:
                 self.bot.sendMessage(chat_id=get_chat_id(self.data),
                                      text='You are authorized.\n'
                                           'This command will be available after you are logging out.\n\n'
@@ -46,16 +46,22 @@ class MessageHandler:
             elif message == '/menu' and not user_step:
                 set_up_commands(self.bot)
                 StartHandler.show_menu(self.bot, self.data)
+
             elif message in ['/invoices', '🧾 Invoices'] and not user_step:
                 InvoiceHandler.show_invoices_menu(self.bot, self.data)
+
             elif message in ['/services', '👨‍💻 Services'] and not user_step:
                 ServicesHandler.show_services_menu(self.bot, self.data)
+
             elif message in ['/tickets', '📝 Tickets'] and not user_step:
                 TicketsHandler.show_tickets_menu(self.bot, self.data)
+
             elif message in ['/faq', '⁉️ FAQ'] and not user_step:
                 FAQHandler.show_faq_menu(self.bot, self.data)
+
             elif message in ['/logout', '🚪 Log Out'] and not user_step:
                 LogOutHandler.show_confirm_keyboard(self.bot, self.data)
+
             else:
                 if user_step:  # user_step is not None and not user_step == ''
                     # steps users ...
@@ -82,4 +88,4 @@ class MessageHandler:
             else:
                 self.bot.sendMessage(chat_id=get_chat_id(self.data),
                                      text='Authorization first 🙃\n'
-                                          'Use /start and write an email 👇')
+                                          'Use /start and then write your email 👇')

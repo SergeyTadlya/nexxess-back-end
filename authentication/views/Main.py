@@ -28,11 +28,11 @@ def main(request):
             status_ongoin = Ticket.objects.filter(tatus__name='Ongoing').count()
 
         else:
-            invoice_count = Invoice.objects.filter(responsible=request.user.b24_contact_id).exclude(status__value='Paid').count()
+            invoice_count = Invoice.objects.filter(responsible=request.user.b24_contact_id).exclude(status__value='Paid').exclude(status__value='Opened').count()
             task_count = Ticket.objects.filter(responsible=str(request.user.b24_contact_id), is_opened=False).count()
             current_user = "not_admin"
             ticket_statuses = TicketStatus.objects.filter(ticket__responsible=str(request.user.b24_contact_id)).distinct()
-            b_services = Invoice.objects.filter(responsible=request.user.b24_contact_id).exclude(status__value='Opened').count()
+            b_services = Invoice.objects.filter(responsible=request.user.b24_contact_id).exclude(status__value='Opened').exclude(status__value='New').count()
             status_closed = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Closed').count()
             status_overdue = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Overdue').count()
             status_ongoin = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Ongoing').count()
@@ -69,4 +69,6 @@ def main(request):
             # 'status_ongoin': '0',
 
         }
-    return render(request, "main.html", res)
+    if request.user.is_superuser:
+        return render(request, "main_superuser.html", res)
+    else: return render(request, "main.html", res)

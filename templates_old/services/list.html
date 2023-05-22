@@ -11,7 +11,7 @@
     <div class="aside-info aside-info-none">
       <div class="aside-info__box">
         <div class="aside-info__box-top">
-          <img class="aside-info__top-img" src="{% static 'images/alert.svg' %}" alt="ico
+          <img class="aside-info__top-img" src="{% static '/images/alert.svg' %}" alt="icon">
           <h6 class="aside-info__top-title">Important</h6>
           <p class="aside-info__top-number">3</p>
         </div>
@@ -39,18 +39,32 @@
         </div>
 
         <ul class="aside-info__accordion-list">
+          {% if status_closed %}
           <li class="aside-info__accordion-item">
             <a class="aside-info__accordion-link" href="#">
-              <p class="aside-info__accordion-text">Ongoing</p>
-              <p class="aside-info__accordion-number font--green">{{task_count}}</p>
+              <p class="aside-info__accordion-text">Closed</p>
+              <p class="aside-info__accordion-number font--red">{{ status_closed }}</p>
             </a>
           </li>
+          {% endif %}
+
+          {% if status_overdue %}
           <li class="aside-info__accordion-item">
             <a class="aside-info__accordion-link" href="#">
               <p class="aside-info__accordion-text">Overdue</p>
-              <p class="aside-info__accordion-number font--red">0</p>
+              <p class="aside-info__accordion-number font--red">{{ status_overdue }}</p>
             </a>
           </li>
+          {% endif %}
+
+          {% if status_ongoin %}
+          <li class="aside-info__accordion-item">
+            <a class="aside-info__accordion-link" href="#">
+              <p class="aside-info__accordion-text">Ongoing</p>
+              <p class="aside-info__accordion-number font--green">{{ status_ongoin }}</p>
+            </a>
+          </li>
+          {% endif %}
         </ul>
       </div>
         <!-- <button class="aside-filter__accordion-btn" id="search-btn">Search</button> -->
@@ -60,53 +74,77 @@
 {% block content %}
     <div class="content__inner">
         <div class="content__top">
-            <h1 class="title content__top-title">{{ section_title}}</h1>
+            <h1 class="title content__top-title">Services</h1>
             <div class="content__top-search">
                 <img class="content__top-img" src="{% static 'images/main/Search.svg' %}" alt="Search">
                 <input class="content__top-input" type="text" id="search-input" placeholder="Search">
             </div>
         </div>
         <ul class="content__list">
-        {% for service in services %}
-          <li class="content__list-item">
-            <div class="content__list-box">
-              <div class="content__list-img">
-               {% if product.image %} <!-- if service.PROPERTY_44 != 'None'-->
-                    <img src="{{b24_domain}}{{ service.PROPERTY_44.0.value.showUrl }}" alt="{{ service.PROPERTY_44.0.value.id }}">
+            {% for section in sections %}
+              <li class="content__list-item">
+                <div class="content__list-box content__list-box-consultation">
+                  <div class="content__list-img">
+                    <img src="{% static 'images/service.jpg' %}" alt="images">
+                  </div>
+                  <p class="content__list-title">{{ section.sections_title }}</p>
+                </div>
+                <ul class="content__list-product-description">
+                    {% for product in section.products %}
+                      <li class="content__list-product-description-item">
+                        <p class="content__list-product-description-text">
+                          {{  product.title }}
+                        </p>
+                        <p class="content__list-product-description-hour">
+                          {% if product.preview_text != None %}
+                              {{ product.preview_text }}
+                          {% endif %}
+                        </p>
+                      </li>
+                    {% endfor %}
+                </ul>
+                <div class="content__list-box">
+                  {% if section.min_price != 0 %}
+                         <p class="content__list-price"> <span class="content__list-price-text">Start From:</span> ${{ section.min_price }}</p>
+                     {% endif %}
+                     <a class="content__list-link" href="{% url 'services:product_detail' section.section_id %}">Detail</a>
+                </div>
+              </li>
+            {% endfor %}
+        </ul>
+
+{% for product in services_info %}
+    <li class="content__list-item">
+        <div class="content__list-box">
+            <div class="content__list-img">
+                {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.title }}">
                 {% else %}
                     <img src="{% static 'images/service.jpg' %}" alt="images">
                 {% endif %}
-              </div>
-              <p class="content__list-title">{{service.NAME}}</p>
             </div>
-            <ul class="content__list-product-description">
-              {% for description_parts in services_description %}
-                {% if description_parts.ID == service.ID %}
-                  {% for description_part in description_parts.DESCRIPTION %}
-                    {% if description_part %}
-                      {% if description_part.0 == "•" %}
-                        <li class="content__list-product-description-item">
-                          <p class="content__list-product-description-text">
-                            {{description_part}}
-                          </p>
-                        </li>
-                      {% else %}
-                          <p class="content__list-product-description-text">
-                            {{description_part}}
-                          </p>
-                      {% endif %}
-                    {% endif %}
-                  {% endfor %}
+            <p class="content__list-title">{{ product.title }}</p>
+        </div>
+        <p class="content__list-text">{{ product.title_description }}</p>
+        <div class="content__list-box">
+            <p class="content__list-price">
+                {% if product.currency == "EUR" %}
+                    {% with '€' as currency %}
+                        {{ currency }}
+                    {% endwith %}
+                {% elif product.currency == "USD" %}
+                    {% with '$' as currency %}
+                        {{ currency }}
+                    {% endwith %}
                 {% endif %}
-              {% endfor %}
-            </ul>
-            <div class="content__list-box">
-              <p class="content__list-price">${{service.PRICE}}</p>
-              <a class="content__list-link order_click" data-b24id="{{ service.ID }}">Order</a>
-            </div>
-          </li>
-        {% endfor %}
-        </ul>
+                {{ product.price }}
+            </p>
+            <a class="content__list-link" href="{% url 'services:product_detail' product.id %}">Detail</a>
+        </div>
+    </li>
+{% endfor %}
+</ul>
+
     </div>
 {% endblock content %}
 
@@ -195,45 +233,10 @@
     </li>
   </ul>
 </div>
-
 {% endblock footer %}
 {% block extra_js %}
-    <script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
-    <script>
-    var items = document.querySelectorAll('.content__list-product-description-item');
-    items.forEach(function(item) {
-      var text = item.querySelector('.content__list-product-description-text');
-      text.innerHTML = text.innerHTML.replace(/•/g, '');
-    });
-
-    $(document).ready(function () {
-      $(".order_click").click(function()
-      {
-        var button = $(this);
-        var b24_product_id = $(button).data("b24id");
-        $.ajax({
-          url: '/services/create_invoice/',
-          type: 'POST',
-          data: {"b24_product_id":b24_product_id},
-          dataType: 'json',
-          success: function(data) {
-            if (data.invoice_id){
-              window.location.href = '/invoices/detail/'+data.invoice_id+"/";
-
-            }else
-            {
-              alert("We have some problem. Please try late")
-            }
-            console.log(data);
-
-          },
-        });
-      });
-    });
-
-    </script>
     <script src="{% static 'js/dynamic_search.js' %}"></script>
     <script src="{% static 'js/services.js' %}"></script>
-    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/global.js' %}"></script>
 
 {% endblock extra_js %}

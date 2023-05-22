@@ -3,9 +3,9 @@ from .services.handlers import ServicesHandler
 from .tickets.handlers import TicketsHandler
 from .logout.handlers import LogOutHandler
 
+from .utils import MyStyleCalendar, LSTEP
 from ..models import User
 
-from telegram_bot_calendar import DetailedTelegramCalendar, LSTEP
 from datetime import date
 
 
@@ -36,7 +36,7 @@ class CallbackHandler:
         elif 'logout' in callback_data:
             LogOutHandler(self.bot, self.data, callback_data)
         elif 'cbcal' in callback_data:
-            result, key, step = DetailedTelegramCalendar(min_date=date.today()).process(self.data['callback_query']['data'])
+            result, key, step = MyStyleCalendar(min_date=date.today()).process(self.data['callback_query']['data'])
             if not result and key:
                 try:
                     self.bot.edit_message_text(f"Select {LSTEP[step]} for deadline:",

@@ -94,10 +94,13 @@ class TicketsHandler:
                         reply_markup=tickets_menu_keyboard())
 
     def show_tickets_statuses(self):
-        tickets = TicketStatus.objects.all()
+        user = get_user(self.data['callback_query'])
+        tickets_statuses = TicketStatus.objects.all()
+        tickets = Ticket.objects.filter(responsible=str(user.b24_contact_id)).order_by('-created_at')
+
         self.bot.sendMessage(chat_id=get_chat_id(self.data['callback_query']),
                              text='Choose the ticket status',
-                             reply_markup=tickets_statuses_keyboard(tickets))
+                             reply_markup=tickets_statuses_keyboard(tickets, tickets_statuses))
 
     def show_ticket_for_selected_status(self, status_name, current_page, element_on_page=8):
         user = get_user(self.data['callback_query'])
@@ -107,7 +110,7 @@ class TicketsHandler:
         tickets_quantity = len(tickets)
         if tickets_quantity == 0:
             self.bot.sendMessage(chat_id=get_chat_id(self.data['callback_query']),
-                                 text='You don`t have any ' + status_name.lower() + ' invoices')
+                                 text='You don`t have any ' + status_name.lower() + ' tickets')
             return
 
         all_pages = tickets_quantity // element_on_page if not tickets_quantity % element_on_page else (tickets_quantity // element_on_page) + 1
@@ -130,12 +133,12 @@ class TicketsHandler:
 
     def show_all_tickets(self, current_page, element_on_page=8):
         user = get_user(self.data['callback_query'])
-        tickets = Ticket.objects.filter(responsible=user.b24_contact_id)
+        tickets = Ticket.objects.filter(responsible=user.b24_contact_id).order_by('created_at')
 
         tickets_quantity = len(tickets)
         if tickets_quantity == 0:
             self.bot.sendMessage(chat_id=get_chat_id(self.data['callback_query']),
-                                 text='You don`t have any invoices')
+                                 text='You don`t have any tickets')
             return
 
         all_pages = tickets_quantity // element_on_page if not tickets_quantity % element_on_page else (tickets_quantity // element_on_page) + 1
@@ -160,7 +163,6 @@ class TicketsHandler:
         if ticket.exists():
             ticket = ticket.first()
 
-        open_value = '☑️\n' if ticket.is_opened is True else '❌\n'
         active_value = '☑️' if ticket.is_active is True else '❌'
 
         ticket_detail = 'Ticket #' + ticket_id + '\n' + \
@@ -168,7 +170,6 @@ class TicketsHandler:
                         'Description: \n' + ticket.ticket_text + '\n\n' + \
                         'Status: ' + str(ticket.status.name) + '\n' + \
                         'Deadline: ' + format_date(ticket.deadline) + '\n' + \
-                        'Open: ' + open_value + \
                         'Active: ' + active_value
 
         self.bot.sendMessage(chat_id=get_chat_id(self.data['callback_query']),
@@ -217,7 +218,7 @@ class TicketsHandler:
         user.step = ''
         user.save()
 
-        calendar, step = DetailedTelegramCalendar(calendar_id=1, min_date=date.today()).build()
+        calendar, step = MyStyleCalendar(calendar_id=1, min_date=date.today()).build()
         self.bot.sendMessage(chat_id=get_chat_id(self.data),
                              text=f'Okay, it remains to choose the deadline\n'
                                   f'Select {LSTEP[step]}  for deadline:',

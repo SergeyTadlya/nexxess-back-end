@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+{% load i18n %}
+{% load static %}
+{% load account %}
+{% load socialaccount %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+
+    <link rel="shortcut icon" href="{% static 'images/main/favicon.ico' %}" type="image/x-icon">
+    {% block extra_css %}
+    {% endblock %}
+    <title>{% block title %} NEXXESS {% endblock %}</title>
+</head>
+<body>
+
+
+    {% if user.google_auth  or user.is_superuser %}
+        <header class="header">
+          <div class="container">
+            <div class="header__inner">
+              <a href="{% url 'authentication:main'%}">
+                <img class="header__logo-img" src="{% static 'images/logo.svg' %}" alt="logo">
+              </a>
+
+              <div class="content__top-search">
+                <img class="header__search-img" src="{% static 'images/main/Search.svg' %}" alt="Search">
+                <input class="content__top-input" type="text" placeholder="Search">
+              </div>
+
+              <nav class="nav">
+                <ul class="nav__list">
+                  <li class="nav__list-item">
+                    <div class="nav__list-item-link-inner">
+                      <a class="{% if "/services/" == request.path %} nav__item-link {% else %} nav__item-link{% endif %}" href="{% url 'services:services' %}">
+                        Services
+                      </a>
+                      <span class="nav__item-link-arrow">
+                        <svg width="15px" height="15px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+                          <g id="SVGRepo_bgCarrier" stroke-width="0" />
+
+                          <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" />
+
+                          <g id="SVGRepo_iconCarrier">
+                            <path
+                              d="M17.9188 8.17969H11.6888H6.07877C5.11877 8.17969 4.63877 9.33969 5.31877 10.0197L10.4988 15.1997C11.3288 16.0297 12.6788 16.0297 13.5088 15.1997L15.4788 13.2297L18.6888 10.0197C19.3588 9.33969 18.8788 8.17969 17.9188 8.17969Z"
+                              fill="#5B66E3" />
+                          </g>
+
+                        </svg>
+                      </span>
+                    </div>
+
+                    <ul class="nav__sublist">
+                      {% for category in categories %}
+                      <li class="nav__subitem">
+                        <a href="{% url 'services:product_detail' category.category_b24_id %}" class="nav__subitem-link">
+                          {{category.category_name}}
+                        </a>
+                      </li>
+                      {% endfor %}
+
+                      <li class="nav__subitem">
+                        <a href="{% url 'services:my_services' %}" class="nav__subitem-link">
+                          My Services
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="nav__list-item">
+                    <a class="{% if "/invoices/" == request.path %} nav__item-link {% else %} nav__item-link{% endif %}"
+                      href="{% url 'invoices' %}">
+                      Invoices
+
+                    </a>
+                  </li>
+                  <li class="nav__list-item">
+                    <div class="nav__list-item-link-inner">
+                      <a class="{% if " /tickets/" == request.path %} nav__item-link {% else %} nav__item-link{% endif %}"
+                        href="{% url 'tickets:list' %}">Tickets
+                      </a>
+                      <span class="nav__item-link-arrow">
+                        <svg width="15px" height="15px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+                          <g id="SVGRepo_bgCarrier" stroke-width="0" />
+
+                          <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" />
+
+                          <g id="SVGRepo_iconCarrier">
+                            <path
+                              d="M17.9188 8.17969H11.6888H6.07877C5.11877 8.17969 4.63877 9.33969 5.31877 10.0197L10.4988 15.1997C11.3288 16.0297 12.6788 16.0297 13.5088 15.1997L15.4788 13.2297L18.6888 10.0197C19.3588 9.33969 18.8788 8.17969 17.9188 8.17969Z"
+                              fill="#5B66E3" />
+                          </g>
+
+                        </svg>
+                      </span>
+                    </div>
+
+                    <ul class="nav__sublist">
+                      <li class="nav__subitem">
+                        <a href="{% url 'tickets:tasks' %}" class="nav__subitem-link">
+                          My Tickets
+                        </a>
+                      </li>
+
+                      <li class="nav__subitem">
+                        <a href="{% url 'tickets:list' %}" class="nav__subitem-link">
+                          Create a Ticket
+                        </a>
+                      </li>
+                    </ul>
+
+                  </li>
+                  <li class="nav__list-item">
+                    <a class="{% if " /support/" == request.path %} nav__item-link {% else %} nav__item-link{% endif %}"
+                      href="{% url 'support' %}">FAQ</a>
+                  </li>
+                  <li class="nav__list-item">
+                    <a class="{% if " /support/" == request.path %} nav__item-link {% else %} nav__item-link{% endif %}"
+                      href="{% url 'support' %}">Refer a Friend</a>
+                  </li>
+                </ul>
+              </nav>
+              <div class="header__box">
+                <span class="header__box-link header__box-link-sublist">
+                  <img class="header__box-img" src="{% static 'images/user.svg' %}" alt="user">
+                  <ul class="header__box-link-list">
+                    <li class="header__box-link-item">
+                      <a href="{% url 'authentication:profile' %}" class="header__box-link-sublink">
+                        Settings
+                      </a>
+                    </li>
+
+                    <li class="header__box-link-item">
+                      <a href="{% url 'account_logout'%}" class="header__box-link-sublink">
+                        Logout
+                      </a>
+                    </li>
+                  </ul>
+                </span>
+                <a class="header__box-link" href="https://t.me/Nexxess_Avivi_bot">
+                  <img class="header__box-img" title="Go to Telegram bot" src="{% static 'images/telegram.svg' %}" alt="user">
+                </a>
+                <a class="burger">
+                  <span class="burger-line"></span>
+                </a>
+              </div>
+            </div>
+        </header>
+        <main class="main">
+          <div class="container">
+
+            <div class="main__inner">
+
+                <aside class="aside">
+                    {% block left_menu %}
+                    {% endblock left_menu %}
+                </aside>
+
+                <section class="content">
+                  {% block task %}
+                  {% endblock %}
+                    {% block content %}
+                    {% endblock content %}
+
+                </section>
+
+
+
+            </div>
+          </div>
+        </main>
+    {% else %}
+
+    {% block auth %}
+    {% endblock auth %}
+
+    {% endif %}
+{% block after_sign_up %}
+
+{% endblock after_sign_up %}
+
+<footer class="footer">
+{% block footer %}
+{% endblock footer %}
+</footer>
+{% block extra_js %}
+
+{% endblock extra_js %}

@@ -47,7 +47,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     telegram_first_name = models.CharField(verbose_name='Telegram first name', max_length=50, null=True, blank=True)
     telegram_last_name = models.CharField(verbose_name='Telegram last name', max_length=50, null=True, blank=True)
     telegram_is_authenticate = models.BooleanField(verbose_name=' Telegram authorize', default=False, null=True, blank=True)
-    step = models.CharField(verbose_name='Step', max_length=50, default='Nothing', null=True, blank=True)
+    step = models.CharField(verbose_name='Step', max_length=50, default='', null=True, blank=True)
     activation_code = models.CharField(verbose_name='Activation code', max_length=16, null=True, blank=True)
     google_auth = models.BooleanField(verbose_name='Google Auth', default=False, null=True, blank=True)
     is_staff = models.BooleanField(default=False)

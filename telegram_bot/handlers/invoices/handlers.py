@@ -2,6 +2,8 @@ from .keyboards import *
 from .utils import *
 from ..utils import *
 
+from invoices.models import Invoice, Status
+
 
 class InvoiceHandler:
     def __init__(self, bot, data, callback_title):
@@ -13,149 +15,93 @@ class InvoiceHandler:
         if callback_title == 'statuses':
             self.show_invoices_menu(self.bot, self.data['callback_query'])
 
-        elif 'invoiceId' in callback_title:
+        elif 'detail' in callback_title:
             parsed_data = callback_title.split('_')
+            status_name, current_page, invoice_id = parsed_data[1], parsed_data[2], parsed_data[4]
 
-            status = parsed_data[0] if parsed_data[0] == 'All' else None
-            current_page = parsed_data[1]
-            invoice_id = parsed_data[3]
+            self.show_invoice_details(status_name, current_page, invoice_id)
 
-            self.show_invoice_details(invoice_id, current_page, status)
+        elif 'status_All' in callback_title:
+            parsed_data = callback_title.split('_')
+            current_page = int(parsed_data[2])
 
-        elif 'New' in callback_title:
-            status = callback_title.split('_')[0]
-            current_page = get_current_page(callback_title)
-
-            self.show_new_invoices(status, current_page)
-
-        elif 'Paid' in callback_title:
-            status = callback_title.split('_')[0]
-            current_page = get_current_page(callback_title)
-
-            self.show_paid_invoices(status, current_page)
-
-        elif 'Unpaid' in callback_title:
-            status = callback_title.split('_')[0]
-            current_page = get_current_page(callback_title)
-
-            self.show_unpaid_invoices(status, current_page)
-
-        elif 'All' in callback_title:
-            current_page = get_current_page(callback_title)
             self.show_all_invoices(current_page)
+
+        elif 'status_' in callback_title:
+            parsed_data = callback_title.split('_')
+            status_name, current_page = parsed_data[1], int(parsed_data[2])
+
+            self.show_invoices_for_selected_status(status_name, current_page)
 
     @staticmethod
     def show_invoices_menu(bot, data):
         user = get_user(data)
-        invoices = get_invoices(user.email)
-
-        invoices_quantity_by_status = {
-            'new': str(len(invoices.filter(status__value='New'))),
-            'paid': str(len(invoices.filter(status__value='Paid'))),
-            'unpaid': str(len(invoices.filter(status__value='Unpaid'))),
-            'all': str(len(invoices))
-        }
+        invoices_statuses = Status.objects.all()
+        invoices = Invoice.objects.filter(responsible=str(user.b24_contact_id))
 
         bot.sendMessage(chat_id=get_chat_id(data),
                         text='Choose the status',
-                        reply_markup=invoices_statuses_keyboard(invoices_quantity_by_status))
+                        reply_markup=invoices_statuses_keyboard(invoices, invoices_statuses))
 
-    def show_new_invoices(self, status, current_page=1):
+    def show_invoices_for_selected_status(self, status_name, current_page, element_on_page=8):
         user = get_user(self.data['callback_query'])
-        new_invoices = get_invoices(user.email, status)
-        invoices_pagination = do_pagination(new_invoices, current_page, 8)
+        invoice_status = Status.objects.get(value=status_name)
+        invoices = Invoice.objects.filter(responsible=str(user.b24_contact_id), status=invoice_status).order_by('-date')
 
-        if invoices_pagination['quantity'] > 0:
-            invoices = invoices_pagination['invoices']
-            all_pages = invoices_pagination['all_pages']
-            has_pages = invoices_pagination['has_pages']
-
-            try:
-                self.bot.edit_message_text(
-                    f"🔵 New invoices: ",
-                    chat_id=get_chat_id(self.data['callback_query']),
-                    message_id=self.data['callback_query']['message']['message_id'],
-                    reply_markup=new_invoices_keyboard(invoices, current_page, all_pages, has_pages)
-                )
-            except Exception as e:
-                print(e)
-        else:
+        invoices_quantity = len(invoices)
+        if invoices_quantity == 0:
             self.bot.sendMessage(chat_id=get_chat_id(self.data['callback_query']),
-                                 text='You don`t have any new invoices')
+                                 text='You don`t have any ' + status_name.lower() + ' invoices')
+            return
 
-    def show_paid_invoices(self, status, current_page=1):
+        all_pages = invoices_quantity // element_on_page if not invoices_quantity % element_on_page else (invoices_quantity // element_on_page) + 1
+        has_pages = False
+
+        if invoices_quantity > element_on_page:
+            has_pages = True
+            invoices = invoices[element_on_page * (current_page - 1):element_on_page * current_page]
+
+        try:
+            message = invoice_status.sticker + ' ' + invoice_status.value + ' invoices: '
+            self.bot.edit_message_text(
+                message,
+                chat_id=get_chat_id(self.data['callback_query']),
+                message_id=self.data['callback_query']['message']['message_id'],
+                reply_markup=invoices_for_selected_status_keyboard(invoices, invoice_status, current_page, all_pages, has_pages)
+            )
+        except Exception as e:
+            print(e)
+
+    def show_all_invoices(self, current_page, element_on_page=8):
         user = get_user(self.data['callback_query'])
-        paid_invoices = get_invoices(user.email, status)
-        invoices_pagination = do_pagination(paid_invoices, current_page, 8)
+        invoices = Invoice.objects.filter(responsible=str(user.b24_contact_id)).order_by('-date')
 
-        if invoices_pagination['quantity'] > 0:
-            invoices = invoices_pagination['invoices']
-            all_pages = invoices_pagination['all_pages']
-            has_pages = invoices_pagination['has_pages']
-
-            try:
-                self.bot.edit_message_text(
-                    f"🟢 Paid invoices: ",
-                    chat_id=get_chat_id(self.data['callback_query']),
-                    message_id=self.data['callback_query']['message']['message_id'],
-                    reply_markup=paid_invoices_keyboard(invoices, current_page, all_pages, has_pages)
-                )
-            except Exception as e:
-                print(e)
-        else:
-            self.bot.sendMessage(chat_id=get_chat_id(self.data['callback_query']),
-                                 text='You don`t have any paid invoices')
-
-    def show_unpaid_invoices(self, status, current_page=1):
-        user = get_user(self.data['callback_query'])
-        unpaid_invoices = get_invoices(user.email, status)
-        invoices_pagination = do_pagination(unpaid_invoices, current_page, 8)
-
-        if invoices_pagination['quantity'] > 0:
-            invoices = invoices_pagination['invoices']
-            all_pages = invoices_pagination['all_pages']
-            has_pages = invoices_pagination['has_pages']
-
-            try:
-                self.bot.edit_message_text(
-                    f"🟡 Unpaid invoices: ",
-                    chat_id=get_chat_id(self.data['callback_query']),
-                    message_id=self.data['callback_query']['message']['message_id'],
-                    reply_markup=unpaid_invoices_keyboard(invoices, current_page, all_pages, has_pages)
-                )
-            except Exception as e:
-                print(e)
-        else:
-            self.bot.sendMessage(chat_id=get_chat_id(self.data['callback_query']),
-                                 text='You don`t have any unpaid invoices')
-
-    def show_all_invoices(self, current_page=1):
-        user = get_user(self.data['callback_query'])
-        all_invoices = get_invoices(user.email)
-        invoices_pagination = do_pagination(all_invoices, current_page, 8)
-
-        if invoices_pagination['quantity'] > 0:
-            invoices = invoices_pagination['invoices']
-            all_pages = invoices_pagination['all_pages']
-            has_pages = invoices_pagination['has_pages']
-
-            try:
-                self.bot.edit_message_text(
-                    f"All invoices: ",
-                    chat_id=get_chat_id(self.data['callback_query']),
-                    message_id=self.data['callback_query']['message']['message_id'],
-                    reply_markup=all_invoices_keyboard(invoices, current_page, all_pages, has_pages)
-                )
-            except Exception as e:
-                print(e)
-        else:
+        invoices_quantity = len(invoices)
+        if invoices_quantity == 0:
             self.bot.sendMessage(chat_id=get_chat_id(self.data['callback_query']),
                                  text='You don`t have any invoices')
+            return
 
-    def show_invoice_details(self, invoice_id, current_page, status_all):
-        invoice = get_invoice_by_id(invoice_id)
+        all_pages = invoices_quantity // element_on_page if not invoices_quantity % element_on_page else (invoices_quantity // element_on_page) + 1
+        has_pages = False
+
+        if invoices_quantity > element_on_page:
+            has_pages = True
+            invoices = invoices[element_on_page * (current_page - 1):element_on_page * current_page]
+
+        try:
+            self.bot.edit_message_text(
+                'All tickets: ',
+                chat_id=get_chat_id(self.data['callback_query']),
+                message_id=self.data['callback_query']['message']['message_id'],
+                reply_markup=all_invoices_keyboard(invoices, current_page, all_pages, has_pages)
+            )
+        except Exception as e:
+            print(e)
+
+    def show_invoice_details(self, status_name, current_page, invoice_id):
+        invoice = get_invoice_by_id(invoice_id, status_name)
         user = get_user(self.data['callback_query'])
-        status = invoice.status.value if status_all is None else status_all
 
         # file_path = set_file_path(invoice)  Set file path by status
         file_path = generate_new_pdf(user, invoice, 'invoices/PDF_templates/invoice_ordinary.pdf')
@@ -173,4 +119,4 @@ class InvoiceHandler:
 
         self.bot.sendMessage(chat_id=get_chat_id(self.data['callback_query']),
                              text=invoice_detail,
-                             reply_markup=invoice_details_keyboard(status, current_page))
+                             reply_markup=invoice_details_keyboard(status_name, current_page))
