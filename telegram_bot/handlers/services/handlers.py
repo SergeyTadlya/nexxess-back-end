@@ -65,7 +65,9 @@ class ServicesHandler:
         if service.exists():
             service = service.first()
 
-        message = format_price(service.price) + ' | ' + service.title + '\n\n' + service.detail_text
+        service_title = service.title if service.title else 'Title is empty...'
+        service_detail_text = service.detail_text if service.detail_text else 'Detail text is empty...'
+        message = format_price(service.price) + ' | ' + service_title + '\n\n' + service_detail_text
 
         if service.image:
             self.bot.sendPhoto(chat_id=get_chat_id(self.data['callback_query']),
