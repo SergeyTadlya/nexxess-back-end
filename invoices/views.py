@@ -1,13 +1,11 @@
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-from django.template.loader import get_template
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, redirect
 from django.db.models import Q
 from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
 
 from authentication.helpers.B24Webhook import set_webhook
-from services.models import Service
 from tickets.models import Ticket, TicketStatus
 
 from .models import Invoice, Status, StripeSettings, LocalInvoice
@@ -35,19 +33,20 @@ def format_price(price):
 @login_required(login_url='/accounts/login/')
 def invoices(request):
     if request.user.is_authenticated and request.user.google_auth or request.user.is_superuser:
+
+        # Get all user invoices and sorting by created date
         all_user_invoices = Invoice.objects.all().order_by('-date') if request.user.is_superuser \
             else Invoice.objects.filter(responsible=request.user.b24_contact_id).order_by('-date')
 
+        # Get all existing statuses for user invoices
         all_statuses = Status.objects.all()
         statuses = (status.value for status in all_statuses)
         statuses_quantity = (value - value for value in range(len(all_statuses)))
-        invoices_array = list()
-        invoices_dates = list()
         statuses_number = {key: value for key, value in zip(statuses, statuses_quantity)}
-        invoices_statuses = list()
 
-
+        # Iterate through the array and put every specified field into a list
         date_count = 0
+        invoices_array = list()
         for index, invoice in enumerate(all_user_invoices):
 
             statuses_number[invoice.status.value] = 1 if invoice.status.value not in statuses_number.keys() \
@@ -64,15 +63,15 @@ def invoices(request):
                 'title': invoice.product_title,
             })
 
+            # Condition for removing bugs with pagination
             if not invoices_array[date_count]['date'] == format_date(invoice.date) or index == 0:
                 date_count = index
                 invoices_array[index]['more_one'] = True
             else:
                 invoices_array[index]['more_one'] = False
 
-            if format_date(invoice.date) not in invoices_dates:
-                invoices_dates.append(format_date(invoice.date))
-
+        # Get all existing statuses and their quantity for user invoices
+        invoices_statuses = list()
         for index, (status_name, status_number) in enumerate(statuses_number.items()):
             invoices_statuses.append({
                 'id': 'status' + str(index + 1),
@@ -80,6 +79,7 @@ def invoices(request):
                 'number': status_number
             })
 
+        # Pagination for invoices
         paginator = Paginator(invoices_array, 10)
         page = request.GET.get('page', 1)
 
@@ -92,15 +92,14 @@ def invoices(request):
 
         context = {
             "invoices": invoices_array,
-            "invoices_dates": invoices_dates,
             'invoices_statuses': invoices_statuses,
             'statuses_amount': len(invoices_statuses),
             'invoices_number': len(all_user_invoices),
-
         }
 
         return render(request, "invoices/invoices.html", context)
-    else: return redirect('authentication:main')
+    else:
+        return redirect('authentication:main')
 
 
 def ajax_invoice_filter(request):
@@ -110,24 +109,35 @@ def ajax_invoice_filter(request):
             data = json.load(request)
             statuses = [keys for keys in data if data[keys] is True]
 
+            # Get all user invoices and sorting by created date
             all_user_invoices = Invoice.objects.all().order_by('-date') if request.user.is_superuser else Invoice.objects.filter(responsible=request.user.b24_contact_id).order_by('-date')
-            invoices_array = list()
-            invoices_dates = list()
 
+            # Ascending or Descending filtering by the field selected by the user
             if 'ascending' in data.keys():
                 all_user_invoices = all_user_invoices.order_by(data['ascending'])
             elif 'descending' in data.keys():
                 all_user_invoices = all_user_invoices.order_by('-' + data['descending'])
 
+            # Invoices existing statuses
             if statuses:
                 all_user_invoices = all_user_invoices.filter(status__value__in=statuses)
 
+            # Calendar filtering
             if data['from_date'] and data['to_date']:
                 all_user_invoices = all_user_invoices.filter(
-                    date__gte=datetime.strptime(data['from_date'], '%B.%d.%Y'),
-                    date__lte=datetime.strptime(data['to_date'], '%B.%d.%Y')
+                    date__gte=datetime.strptime(data['from_date'] + 'T00:00:00', '%B.%d.%YT%H:%M:%S'),
+                    date__lte=datetime.strptime(data['to_date'] + 'T23:59:59', '%B.%d.%YT%H:%M:%S')
+                )
+            elif data['from_date']:
+                all_user_invoices = all_user_invoices.filter(
+                    date__gte=datetime.strptime(data['from_date'] + 'T00:00:00', '%B.%d.%YT%H:%M:%S'),
+                )
+            elif data['to_date']:
+                all_user_invoices = all_user_invoices.filter(
+                    date__lte=datetime.strptime(data['to_date'] + 'T23:59:59', '%B.%d.%YT%H:%M:%S')
                 )
 
+            # Local search
             if data['local_search']:
                 all_user_invoices = all_user_invoices.filter(
                     Q(invoice_id__icontains=data['local_search']) |
@@ -137,7 +147,9 @@ def ajax_invoice_filter(request):
                     Q(due_date__icontains=data['local_search'])
                 )
 
+            # Iterate through the array and put everything into a list
             date_count = 0
+            invoices_array = list()
             for index, invoice in enumerate(all_user_invoices):
                 invoices_array.append({
                     'id': invoice.id,
@@ -150,15 +162,14 @@ def ajax_invoice_filter(request):
                     'status_color': invoice.status.color
                 })
 
+                # Condition for removing bugs with pagination
                 if not invoices_array[date_count]['date'] == format_date(invoice.date) or index == 0:
                     date_count = index
                     invoices_array[index]['more_one'] = True
                 else:
                     invoices_array[index]['more_one'] = False
 
-                if format_date(invoice.date) not in invoices_dates:
-                    invoices_dates.append(format_date(invoice.date))
-
+            # Pagination for tickets
             paginator = Paginator(invoices_array, 10)
             page = request.GET.get('page', 1)
 
@@ -169,6 +180,7 @@ def ajax_invoice_filter(request):
             except EmptyPage:
                 invoices_array = paginator.page(paginator.num_pages)
 
+            # Get all pagination data for converting to json format
             has_next = invoices_array.has_next()
             has_previous = invoices_array.has_previous()
             has_other_pages = invoices_array.has_other_pages()
@@ -176,6 +188,7 @@ def ajax_invoice_filter(request):
             next_page = invoices_array.number + 1 if invoices_array.has_next() else invoices_array.number
             previous_page = invoices_array.number - 1 if invoices_array.has_previous() else invoices_array.number
 
+            # Not working yet
             if data['showing_amount']:
                 # showing_amount = int(data['showing_amount']) if not data['showing_amount'] == 'All' else len(invoices_array)
                 showing_amount = 100
@@ -183,7 +196,6 @@ def ajax_invoice_filter(request):
 
             response = {
                 'invoices': [invoices_array],
-                'invoices_dates': invoices_dates,
                 'invoices_number': str(len(all_user_invoices)),
                 'showing_amount': str(len(all_user_invoices)),
                 'has_next': has_next,
@@ -195,6 +207,7 @@ def ajax_invoice_filter(request):
             }
 
             return JsonResponse(response)
+
 
 @login_required(login_url='/accounts/login/')
 def invoice_detail(request, id):
@@ -228,6 +241,7 @@ def invoice_detail(request, id):
         except :
                 return redirect('/invoices/')
     else: return redirect('authentication:main')
+
 
 def generate_new_pdf(pdf_path, id, invoice, request):
 

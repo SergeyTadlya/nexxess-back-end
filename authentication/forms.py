@@ -1,10 +1,6 @@
-from django.contrib.auth.forms import UserChangeForm
 from allauth.account.forms import (SignupForm, LoginForm, ChangePasswordForm, ResetPasswordForm)
-from django.forms import ModelForm, TextInput, PasswordInput, NumberInput, FileInput, EmailInput
 
 from django import forms
-
-from telegram_bot.models import User
 
 
 class CustomLoginForm(LoginForm):
@@ -15,7 +11,6 @@ class CustomLoginForm(LoginForm):
             'class': 'authentication__box-input',
             'id': 'authentication-input__username',
             'placeholder': 'Username',
-
         })
     )
     password = forms.CharField(
@@ -23,7 +18,6 @@ class CustomLoginForm(LoginForm):
         widget=forms.PasswordInput(attrs={
             'class': 'authentication__box-input',
             'id': 'authentication-input__password',
-
         })
     )
 
@@ -32,13 +26,9 @@ class CustomLoginForm(LoginForm):
 
         self.fields['login'].widget.attrs.update({'class': 'authentication__box-input',
                                                   'id': 'authentication-input__username',
-                                                  'placeholder': '',
-                                                  })
+                                                  'placeholder': ''})
         self.fields['password'].widget.attrs.update({'class': 'authentication__box-input',
-                                                     'id': 'authentication-input__password',
-                                                     })
-
-
+                                                     'id': 'authentication-input__password'})
 
 
 class CustomSignupForm(SignupForm):
@@ -75,8 +65,7 @@ class CustomSignupForm(SignupForm):
         self.fields['email'].label = 'E-mail'
         self.fields['password1'].widget.attrs.update({'class': 'authentication__box-input',
                                                       'id': 'authentication-input__password',
-                                                      'placeholder': '',
-                                                      })
+                                                      'placeholder': ''})
 
     def save(self, request):
         user = super().save(request)
@@ -85,9 +74,9 @@ class CustomSignupForm(SignupForm):
             custom_data.remove('@')
 
         user.first_name = custom_data[0] if len(custom_data) > 0 else ''
-
         user.last_name = custom_data[1] if len(custom_data) > 1 else ''
         user.save()
+
         return user
 
 

@@ -8,7 +8,6 @@ from telegram_bot.models import User
 from tickets.models import Ticket, TicketStatus
 
 
-
 @login_required(login_url='/accounts/login/')
 def profile_view(request):
     user = User.objects.filter(id=request.user.id)

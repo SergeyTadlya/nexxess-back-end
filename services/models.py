@@ -1,7 +1,6 @@
 from django.db import models
 
 
-
 class Service(models.Model):
     category = models.ForeignKey(
         to='services.ServiceCategory',
