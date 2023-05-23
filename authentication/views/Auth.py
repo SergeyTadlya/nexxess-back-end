@@ -6,12 +6,13 @@ from django.urls import reverse_lazy
 
 from authentication.forms import *
 from telegram_bot.models import User
-from random import randint
 
+from random import randint
 
 
 def csrf_failure(request, reason=""):
     return redirect('/')
+
 
 def verification(request):
     if request.user.is_authenticated and not request.user.google_auth:
@@ -20,13 +21,14 @@ def verification(request):
             user = user.first()
 
         verify_code = request.GET.get('verify_code') if request.GET.get('verify_code') else ''
+
         if user.activation_code == verify_code:
             user.google_auth = True
             user.save()
             return redirect('/')
+
         return render(request, '2fa.html')
     else:
-
         return render(request, 'main.html')
 
 
@@ -34,6 +36,7 @@ class MyLoginView(LoginView):
     def form_valid(self, form):
         response = super().form_valid(form)
         if self.request.user.is_authenticated:
+
             if self.request.user.is_superuser:
                 next_url = self.request.GET.get('next', reverse_lazy('authentication:main'))
                 return redirect(next_url)
@@ -43,23 +46,25 @@ class MyLoginView(LoginView):
                 user = User.objects.filter(email=self.request.user.email)
                 if user.exists():
                     user = user.first()
-
                     user.activation_code = code
                     user.save()
+
                 send_mail('Secret key',
-                          f'Your private key for "{self.request.user.email}":\n{code}',
+                          f'Your private key for "{self.request.user.email}":\n\n{code}',
                           'cutrys69@gmail.com',
                           [self.request.user.email],
                           fail_silently=False)
 
-
             except Exception as e:
                 print(e)
+
             if self.request.user.google_auth:
                 next_url = self.request.GET.get('next', reverse_lazy('authentication:main'))
-            elif self.request.user.google_auth == False:
+                return redirect(next_url)
+
+            elif self.request.user.google_auth is False:
                 next_url = self.request.GET.get('next', reverse_lazy('authentication:verification'))
-            return redirect(next_url)
+                return redirect(next_url)
         else:
             return response
 

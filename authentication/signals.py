@@ -1,7 +1,6 @@
 from authentication.helpers.B24Webhook import  set_webhook
 from allauth.account.signals import user_signed_up
 from django.dispatch import receiver
-from telegram_bot.models import User
 
 import requests
 import logging
