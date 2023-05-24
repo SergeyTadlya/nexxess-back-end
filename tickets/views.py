@@ -234,9 +234,9 @@ def create_bitrix_task(request):
                     'TITLE': task_name,
                     'DESCRIPTION': task_description,
                     'DEADLINE': task_deadline,
-                    'CREATED_BY': 2,
-                    'RESPONSIBLE_ID': 1,
-                    'PRIORITY': 2,
+                    'CREATED_BY': 393,
+                    'RESPONSIBLE_ID': 393,
+                    'PRIORITY': 0,
                     'ALLOW_CHANGE_DEADLINE': 1,
                     'UF_CRM_TASK': {
                         "0": 'C_' + responsible,  # bitrix24_id
@@ -244,10 +244,13 @@ def create_bitrix_task(request):
                     }
                 }
             response = requests.post(url, json=payload)
-
+            print(f'response>>>>>>>>>>>{response}')
+            print(f'>>>>>>>>>>>>{response.status_code}')
             if response.status_code == 200:
-                time.sleep(3)
+                print('>>>>>>>>>>>>>>>>..DCHJKASHABHBLAHBFBBHFSLABBCALHJBHSH JLMCB,AJDHS SHCXJAKSNCXJAKSMBZCX HJANDMS, BCZX HANSK,BMXAA NX,MSDHA')
+                time.sleep(12)
                 return redirect('tickets:tasks')
+
 
         except Exception as e:
             print(e)
@@ -293,5 +296,5 @@ def task_data(request):
     # url = set_webhook("tasks.task.update?taskId=556&fields[TAGS]=tag_one,tag_two")
     # response = requests.post(url)
     # print('response', response)
-    
+
     return render(request, 'tickets/list.html', context)

@@ -28,10 +28,12 @@ def create_bitrix_contact(sender, request, user, **kwargs):
         url = set_webhook(method)
         payload = {
             'fields': {
-                'NAME': name,
+                'NAME': f'TESTEST_WEBSITE >>>>{name}',
                 'PHONE': [{'VALUE': 'no_phone', 'VALUE_TYPE': 'WORK'}],
                 'EMAIL': [{'VALUE': email, 'VALUE_TYPE': 'WORK'}],
-                'SOURCE_ID': source_id
+                'SOURCE_ID': source_id,
+                'TYPE_ID': 'other',
+                'ASSIGNED_BY_ID': '393',
             }
         }
 

@@ -23,59 +23,59 @@ def format_date(date):
 
 @csrf_exempt
 def webhook_task(request):
-    # try:
-    if request.method == 'POST':
-        event = request.POST.get('event', "")
+    try:
+        if request.method == 'POST':
+            event = request.POST.get('event', "")
 
-        if event == "ONTASKADD":
-            entities_id = request.POST.get('data[FIELDS_AFTER][ID]', "")
-        elif event == "ONTASKUPDATE":
-            entities_id = request.POST.get('data[FIELDS_BEFORE][ID]', "")
+            if event == "ONTASKADD":
+                entities_id = request.POST.get('data[FIELDS_AFTER][ID]', "")
+            elif event == "ONTASKUPDATE":
+                entities_id = request.POST.get('data[FIELDS_BEFORE][ID]', "")
 
-        b24_time = request.POST.get('ts', "")
-        b24_domain = request.POST.get('auth[domain]', "")
-        b24_member_id = request.POST.get('auth[member_id]', "")
-        b24_application_token = request.POST.get('auth[application_token]', "")
+            b24_time = request.POST.get('ts', "")
+            b24_domain = request.POST.get('auth[domain]', "")
+            b24_member_id = request.POST.get('auth[member_id]', "")
+            b24_application_token = request.POST.get('auth[application_token]', "")
 
-        print(all([entities_id, b24_time, b24_domain, b24_member_id, b24_application_token]))
+            print(all([entities_id, b24_time, b24_domain, b24_member_id, b24_application_token]))
 
-        if all([entities_id, b24_time, b24_domain, b24_member_id, b24_application_token]):
+            if all([entities_id, b24_time, b24_domain, b24_member_id, b24_application_token]):
 
-            task_url = set_webhook() + 'tasks.task.get/?id=' + entities_id
-            task_crm = set_webhook() + 'tasks.task.get/?taskId=' + entities_id + '&select%5B0%5D=UF_CRM_TASK'
-            task_info = requests.get(task_url).json()['result']['task']
-            task_info_crm = requests.get(task_crm).json()['result']['task']
+                task_url = set_webhook() + 'tasks.task.get/?id=' + entities_id
+                task_crm = set_webhook() + 'tasks.task.get/?taskId=' + entities_id + '&select%5B0%5D=UF_CRM_TASK'
+                task_info = requests.get(task_url).json()['result']['task']
+                task_info_crm = requests.get(task_crm).json()['result']['task']
 
-            ticket_title = task_info["title"]
-            ticket_text = task_info["description"]
-            status = TicketStatus.objects.filter(value=task_info["status"])
-            if status.exists():
-                status = status.first()
-            deadline = datetime.strptime(task_info["deadline"][:11] + '23:59:59', '%Y-%m-%dT%H:%M:%S')
-            created_at = task_info["createdDate"]
+                ticket_title = task_info["title"]
+                ticket_text = task_info["description"]
+                status = TicketStatus.objects.filter(value=task_info["status"])
+                if status.exists():
+                    status = status.first()
+                deadline = datetime.strptime(task_info["deadline"][:11] + '23:59:59', '%Y-%m-%dT%H:%M:%S')
+                created_at = task_info["createdDate"]
 
-            defaults = {
-                'responsible': trim_before(task_info_crm["ufCrmTask"][0]),
-                'ticket_title': ticket_title,
-                'ticket_text': ticket_text,
-                'status': status,
-                'is_opened': False,
-                'is_active': True,
-                'deadline': deadline,
-                'b24_domain': b24_domain,
-                'b24_member_id': b24_member_id,
-                'b24_application_token': b24_application_token,
-                'b24_time': b24_time,
-                'task_info': task_info,
-                'task_info_crm': task_info_crm,
-                'created_at': created_at,
-            }
+                defaults = {
+                    'responsible': trim_before(task_info_crm["ufCrmTask"][0]),
+                    'ticket_title': ticket_title,
+                    'ticket_text': ticket_text,
+                    'status': status,
+                    'is_opened': False,
+                    'is_active': True,
+                    'deadline': deadline,
+                    'b24_domain': b24_domain,
+                    'b24_member_id': b24_member_id,
+                    'b24_application_token': b24_application_token,
+                    'b24_time': b24_time,
+                    'task_info': task_info,
+                    'task_info_crm': task_info_crm,
+                    'created_at': created_at,
+                }
 
-            Ticket.objects.update_or_create(task_id=entities_id, defaults=defaults)
-    return HttpResponse('ok')
+                Ticket.objects.update_or_create(task_id=entities_id, defaults=defaults)
+        return HttpResponse('ok')
 
-    # except Exception as e:
-    #     print(e)
+    except Exception as e:
+        print(e)
     return HttpResponse('ok')
 
 
