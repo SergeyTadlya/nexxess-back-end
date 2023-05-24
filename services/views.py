@@ -2,20 +2,19 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
-from bitrix24 import Bitrix24, BitrixError
-from requests import Response
+
 from authentication.helpers.B24Webhook import set_webhook
+from authentication.models import B24keys
 from invoices.models import Invoice, StripeSettings, LocalInvoice, Status
-from telegram_bot.models import User
+
 from .models import Service, ServiceCategory
-from . import urls
+
+from bitrix24 import Bitrix24, BitrixError
+
 import datetime
-import requests
 import stripe
 import time
-import json
 import re
-from authentication.models import B24keys
 
 
 def remove_html_tags(text):
@@ -24,7 +23,6 @@ def remove_html_tags(text):
 
 
 def clean_and_shorten_text(text):
-
     cleaned_text = re.sub('<[^<]+?>', '', text)
 
     if len(cleaned_text) > 200:
@@ -62,7 +60,6 @@ def services(request):
                 min_price = 1000000
                 products = []
                 for product_b24 in section_products:
-                    # print(product_b24)
 
                     if min_price > float(product_b24["PRICE"]):
                         min_price = float(product_b24["PRICE"])
@@ -113,7 +110,6 @@ def services(request):
                             product.category = section_get
                         product.save()
                     products.append(product)
-                    # print(product_b24)
 
                 if not products:
                     set_min_price = 0
@@ -126,7 +122,6 @@ def services(request):
                     'section_id': section["ID"]
                 }
                 sections.append(test)
-                # print(sections)
 
             context = {
                 'sections': sections,
@@ -154,10 +149,10 @@ def product_detail(request, id):
         sections = []
         section_products = bx24.callMethod('crm.product.list', order={'PRICE': "ASC"},
                                            filter={"SECTION_ID": id},
-                                           select=["ID", "NAME", "PROPERTY_98", "PRICE", "CURRENCY_ID", "PROPERTY_100", "DESCRIPTION", "SECTION_ID", "PROPERTY_MORE_PHOTO"])
-        # service = get_object_or_404(Service, id=id)
+                                           select=["ID", "NAME", "PROPERTY_98", "PRICE", "CURRENCY_ID", "PROPERTY_100",
+                                                   "DESCRIPTION", "SECTION_ID", "PROPERTY_MORE_PHOTO"])
 
-        property_type = bx24.callMethod("crm.product.property.get", id=100) # 100 - id custom field "type"
+        property_type = bx24.callMethod("crm.product.property.get", id=100)  # 100 - id custom field "type"
         description = []
         for products in section_products:
             stripe.api_key = StripeSettings.objects.all().first().secret_key
@@ -185,23 +180,17 @@ def product_detail(request, id):
                 defaults=defaults
             )
 
-            # description convertation for template
-            # description_parts = products['DESCRIPTION'].split("•")
-            # parts_array = []
-            # for description_part in description_parts:
-            #     if description_part != "":
-            #         parts_array.append(description_part.strip().replace('<br>', ''))
-
             description_parts = products['DESCRIPTION'].split("<br>\n ")
             parts_array = [remove_html_tags(item) for item in description_parts]
             description.append({
                 "ID": products["ID"],
                 "DESCRIPTION": parts_array,
             })
-            # user field "type" (need for template)
+            # User field "type" (need for template)
             property_type_id = products['PROPERTY_100']['value']
             property_type_name = property_type["VALUES"][property_type_id]["VALUE"]
-            if(property_type_name != "Consultation"):
+
+            if (property_type_name != "Consultation"):
                 template = "services/other.html"
             else:
                 template = "services/consultation.html"
@@ -213,8 +202,8 @@ def product_detail(request, id):
             'services_description': description,
             'section_title': section[0]["NAME"]
         }
-        return render(request, template, context=context)
 
+        return render(request, template, context=context)
     except:
         return redirect('/')
 
