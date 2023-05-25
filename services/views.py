@@ -16,7 +16,6 @@ import stripe
 import time
 import re
 
-
 def remove_html_tags(text):
     clean = re.compile('<.*?>')
     return re.sub(clean, '', text)
@@ -180,12 +179,13 @@ def product_detail(request, id):
                 defaults=defaults
             )
 
-            description_parts = products['DESCRIPTION'].split("<br>\n ")
-            parts_array = [remove_html_tags(item) for item in description_parts]
+            description_parts = products['DESCRIPTION'].split("• ")
+            parts_array = [remove_html_tags(item.replace("&nbsp;", "").strip()) for item in description_parts if item.strip()]
             description.append({
                 "ID": products["ID"],
                 "DESCRIPTION": parts_array,
             })
+
             # User field "type" (need for template)
             property_type_id = products['PROPERTY_100']['value']
             property_type_name = property_type["VALUES"][property_type_id]["VALUE"]
@@ -263,10 +263,13 @@ def my_services(request):
         section_products = bx24.callMethod('crm.product.list', order={'PRICE': "ASC"},
                                            filter={"ID": service_id},
                                            select=["ID", "NAME", "PROPERTY_98", "PRICE", "CURRENCY_ID", "PROPERTY_100",
-                                                   "DESCRIPTION", "SECTION_ID", "PROPERTY_44"])
+                                                   "DESCRIPTION", "SECTION_ID"])
         for products in section_products:
-            description_parts = products['DESCRIPTION'].split("<br>\n ")
-            parts_array = [remove_html_tags(item) for item in description_parts]
+            # description_parts = products['DESCRIPTION'].split("<br>\n ")
+            # parts_array = [remove_html_tags(item) for item in description_parts]
+            description_parts = products['DESCRIPTION'].split("• ")
+            parts_array = [remove_html_tags(item.replace("&nbsp;", "").strip()) for item in description_parts if
+                           item.strip()]
 
             property_type_id = products['PROPERTY_100']['value']
             property_type_name = property_type["VALUES"][property_type_id]["VALUE"]
@@ -275,7 +278,6 @@ def my_services(request):
                 "ID": products["ID"],
                 "NAME": products["NAME"],
                 "DESCRIPTION": parts_array,
-                "IMAGE": products["PROPERTY_44"],
                 "PRICE": products["PRICE"],
                 "CATEGORY": property_type_name,
             })
