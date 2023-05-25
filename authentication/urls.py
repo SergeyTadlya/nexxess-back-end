@@ -1,8 +1,9 @@
 from django.conf.urls.static import static
 from django.conf import settings
-from django.urls import path, include
+from django.urls import path
 from . import views
 from .views import TestView
+
 
 app_name = 'authentication'
 
@@ -16,6 +17,7 @@ urlpatterns = [
     path('profile/', views.profile_view, name='profile'),
     path('accounts/logout/', views.MyLogoutView.as_view(), name='account_logout'),
     path('ajax_errors/', views.ajax_errors),
+    path('accounts/googlelogin/', views.google_login, name='google_login'),
 ]
 
 if settings.DEBUG:

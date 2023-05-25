@@ -80,7 +80,7 @@
         <form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
         {% csrf_token %}
         <a class="content__pay" href="{% url 'account_logout' %}">
-          <a class="content__pay" href="{% url 'account_logout' %}"> <button class="confirm-address-btn" type="button" id="confirm-button">{% trans 'Confirm' %}
+          <a class="content__pay" href="{% url 'account_logout' %}"> <button class="confirm-address-btn" type="submit" id="confirm-button">{% trans 'Confirm' %}
         </button></a>
         </form>
 

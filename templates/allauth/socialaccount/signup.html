@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+{% load account %}
+{% load socialaccount %}
+
+{% block  extra_css %}
+      <link rel="stylesheet" type="text/css" href="{% static 'css/authentication.css' %}">
+      <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+      <style>
+      .footer {padding: 0;}
+    </style>
+{% endblock  %}
+
+{% block title %} Verification {% endblock %}
+
+{% block auth %}
+  <section class="authentication">
+    <div class="authentication__body">
+
+      <form class="authentication__email" action="{% url 'authentication:verification' %}" method="POST">
+         {% csrf_token %}
+        <div id="authentication__email-code" class="authentication__email-code">
+          <div class="authentication__email-img">
+            <img src="{% static 'images/authentication/security.svg' %}" alt="images">
+          </div>
+          <div class="authentication__email-box authentication__box-titles">
+            <h5 class="authentication__box-title">Enter your code</h5>
+            <p class="authentication__box-subtitle authentication__email-subtitle">We sent a code to <span id="authentication__box-span" class="authentication__box-span">{{ user_email }}</span></p>
+          </div>
+          <div class="authentication__box">
+            <input id="authentication__code-input" class="authentication__box-input" type="text" required="" name="verify_code">
+            <label class="authentication__box-label">Verify-code</label>
+          </div>
+          <button id="authentication__email-button" class="authentication__button authentication__email-button" type="submit">Verify my account</button>
+          <div class="authentication__email-bottom">
+            <p class="authentication__email-text">Haven't received it?</p>
+            <button class="authentication__email-btn" type="button">Resend a new code</button>
+        </div>
+        </div>
+      </form>
+    </div>
+  </section>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'js/authentication.js' %}"></script>
+{% endblock %}

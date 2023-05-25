@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from tickets.models import Ticket
 from invoices.models import Invoice
 import requests

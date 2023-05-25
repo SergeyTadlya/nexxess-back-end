@@ -3,7 +3,6 @@ from allauth.account.views import LoginView, SignupView, LogoutView, _ajax_respo
 from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 from django.urls import reverse_lazy
-
 from authentication.forms import *
 from telegram_bot.models import User
 from random import randint
@@ -14,15 +13,14 @@ def verification(request):
         user = User.objects.filter(email=request.user.email)
         if user.exists():
             user = user.first()
-
         verify_code = request.GET.get('verify_code') if request.GET.get('verify_code') else ''
         if user.activation_code == verify_code:
             user.google_auth = True
             user.save()
-            return redirect('/')
-        return render(request, '2fa.html')
-    else:
 
+            return redirect('/')
+        return render(request, '2fa.html')    
+    else:
         return render(request, 'main.html')
 
 
@@ -47,8 +45,6 @@ class MyLoginView(LoginView):
                           'cutrys69@gmail.com',
                           [self.request.user.email],
                           fail_silently=False)
-
-
             except Exception as e:
                 print(e)
             if self.request.user.google_auth:

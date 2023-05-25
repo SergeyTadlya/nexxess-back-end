@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-5gr8pz%pg!3v@x045wmo96dj-8u$(gljgnbpj)hpeh@0p5wu(q
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = ['https://8af8-188-190-190-33.ngrok-free.app']
+CSRF_TRUSTED_ORIGINS = ['https://5e04-188-190-190-33.ngrok-free.app']
 # Application definition
 
 INSTALLED_APPS = [
@@ -55,6 +55,8 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',  # for Google auth
+    # 'django.contrib.sites'
+
 ]
 
 AUTH_USER_MODEL = 'telegram_bot.User'
@@ -88,15 +90,24 @@ TEMPLATES = [
 ]
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
+
+    'APP': {
+        'client_id': '793435315423-uvu4ovued24s8r0t5u358u0tnoae44o7.apps.googleusercontent.com',
+        'secret': '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',
+        'key': ''
+        },
         'SCOPE': [
             'profile',
-            'email',
+            'email'
         ],
         'AUTH_PARAMS': {
-            'access_type': 'online',
-        }
+            'access_type': 'online'
+        },
+        "VERIFIED_EMAIL": True
     }
 }
+
+
 # django-allauth
 # https://django-allauth.readthedocs.io/en/latest/overview.html
 AUTHENTICATION_BACKENDS = [
@@ -172,8 +183,11 @@ ACCOUNT_FORMS = {
     'disconnect': 'allauth.socialaccount.forms.DisconnectForm',
 }
 
-EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
-LOGIN_REDIRECT_URL = '/'
+# EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
+
+SOCIALACCOUNT_ADAPTER = "authentication.adapters.CustomSocialAccountAdapter"
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
@@ -185,7 +199,7 @@ ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = True
 SOCIALACCOUNT_QUERY_EMAIL = True
 ACCOUNT_LOGOUT_ON_GET= True
 ACCOUNT_UNIQUE_EMAIL = True
-SIGNUP_REDIRECT_URL = '/'
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'  # відповідає за заборону логіну без підтвердження пошти
 ACCOUNT_EMAIL_REQUIRED = True
 
 REST_FRAMEWORK = {
@@ -253,3 +267,4 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_PASSWORD = 'knea ggzc msdt jsep'
+DEFAULT_FROM_EMAIL = 'cutrys69@gmail.com'
