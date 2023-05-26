@@ -77,27 +77,47 @@ $(document).ready(function () {
                                   </ul>
                                   <ul class="content__body-items">
                                       <li class="content__body-item style--width">
+<<<<<<< HEAD
+                                          <a href="tickets/detail/` + data['tasks'][0][task].id + `/">
+=======
                                           <a href="detail/` + data['tasks'][0][task].id + `/">
+>>>>>>> f50621fee20e9b3cd9d9eabe4b6377badcf3fde8
                                               <p class="content__body-name">` + data['tasks'][0][task].id + `</p>
                                           </a>
                                       </li>
                                       <li class="content__body-item style--width">
+<<<<<<< HEAD
+                                        <a class="content__body-link" href="tickets/detail/` + data['tasks'][0][task].id + `/">
+=======
                                         <a class="content__body-link" href="detail/` + data['tasks'][0][task].id + `/">
+>>>>>>> f50621fee20e9b3cd9d9eabe4b6377badcf3fde8
                                             <p class="content__body-name">` + data['tasks'][0][task].title + `</p>
                                         </a>
                                       </li>
                                       <li class="content__body-item style--width">
+<<<<<<< HEAD
+                                        <a class="content__body-link" href="tickets/detail/` + data['tasks'][0][task].id + `/">
+=======
                                         <a class="content__body-link" href="detail/` + data['tasks'][0][task].id + `/">
+>>>>>>> f50621fee20e9b3cd9d9eabe4b6377badcf3fde8
                                             <p class="content__body-date">` + data['tasks'][0][task].created_at + `</p>
                                         </a>
                                       </li>
                                       <li class="content__body-item style--width">
+<<<<<<< HEAD
+                                          <a class="content__body-link" href="tickets/detail/` + data['tasks'][0][task].id + `/">
+=======
                                           <a class="content__body-link" href="detail/` + data['tasks'][0][task].id + `/">
+>>>>>>> f50621fee20e9b3cd9d9eabe4b6377badcf3fde8
                                               <p class="content__body-date">` + data['tasks'][0][task].deadline + `</p>
                                           </a>
                                       </li>
                                       <li class="content__body-item style--width">
+<<<<<<< HEAD
+                                          <a class="content__body-link" href="tickets/detail/` + data['tasks'][0][task].id + `/">
+=======
                                           <a class="content__body-link" href="detail/` + data['tasks'][0][task].id + `/">
+>>>>>>> f50621fee20e9b3cd9d9eabe4b6377badcf3fde8
                                               <p class="content__body-status style--width font--` + data['tasks'][0][task].status_color + `">` + data['tasks'][0][task].status_name + `</p>
                                           </a>
                                       </li>
@@ -111,7 +131,11 @@ $(document).ready(function () {
                                   </button>
                               </li>
                           </ul>`
+<<<<<<< HEAD
+                    if (task.more_one) {
+=======
                     if (data['tasks'][0][task].more_one) {
+>>>>>>> f50621fee20e9b3cd9d9eabe4b6377badcf3fde8
                         html_tasks += `</div>`
                     }
                 }

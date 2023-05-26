@@ -11,6 +11,7 @@ from datetime import datetime, timedelta
 from bitrix24 import *
 
 import requests
+from services.models import ServiceCategory
 
 
 def trim_before(text):
@@ -84,51 +85,78 @@ def webhook_task_comment(request):
     try:
         if request.method == 'POST':
             b24keys = B24keys.objects.first()
-
             event = request.POST.get('event', "")
+            entities_id = request.POST.get('data[FIELDS_AFTER][TASK_ID]', "")
+            comment_id = request.POST.get('data[FIELDS_AFTER][ID]', "")
 
-            if event == "ONTASKCOMMENTADD":
-                entities_id = request.POST.get('data[FIELDS_AFTER][TASK_ID]', "")
-                comment_id = request.POST.get('data[FIELDS_AFTER][ID]', "")
-                domain = b24keys.domain
-                rest_key = b24keys.rest_key
-                method = 'task.commentitem.getlist'
+            domain = b24keys.domain
+            rest_key = b24keys.rest_key
+            b24_comment = 'task.commentitem.get'
+            bx24 = Bitrix24(domain + rest_key)
 
-                b24Comments = 'task.commentitem.getlist'
-                bx24 = Bitrix24(domain + rest_key)
-
-                comments = bx24.callMethod(
-                    b24Comments,
+            # check if comment is isset in ticket
+            try:
+                comment = bx24.callMethod(
+                    b24_comment,
                     taskId=int(entities_id),
+                    itemId=int(comment_id),
                 )
-                # get user email
-                userId = comments[0]['AUTHOR_ID']
-                b24User = 'user.get'
-                user = bx24.callMethod(
-                    b24User,
-                    FILTER={'ID': userId},
-                )
-                manager_name = user[0]['EMAIL']
-                message_text = comments[-1]['POST_MESSAGE']
-                ticket = Ticket.objects.get(task_id=entities_id)
+                print('comment 104', comment)
+                comment_isset = True
+            # comment is deleted in ticket
+            except:
+                comment_isset = False
 
-                # Get Bitrix24 webhook information
-                b24_time = request.POST.get('ts', "")
-                b24_domain = request.POST.get('auth[domain]', "")
-                b24_member_id = request.POST.get('auth[member_id]', "")
-                b24_application_token = request.POST.get('auth[application_token]', "")
-
-                if all([comment_id, ticket, b24_domain, b24_member_id, b24_application_token, b24_time]):
-                    comment = TicketComments.objects.create(
-                        ticket=ticket,
-                        comment_id=comment_id,
-                        text=message_text,
-                        manager_name=manager_name,
-                        is_opened=ticket.is_opened,
-                        added_documents=None,  # You can add the documents here
-                        is_active=True,
+            if comment_isset == True:
+                message_text = comment['POST_MESSAGE']
+                if comment['AUTHOR_ID'] != '2':
+                    # get user email
+                    userId = comment['AUTHOR_ID']
+                    b24User = 'user.get'
+                    user = bx24.callMethod(
+                        b24User,
+                        FILTER={'ID': userId},
                     )
-                    print(f"New comment added to ticket {ticket.task_id} with comment id {comment.comment_id}")
+                    manager_name = user[0]['EMAIL']
+                    is_opened = False
+                else:
+                    manager_name = "client"
+                    is_opened = True
+
+            ticket = Ticket.objects.get(task_id=entities_id)
+
+            # Get Bitrix24 webhook information
+            b24_domain = request.POST.get('auth[domain]', "")
+            b24_member_id = request.POST.get('auth[member_id]', "")
+            b24_application_token = request.POST.get('auth[application_token]', "")
+            b24_time = request.POST.get('ts', "")
+            if event == "ONTASKCOMMENTADD":
+                TicketComments.objects.create(
+                    ticket=ticket,
+                    comment_id=comment_id,
+                    text=message_text,
+                    manager_name=manager_name,
+                    is_opened=is_opened,             # ticket.is_opened
+                    added_documents=None,  # You can add the documents here
+                    is_active=True,
+                    created_date=datetime.now(),
+                )
+            elif event == "ONTASKCOMMENTUPDATE":
+                TicketComments.objects.filter(
+                    ticket=ticket,
+                    comment_id=comment_id,
+                ).update(
+                    text=message_text,
+                    manager_name=manager_name,
+                    is_opened=ticket.is_opened,
+                    added_documents=None,  # you can add the documents here
+                    is_active=True,
+                )
+            else:
+                TicketComments.objects.filter(
+                    ticket=ticket,
+                    comment_id=comment_id,
+                ).delete()
         return HttpResponse('ok')
     except Exception as e:
         print(e)
@@ -159,8 +187,10 @@ def webhook_invoice(request):
             current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             future_time = datetime.now() + timedelta(days=1)
 
+            # Check avaible to write in database
             try:
-                date_bill = datetime.strptime(invoice_load['DATE_BILL'], '%Y-%m-%dT%H:%M:%S%z')
+                date_bill = datetime.strptime(invoice_load['DATE_BILL'] + datetime.now(), '%Y-%m-%dT%H:%M:%S%z')
+                # due_time = datetime.strptime(invoice_load['DATE_PAY_BEFORE'][:11] + '23:59:59', '%Y-%m-%dT%H:%M:%S')
                 due_time = datetime.strptime(invoice_load['DATE_PAY_BEFORE'][:11] + future_time, '%Y-%m-%dT%H:%M:%S')
             except:
                 date_bill = current_time
@@ -207,5 +237,4 @@ def webhook_service_section(request):
                 category_b24_id=section["ID"],
                 defaults={'category_name':section["NAME"]}
             )
-
         return HttpResponse('ok')

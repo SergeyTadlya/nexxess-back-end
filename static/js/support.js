@@ -1,19 +1,5 @@
 'use strict'
 
-const accordionInfoBtn = document.querySelectorAll('#aside-info__accordion-top')
-const accordionInfoList = document.querySelectorAll(
-  '.aside-info__accordion-list'
-)
-const accordionInfoArrow = document.querySelectorAll('.aside-info__top-arrow')
-
-accordionInfoBtn.forEach((button, index) => {
-  button.addEventListener('click', (e) => {
-    accordionInfoBtn[index].classList.toggle('accordion__top--active')
-    accordionInfoList[index].classList.toggle('accordion__list--active')
-    accordionInfoArrow[index].classList.toggle('accordion__arrow--active')
-  })
-})
-
 //__________BURGER__________
 
 // const asideInfo = document.querySelector('.aside-info')
@@ -34,15 +20,6 @@ accordionInfoBtn.forEach((button, index) => {
 //   }
 // }
 
-const headerNav = document.querySelector('.nav__list')
-const burger = document.querySelector('.burger')
-
-burger.addEventListener('click', menu)
-
-function menu() {
-  burger.classList.toggle('burger--active')
-  headerNav.classList.toggle('show-nav')
-}
 
 const accordiontitle = document.querySelectorAll('.content__item-title')
 const accordionBox = document.querySelectorAll('.content__item-box')

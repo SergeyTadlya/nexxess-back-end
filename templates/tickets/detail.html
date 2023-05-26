@@ -21,16 +21,42 @@
     color: #666666;
   }
 
+  /*.conversation {*/
+  /*  background-color: #F5F5F5;*/
+  /*  width: 650px;*/
+  /*  padding: 20px;*/
+  /*  display: flex;*/
+  /*  flex-direction: column;*/
+  /*  align-items: flex-start;*/
+  /*  justify-content: flex-start;*/
+  /*}*/
+  .empty_chat{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
   .conversation {
-    background-color: #F5F5F5;
-    width: 650px;
-    padding: 20px;
+    position: absolute;
     display: flex;
+    flex: 1 1;
     flex-direction: column;
     align-items: flex-start;
-    justify-content: flex-start;
+    padding: 20px;
+    overflow: auto;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
   }
-
+  .chat {
+    display: flex;
+    flex: 1 1;
+    position: relative;
+    background-color: #F5F5F5;
+    min-height: 500px;
+    width: 800px;
+  }
   .conversation .message {
     background-color: #FFFFFF;
     margin-bottom: 20px;
@@ -141,6 +167,47 @@
   font-size: 16px;
   font-weight: bold;
 }
+  .chat-box__field {
+    width: 100%;
+    min-height: 60px;
+    max-height: 95px;
+    background-color: #f4f7f9;
+    display: block;
+    border-top: 2px solid #cfcccc;
+}
+
+.chat-box__field.hide {
+    display: none;
+}
+
+.field {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 5px 15px 15px;
+    align-items: center;
+}
+
+.field__area {
+    border: none;
+    display: flex;
+    flex-grow: 1;
+    resize: none;
+    background: none;
+    outline: none;
+    font-family: Inter,sans-serif;
+    height: 23px;
+}
+
+.field__button {
+    border: none;
+    background: none;
+    padding: 1px 6px;
+    margin: 0;
+    cursor: pointer;
+    transition: all 0.2s;
+    opacity: 1;
+    pointer-events: all;
+}
 </style>
 {% endblock extra_css %}
 {% block left_menu %}
@@ -206,6 +273,7 @@
 </div>
 {% endblock %}
 {% block task %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <div class="ticket-container">
   <h1 class="ticket-title">Ticket #{{ task.task_id }}: {{ task.ticket_title }}📝 </h1>
   <div class="problem-description">
@@ -217,22 +285,37 @@
   Deadline: {{ task.deadline }}
 </div>
 
-  <div class="conversation">
-    <div class="message your-manager">
-      <p class="title">Your personal manager👩‍💻</p>
-      <p>Hello, its Nexxess bot🤖, your ticket is being processed, I will answer you soon📲</p>
-      <div class="time">10:00 AM</div>
+  <div class="chat">
+    <div class="conversation" id="ticket_chat">
+      {% if comments %}
+        {% for comment in comments %}
+          {% if comment.sender == "client" %}
+            <div class="message you">
+              <p class="title">You</p>
+              <p style="margin-top: 5px">{{comment.message}}</p>
+              <div class="time">{{comment.data}}</div>
+            </div>
+          {% else %}
+            <div class="message your-manager">
+              <p class="title">Your personal manager👩‍💻</p>
+              <p style="margin-top: 5px">{{comment.message}}</p>
+              <div class="time">{{comment.data}}</div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      {% else %}
+        <div class="empty_chat" id="empty_chat">Chat is empty. Please send message in ticked.</div>
+      {% endif %}
     </div>
-    <div class="message you">
-      <p class="title">You</p>
-      <p>you wrote.....</p>
-      <div class="time">10:05 AM</div>
-    </div>
-    <div class="message your-manager">
-      <p class="title">Your personal manager👩‍💻</p>
-      <p>.....</p>
-      <div class="time">10:07 AM</div>
-    </div>
+  </div>
+  <div class="chat-box__field">
+      <form class="field" method="POST" id="new-user-message-form">
+          <textarea placeholder="write message" class="field__area" name="new-user-message" id="new-user-message" autocomplete="off"></textarea>
+          <span id="ticked_id" hidden>{{task.task_id}}</span>
+          <div type="submit" class="field__button">
+              <img src="{% static 'images/send.svg' %}" alt="send" id="send-user-message">
+          </div>
+      </form>
   </div>
 {% endblock %}
 {% block footer %}
@@ -322,6 +405,69 @@
 </div>
 {% endblock %}
 {% block extra_js %}
+<script>
+  // send ajax using "enter" keydown
+  $("#new-user-message-form").keydown(function(event) {
+      if (event.keyCode === 13) {
+        event.preventDefault();
+        sendMessage();
+      }
+  });
+  // send ajax using button click
+  $("#send-user-message").click(function(event) {
+      event.preventDefault();
+      sendMessage();
+  });
+
+  function sendMessage() {
+      $.ajax({
+          url: '/tickets/send_user_message/',
+          type: 'POST',
+          data: {
+              'user_message': $("#new-user-message").val(),
+              'ticked_id': document.getElementById("ticked_id").innerText,
+          },
+          success: function (data) {
+              // clear message in textarea
+              document.getElementById('new-user-message').value = '';
+              // delete empty block
+              var empty_block = document.getElementById('empty_chat');
+              if(empty_block){
+                  document.getElementById('empty_chat').remove();
+              }
+
+              // title block
+              var Title = document.createElement("p");
+              Title.className = "title";
+              Title.textContent = "You";
+
+              // message block
+              var newMessage = document.createElement("p");
+              newMessage.style = "margin-top: 5px";
+              newMessage.textContent = data.user_message;
+
+              // time block
+              var TimeMessage = document.createElement("div");
+              TimeMessage.className = "time";
+              TimeMessage.textContent = data.comment_created_data;
+
+              // news message block with title, message, time
+              var newMessageDiv = document.createElement("div");
+              newMessageDiv.className = "message you";
+              newMessageDiv.append(Title, newMessage, TimeMessage);
+
+              // set block with new message in chat bock
+              var conversationBlock = document.getElementById("ticket_chat");
+              conversationBlock.appendChild(newMessageDiv);
+
+              console.log('ajax_res', newMessageDiv);
+          },
+          error: function(error) {
+              console.log('ajax send message', error);
+          }
+      });
+  }
+</script>
 <script src="{% static 'js/tickets.js' %}"> </script>
 <script src="{% static 'js/global.js' %}"></script>
 {% endblock %}
