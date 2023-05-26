@@ -118,12 +118,12 @@
                       Add to Nexxess© Trust Book (total $35,000) <br>
                       or purchase a gold package a la cart
                     </h6>
-                    <p class="content__descrip-text" id="includes">INCLUDE:</p>
+                      <p class="content__descrip-text" id="includes">INCLUDE:</p>
                       <ul class="content__descrip-list">
                         {% for description_part in description_parts %}
-                          <li class="content__descrip-item" style="list-style: none">
-                            {{description_part}}
-                          </li>
+                            <li class="content__descrip-item" style="list-style: none">
+                              {{description_part}}
+                            </li>
                         {% endfor %}
                       </ul>
                   </div>
@@ -234,6 +234,7 @@
         item.remove();
       }
     });
+
   $(document).ready(function () {
     $(".button_pay").click(function()
     {

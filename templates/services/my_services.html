@@ -72,7 +72,7 @@
               <div class="content__list-box">
                 <div class="content__list-img">
                  {% if product.image %} <!-- if service.IMAGE != 'None'-->
-                      <img src="{{b24_domain}}{{ service.IMAGE.0.value.showUrl }}" alt="{{ service.IMAGE.0.value.id }}">
+                      <img src="{{product.image}}">
                   {% else %}
                       <img src="{% static 'images/service.jpg' %}" alt="images">
                   {% endif %}
@@ -82,16 +82,16 @@
               </div>
               <ul class="content__list-product-description">
                 {% for description_part in service.DESCRIPTION %}
-                    {% if description_part.0 == '•' %}
+                    {% if description_part == 'INCLUDES:' %}
+                      <p class="content__list-product-description-text">
+                        {{description_part}}
+                      </p>
+                    {% else %}
                       <li class="content__list-product-description-item">
                         <p class="content__list-product-description-text">
                           {{description_part}}
                         </p>
                       </li>
-                    {% else %}
-                        <p class="content__list-product-description-text">
-                          {{description_part}}
-                        </p>
                     {% endif %}
                 {% endfor %}
               </ul>
@@ -194,13 +194,6 @@
 </div>
 {% endblock footer %}
 {% block extra_js %}
-    <script>
-      var items = document.querySelectorAll('.content__list-product-description-item');
-      items.forEach(function(item) {
-        var text = item.querySelector('.content__list-product-description-text');
-        text.innerHTML = text.innerHTML.replace(/•/g, '');
-      });
-    </script>
     <script src="{% static 'js/dynamic_search.js' %}"></script>
     <script src="{% static 'js/services.js' %}"></script>
     <script src="{% static 'js/main.js' %}"></script>

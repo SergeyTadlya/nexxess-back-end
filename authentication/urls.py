@@ -17,6 +17,7 @@ urlpatterns = [
     path('webhook/task/', views.webhook_task, name='webhook_task'),
     path('webhook/invoice/', views.webhook_invoice, name='webhook_invoice'),
     path('webhook/service_section/', views.webhook_service_section),
+    path('webhook/task/comment_add/', views.webhook_task_comment, name='webhook_task_comment'),
     path('ajax_errors/', views.ajax_errors),
 ]
 

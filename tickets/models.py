@@ -51,7 +51,7 @@ class TicketComments(models.Model):
     text = models.TextField(verbose_name='Comment')
     is_opened = models.BooleanField()
     is_active = models.BooleanField(default=True)
-    created_date = models.DateTimeField(default=timezone.now)
+    created_date = models.DateTimeField(null=True, blank=True)
 
 
 class TelegramTicket(models.Model):
