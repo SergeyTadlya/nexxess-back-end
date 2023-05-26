@@ -1,28 +1,18 @@
 'use strict'
 
-const accordionInfoBtn = document.querySelectorAll('#aside-info__accordion-top')
-const accordionInfoList = document.querySelectorAll('.aside-info__accordion-list')
-const accordionInfoArrow = document.querySelectorAll('.aside-info__top-arrow')
+//__________Mobile content arrow_____
 
-accordionInfoBtn.forEach((button, index) => {
+const contentBox = document.querySelectorAll('.content__body-box')
+const contentBtn = document.querySelectorAll('.content__body-btn')
+
+contentBtn.forEach((button, index) => {
   button.addEventListener('click', (e) => {
-    accordionInfoBtn[index].classList.toggle('accordion__top--active')
-    accordionInfoList[index].classList.toggle('accordion__list--active')
-    accordionInfoArrow[index].classList.toggle('accordion__arrow--active')
+    contentBox[index].classList.toggle('content__body-activeBox')
+    contentBtn[index].classList.toggle('content__body-activeBtn')
   })
 })
 
-const accordionFilterBtn = document.querySelectorAll('#aside-filter__accordion-top')
-const accordionFilterList = document.querySelectorAll('.aside-filter__accordion-list')
-const accordionFilterArrow = document.querySelectorAll('.aside-filter__top-arrow')
 
-accordionFilterBtn.forEach((button, index) => {
-  button.addEventListener('click', (e) => {
-    accordionFilterBtn[index].classList.toggle('accordion__top--active')
-    accordionFilterList[index].classList.toggle('accordion__list--active')
-    accordionFilterArrow[index].classList.toggle('accordion__arrow--active')
-  })
-})
 
 //_________*BLOCK*Cotent-top______
 
@@ -120,15 +110,9 @@ document.addEventListener('keydown', (e) => {
 //   }
 // }
 
-const headerNav = document.querySelector('.nav__list')
-const burger = document.querySelector('.burger')
 
-burger.addEventListener('click', menu)
 
-function menu() {
-  burger.classList.toggle('burger--active')
-  headerNav.classList.toggle('show-nav')
-}
+
 
 //_____FILTER____
 
@@ -146,14 +130,5 @@ function filters() {
 }
 
 
-//__________Mobile content arrow_____
 
-const contentBox = document.querySelectorAll('.content__body-box')
-const contentBtn = document.querySelectorAll('.content__body-btn')
 
-contentBtn.forEach((button, index) => {
-  button.addEventListener('click', (e) => {
-    contentBox[index].classList.toggle('content__body-activeBox')
-    contentBtn[index].classList.toggle('content__body-activeBtn')
-  })
-})

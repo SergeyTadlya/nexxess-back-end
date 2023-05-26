@@ -80,25 +80,17 @@
               <p class="content__list-title">{{service.NAME}}</p>
             </div>
             <ul class="content__list-product-description">
-              {% for description_parts in services_description %}
-                {% if description_parts.ID == service.ID %}
-                  {% for description_part in description_parts.DESCRIPTION %}
-                    {% if description_part %}
-                      {% if description_part.0 == "•" %}
-                        <li class="content__list-product-description-item">
-                          <p class="content__list-product-description-text">
-                            {{description_part}}
-                          </p>
-                        </li>
-                      {% else %}
-                          <p class="content__list-product-description-text">
-                            {{description_part}}
-                          </p>
-                      {% endif %}
+                {% for description_parts in services_description %}
+                    {% if description_parts.ID == service.ID %}
+                        {% for description_part in description_parts.DESCRIPTION %}
+                            <li class="content__list-product-description-item">
+                                <p class="content__list-product-description-text">
+                                    {{description_part}}
+                                </p>
+                            </li>
+                        {% endfor %}
                     {% endif %}
-                  {% endfor %}
-                {% endif %}
-              {% endfor %}
+                {% endfor %}
             </ul>
             <div class="content__list-box">
               <p class="content__list-price">${{service.PRICE}}</p>
@@ -200,17 +192,12 @@
 {% block extra_js %}
     <script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
     <script>
-    var items = document.querySelectorAll('.content__list-product-description-item');
-    items.forEach(function(item) {
-      var text = item.querySelector('.content__list-product-description-text');
-      text.innerHTML = text.innerHTML.replace(/•/g, '');
-    });
-
     $(document).ready(function () {
       $(".order_click").click(function()
       {
         var button = $(this);
-        var b24_product_id = $(button).data("b24id");
+        // var b24_product_id = $(button).data("b24id");
+        var b24_product_id = $(button).data("test");
         $.ajax({
           url: '/services/create_invoice/',
           type: 'POST',

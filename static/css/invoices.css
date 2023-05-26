@@ -786,7 +786,7 @@
     font-size: 14px;
     line-height: 140%;
     overflow: hidden;
-    height: 58px;
+    height: 80px;
     -webkit-transition: all 0.5s;
     -o-transition: all 0.5s;
     transition: all 0.5s;
@@ -836,6 +836,7 @@
             align-items: center;
     font-size: 14px;
     line-height: 140%;
+    text-align: center;
   }
   .content__body-item + .content__body-item {
     margin-top: 5px;
@@ -854,6 +855,7 @@
     -webkit-box-ordinal-group: 6;
         -ms-flex-order: 5;
             order: 5;
+    margin-top: 20px;
   }
   .content__body-item:nth-child(5) {
     -webkit-box-ordinal-group: 6;
@@ -890,7 +892,7 @@
     -webkit-transition: all 0.5s;
     -o-transition: all 0.5s;
     transition: all 0.5s;
-    height: 130px;
+    height: 100%;
   }
   .content__body-activeBtn {
     -webkit-transition: all 0.5s;
