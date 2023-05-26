@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'services',
     'support',
     'telegram_bot',
+    'search',
     # install app
     'rest_framework',
     'rest_framework.authtoken',

@@ -14,6 +14,8 @@ urlpatterns = [
     path('services/', include('services.urls')),
     path('support/', include('support.urls')),
     path('telegram/', include('telegram_bot.urls')),
+    
+    path('search/', include('search.urls'))
 ]
 
 if settings.DEBUG:
