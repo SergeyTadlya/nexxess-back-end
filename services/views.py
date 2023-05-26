@@ -16,6 +16,7 @@ import stripe
 import time
 import re
 
+
 def remove_html_tags(text):
     clean = re.compile('<.*?>')
     return re.sub(clean, '', text)
@@ -43,7 +44,7 @@ def services(request):
         try:
             url = set_webhook()
             bx24 = Bitrix24(url)
-            section_list = bx24.callMethod('crm.productsection.list', order={'ID': "ASC"}, filter={"CATALOG_ID": 14},
+            section_list = bx24.callMethod('crm.productsection.list', order={'ID': "ASC"}, filter={"CATALOG_ID": 25},
                                            select={"ID", "NAME", "CODE",
                                                    "DESCRIPTION"})
             sections = []
@@ -54,8 +55,8 @@ def services(request):
                 )
                 section_products = bx24.callMethod('crm.product.list', order={'ID': "ASC"},
                                                    filter={"SECTION_ID": section["ID"]},
-                                                   select=["ID", "NAME", "PROPERTY_98", "PRICE", "CURRENCY_ID",
-                                                           "PROPERTY_44"])
+                                                   select=["ID", "NAME", "PRICE", "CURRENCY_ID", "PROPERTY_143"])
+                print(f'PRODUCT>>>>>>>>>>>{section_products}')
                 min_price = 1000000
                 products = []
                 for product_b24 in section_products:
@@ -71,7 +72,7 @@ def services(request):
                             currency="usd",
                             product_data={"name": product_b24["NAME"]},
                         )
-                        if product_b24["PROPERTY_98"] is None:
+                        if product_b24["PROPERTY_143"] is None:
                             product = Service.objects.create(
                                 service_id=product_b24["ID"],
                                 stripe_id=stripe_response.id,
@@ -85,14 +86,14 @@ def services(request):
                                 service_id=product_b24["ID"],
                                 stripe_id=stripe_response.id,
                                 title=product_b24["NAME"],
-                                preview_text=product_b24["PROPERTY_98"]["value"],
+                                preview_text=product_b24["PROPERTY_143"]["value"],
                                 price=format_price(product_b24["PRICE"]),
                                 currency=product_b24["CURRENCY_ID"],
                                 category=section_get,
                             )
                         product.save()
                     else:
-                        if product_b24["PROPERTY_98"] is None:
+                        if product_b24["PROPERTY_143"] is None:
                             product = Service.objects.get(id=product.first().id)
                             product.service_id = product_b24["ID"]
                             product.title = product_b24["NAME"]
@@ -103,7 +104,7 @@ def services(request):
                             product = Service.objects.get(id=product.first().id)
                             product.service_id = product_b24["ID"]
                             product.title = product_b24["NAME"]
-                            product.preview_text = product_b24["PROPERTY_98"]["value"]
+                            product.preview_text = product_b24["PROPERTY_143"]["value"]
                             product.price = format_price(product_b24["PRICE"])
                             product.currency = product_b24["CURRENCY_ID"]
                             product.category = section_get
@@ -148,10 +149,10 @@ def product_detail(request, id):
         sections = []
         section_products = bx24.callMethod('crm.product.list', order={'PRICE': "ASC"},
                                            filter={"SECTION_ID": id},
-                                           select=["ID", "NAME", "PROPERTY_98", "PRICE", "CURRENCY_ID", "PROPERTY_100",
-                                                   "DESCRIPTION", "SECTION_ID", "PROPERTY_MORE_PHOTO"])
+                                           select=["ID", "NAME", "PROPERTY_143", "PRICE", "CURRENCY_ID", "PROPERTY_144",
+                                                   "DESCRIPTION", "SECTION_ID"])
 
-        property_type = bx24.callMethod("crm.product.property.get", id=100)  # 100 - id custom field "type"
+        property_type = bx24.callMethod("crm.product.property.get", id=144)  # 100 - id custom field "type"
         description = []
         for products in section_products:
             stripe.api_key = StripeSettings.objects.all().first().secret_key
@@ -161,10 +162,10 @@ def product_detail(request, id):
                 currency="usd",
                 product_data={"name": products["NAME"]},
             )
-            if products["PROPERTY_98"] is None:
+            if products["PROPERTY_143"] is None:
                 preview_text = ""
             else:
-                preview_text = products["PROPERTY_98"]["value"]
+                preview_text = products["PROPERTY_143"]["value"]
             defaults = {
                 'stripe_id': stripe_response.id,
                 'title': products["NAME"],
@@ -179,15 +180,14 @@ def product_detail(request, id):
                 defaults=defaults
             )
 
-            description_parts = products['DESCRIPTION'].split("• ")
-            parts_array = [remove_html_tags(item.replace("&nbsp;", "").strip()) for item in description_parts if item.strip()]
+            description_parts = products['DESCRIPTION'].split("<br>\n ")   #### !!!!!!!rewrite tags HTML
+            parts_array = [remove_html_tags(item) for item in description_parts]
             description.append({
                 "ID": products["ID"],
                 "DESCRIPTION": parts_array,
             })
-
             # User field "type" (need for template)
-            property_type_id = products['PROPERTY_100']['value']
+            property_type_id = products['PROPERTY_144']['value']
             property_type_name = property_type["VALUES"][property_type_id]["VALUE"]
 
             if (property_type_name != "Consultation"):
@@ -205,7 +205,7 @@ def product_detail(request, id):
 
         return render(request, template, context=context)
     except:
-        return redirect('/')
+        return redirect('/services/')
 
 
 @login_required(login_url='/accounts/login/')
@@ -219,19 +219,19 @@ def create_invoice(request):
     bx24 = Bitrix24(url)
     try:
         invoice_id = bx24.callMethod('crm.invoice.add', fields={'ORDER_TOPIC': "Invoice - " + product.title,
-                                                   'PERSON_TYPE_ID': 1,
-                                                   'UF_CONTACT_ID': request.user.b24_contact_id, #1
-                                                   'STATUS_ID': 'N',
-                                                   'RESPONSIBLE_ID': 1,
-                                                   'PAY_SYSTEM_ID': 4,
-                                                   'DATE_PAY_BEFORE': tomorrow.strftime("%m/%d/%Y"),
-                                                   "PRODUCT_ROWS": [
-                                                       {"ID": 0,
-                                                        "PRODUCT_ID": product.service_id, #product.id
-                                                        "PRODUCT_NAME": product.title,
-                                                        "QUANTITY": 1,
-                                                        "PRICE": product.price},
-                                                   ]})
+                                                                'PERSON_TYPE_ID': 1,
+                                                                'UF_CONTACT_ID': request.user.b24_contact_id,  # 1
+                                                                'STATUS_ID': 'N',
+                                                                'RESPONSIBLE_ID': 1,
+                                                                'PAY_SYSTEM_ID': 3,
+                                                                'DATE_PAY_BEFORE': tomorrow.strftime("%m/%d/%Y"),
+                                                                "PRODUCT_ROWS": [
+                                                                    {"ID": 0,
+                                                                     "PRODUCT_ID": product.service_id,  # product.id
+                                                                     "PRODUCT_NAME": product.title,
+                                                                     "QUANTITY": 1,
+                                                                     "PRICE": product.price},
+                                                                ]})
 
         time.sleep(3)
         LocalInvoice.objects.create(b24_invoice_id=invoice_id, stripe_price_id=product.stripe_id)
@@ -256,22 +256,19 @@ def my_services(request):
 
     url = set_webhook()
     bx24 = Bitrix24(url)
-    property_type = bx24.callMethod("crm.product.property.get", id=100)  # 100 - id custom field "type"
+    property_type = bx24.callMethod("crm.product.property.get", id=144)  # 100 - id custom field "type"
 
     b24_service = []
     for service_id in purchased_services_id:
         section_products = bx24.callMethod('crm.product.list', order={'PRICE': "ASC"},
                                            filter={"ID": service_id},
-                                           select=["ID", "NAME", "PROPERTY_98", "PRICE", "CURRENCY_ID", "PROPERTY_100",
+                                           select=["ID", "NAME", "PROPERTY_143", "PRICE", "CURRENCY_ID", "PROPERTY_144",
                                                    "DESCRIPTION", "SECTION_ID"])
         for products in section_products:
-            # description_parts = products['DESCRIPTION'].split("<br>\n ")
-            # parts_array = [remove_html_tags(item) for item in description_parts]
-            description_parts = products['DESCRIPTION'].split("• ")
-            parts_array = [remove_html_tags(item.replace("&nbsp;", "").strip()) for item in description_parts if
-                           item.strip()]
+            description_parts = products['DESCRIPTION'].split("<br>\n ")  ####### remove tags
+            parts_array = [remove_html_tags(item) for item in description_parts]
 
-            property_type_id = products['PROPERTY_100']['value']
+            property_type_id = products['PROPERTY_144']['value']
             property_type_name = property_type["VALUES"][property_type_id]["VALUE"]
 
             b24_service.append({
