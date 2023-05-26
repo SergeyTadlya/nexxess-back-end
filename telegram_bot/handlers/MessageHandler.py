@@ -16,7 +16,20 @@ class MessageHandler:
         self.data = data
 
     def get_message_text(self):
-        return self.data['message']['text'] if 'text' in self.data['message'].keys() else 'None'
+        data_message_keys = self.data['message'].keys()
+
+        if 'text' in data_message_keys:
+            return self.data['message']['text']
+
+        elif 'pre_checkout_query' in self.data.keys():
+            return 'Without message'
+
+        elif 'successful_payment' in data_message_keys:
+            self.bot.sendMessage(chat_id=get_chat_id(self.data),
+                                 text='The payment was made successfully')
+            return 'Without message'
+        else:
+            'None'
 
     def get_user_step(self):
         user = User.objects.filter(telegram_id=self.data['message']['from']['id'])
@@ -61,6 +74,9 @@ class MessageHandler:
 
             elif message in ['/logout', '🚪 Log Out'] and not user_step:
                 LogOutHandler.show_confirm_keyboard(self.bot, self.data)
+
+            elif message == 'Without message':
+                pass
 
             else:
                 if user_step:  # user_step is not None and not user_step == ''

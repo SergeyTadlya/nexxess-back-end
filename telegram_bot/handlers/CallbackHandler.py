@@ -15,7 +15,10 @@ class CallbackHandler:
         self.data = data
 
     def get_callback_data(self):
-        return self.data['callback_query']['data']
+        return self.data['callback_query']['data'] if 'callback_query' in self.data.keys() else ''
+
+    def get_invoice_payload(self):
+        return self.data['pre_checkout_query']['invoice_payload'] if 'pre_checkout_query' in self.data.keys() else ''
 
     def get_user_step(self):
         user = User.objects.filter(telegram_id=self.data['callback_query']['from']['id'])
@@ -24,10 +27,11 @@ class CallbackHandler:
 
     def handle_request(self):
         callback_data = self.get_callback_data()
+        invoice_payload = self.get_invoice_payload()
 
         if 'invoices' in callback_data:
             InvoiceHandler(self.bot, self.data, callback_data)
-        elif 'services' in callback_data:
+        elif 'services' in callback_data or 'services' in invoice_payload:
             ServicesHandler(self.bot, self.data, callback_data)
         elif 'tickets' in callback_data:
             TicketsHandler(self.bot, self.data, callback_data)
