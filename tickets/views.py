@@ -6,15 +6,14 @@ from django.http import JsonResponse
 
 from authentication.helpers.B24Webhook import set_webhook
 from invoices.views import format_date
-from .models import Ticket, TicketStatus, TicketComments
+
+from .models import Ticket, TicketStatus
+
 from datetime import datetime
-from django.views.decorators.csrf import csrf_exempt
+
 import requests
 import json
 import time
-
-from bitrix24 import Bitrix24
-import xml.etree.ElementTree as ET
 
 
 def check_and_shorten_string(string):
@@ -42,8 +41,6 @@ def tasks(request):
         statuses_number[task.status.name] = 1 if task.status.name not in statuses_number.keys() \
             else statuses_number[task.status.name] + 1
 
-        ticket = Ticket.objects.get(task_id=task.task_id)
-        new_comment = TicketComments.objects.filter(ticket=ticket, is_opened=False).count()
         tasks_array.append({
             'id': task.task_id,
             'title': check_and_shorten_string(task.ticket_title),
@@ -51,7 +48,6 @@ def tasks(request):
             'created_at': format_date(task.created_at),
             'deadline': format_date(task.deadline),
             'is_opened': task.is_opened,
-            'new_comment': new_comment,
         })
 
         # Condition for removing bugs with pagination
@@ -202,45 +198,20 @@ def task_detail(request, id):
     task = Ticket.objects.get(task_id=str(id))
     if request.user.is_superuser or int(task.responsible) == request.user.b24_contact_id:
         if not request.user.is_superuser:
-            Ticket.objects.filter(task_id=str(id)).update(is_opened=True)
+            Ticket.objects.filter(id=id).update(is_opened=True)
             status_closed = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Closed').count()
             status_overdue = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Overdue').count()
             status_ongoin = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Ongoing').count()
-
-            get_comments = TicketComments.objects.filter(ticket=Ticket.objects.get(task_id=str(id)))
-            for comment in get_comments:
-                comment.is_opened = True
-                comment.save()
         else:
             status_closed = 0
             status_overdue = 0
             status_ongoin = 0
-
-        # get comment from bitrix
-        # url = set_webhook()
-        # bx24 = Bitrix24(url)
-        # section_list = bx24.callMethod('task.commentitem.getlist', taskId=int(id))
-        all_created_comments = TicketComments.objects.filter(ticket=Ticket.objects.get(task_id=str(id))).order_by('created_date')
-        comments_array = []
-        for created_comment in all_created_comments:
-            # test = datetime.strptime(created_comment.created_date, '%B.%d.%YT%H:%M:%S')
-
-            comment_time = created_comment.created_date
-            formatted_date = comment_time.strftime("%B %d, %Y, %I:%M %p")
-
-            comments_array.append({
-                'bitrix_id': created_comment.comment_id,
-                'message': created_comment.text,
-                'sender': created_comment.manager_name,
-                'data': formatted_date,
-            })
 
         res = {
             'task': task,
             'status_closed': status_closed,
             'status_overdue': status_overdue,
             'status_ongoin': status_ongoin,
-            'comments': comments_array,
         }
         return render(request, "tickets/detail.html", res)
     else:
@@ -257,14 +228,15 @@ def create_bitrix_task(request):
         try:
             method = "tasks.task.add"
             url = set_webhook(method)
+
             payload = {
                 'fields': {
                     'TITLE': task_name,
                     'DESCRIPTION': task_description,
                     'DEADLINE': task_deadline,
-                    'CREATED_BY': 2,
-                    'RESPONSIBLE_ID': 1,
-                    'PRIORITY': 2,
+                    'CREATED_BY': 393,
+                    'RESPONSIBLE_ID': 393,
+                    'PRIORITY': 0,
                     'ALLOW_CHANGE_DEADLINE': 1,
                     'UF_CRM_TASK': {
                         "0": 'C_' + responsible,  # bitrix24_id
@@ -272,14 +244,13 @@ def create_bitrix_task(request):
                     }
                 }
             response = requests.post(url, json=payload)
-            print('test123 create task')
-            response_data = json.loads(response.content)
-            task_id = response_data['result']['task']['id']
-            print('response task_id', task_id)
-
+            print(f'response>>>>>>>>>>>{response}')
+            print(f'>>>>>>>>>>>>{response.status_code}')
             if response.status_code == 200:
+                print('>>>>>>>>>>>>>>>>..DCHJKASHABHBLAHBFBBHFSLABBCALHJBHSH JLMCB,AJDHS SHCXJAKSNCXJAKSMBZCX HJANDMS, BCZX HANSK,BMXAA NX,MSDHA')
                 time.sleep(3)
                 return redirect('tickets:tasks')
+
 
         except Exception as e:
             print(e)
@@ -325,24 +296,5 @@ def task_data(request):
     # url = set_webhook("tasks.task.update?taskId=556&fields[TAGS]=tag_one,tag_two")
     # response = requests.post(url)
     # print('response', response)
+
     return render(request, 'tickets/list.html', context)
-
-@csrf_exempt
-def send_user_message(request):
-    if request.method == "POST":
-        user_message = request.POST.get('user_message')
-        ticked_id = request.POST.get('ticked_id')
-
-        # add comment in task in bitrix
-        url = set_webhook()
-        bx24 = Bitrix24(url)
-        new_comment = bx24.callMethod('task.commentitem.add', taskId=ticked_id, fields={"AUTHOR_ID": 2, "POST_MESSAGE": user_message})
-
-        now = datetime.now()
-        formatted_date = now.strftime("%B %d, %Y, %I:%M %p")
-        res = {
-            'user_message': user_message,
-            'ticked_id': ticked_id,
-            'comment_created_data': formatted_date,
-        }
-        return JsonResponse(res)
