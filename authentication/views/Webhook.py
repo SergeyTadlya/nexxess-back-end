@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 from bitrix24 import *
 
 import requests
-from services.models import ServiceCategory
+from services.models import ServiceCategory, Service
 
 
 def trim_before(text):
@@ -226,7 +226,11 @@ def webhook_service_section(request):
     if request.method == 'POST':
         event = request.POST.get('event', "")
         entities_id = request.POST.get('data[FIELDS][ID]', "")
+
         if event == "ONCRMPRODUCTSECTIONDELETE":
+            # first delete all services from deleted category
+            Service.objects.filter(category=ServiceCategory.objects.get(category_b24_id=entities_id)).delete()
+            # delete category
             ServiceCategory.objects.filter(category_b24_id=entities_id).delete()
         else:
             url = set_webhook()
