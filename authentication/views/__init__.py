@@ -1,4 +1,5 @@
-from .Auth import login_view, CustomSignupView
-from .Main import main, b24_webhook
-from .profile import profile_zview
+from .Auth import *
+from .Main import *
+from .profile import *
 from .Webhook import *
+from .google_auth import *

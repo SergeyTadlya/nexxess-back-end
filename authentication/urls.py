@@ -2,16 +2,12 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.urls import path
 
-from .views import TestView
 from . import views
-
-
 
 app_name = 'authentication'
 
 urlpatterns = [
     path('', views.main, name='main'),
-    path('test/', TestView.as_view(), name='test'),
     path('profile/', views.profile_view, name='profile'),
     path('accounts/login/', views.MyLoginView.as_view(), name='account_login'),
     path('login/verification/', views.verification, name='verification'),
