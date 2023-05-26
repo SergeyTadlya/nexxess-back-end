@@ -4,6 +4,24 @@ from django.shortcuts import render, redirect
 from django.db.models import Q
 from django.http import JsonResponse
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 from authentication.helpers.B24Webhook import set_webhook
 from invoices.views import format_date
 from .models import Ticket, TicketStatus, TicketComments
