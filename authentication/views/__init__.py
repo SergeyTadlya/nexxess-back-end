@@ -1,5 +1,4 @@
-from .google_auth import google_login
-from .Webhook import webhook_task, webhook_invoice, webhook_task_comment, webhook_service_section
-from .profile import profile_view, ajax_errors
-from .Auth import CustomSignupView, MyLoginView, MyLogoutView, edit_profile, verification, csrf_failure
-from .Main import main, TestView
+from .Auth import login_view, CustomSignupView
+from .Main import main, b24_webhook
+from .profile import profile_zview
+from .Webhook import *
