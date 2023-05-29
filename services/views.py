@@ -180,8 +180,8 @@ def product_detail(request, id):
                 defaults=defaults
             )
 
-            description_parts = products['DESCRIPTION'].split("<br>\n ")   #### !!!!!!!rewrite tags HTML
-            parts_array = [remove_html_tags(item) for item in description_parts]
+            description_parts = products['DESCRIPTION'].split("• ")
+            parts_array = [remove_html_tags(item.replace("&nbsp;", "").strip()) for item in description_parts if item.strip()]
             description.append({
                 "ID": products["ID"],
                 "DESCRIPTION": parts_array,
@@ -265,8 +265,8 @@ def my_services(request):
                                            select=["ID", "NAME", "PROPERTY_143", "PRICE", "CURRENCY_ID", "PROPERTY_144",
                                                    "DESCRIPTION", "SECTION_ID"])
         for products in section_products:
-            description_parts = products['DESCRIPTION'].split("<br>\n ")  ####### remove tags
-            parts_array = [remove_html_tags(item) for item in description_parts]
+            description_parts = products['DESCRIPTION'].split("• ")
+            parts_array = [remove_html_tags(item.replace("&nbsp;", "").strip()) for item in description_parts if item.strip()]
 
             property_type_id = products['PROPERTY_144']['value']
             property_type_name = property_type["VALUES"][property_type_id]["VALUE"]

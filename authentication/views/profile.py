@@ -37,7 +37,10 @@ def profile_view(request):
             user.save()
             return redirect('/profile/')
 
-        elif '' not in check_list and len(new_password) > 7 and authenticate(request, username=request.user.email, password=old_password):
+        elif '' not in check_list and len(new_password) > 7 and any([
+            authenticate(request, username=request.user.email, password=old_password),
+            all([old_password == user.password, len(old_password) == 41])],
+            ):
             user.username = username if username is not None else request.user.username
             user.first_name = first_name if first_name is not None else request.user.first_name
             user.last_name = last_name if last_name is not None else request.user.last_name

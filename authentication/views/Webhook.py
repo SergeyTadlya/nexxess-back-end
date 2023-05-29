@@ -87,6 +87,7 @@ def webhook_task_comment(request):
             b24keys = B24keys.objects.first()
             event = request.POST.get('event', "")
             entities_id = request.POST.get('data[FIELDS_AFTER][TASK_ID]', "")
+            print(f'entititi {entities_id}')
             comment_id = request.POST.get('data[FIELDS_AFTER][ID]', "")
 
             domain = b24keys.domain
@@ -109,7 +110,7 @@ def webhook_task_comment(request):
 
             if comment_isset == True:
                 message_text = comment['POST_MESSAGE']
-                if comment['AUTHOR_ID'] != '2':
+                if comment['AUTHOR_ID'] != '312':
                     # get user email
                     userId = comment['AUTHOR_ID']
                     b24User = 'user.get'
@@ -227,6 +228,9 @@ def webhook_service_section(request):
         event = request.POST.get('event', "")
         entities_id = request.POST.get('data[FIELDS][ID]', "")
         if event == "ONCRMPRODUCTSECTIONDELETE":
+            # first delete all services from deleted category
+            Service.objects.filter(category=ServiceCategory.objects.get(category_b24_id=entities_id)).delete()
+            # delete category
             ServiceCategory.objects.filter(category_b24_id=entities_id).delete()
         else:
             url = set_webhook()
