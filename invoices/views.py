@@ -226,7 +226,9 @@ def invoice_detail(request, id):
                 url = set_webhook()
                 bx24 = Bitrix24(url)
                 product = bx24.callMethod('crm.product.get', id=invoice.service_id)
-                description_parts = product['DESCRIPTION'].split("<br>")
+                # description_parts = product['DESCRIPTION'].split("<br>")
+                parts_array = product['DESCRIPTION'].split("<br>")
+                description_parts = [item.replace("&nbsp;", "").strip() for item in parts_array if item.strip()]
 
                 res = {
                     'invoice': invoice,
