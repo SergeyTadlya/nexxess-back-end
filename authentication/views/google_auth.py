@@ -33,7 +33,7 @@ def google_login(request):
 
     send_mail('Secret key',
                 f'Your private key for "{request.user.email}":\n{code}\n{extra_text}',
-                'cutrys69@gmail.com',
+                'info@nexxess.com',
                 [user_email],
                 fail_silently=False)
 

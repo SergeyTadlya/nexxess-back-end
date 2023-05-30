@@ -20,7 +20,12 @@ def invoices_for_selected_status_keyboard(invoices, status, current_page, all_pa
     buttons = list()
 
     for invoice in invoices:
-        invoice_detail = '#' + invoice.invoice_id + ' | ' + format_price(invoice.price) + ' | ' + format_date(invoice.date)
+        sticker = invoice.status.sticker
+        product_title_preview = invoice.product_title if len(invoice.product_title) < 18 else invoice.product_title[:18] + '...'
+        price = format_price(invoice.price)
+        date = format_date(invoice.date)
+
+        invoice_detail = sticker + ' ' + product_title_preview + ' | ' + price + ' | ' + date
         invoice_callback_data = 'invoices_status_' + status.value + '_' + str(current_page) + '_detail_' + invoice.invoice_id
 
         buttons.append([InlineKeyboardButton(invoice_detail, callback_data=invoice_callback_data)])
@@ -46,7 +51,12 @@ def all_invoices_keyboard(invoices, current_page, all_pages, has_pages) -> Inlin
     buttons = list()
 
     for invoice in invoices:
-        invoice_detail = invoice.status.sticker + ' #' + invoice.invoice_id + ' | ' + format_price(invoice.price) + ' | ' + format_date(invoice.date)
+        sticker = invoice.status.sticker
+        product_title_preview = invoice.product_title if len(invoice.product_title) < 18 else invoice.product_title[:18] + '...'
+        price = format_price(invoice.price)
+        date = format_date(invoice.date)
+
+        invoice_detail = sticker + ' ' + product_title_preview + ' | ' + price + ' | ' + date
         invoice_callback_data = 'invoices_status_All_' + str(current_page) + '_detail_' + invoice.invoice_id
 
         buttons.append([InlineKeyboardButton(invoice_detail, callback_data=invoice_callback_data)])
@@ -68,7 +78,14 @@ def all_invoices_keyboard(invoices, current_page, all_pages, has_pages) -> Inlin
     return InlineKeyboardMarkup(buttons)
 
 
-def invoice_details_keyboard(status, current_page) -> InlineKeyboardMarkup:
-    button = [[InlineKeyboardButton('⬅️ Back to ' + status.lower() + ' invoices', callback_data='invoices_status_' + status + '_' + current_page)]]
-
-    return InlineKeyboardMarkup(button)
+def invoice_details_keyboard(status, current_page, invoice) -> InlineKeyboardMarkup:
+    if invoice.status.value == 'Paid':
+        buttons = [
+            [InlineKeyboardButton('⬅️ Back to ' + status.lower() + ' invoices', callback_data='invoices_status_' + status + '_' + current_page)]
+        ]
+    else:
+        buttons = [
+            [InlineKeyboardButton('Pay the invoice', callback_data='services_detail_' + invoice.invoice_id)],
+            [InlineKeyboardButton('⬅️ Back to ' + status.lower() + ' invoices', callback_data='invoices_status_' + status + '_' + current_page)]
+        ]
+    return InlineKeyboardMarkup(buttons)

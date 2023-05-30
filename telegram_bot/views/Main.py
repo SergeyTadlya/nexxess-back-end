@@ -35,4 +35,10 @@ def main(request):
             else:
                 print('Callback from: ' + str(data['callback_query']['from']['id']) + ' - Not text\n')
 
+        elif 'pre_checkout_query' in data:
+            callback_handler = CallbackHandler(bot, data)
+            callback_handler.handle_request()
+
+            print('Callback from: ' + str(data['pre_checkout_query']['from']['id']) + ' - ' + data['pre_checkout_query']['id'])
+
     return HttpResponse('Main')

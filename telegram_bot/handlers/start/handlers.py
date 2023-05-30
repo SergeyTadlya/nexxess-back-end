@@ -106,7 +106,7 @@ class AuthenticationHandler:
                                       f'Check it and write here your code:')
             send_mail('Secret key',
                       f'Your private key for {unauthorized_user.email}:\n\n{code}',
-                      'cutrys69@gmail.com',
+                      'info@nexxess.com',
                       [unauthorized_user.email],
                       fail_silently=False)
         except Exception as e:
