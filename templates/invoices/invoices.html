@@ -16,7 +16,9 @@
       <div class="aside-info__box">
         <div class="aside-info__box-top">
           <img class="aside-info__top-img" src="{% static 'images/alert.svg' %}" alt="icon">
-          <h6 class="aside-info__top-title">Important</h6>
+          {% for b_s in bought_services %}
+            <h6 class="aside-info__top-title"> {{ b_s.product_title }}</h6>
+          {% endfor %}
           <p class="aside-info__top-number">3</p>
         </div>
         <ul class="aside-info__box-list">
@@ -309,6 +311,43 @@
 {% block extra_js %}
     <script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
     <script src="{% static 'js/jquery-ui.min.js' %}"></script>
+    <script>
+      var items = document.querySelectorAll('.content__descrip-item');
+        items.forEach(function(item) {
+          if(item.innerText[0] == "•"){
+            item.innerText = item.innerText.replace(/•/g, '');
+            item.style = "list-style: disc";
+          }
+          if(item.innerText == "INCLUDES:"){
+            // document.getElementById("includes").innerText = item.innerText;
+            item.remove();
+          }
+        });
+
+      $(document).ready(function () {
+        $(".button_pay").click(function()
+        {
+          var button = $(this);
+          var b24_product_id = $(button).data("b24invoice");
+
+          $.ajax({
+            url: '/invoices/create_payment_link/',
+            type: 'POST',
+            data: {"b24_invoice_id":b24_product_id},
+            dataType: 'json',
+            success: function(data) {
+              if (data.pay_link){
+                // window.open(data.pay_link, '_blank');
+                window.location.href = data.pay_link;
+              }else
+              {
+                alert("We have some problem. Please try late")
+              }
+            },
+          });
+        });
+      });
+    </script>
     <script src="{% static 'js/invoices.js' %}"></script>
     <script src="{% static 'js/calendar.js' %}"></script>
     <script src="{% static 'js/global.js' %}"></script>
