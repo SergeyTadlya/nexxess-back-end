@@ -110,7 +110,7 @@ def webhook_task_comment(request):
 
             if comment_isset == True:
                 message_text = comment['POST_MESSAGE']
-                if comment['AUTHOR_ID'] != '312':
+                if comment['AUTHOR_ID'] != '393':
                     # get user email
                     userId = comment['AUTHOR_ID']
                     b24User = 'user.get'

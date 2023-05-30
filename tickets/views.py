@@ -267,8 +267,8 @@ def create_bitrix_task(request):
                     'TITLE': task_name,
                     'DESCRIPTION': task_description,
                     'DEADLINE': task_deadline,
-                    'CREATED_BY': 312,
-                    'RESPONSIBLE_ID': 393,
+                    'CREATED_BY': 393,
+                    'RESPONSIBLE_ID': 312,
                     'PRIORITY': 0,
                     'ALLOW_CHANGE_DEADLINE': 1,
                     'UF_CRM_TASK': {
@@ -344,7 +344,7 @@ def send_user_message(request):
         # add comment in task in bitrix
         url = set_webhook()
         bx24 = Bitrix24(url)
-        new_comment = bx24.callMethod('task.commentitem.add', taskId=ticked_id, fields={"AUTHOR_ID": 312, "POST_MESSAGE": user_message})
+        new_comment = bx24.callMethod('task.commentitem.add', taskId=ticked_id, fields={"AUTHOR_ID": 393, "POST_MESSAGE": user_message})
 
 
         now = datetime.now()
