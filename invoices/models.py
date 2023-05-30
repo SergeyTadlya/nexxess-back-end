@@ -44,6 +44,7 @@ class StripeSettings(models.Model):
     publishable_key = models.CharField(verbose_name="Publishable key", max_length=250, unique=True)
     secret_key = models.CharField(verbose_name="Secret key", max_length=250, unique=True)
     webhook_url = models.CharField(verbose_name='Webhook url', max_length=250, null=True, blank=True)
+    telegram_provider_token = models.CharField(verbose_name='Telegram Provider token', max_length=100, blank=True, null=True)
 
     def __str__(self):
         return f'Stripe - {self.name}'
