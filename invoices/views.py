@@ -43,6 +43,7 @@ def invoices(request):
         statuses = (status.value for status in all_statuses)
         statuses_quantity = (value - value for value in range(len(all_statuses)))
         statuses_number = {key: value for key, value in zip(statuses, statuses_quantity)}
+        bought_services = Invoice.objects.filter(responsible=str(request.user.b24_contact_id), status__value='Paid')
 
         # Iterate through the array and put every specified field into a list
         date_count = 0
@@ -95,6 +96,7 @@ def invoices(request):
             'invoices_statuses': invoices_statuses,
             'statuses_amount': len(invoices_statuses),
             'invoices_number': len(all_user_invoices),
+            'bought_services': bought_services,
         }
 
         return render(request, "invoices/invoices.html", context)
@@ -226,7 +228,9 @@ def invoice_detail(request, id):
                 url = set_webhook()
                 bx24 = Bitrix24(url)
                 product = bx24.callMethod('crm.product.get', id=invoice.service_id)
-                description_parts = product['DESCRIPTION'].split("<br>")
+                # description_parts = product['DESCRIPTION'].split("<br>")
+                parts_array = product['DESCRIPTION'].split("<br>")
+                description_parts = [item.replace("&nbsp;", "").strip() for item in parts_array if item.strip()]
 
                 res = {
                     'invoice': invoice,
@@ -300,6 +304,8 @@ def create_payment_link(request):
     stipe_settings = StripeSettings.objects.all().first()
     stripe.api_key = stipe_settings.secret_key
     b24_invoice_id = request.POST["b24_invoice_id"]
+    print(f'>>>>>>invoice_id>>>>>>>{b24_invoice_id}')
+    print(f'type {type(b24_invoice_id)}')
     invoice = LocalInvoice.objects.get(b24_invoice_id=b24_invoice_id)
     stripe_response = stripe.PaymentLink.create(
         line_items=[

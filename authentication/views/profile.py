@@ -6,6 +6,7 @@ from django.http import JsonResponse
 
 from telegram_bot.models import User
 from tickets.models import Ticket, TicketStatus
+from invoices.models import *
 
 
 @login_required(login_url='/accounts/login/')
@@ -37,7 +38,9 @@ def profile_view(request):
             user.save()
             return redirect('/profile/')
 
-        elif '' not in check_list and len(new_password) > 7 and authenticate(request, username=request.user.email, password=old_password):
+        elif '' not in check_list and len(new_password) > 7 and any([
+            authenticate(request, username=request.user.email, password=old_password),
+            all([old_password == user.password, len(old_password) == 41])],):
             user.username = username if username is not None else request.user.username
             user.first_name = first_name if first_name is not None else request.user.first_name
             user.last_name = last_name if last_name is not None else request.user.last_name
@@ -56,15 +59,33 @@ def profile_view(request):
         user.username = 'Username' if user.username is None else user.username
         user.save()
 
-    status_closed = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Closed').count()
-    status_overdue = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Overdue').count()
-    status_ongoin = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Ongoing').count()
+    all_user_tickets = Ticket.objects.all().order_by('-created_at') if request.user.is_superuser \
+        else Ticket.objects.filter(responsible=request.user.b24_contact_id).order_by('-created_at')
+
+    bought_services = Invoice.objects.filter(responsible=str(request.user.b24_contact_id), status__value='Paid')
+
+    all_tickets_statuses = TicketStatus.objects.all()
+    tickets_statuses = list()
+    status_check = list()
+
+    for ticket in all_user_tickets:
+        for ticket_status in all_tickets_statuses:
+
+            if ticket_status.name == ticket.status.name:
+                ticket_status_quantity = all_user_tickets.filter(status__name=ticket_status.name).count()
+
+                if ticket.status.name not in status_check:
+                    status_check.append(ticket.status.name)
+                    tickets_statuses.append({
+                                    'name': ticket.status.name,
+                                    'color': ticket.status.color,
+                                    'number': ticket_status_quantity
+                                    })
 
     context = {
         'user': user,
-        'status_closed': status_closed,
-        'status_overdue': status_overdue,
-        'status_ongoin': status_ongoin,
+        'statuses': tickets_statuses,
+        'bought_services': bought_services,
     }
 
     return render(request, 'profile.html', context)

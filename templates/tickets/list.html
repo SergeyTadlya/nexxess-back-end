@@ -13,7 +13,9 @@
     <div class="aside-info__box">
       <div class="aside-info__box-top">
         <img class="aside-info__top-img" src="{% static 'images/alert.svg' %}" alt="icon">
-        <h6 class="aside-info__top-title">Important</h6>
+        {% for b_s in bought_services %}
+          <h6 class="aside-info__top-title"> {{ b_s.product_title }}</h6>
+        {% endfor %}
         <p class="aside-info__top-number">3</p>
       </div>
       <ul class="aside-info__box-list">

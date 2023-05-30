@@ -6,6 +6,7 @@ from django.http import JsonResponse
 
 from authentication.helpers.B24Webhook import set_webhook
 from invoices.views import format_date
+from invoices.models import *
 from .models import Ticket, TicketStatus, TicketComments
 from datetime import datetime
 from django.views.decorators.csrf import csrf_exempt
@@ -34,6 +35,7 @@ def tasks(request):
     statuses = (status.name for status in all_statuses)
     statuses_quantity = (value - value for value in range(len(all_statuses)))
     statuses_number = {key: value for key, value in zip(statuses, statuses_quantity)}
+    bought_services = Invoice.objects.filter(responsible=str(request.user.b24_contact_id), status__value='Paid')
 
     # Iterate through the array and put every specified field into a list
     date_count = 0
@@ -81,11 +83,14 @@ def tasks(request):
     except EmptyPage:
         tasks_array = paginator.page(paginator.num_pages)
 
+
+
     context = {
         'tasks': tasks_array,
         'tasks_statuses': tasks_statuses,
         'tasks_number': len(all_user_tasks),
         'statuses_amount': len(tasks_statuses),
+        'bought_services': bought_services,
     }
 
     return render(request, "tickets/tickets.html", context)
@@ -262,7 +267,7 @@ def create_bitrix_task(request):
                     'TITLE': task_name,
                     'DESCRIPTION': task_description,
                     'DEADLINE': task_deadline,
-                    'CREATED_BY': 393,
+                    'CREATED_BY': 312,
                     'RESPONSIBLE_ID': 393,
                     'PRIORITY': 0,
                     'ALLOW_CHANGE_DEADLINE': 1,
@@ -278,7 +283,7 @@ def create_bitrix_task(request):
             print('response task_id', task_id)
 
             if response.status_code == 200:
-                print('>>>>>>>>>>>>>>>>..DCHJKASHABHBLAHBFBBHFSLABBCALHJBHSH JLMCB,AJDHS SHCXJAKSNCXJAKSMBZCX HJANDMS, BCZX HANSK,BMXAA NX,MSDHA')
+                
                 time.sleep(3)
                 return redirect('tickets:tasks')
 
@@ -339,7 +344,8 @@ def send_user_message(request):
         # add comment in task in bitrix
         url = set_webhook()
         bx24 = Bitrix24(url)
-        new_comment = bx24.callMethod('task.commentitem.add', taskId=ticked_id, fields={"AUTHOR_ID": 2, "POST_MESSAGE": user_message})
+        new_comment = bx24.callMethod('task.commentitem.add', taskId=ticked_id, fields={"AUTHOR_ID": 312, "POST_MESSAGE": user_message})
+
 
         now = datetime.now()
         formatted_date = now.strftime("%B %d, %Y, %I:%M %p")
