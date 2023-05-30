@@ -10,5 +10,5 @@ class FAQHandler:
     @staticmethod
     def show_faq_menu(bot, data):
         bot.sendMessage(chat_id=get_chat_id(data),
-                        text='Choose the topic for more information',
-                        reply_markup=faqs_topics_keyboard())
+                        text='To view frequently asked questions, you can go to the site:\n'
+                             'https://dev1.nexxess.com/support/')

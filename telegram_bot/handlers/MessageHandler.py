@@ -1,6 +1,7 @@
 from .start.handlers import StartHandler, AuthenticationHandler
-from .invoices.handlers import InvoiceHandler
-from .services.handlers import ServicesHandler
+from .invoices.handlers import InvoiceHandler, Invoice, format_price, format_date
+from .services.handlers import ServicesHandler, Service
+from .services.keyboards import back_to_my_services_keyboard
 from .tickets.handlers import TicketsHandler
 from .FAQ.handlers import FAQHandler
 from .logout.handlers import LogOutHandler
@@ -25,8 +26,25 @@ class MessageHandler:
             return 'Without message'
 
         elif 'successful_payment' in data_message_keys:
+            invoice_id = self.data['message']['successful_payment']['invoice_payload'].split('_')[1]
+            invoice = Invoice.objects.get(invoice_id=invoice_id)
+            service = Service.objects.get(service_id=invoice.service_id)
+
+            service_info_text = service.detail_text if service.detail_text else 'Detail text is empty...'
+            message = '----------------------  Service  ----------------------' + '\n' + \
+                      'Title: ' + service.title + '\n' + \
+                      'Category: ' + service.category.category_name + '\n' + \
+                      'Description: ' + service_info_text + '\n\n' + \
+                      '----------------------  Invoice  ----------------------' + '\n' + \
+                      'Id: ' + invoice.invoice_id + '\n' + \
+                      'Price: ' + format_price(invoice.price) + '\n' + \
+                      'Status: ' + invoice.status.sticker + ' ' + invoice.status.value + '\n' + \
+                      'Date: ' + format_date(invoice.date) + '\n' + \
+                      'Due date: ' + format_date(invoice.due_date)
+
             self.bot.sendMessage(chat_id=get_chat_id(self.data),
-                                 text='The payment was made successfully')
+                                 text=message,
+                                 reply_markup=back_to_my_services_keyboard())
             return 'Without message'
         else:
             'None'
@@ -50,7 +68,7 @@ class MessageHandler:
         user_step = self.get_user_step()
         is_user_authorize = self.get_user()
 
-        if is_user_authorize:  # access to commands and keyboard
+        if is_user_authorize:  # Access to commands and keyboard
             if message == '/start' and not user_step:
                 self.bot.sendMessage(chat_id=get_chat_id(self.data),
                                      text='You are authorized.\n'
