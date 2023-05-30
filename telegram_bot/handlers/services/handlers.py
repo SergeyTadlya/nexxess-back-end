@@ -9,6 +9,7 @@ from .keyboards import *
 from ..utils import *
 
 import datetime
+import time
 
 
 class ServicesHandler:
@@ -216,7 +217,7 @@ class ServicesHandler:
                                                                     'UF_CONTACT_ID': user.b24_contact_id,
                                                                     'STATUS_ID': 'N',
                                                                     'RESPONSIBLE_ID': 1,
-                                                                    'PAY_SYSTEM_ID': 4,
+                                                                    'PAY_SYSTEM_ID': 3,
                                                                     'DATE_PAY_BEFORE': tomorrow.strftime("%m/%d/%Y"),
                                                                     "PRODUCT_ROWS": [
                                                                         {"ID": 0,
@@ -237,6 +238,7 @@ class ServicesHandler:
 
         # Send invoice to user
         stripe = StripeSettings.objects.get(id=1)
+        print(stripe.telegram_provider_token)
         self.bot.sendInvoice(chat_id=get_chat_id(self.data['callback_query']),
                              title=service_title,
                              description=service_info_text,

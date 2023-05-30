@@ -51,7 +51,7 @@ class MyLoginView(LoginView):
 
                 send_mail('Secret key',
                           f'Your private key for "{self.request.user.email}":\n\n{code}',
-                          'cutrys69@gmail.com',
+                          'info@nexxess.com',
                           [self.request.user.email],
                           fail_silently=False)
 

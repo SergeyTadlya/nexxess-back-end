@@ -104,7 +104,11 @@ class InvoiceHandler:
         user = get_user(self.data['callback_query'])
 
         # file_path = set_file_path(invoice)  Set file path by status
-        file_path = generate_new_pdf(user, invoice, 'invoices/PDF_templates/invoice_ordinary.pdf')
+        if status_name == 'Paid':
+            file_path = generate_new_pdf(user, invoice, 'invoices/PDF_templates/invoice_template.pdf')
+        else:
+            file_path = generate_new_pdf(user, invoice, 'invoices/PDF_templates/invoice_ordinary.pdf')
+
         filename = invoice.invoice_id + '_' + invoice.status.value
 
         invoice_detail = 'Invoice ID: ' + invoice.invoice_id + '\n' + \

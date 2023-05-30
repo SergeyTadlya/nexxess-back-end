@@ -245,7 +245,7 @@ def task_detail(request, id):
             'status_closed': status_closed,
             'status_overdue': status_overdue,
             'status_ongoin': status_ongoin,
-            'comments': comments_array,
+            'comments': comments_array[1:],
         }
         return render(request, "tickets/detail.html", res)
     else:
@@ -257,8 +257,17 @@ def create_bitrix_task(request):
         responsible = str(request.user.b24_contact_id)
         task_name = request.POST.get('task_name')
         task_description = request.POST.get('task_description')
-        task_deadline = request.POST.get('task_deadline') if not 'NoneType' else datetime.today().strftime("%b.%d.%Y")
+        print(f'>>>>>{request.POST.get("task_deadline")}')
 
+        request_deadline = request.POST.get('task_deadline')
+
+        if not request_deadline == '':
+            task_deadline = datetime.strptime(request_deadline, "%B.%d.%Y").strftime("%Y-%m-%d")
+        else:
+            task_deadline = datetime.today().strftime("%Y-%m-%d")
+
+        print(type(task_deadline))
+        print(f'>>>>>>>>>>>>>>{task_deadline}')
         try:
             method = "tasks.task.add"
             url = set_webhook(method)
@@ -283,7 +292,7 @@ def create_bitrix_task(request):
             print('response task_id', task_id)
 
             if response.status_code == 200:
-                
+
                 time.sleep(3)
                 return redirect('tickets:tasks')
 

@@ -46,14 +46,18 @@ def webhook_task(request):
                 task_crm = set_webhook() + 'tasks.task.get/?taskId=' + entities_id + '&select%5B0%5D=UF_CRM_TASK'
                 task_info = requests.get(task_url).json()['result']['task']
                 task_info_crm = requests.get(task_crm).json()['result']['task']
+                print(f'taskinfo >>>>>>>>>>{task_info}')
+                print(f'taskinfocrm>>>>>>{task_info_crm}')
 
                 ticket_title = task_info["title"]
                 ticket_text = task_info["description"]
                 status = TicketStatus.objects.filter(value=task_info["status"])
                 if status.exists():
                     status = status.first()
+
                 deadline = datetime.strptime(task_info["deadline"][:11] + '23:59:59', '%Y-%m-%dT%H:%M:%S')
-                created_at = task_info["createdDate"]
+                created_at = datetime.strptime(task_info["changedDate"][:19], '%Y-%m-%dT%H:%M:%S')
+                print(f'>>>>>>>>>>>>>>>>>>{created_at}')
 
                 defaults = {
                     'responsible': trim_before(task_info_crm["ufCrmTask"][0]),

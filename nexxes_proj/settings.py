@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',  # for Google auth
-    
+
 ]
 
 AUTH_USER_MODEL = 'telegram_bot.User'
@@ -187,8 +187,8 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 SOCIALACCOUNT_ADAPTER = "authentication.adapters.CustomSocialAccountAdapter"
-EMAIL_HOST_USER = 'cutrys69@gmail.com'
-EMAIL_HOST_PASSWORD = 'knea ggzc msdt jsep'
+EMAIL_HOST_USER = 'info@nexxess.com'
+EMAIL_HOST_PASSWORD = 'xboq xzdm cltw zjuy'
 
 CSRF_FAILURE_VIEW = 'authentication.views.csrf_failure'
 
@@ -251,4 +251,4 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 }
 
-DEFAULT_FROM_EMAIL = 'cutrys69@gmail.com'
+DEFAULT_FROM_EMAIL = 'info@nexxess.com'
