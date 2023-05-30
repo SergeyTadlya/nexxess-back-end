@@ -15,8 +15,8 @@ urlpatterns = [
     path('support/', include('support.urls')),
     path('telegram/', include('telegram_bot.urls')),
     
-    path('search/', include('search.urls'))
-]
+    path('search/', include('search.urls')),
+    ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

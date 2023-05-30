@@ -1,6 +1,6 @@
 from django.conf.urls.static import static
 from django.conf import settings
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 
@@ -12,6 +12,7 @@ urlpatterns = [
     path('detail/<int:id>/', views.task_detail, name="task_detail"),
     path('create-task/', views.create_bitrix_task, name='create_task'),
     path('list', views.task_data, name='list'),
+    path('search/', include('search.urls')),
 
 
 ]
