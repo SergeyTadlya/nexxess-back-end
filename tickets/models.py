@@ -38,6 +38,9 @@ class TicketComments(models.Model):
     is_active = models.BooleanField(default=True)
     created_date = models.DateTimeField(default=timezone.now)
 
+    def __str__(self):
+        return self.text
+
 
 class TelegramTicket(models.Model):
     responsible = models.CharField(max_length=50, verbose_name='Responsible bitrix ID')
@@ -57,6 +60,7 @@ class TicketStatus(models.Model):
     name = models.CharField(verbose_name='name', max_length=24)
     color = models.CharField(verbose_name='color', max_length=24)
     abbreviation = models.CharField(verbose_name='abbreviation', max_length=24)
+    sticker = models.CharField(verbose_name='Sticker', max_length=8, blank=True, null=True)
 
     def __str__(self):
         return self.name + ' - ' + self.color

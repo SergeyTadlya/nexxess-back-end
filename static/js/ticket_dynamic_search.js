@@ -62,23 +62,3 @@ searchInput.addEventListener("keyup", e => {
 
     sendSearchData(e.target.value)
 })
-
-
-// let keyPressCount = 0;
-// let searchTimeout;
-
-// searchInput.addEventListener("keyup", e => {
-//     keyPressCount++;
-
-//     if (keyPressCount % 2 === 0) {
-//         clearTimeout(searchTimeout);
-//         searchTimeout = setTimeout(() => {
-//             console.log(e.target.value);
-//             sendSearchData(e.target.value);
-//         }, 300); // Задержка в миллисекундах перед отправкой запроса
-//     }
-
-//     if (resultsBox.classList.contains('not-visible')) {
-//         resultsBox.classList.remove('not-visible');
-//     }
-// });

@@ -21,4 +21,4 @@ class TelegramTicketAdmin(admin.ModelAdmin):
 
 @admin.register(TicketStatus)
 class TicketStatusAdmin(admin.ModelAdmin):
-    list_display = ['value', 'name', 'color', 'abbreviation']
+    list_display = ['id', 'name', 'value', 'color']

@@ -1,14 +1,9 @@
 from django.http import JsonResponse
-from invoices.models import Invoice
-from services.models import Service
-from tickets.models import Ticket, TicketComments
-from django.db.models import Q
 from search.views import search_for_invoice, search_for_service, search_for_ticket
 
 
 def general_search(request):
     if request.headers.get('x-requested-with'):
-        input_value = request.POST.get('input_value')
         result = None
         data = []
 

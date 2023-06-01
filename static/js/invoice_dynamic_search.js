@@ -1,7 +1,5 @@
 const url = window.location.href
 
-// const searchForm = document.getElementById('search-form')
-
 const searchInput = document.getElementById('search-input')
 
 const resultsBox = document.getElementById('results_box')
@@ -53,7 +51,6 @@ searchInput.addEventListener("keyup", e => {
   
     if (keyPressCount % 2 === 0 ) {
       console.log(e.target.value)
-    //   sendSearchData(e.target.value)  пошук при введенні кожного другого символу
     }
   
     if (resultsBox.classList.contains('not-visible')){
@@ -62,23 +59,3 @@ searchInput.addEventListener("keyup", e => {
 
     sendSearchData(e.target.value)
 })
-
-
-// let keyPressCount = 0;
-// let searchTimeout;
-
-// searchInput.addEventListener("keyup", e => {
-//     keyPressCount++;
-
-//     if (keyPressCount % 2 === 0) {
-//         clearTimeout(searchTimeout);
-//         searchTimeout = setTimeout(() => {
-//             console.log(e.target.value);
-//             sendSearchData(e.target.value);
-//         }, 300); // Задержка в миллисекундах перед отправкой запроса
-//     }
-
-//     if (resultsBox.classList.contains('not-visible')) {
-//         resultsBox.classList.remove('not-visible');
-//     }
-// });
