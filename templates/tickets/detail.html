@@ -208,6 +208,12 @@
     opacity: 1;
     pointer-events: all;
 }
+.added_file {
+  font-family: Inter,sans-serif;
+  font-size: 15px;
+  padding-right: 7px;
+  padding-bottom: 6px;
+}
 </style>
 {% endblock extra_css %}
 {% block left_menu %}
@@ -292,13 +298,19 @@
           {% if comment.sender == "client" %}
             <div class="message you">
               <p class="title">You</p>
-              <p style="margin-top: 5px">{{comment.message}}</p>
+              <p style="margin-top: 5px">{{comment.message|linebreaksbr}}</p>
+              {% if comment.file_name %}
+                <img alt="img" style="height: 400px" src="{{ request.scheme }}://{{ request.get_host }}{{comment.file}}" alt="{{comment.file_name}}">
+              {% endif %}
               <div class="time">{{comment.data}}</div>
             </div>
           {% else %}
             <div class="message your-manager">
               <p class="title">Your personal manager👩‍💻</p>
-              <p style="margin-top: 5px">{{comment.message}}</p>
+              <p style="margin-top: 5px">{{comment.message|linebreaksbr}}</p>
+              {% if comment.file_name %}
+                <img alt="img" style="height: 400px" src="{{ request.scheme }}://{{ request.get_host }}{{comment.file}}" alt="{{comment.file_name}}">
+              {% endif %}
               <div class="time">{{comment.data}}</div>
             </div>
           {% endif %}
@@ -310,8 +322,15 @@
   </div>
   <div class="chat-box__field">
       <form class="field" method="POST" id="new-user-message-form">
-          <textarea placeholder="write message" class="field__area" name="new-user-message" id="new-user-message" autocomplete="off"></textarea>
           <span id="ticked_id" hidden>{{task.task_id}}</span>
+          <textarea placeholder="write message" class="field__area" name="new-user-message" id="new-user-message" autocomplete="off"></textarea>
+          <div id="added_file" class="added_file"></div>
+          <div class="file-upload">
+            <label>
+              <input type="file" name="userfile[]" multiple id="userfile" hidden>
+              <img src="{% static 'images/add_file.svg' %}" style="height: 25px">
+            </label>
+          </div>
           <div type="submit" class="field__button">
               <img src="{% static 'images/send.svg' %}" alt="send" id="send-user-message">
           </div>
@@ -420,13 +439,27 @@
   });
 
   function sendMessage() {
+      // if field "new-user-message" is not empty
+      var userMessage = $("#new-user-message").val();
+      if (userMessage.trim() === '') {
+        alert("Please enter a message");
+        // $("#message-error").show();
+        return;
+      }
+
+      var fileInput = document.getElementById('userfile');
+      var fileArray = fileInput.files[0];
+      var formdata = new FormData();
+      formdata.append("file", fileArray);
+      formdata.append("user_message", $("#new-user-message").val());
+      formdata.append("ticked_id", document.getElementById("ticked_id").innerText);
+      formdata.append("site_domain", "https://" + location.hostname);
       $.ajax({
           url: '/tickets/send_user_message/',
           type: 'POST',
-          data: {
-              'user_message': $("#new-user-message").val(),
-              'ticked_id': document.getElementById("ticked_id").innerText,
-          },
+          data: formdata,
+          contentType: false,
+          processData: false,
 
           success: function (data) {
               // clear message in textarea
@@ -455,19 +488,53 @@
               // news message block with title, message, time
               var newMessageDiv = document.createElement("div");
               newMessageDiv.className = "message you";
-              newMessageDiv.append(Title, newMessage, TimeMessage);
+
+              // news message block with file if it added
+              if(data.added_file == true){
+                document.getElementById('added_file').innerText = "";
+                var newMessageImg = document.createElement("img");
+                newMessageImg.style = "height: 400px";
+                newMessageImg.alt = data.file_name;
+                newMessageImg.src = data.file_url;
+                newMessageDiv.append(Title, newMessage, newMessageImg, TimeMessage);
+              }else{
+                newMessageDiv.append(Title, newMessage, TimeMessage);
+              }
 
               // set block with new message in chat bock
               var conversationBlock = document.getElementById("ticket_chat");
               conversationBlock.appendChild(newMessageDiv);
-
-              console.log('ajax_res', newMessageDiv);
           },
           error: function(error) {
               console.log('ajax send message', error);
           }
       });
   }
+
+  // $("#add-file").click(function(event) {
+  //     var fileInput = document.createElement('input');
+  //     fileInput.type = 'file';
+  //     fileInput.style.display = 'none';
+  //     fileInput.addEventListener('change', function() {
+  //         var selectedFile = fileInput.files[0];
+  //         // console.log('Ви обрали файл:', selectedFile);
+  //         var added_file = document.getElementById("added_file");
+  //         added_file.innerText = selectedFile['name'];
+  //         added_file.dataset.file_name = selectedFile['name'];
+  //         added_file.dataset.size = selectedFile['size'];
+  //         added_file.dataset.type = selectedFile['type'];
+  //         added_file.dataset.last_modified = selectedFile['lastModified'];
+  //     });
+  //     document.body.appendChild(fileInput);
+  //     fileInput.click();
+  //     document.body.removeChild(fileInput);
+  // });
+
+  // file in input block
+  $(".file-upload input[type=file]").change(function(){
+       var filename = $(this).val().replace(/.*\\/, "");
+       $("#added_file")[0].innerText = filename;
+  });
 </script>
 <script src="{% static 'js/tickets.js' %}"> </script>
 <script src="{% static 'js/global.js' %}"></script>

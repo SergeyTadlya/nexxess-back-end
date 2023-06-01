@@ -6,15 +6,15 @@ from django.http import JsonResponse
 
 from authentication.helpers.B24Webhook import set_webhook
 from invoices.views import format_date
+from nexxes_proj import settings
 from .models import Ticket, TicketStatus, TicketComments
 from datetime import datetime
 from django.views.decorators.csrf import csrf_exempt
 import requests
 import json
 import time
-
+import os
 from bitrix24 import Bitrix24
-import xml.etree.ElementTree as ET
 
 
 def check_and_shorten_string(string):
@@ -233,6 +233,8 @@ def task_detail(request, id):
                 'message': created_comment.text,
                 'sender': created_comment.manager_name,
                 'data': formatted_date,
+                'file': f'/media/{created_comment.added_documents}',
+                'file_name': os.path.basename(created_comment.added_documents.name),
             })
 
         res = {
@@ -252,27 +254,33 @@ def create_bitrix_task(request):
         responsible = str(request.user.b24_contact_id)
         task_name = request.POST.get('task_name')
         task_description = request.POST.get('task_description')
-        task_deadline = request.POST.get('task_deadline') if not 'NoneType' else datetime.today().strftime("%b.%d.%Y")
-
+        # task_deadline = request.POST.get('task_deadline') if not 'NoneType' else datetime.today().strftime("%b.%d.%Y")
+        request_deadline = request.POST.get('task_deadline')
+        if not request_deadline == '':
+            task_deadline = datetime.strptime(request_deadline, "%B.%d.%Y").strftime("%Y-%m-%d")
+        else:
+            task_deadline = datetime.today().strftime("%Y-%m-%d")
         try:
             method = "tasks.task.add"
             url = set_webhook(method)
+            print('url', url)
             payload = {
                 'fields': {
                     'TITLE': task_name,
                     'DESCRIPTION': task_description,
                     'DEADLINE': task_deadline,
-                    'CREATED_BY': 2,
-                    'RESPONSIBLE_ID': 1,
-                    'PRIORITY': 2,
+                    'CREATED_BY': 393, #2
+                    'RESPONSIBLE_ID': 312, #1
+                    'PRIORITY': 0,
                     'ALLOW_CHANGE_DEADLINE': 1,
                     'UF_CRM_TASK': {
                         "0": 'C_' + responsible,  # bitrix24_id
                         }
                     }
                 }
+
             response = requests.post(url, json=payload)
-            print('test123 create task')
+            print('response', response)
             response_data = json.loads(response.content)
             task_id = response_data['result']['task']['id']
             print('response task_id', task_id)
@@ -327,22 +335,47 @@ def task_data(request):
     # print('response', response)
     return render(request, 'tickets/list.html', context)
 
+
 @csrf_exempt
 def send_user_message(request):
     if request.method == "POST":
+        url = set_webhook()
+        bx24 = Bitrix24(url)
         user_message = request.POST.get('user_message')
         ticked_id = request.POST.get('ticked_id')
 
-        # add comment in task in bitrix
-        url = set_webhook()
-        bx24 = Bitrix24(url)
-        new_comment = bx24.callMethod('task.commentitem.add', taskId=ticked_id, fields={"AUTHOR_ID": 2, "POST_MESSAGE": user_message})
+        if request.FILES.get('file'):
+            file = request.FILES.get('file')
+            file_name = file.name
+            # save file localy in media folder
+            file_path = os.path.join(settings.MEDIA_ROOT, 'comment_files', file_name)
+            with open(file_path, 'wb') as destination:
+                for chunk in file.chunks():
+                    destination.write(chunk)
 
+            # comment with file
+            domain = request.POST.get('site_domain')
+            file_url = f'{domain}/media/comment_files/{file_name}'
+            post_message = f'{user_message}\n' \
+                           f'file:{file_url}:file'
+            added_file = True
+        else:
+            # comment without file
+            post_message = user_message
+            added_file = False
+            file_name = None
+            file_url = None
+
+
+        new_comment = bx24.callMethod('task.commentitem.add', taskId=ticked_id, fields={'AUTHOR_ID': 2, 'POST_MESSAGE': post_message})
         now = datetime.now()
         formatted_date = now.strftime("%B %d, %Y, %I:%M %p")
         res = {
             'user_message': user_message,
             'ticked_id': ticked_id,
             'comment_created_data': formatted_date,
+            'added_file': added_file,
+            'file_name': file_name,
+            'file_url': file_url,
         }
         return JsonResponse(res)

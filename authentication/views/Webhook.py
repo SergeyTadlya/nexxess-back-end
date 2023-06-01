@@ -12,6 +12,7 @@ from bitrix24 import *
 
 import requests
 from services.models import ServiceCategory, Service
+from django.core.files.base import ContentFile
 
 
 def trim_before(text):
@@ -72,12 +73,23 @@ def webhook_task(request):
                 'created_at': created_at,
             }
 
-            Ticket.objects.update_or_create(task_id=entities_id, defaults=defaults)
+            ticket, created = Ticket.objects.update_or_create(task_id=entities_id, defaults=defaults)
+            if event == "ONTASKADD":
+                TicketComments.objects.create(
+                    ticket=ticket,
+                    comment_id=0,
+                    text="Wait for manager answer",
+                    manager_name=trim_before(task_info_crm["ufCrmTask"][0]),
+                    is_opened=True,
+                    added_documents=None,
+                    is_active=True,
+                    created_date=datetime.now(),
+                )
     return HttpResponse('ok')
 
     # except Exception as e:
     #     print(e)
-    return HttpResponse('ok')
+    # return HttpResponse('ok')
 
 
 @csrf_exempt
@@ -109,7 +121,7 @@ def webhook_task_comment(request):
 
             if comment_isset == True:
                 message_text = comment['POST_MESSAGE']
-                if comment['AUTHOR_ID'] != '2':
+                if comment['AUTHOR_ID'] != '393': #2
                     # get user email
                     userId = comment['AUTHOR_ID']
                     b24User = 'user.get'
@@ -157,6 +169,22 @@ def webhook_task_comment(request):
                     ticket=ticket,
                     comment_id=comment_id,
                 ).delete()
+
+            # if file is isset in comment
+            if 'ATTACHED_OBJECTS' in comment:
+                for file_data in comment['ATTACHED_OBJECTS']:
+                    file_item = file_data
+
+                file_view_url = domain[:-1] + comment['ATTACHED_OBJECTS'][file_item]['VIEW_URL']
+                file_name = comment['ATTACHED_OBJECTS'][file_item]['NAME']
+
+                response = requests.get(file_view_url)
+                image_content = response.content
+                image_file = ContentFile(image_content)
+
+                new_comment = TicketComments.objects.get(ticket=ticket, comment_id=comment_id)
+                new_comment.added_documents.save(file_name, image_file)
+                new_comment.save()
         return HttpResponse('ok')
     except Exception as e:
         print(e)
