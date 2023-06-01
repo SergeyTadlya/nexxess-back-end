@@ -64,9 +64,9 @@ class TicketsHandler:
                 'TITLE': telegram_ticket.title,
                 'DESCRIPTION': telegram_ticket.description,
                 'DEADLINE': deadline,
-                'CREATED_BY': 2,
-                'RESPONSIBLE_ID': 1,
-                'PRIORITY': 2,
+                'CREATED_BY': 393,
+                'RESPONSIBLE_ID': 312,
+                'PRIORITY': 0,
                 'ALLOW_CHANGE_DEADLINE': 1,
                 'UF_CRM_TASK': {
                     "0": 'C_' + str(user.b24_contact_id),  # bitrix24_id

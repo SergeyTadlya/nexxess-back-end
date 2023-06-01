@@ -65,3 +65,10 @@ class MyStyleCalendar(DetailedTelegramCalendar):
 
     size_year = 1
     size_year_column = 2
+
+
+def format_price_for_service(price):
+    price = str(price)
+    price = price.rstrip('0').rstrip('.') if '.' in price else price
+
+    return int(price) * 100

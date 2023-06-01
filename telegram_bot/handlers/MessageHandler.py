@@ -1,6 +1,7 @@
 from .start.handlers import StartHandler, AuthenticationHandler
-from .invoices.handlers import InvoiceHandler
-from .services.handlers import ServicesHandler
+from .invoices.handlers import InvoiceHandler, Invoice, format_price, format_date
+from .services.handlers import ServicesHandler, Service
+from .services.keyboards import back_to_my_services_keyboard
 from .tickets.handlers import TicketsHandler
 from .FAQ.handlers import FAQHandler
 from .logout.handlers import LogOutHandler
@@ -16,7 +17,37 @@ class MessageHandler:
         self.data = data
 
     def get_message_text(self):
-        return self.data['message']['text'] if 'text' in self.data['message'].keys() else 'None'
+        data_message_keys = self.data['message'].keys()
+
+        if 'text' in data_message_keys:
+            return self.data['message']['text']
+
+        elif 'pre_checkout_query' in self.data.keys():
+            return 'Without message'
+
+        elif 'successful_payment' in data_message_keys:
+            invoice_id = self.data['message']['successful_payment']['invoice_payload'].split('_')[1]
+            invoice = Invoice.objects.get(invoice_id=invoice_id)
+            service = Service.objects.get(service_id=invoice.service_id)
+
+            service_info_text = service.detail_text if service.detail_text else 'Detail text is empty...'
+            message = '----------------------  Service  ----------------------' + '\n' + \
+                      'Title: ' + service.title + '\n' + \
+                      'Category: ' + service.category.category_name + '\n' + \
+                      'Description: ' + service_info_text + '\n\n' + \
+                      '----------------------  Invoice  ----------------------' + '\n' + \
+                      'Id: ' + invoice.invoice_id + '\n' + \
+                      'Price: ' + format_price(invoice.price) + '\n' + \
+                      'Status: ' + invoice.status.sticker + ' ' + invoice.status.value + '\n' + \
+                      'Date: ' + format_date(invoice.date) + '\n' + \
+                      'Due date: ' + format_date(invoice.due_date)
+
+            self.bot.sendMessage(chat_id=get_chat_id(self.data),
+                                 text=message,
+                                 reply_markup=back_to_my_services_keyboard())
+            return 'Without message'
+        else:
+            'None'
 
     def get_user_step(self):
         user = User.objects.filter(telegram_id=self.data['message']['from']['id'])
@@ -37,7 +68,7 @@ class MessageHandler:
         user_step = self.get_user_step()
         is_user_authorize = self.get_user()
 
-        if is_user_authorize:  # access to commands and keyboard
+        if is_user_authorize:  # Access to commands and keyboard
             if message == '/start' and not user_step:
                 self.bot.sendMessage(chat_id=get_chat_id(self.data),
                                      text='You are authorized.\n'
@@ -61,6 +92,9 @@ class MessageHandler:
 
             elif message in ['/logout', '🚪 Log Out'] and not user_step:
                 LogOutHandler.show_confirm_keyboard(self.bot, self.data)
+
+            elif message == 'Without message':
+                pass
 
             else:
                 if user_step:  # user_step is not None and not user_step == ''

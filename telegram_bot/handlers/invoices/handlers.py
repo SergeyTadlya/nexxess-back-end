@@ -91,7 +91,7 @@ class InvoiceHandler:
 
         try:
             self.bot.edit_message_text(
-                'All tickets: ',
+                'All invoices: ',
                 chat_id=get_chat_id(self.data['callback_query']),
                 message_id=self.data['callback_query']['message']['message_id'],
                 reply_markup=all_invoices_keyboard(invoices, current_page, all_pages, has_pages)
@@ -104,7 +104,11 @@ class InvoiceHandler:
         user = get_user(self.data['callback_query'])
 
         # file_path = set_file_path(invoice)  Set file path by status
-        file_path = generate_new_pdf(user, invoice, 'invoices/PDF_templates/invoice_ordinary.pdf')
+        if status_name == 'Paid':
+            file_path = generate_new_pdf(user, invoice, 'invoices/PDF_templates/invoice_template.pdf')
+        else:
+            file_path = generate_new_pdf(user, invoice, 'invoices/PDF_templates/invoice_ordinary.pdf')
+
         filename = invoice.invoice_id + '_' + invoice.status.value
 
         invoice_detail = 'Invoice ID: ' + invoice.invoice_id + '\n' + \
@@ -115,8 +119,8 @@ class InvoiceHandler:
 
         self.bot.send_document(chat_id=get_chat_id(self.data['callback_query']),
                                document=open(file_path, 'rb'),
-                               filename=filename)
+                               filename=filename + '.pdf')
 
         self.bot.sendMessage(chat_id=get_chat_id(self.data['callback_query']),
                              text=invoice_detail,
-                             reply_markup=invoice_details_keyboard(status_name, current_page))
+                             reply_markup=invoice_details_keyboard(status_name, current_page, invoice))

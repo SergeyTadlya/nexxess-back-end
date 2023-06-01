@@ -21,9 +21,7 @@ def main(request):
             task_count = Ticket.objects.filter(is_opened=False).count()
             current_user = "admin"
 
-            status_closed = Ticket.objects.filter(status__name='Closed').count()
-            status_overdue = Ticket.objects.filter(status__name='Overdue').count()
-            status_ongoin = Ticket.objects.filter(tatus__name='Ongoing').count()
+
 
         else:
             invoice_count = Invoice.objects.filter(responsible=request.user.b24_contact_id).exclude(status__value='Paid').exclude(status__value='Opened').count()
@@ -33,13 +31,35 @@ def main(request):
             b_services = Invoice.objects.filter(responsible=request.user.b24_contact_id).exclude(status__value='Opened').count()
 
             b_services = Invoice.objects.filter(responsible=request.user.b24_contact_id).exclude(status__value='Opened').exclude(status__value='New').count()
-            status_closed = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Closed').count()
-            status_overdue = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Overdue').count()
-            status_ongoin = Ticket.objects.filter(responsible=str(request.user.b24_contact_id),  status__name='Ongoing').count()
 
         method = "crm.product.list"
         url = set_webhook(method)
         product_count = requests.get(url).json()['total']
+
+
+
+        all_user_tickets = Ticket.objects.all().order_by('-created_at') if request.user.is_superuser \
+            else Ticket.objects.filter(responsible=request.user.b24_contact_id).order_by('-created_at')
+
+        bought_services = Invoice.objects.filter(responsible=str(request.user.b24_contact_id), status__value='Paid')
+
+        all_tickets_statuses = TicketStatus.objects.all()
+        tickets_statuses = list()
+        status_check = list()
+
+        for ticket in all_user_tickets:
+            for ticket_status in all_tickets_statuses:
+
+                if ticket_status.name == ticket.status.name:
+                    ticket_status_quantity = all_user_tickets.filter(status__name=ticket_status.name).count()
+
+                    if ticket.status.name not in status_check:
+                        status_check.append(ticket.status.name)
+                        tickets_statuses.append({
+                                        'name': ticket.status.name,
+                                        'color': ticket.status.color,
+                                        'number': ticket_status_quantity
+                                        })
 
         res = {
             'invoice_count': invoice_count,
@@ -48,9 +68,8 @@ def main(request):
             'current_user': current_user,
             'ticket_statuses': ticket_statuses,
             'b_services': b_services,
-            'status_closed': status_closed,
-            'status_overdue': status_overdue,
-            'status_ongoin': status_ongoin,
+            'statuses': tickets_statuses,
+
         }
 
     except:

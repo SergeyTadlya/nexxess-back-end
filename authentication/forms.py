@@ -68,16 +68,19 @@ class CustomSignupForm(SignupForm):
                                                       'placeholder': ''})
 
     def save(self, request):
-        user = super().save(request)
-        custom_data = self.cleaned_data.get('name').strip().split()
-        if '@' in custom_data:
-            custom_data.remove('@')
+        try:
+            user = super().save(request)
+            custom_data = self.cleaned_data.get('name').strip().split()
+            if '@' in custom_data:
+                custom_data.remove('@')
 
-        user.first_name = custom_data[0] if len(custom_data) > 0 else ''
-        user.last_name = custom_data[1] if len(custom_data) > 1 else ''
-        user.save()
+            user.first_name = custom_data[0] if len(custom_data) > 0 else ''
 
-        return user
+            user.last_name = custom_data[1] if len(custom_data) > 1 else ''
+            user.save()
+            return user
+        except AttributeError as er:
+            print(er)
 
 
 class CustomResetPasswordForm(ResetPasswordForm):

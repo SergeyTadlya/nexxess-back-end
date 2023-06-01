@@ -12,7 +12,9 @@
     <div class="aside-info__box">
       <div class="aside-info__box-top">
         <img class="aside-info__top-img" src="{% static 'images/alert.svg' %}" alt="icon">
-        <h6 class="aside-info__top-title">Important</h6>
+        {% for b_s in bought_services %}
+          <h6 class="aside-info__top-title"> {{ b_s.product_title }}</h6>
+        {% endfor %}
         <p class="aside-info__top-number">3</p>
       </div>
       <ul class="aside-info__box-list">
@@ -158,7 +160,7 @@
 
       <div id="content__showing-box" class="content__showing-box">
         <p class="content__showing-text">Showing</p>
-        <p id="content__showing-number" class="content__showing-number">10</p>
+        <p id="content__showing-number" class="content__showing-number">{{ tasks_number }}</p>
         <img class="content__showing-img" src="{% static 'images/invoices/arrow-drop-down.svg' %}" alt="icon">
         <p class="content__showing-numbers">of {{ tasks_number }}</p>
         <ul id="content__showing-list" class="content__showing-list">

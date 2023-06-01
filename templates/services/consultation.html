@@ -39,37 +39,19 @@
           </div>
 
           <ul class="aside-info__accordion-list">
-            {% if status_closed %}
-            <li class="aside-info__accordion-item">
-              <a class="aside-info__accordion-link" href="#">
-                <p class="aside-info__accordion-text">Closed</p>
-                <p class="aside-info__accordion-number font--red">{{ status_closed }}</p>
-              </a>
-            </li>
-            {% endif %}
+            <ul class="aside-info__accordion-list">
+              {% for status in statuses %}
+                  <li class="aside-info__accordion-item">
+                    <a class="aside-info__accordion-link" href="#">
+                      <p class="aside-info__accordion-text">{{ status.name }}</p>
+                      <p class="aside-info__accordion-number font--{{ status.color }}">{{ status.number }}</p>
+                    </a>
+                  </li>
+              {% endfor %}
+            </ul>
 
-            {% if status_overdue %}
-            <li class="aside-info__accordion-item">
-              <a class="aside-info__accordion-link" href="#">
-                <p class="aside-info__accordion-text">Overdue</p>
-                <p class="aside-info__accordion-number font--red">{{ status_overdue }}</p>
-              </a>
-            </li>
-            {% endif %}
-
-            {% if status_ongoin %}
-            <li class="aside-info__accordion-item">
-              <a class="aside-info__accordion-link" href="#">
-                <p class="aside-info__accordion-text">Ongoing</p>
-                <p class="aside-info__accordion-number font--green">{{ status_ongoin }}</p>
-              </a>
-            </li>
-            {% endif %}
-          </ul>
-        </div>
-
-        <!-- <button class="aside-filter__accordion-btn" id="search-btn">Search</button> -->
-    </div>
+            </div>
+            </div>
 {% endblock left_menu %}
 
 {% block content %}

@@ -25,71 +25,75 @@ def format_date(date):
 
 @csrf_exempt
 def webhook_task(request):
-    # try:
-    if request.method == 'POST':
-        event = request.POST.get('event', "")
+    try:
+        if request.method == 'POST':
+            event = request.POST.get('event', "")
 
-        if event == "ONTASKADD":
-            entities_id = request.POST.get('data[FIELDS_AFTER][ID]', "")
-        elif event == "ONTASKUPDATE":
-            entities_id = request.POST.get('data[FIELDS_BEFORE][ID]', "")
-
-        b24_time = request.POST.get('ts', "")
-        b24_domain = request.POST.get('auth[domain]', "")
-        b24_member_id = request.POST.get('auth[member_id]', "")
-        b24_application_token = request.POST.get('auth[application_token]', "")
-
-        print(all([entities_id, b24_time, b24_domain, b24_member_id, b24_application_token]))
-
-        if all([entities_id, b24_time, b24_domain, b24_member_id, b24_application_token]):
-
-            task_url = set_webhook() + 'tasks.task.get/?id=' + entities_id
-            task_crm = set_webhook() + 'tasks.task.get/?taskId=' + entities_id + '&select%5B0%5D=UF_CRM_TASK'
-            task_info = requests.get(task_url).json()['result']['task']
-            task_info_crm = requests.get(task_crm).json()['result']['task']
-
-            ticket_title = task_info["title"]
-            ticket_text = task_info["description"]
-            status = TicketStatus.objects.filter(value=task_info["status"])
-            if status.exists():
-                status = status.first()
-            deadline = datetime.strptime(task_info["deadline"][:11] + '23:59:59', '%Y-%m-%dT%H:%M:%S')
-            created_at = task_info["createdDate"]
-
-            defaults = {
-                'responsible': trim_before(task_info_crm["ufCrmTask"][0]),
-                'ticket_title': ticket_title,
-                'ticket_text': ticket_text,
-                'status': status,
-                'is_opened': False,
-                'is_active': True,
-                'deadline': deadline,
-                'b24_domain': b24_domain,
-                'b24_member_id': b24_member_id,
-                'b24_application_token': b24_application_token,
-                'b24_time': b24_time,
-                'task_info': task_info,
-                'task_info_crm': task_info_crm,
-                'created_at': created_at,
-            }
-
-            ticket, created = Ticket.objects.update_or_create(task_id=entities_id, defaults=defaults)
             if event == "ONTASKADD":
-                TicketComments.objects.create(
-                    ticket=ticket,
-                    comment_id=0,
-                    text="Wait for manager answer",
-                    manager_name=trim_before(task_info_crm["ufCrmTask"][0]),
-                    is_opened=True,
-                    added_documents=None,
-                    is_active=True,
-                    created_date=datetime.now(),
-                )
-    return HttpResponse('ok')
+                entities_id = request.POST.get('data[FIELDS_AFTER][ID]', "")
+            elif event == "ONTASKUPDATE":
+                entities_id = request.POST.get('data[FIELDS_BEFORE][ID]', "")
 
-    # except Exception as e:
-    #     print(e)
-    # return HttpResponse('ok')
+            b24_time = request.POST.get('ts', "")
+            b24_domain = request.POST.get('auth[domain]', "")
+            b24_member_id = request.POST.get('auth[member_id]', "")
+            b24_application_token = request.POST.get('auth[application_token]', "")
+
+            print(all([entities_id, b24_time, b24_domain, b24_member_id, b24_application_token]))
+
+            if all([entities_id, b24_time, b24_domain, b24_member_id, b24_application_token]):
+
+                task_url = set_webhook() + 'tasks.task.get/?id=' + entities_id
+                task_crm = set_webhook() + 'tasks.task.get/?taskId=' + entities_id + '&select%5B0%5D=UF_CRM_TASK'
+                task_info = requests.get(task_url).json()['result']['task']
+                task_info_crm = requests.get(task_crm).json()['result']['task']
+                print(f'taskinfo >>>>>>>>>>{task_info}')
+                print(f'taskinfocrm>>>>>>{task_info_crm}')
+
+                ticket_title = task_info["title"]
+                ticket_text = task_info["description"]
+                status = TicketStatus.objects.filter(value=task_info["status"])
+                if status.exists():
+                    status = status.first()
+
+                deadline = datetime.strptime(task_info["deadline"][:11] + '23:59:59', '%Y-%m-%dT%H:%M:%S')
+                created_at = datetime.strptime(task_info["changedDate"][:19], '%Y-%m-%dT%H:%M:%S')
+                print(f'>>>>>>>>>>>>>>>>>>{created_at}')
+
+                defaults = {
+                    'responsible': trim_before(task_info_crm["ufCrmTask"][0]),
+                    'ticket_title': ticket_title,
+                    'ticket_text': ticket_text,
+                    'status': status,
+                    'is_opened': False,
+                    'is_active': True,
+                    'deadline': deadline,
+                    'b24_domain': b24_domain,
+                    'b24_member_id': b24_member_id,
+                    'b24_application_token': b24_application_token,
+                    'b24_time': b24_time,
+                    'task_info': task_info,
+                    'task_info_crm': task_info_crm,
+                    'created_at': created_at,
+                }
+                Ticket.objects.update_or_create(task_id=entities_id, defaults=defaults)
+                # ticket, created = Ticket.objects.update_or_create(task_id=entities_id, defaults=defaults)
+                # if event == "ONTASKADD":
+                #     TicketComments.objects.create(
+                #         ticket=ticket,
+                #         comment_id=0,
+                #         text="Wait for manager answer",
+                #         manager_name=trim_before(task_info_crm["ufCrmTask"][0]),
+                #         is_opened=True,
+                #         added_documents=None,
+                #         is_active=True,
+                #         created_date=datetime.now(),
+                #     )
+        return HttpResponse('ok')
+
+    except Exception as e:
+        print(e)
+    return HttpResponse('ok')
 
 
 @csrf_exempt
@@ -99,8 +103,9 @@ def webhook_task_comment(request):
             b24keys = B24keys.objects.first()
             event = request.POST.get('event', "")
             entities_id = request.POST.get('data[FIELDS_AFTER][TASK_ID]', "")
+            print(f'entititi {entities_id}')
             comment_id = request.POST.get('data[FIELDS_AFTER][ID]', "")
-
+            print('comment_id', comment_id)
             domain = b24keys.domain
             rest_key = b24keys.rest_key
             b24_comment = 'task.commentitem.get'
@@ -113,7 +118,6 @@ def webhook_task_comment(request):
                     taskId=int(entities_id),
                     itemId=int(comment_id),
                 )
-                print('comment 104', comment)
                 comment_isset = True
             # comment is deleted in ticket
             except:
@@ -121,7 +125,7 @@ def webhook_task_comment(request):
 
             if comment_isset == True:
                 message_text = comment['POST_MESSAGE']
-                if comment['AUTHOR_ID'] != '393': #2
+                if comment['AUTHOR_ID'] != '2': # 393
                     # get user email
                     userId = comment['AUTHOR_ID']
                     b24User = 'user.get'

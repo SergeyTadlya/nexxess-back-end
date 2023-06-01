@@ -1,19 +1,18 @@
 from django.conf.urls.static import static
 from django.conf import settings
-from django.urls import path, include
-from . import views
-from .views import TestView
+from django.urls import path
 
+from . import views
 
 app_name = 'authentication'
 
 urlpatterns = [
     path('', views.main, name='main'),
-    path('test/', TestView.as_view(), name='test'),
     path('profile/', views.profile_view, name='profile'),
     path('accounts/login/', views.MyLoginView.as_view(), name='account_login'),
     path('login/verification/', views.verification, name='verification'),
     path('accounts/logout/', views.MyLogoutView.as_view(), name='account_logout'),
+    path('accounts/googlelogin/', views.google_login, name='google_login'),
     path('webhook/task/', views.webhook_task, name='webhook_task'),
     path('webhook/invoice/', views.webhook_invoice, name='webhook_invoice'),
     path('webhook/service_section/', views.webhook_service_section),

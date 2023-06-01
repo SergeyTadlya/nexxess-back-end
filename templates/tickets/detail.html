@@ -293,6 +293,11 @@
 
   <div class="chat">
     <div class="conversation" id="ticket_chat">
+      <div class="message your-manager">
+        <p class="title">Your personal manager👩‍💻</p>
+        <p style="margin-top: 5px">We have accepted your ticket and will respond to you soon</p>
+        <div class="time"></div>
+      </div>
       {% if comments %}
         {% for comment in comments %}
           {% if comment.sender == "client" %}
@@ -316,7 +321,7 @@
           {% endif %}
         {% endfor %}
       {% else %}
-        <div class="empty_chat" id="empty_chat">Chat is empty. Please send message in ticked.</div>
+        <div class="empty_chat" id="empty_chat"></div>
       {% endif %}
     </div>
   </div>

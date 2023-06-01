@@ -6,15 +6,19 @@ from django.http import JsonResponse
 
 from authentication.helpers.B24Webhook import set_webhook
 from invoices.views import format_date
-from nexxes_proj import settings
+from invoices.models import *
 from .models import Ticket, TicketStatus, TicketComments
 from datetime import datetime
 from django.views.decorators.csrf import csrf_exempt
 import requests
 import json
 import time
-import os
+
 from bitrix24 import Bitrix24
+import xml.etree.ElementTree as ET
+from nexxes_proj import settings
+import os
+
 
 
 def check_and_shorten_string(string):
@@ -34,6 +38,7 @@ def tasks(request):
     statuses = (status.name for status in all_statuses)
     statuses_quantity = (value - value for value in range(len(all_statuses)))
     statuses_number = {key: value for key, value in zip(statuses, statuses_quantity)}
+    bought_services = Invoice.objects.filter(responsible=str(request.user.b24_contact_id), status__value='Paid')
 
     # Iterate through the array and put every specified field into a list
     date_count = 0
@@ -81,11 +86,14 @@ def tasks(request):
     except EmptyPage:
         tasks_array = paginator.page(paginator.num_pages)
 
+
+
     context = {
         'tasks': tasks_array,
         'tasks_statuses': tasks_statuses,
         'tasks_number': len(all_user_tasks),
         'statuses_amount': len(tasks_statuses),
+        'bought_services': bought_services,
     }
 
     return render(request, "tickets/tickets.html", context)
@@ -225,6 +233,10 @@ def task_detail(request, id):
         for created_comment in all_created_comments:
             # test = datetime.strptime(created_comment.created_date, '%B.%d.%YT%H:%M:%S')
 
+            # unset comment if message have "Author assigned:" text
+            if "Author assigned:" in created_comment.text:
+                continue
+
             comment_time = created_comment.created_date
             formatted_date = comment_time.strftime("%B %d, %Y, %I:%M %p")
 
@@ -256,10 +268,12 @@ def create_bitrix_task(request):
         task_description = request.POST.get('task_description')
         # task_deadline = request.POST.get('task_deadline') if not 'NoneType' else datetime.today().strftime("%b.%d.%Y")
         request_deadline = request.POST.get('task_deadline')
+
         if not request_deadline == '':
             task_deadline = datetime.strptime(request_deadline, "%B.%d.%Y").strftime("%Y-%m-%d")
         else:
             task_deadline = datetime.today().strftime("%Y-%m-%d")
+
         try:
             method = "tasks.task.add"
             url = set_webhook(method)
@@ -269,8 +283,8 @@ def create_bitrix_task(request):
                     'TITLE': task_name,
                     'DESCRIPTION': task_description,
                     'DEADLINE': task_deadline,
-                    'CREATED_BY': 393, #2
-                    'RESPONSIBLE_ID': 312, #1
+                    'CREATED_BY': 2, # 393
+                    'RESPONSIBLE_ID': 1, # 312
                     'PRIORITY': 0,
                     'ALLOW_CHANGE_DEADLINE': 1,
                     'UF_CRM_TASK': {
@@ -333,17 +347,20 @@ def task_data(request):
     # url = set_webhook("tasks.task.update?taskId=556&fields[TAGS]=tag_one,tag_two")
     # response = requests.post(url)
     # print('response', response)
+
     return render(request, 'tickets/list.html', context)
 
 
 @csrf_exempt
 def send_user_message(request):
     if request.method == "POST":
-        url = set_webhook()
-        bx24 = Bitrix24(url)
         user_message = request.POST.get('user_message')
         ticked_id = request.POST.get('ticked_id')
 
+        url = set_webhook()
+        bx24 = Bitrix24(url)
+
+        # if added file in comments
         if request.FILES.get('file'):
             file = request.FILES.get('file')
             file_name = file.name
@@ -352,12 +369,11 @@ def send_user_message(request):
             with open(file_path, 'wb') as destination:
                 for chunk in file.chunks():
                     destination.write(chunk)
-
             # comment with file
             domain = request.POST.get('site_domain')
             file_url = f'{domain}/media/comment_files/{file_name}'
             post_message = f'{user_message}\n' \
-                           f'file:{file_url}:file'
+                           f'file:{file_url}'
             added_file = True
         else:
             # comment without file
@@ -366,8 +382,10 @@ def send_user_message(request):
             file_name = None
             file_url = None
 
+        # add comment in task in bitrix
+        new_comment = bx24.callMethod('task.commentitem.add', taskId=ticked_id,
+                                      fields={"AUTHOR_ID": 2, "POST_MESSAGE": post_message}) # AUTHOR_ID  393
 
-        new_comment = bx24.callMethod('task.commentitem.add', taskId=ticked_id, fields={'AUTHOR_ID': 2, 'POST_MESSAGE': post_message})
         now = datetime.now()
         formatted_date = now.strftime("%B %d, %Y, %I:%M %p")
         res = {
