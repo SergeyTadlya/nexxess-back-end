@@ -283,8 +283,8 @@ def create_bitrix_task(request):
                     'TITLE': task_name,
                     'DESCRIPTION': task_description,
                     'DEADLINE': task_deadline,
-                    'CREATED_BY': 2, # 393
-                    'RESPONSIBLE_ID': 1, # 312
+                    'CREATED_BY': 393, # 393
+                    'RESPONSIBLE_ID': 312, # 312
                     'PRIORITY': 0,
                     'ALLOW_CHANGE_DEADLINE': 1,
                     'UF_CRM_TASK': {
@@ -384,7 +384,7 @@ def send_user_message(request):
 
         # add comment in task in bitrix
         new_comment = bx24.callMethod('task.commentitem.add', taskId=ticked_id,
-                                      fields={"AUTHOR_ID": 2, "POST_MESSAGE": post_message}) # AUTHOR_ID  393
+                                      fields={"AUTHOR_ID": 393, "POST_MESSAGE": post_message}) # AUTHOR_ID  393
 
         now = datetime.now()
         formatted_date = now.strftime("%B %d, %Y, %I:%M %p")

@@ -13,6 +13,8 @@ from bitrix24 import *
 import requests
 from services.models import ServiceCategory, Service
 from django.core.files.base import ContentFile
+from nexxes_proj import settings
+import os
 
 
 def trim_before(text):
@@ -125,7 +127,7 @@ def webhook_task_comment(request):
 
             if comment_isset == True:
                 message_text = comment['POST_MESSAGE']
-                if comment['AUTHOR_ID'] != '2': # 393
+                if comment['AUTHOR_ID'] != '393': # 393
                     # get user email
                     userId = comment['AUTHOR_ID']
                     b24User = 'user.get'
@@ -146,6 +148,7 @@ def webhook_task_comment(request):
             b24_member_id = request.POST.get('auth[member_id]', "")
             b24_application_token = request.POST.get('auth[application_token]', "")
             b24_time = request.POST.get('ts', "")
+            
             if event == "ONTASKCOMMENTADD":
                 TicketComments.objects.create(
                     ticket=ticket,
@@ -169,22 +172,30 @@ def webhook_task_comment(request):
                     is_active=True,
                 )
             else:
-                TicketComments.objects.filter(
+                deleted_ticket = TicketComments.objects.filter(
                     ticket=ticket,
                     comment_id=comment_id,
-                ).delete()
+                )
+                # delete file from db item
+                file_path = os.path.join(settings.MEDIA_ROOT, deleted_ticket.first().added_documents.path)
+                os.remove(file_path)
+                deleted_ticket.delete()
 
             # if file is isset in comment
             if 'ATTACHED_OBJECTS' in comment:
                 for file_data in comment['ATTACHED_OBJECTS']:
                     file_item = file_data
 
-                file_view_url = domain[:-1] + comment['ATTACHED_OBJECTS'][file_item]['VIEW_URL']
+                file_view_url1 = domain[:-1] + comment['ATTACHED_OBJECTS'][file_item]['VIEW_URL']
+                file_view_url = "https://dev1.nexxess.com/media/comment_files/image.jpeg"
+                print('file_view_url 190', file_view_url)
+                print('file_view_url 192', file_view_url1)
                 file_name = comment['ATTACHED_OBJECTS'][file_item]['NAME']
 
                 response = requests.get(file_view_url)
                 image_content = response.content
-                image_file = ContentFile(image_content)
+                # image_file = ContentFile(image_content)
+                image_file = ContentFile(image_content, name=file_name)
 
                 new_comment = TicketComments.objects.get(ticket=ticket, comment_id=comment_id)
                 new_comment.added_documents.save(file_name, image_file)
