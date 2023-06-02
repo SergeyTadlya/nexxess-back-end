@@ -47,11 +47,11 @@ class TicketComments(models.Model):
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE, related_name='comments')
     comment_id = models.PositiveIntegerField()
     manager_name = models.CharField(max_length=50)
-    added_documents = models.CharField(max_length=100, null=True, blank=True)
+    added_documents = models.FileField(null=True, blank=True, upload_to='comment_files')
     text = models.TextField(verbose_name='Comment')
     is_opened = models.BooleanField()
     is_active = models.BooleanField(default=True)
-    created_date = models.DateTimeField(null=True, blank=True)
+    created_date = models.DateTimeField(null=True, blank=True, auto_now_add=True,)
 
 
 class TelegramTicket(models.Model):

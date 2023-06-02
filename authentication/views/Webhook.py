@@ -11,7 +11,8 @@ from datetime import datetime, timedelta
 from bitrix24 import *
 
 import requests
-from services.models import ServiceCategory
+from services.models import ServiceCategory, Service
+from django.core.files.base import ContentFile
 
 
 def trim_before(text):
@@ -75,8 +76,19 @@ def webhook_task(request):
                     'task_info_crm': task_info_crm,
                     'created_at': created_at,
                 }
-
                 Ticket.objects.update_or_create(task_id=entities_id, defaults=defaults)
+                # ticket, created = Ticket.objects.update_or_create(task_id=entities_id, defaults=defaults)
+                # if event == "ONTASKADD":
+                #     TicketComments.objects.create(
+                #         ticket=ticket,
+                #         comment_id=0,
+                #         text="Wait for manager answer",
+                #         manager_name=trim_before(task_info_crm["ufCrmTask"][0]),
+                #         is_opened=True,
+                #         added_documents=None,
+                #         is_active=True,
+                #         created_date=datetime.now(),
+                #     )
         return HttpResponse('ok')
 
     except Exception as e:
@@ -93,7 +105,7 @@ def webhook_task_comment(request):
             entities_id = request.POST.get('data[FIELDS_AFTER][TASK_ID]', "")
             print(f'entititi {entities_id}')
             comment_id = request.POST.get('data[FIELDS_AFTER][ID]', "")
-
+            print('comment_id', comment_id)
             domain = b24keys.domain
             rest_key = b24keys.rest_key
             b24_comment = 'task.commentitem.get'
@@ -106,7 +118,6 @@ def webhook_task_comment(request):
                     taskId=int(entities_id),
                     itemId=int(comment_id),
                 )
-                print('comment 104', comment)
                 comment_isset = True
             # comment is deleted in ticket
             except:
@@ -114,7 +125,7 @@ def webhook_task_comment(request):
 
             if comment_isset == True:
                 message_text = comment['POST_MESSAGE']
-                if comment['AUTHOR_ID'] != '393':
+                if comment['AUTHOR_ID'] != '2': # 393
                     # get user email
                     userId = comment['AUTHOR_ID']
                     b24User = 'user.get'
@@ -162,6 +173,22 @@ def webhook_task_comment(request):
                     ticket=ticket,
                     comment_id=comment_id,
                 ).delete()
+
+            # if file is isset in comment
+            if 'ATTACHED_OBJECTS' in comment:
+                for file_data in comment['ATTACHED_OBJECTS']:
+                    file_item = file_data
+
+                file_view_url = domain[:-1] + comment['ATTACHED_OBJECTS'][file_item]['VIEW_URL']
+                file_name = comment['ATTACHED_OBJECTS'][file_item]['NAME']
+
+                response = requests.get(file_view_url)
+                image_content = response.content
+                image_file = ContentFile(image_content)
+
+                new_comment = TicketComments.objects.get(ticket=ticket, comment_id=comment_id)
+                new_comment.added_documents.save(file_name, image_file)
+                new_comment.save()
         return HttpResponse('ok')
     except Exception as e:
         print(e)
@@ -231,6 +258,7 @@ def webhook_service_section(request):
     if request.method == 'POST':
         event = request.POST.get('event', "")
         entities_id = request.POST.get('data[FIELDS][ID]', "")
+
         if event == "ONCRMPRODUCTSECTIONDELETE":
             # first delete all services from deleted category
             Service.objects.filter(category=ServiceCategory.objects.get(category_b24_id=entities_id)).delete()
