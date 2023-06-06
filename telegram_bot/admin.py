@@ -60,8 +60,8 @@ class UserAdmin(BaseUserAdmin):
         ),
     )
 
-    list_display = ('email', 'username', 'is_staff', 'last_login', 'date_joined')
     list_filter = ('is_staff', 'is_superuser', 'is_active', 'groups')
+    list_display = ('email', 'username', 'is_staff', 'last_login', 'date_joined')
     search_fields = ('email',)
     ordering = ('email',)
     filter_horizontal = ('groups', 'user_permissions',)

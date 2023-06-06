@@ -3,6 +3,12 @@ from .utils import *
 from ..utils import *
 
 from invoices.models import Invoice, Status
+from services.models import Service
+
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 class InvoiceHandler:
@@ -70,7 +76,11 @@ class InvoiceHandler:
                 reply_markup=invoices_for_selected_status_keyboard(invoices, invoice_status, current_page, all_pages, has_pages)
             )
         except Exception as e:
-            print(e)
+            # Exception logger credentials
+            user_chat_id = str(user.telegram_id)
+            username = user.telegram_username
+
+            logger.error('Exception: ' + user_chat_id + ' (' + username + ') - ' + str(e))
 
     def show_all_invoices(self, current_page, element_on_page=8):
         user = get_user(self.data['callback_query'])
@@ -97,7 +107,11 @@ class InvoiceHandler:
                 reply_markup=all_invoices_keyboard(invoices, current_page, all_pages, has_pages)
             )
         except Exception as e:
-            print(e)
+            # Exception logger credentials
+            user_chat_id = str(user.telegram_id)
+            username = user.telegram_username
+
+            logger.error('Exception: ' + user_chat_id + ' (' + username + ') - ' + str(e))
 
     def show_invoice_details(self, status_name, current_page, invoice_id):
         invoice = get_invoice_by_id(invoice_id, status_name)
@@ -109,14 +123,20 @@ class InvoiceHandler:
         else:
             file_path = generate_new_pdf(user, invoice, 'invoices/PDF_templates/invoice_ordinary.pdf')
 
-        filename = invoice.invoice_id + '_' + invoice.status.value
-
-        invoice_detail = 'Invoice ID: ' + invoice.invoice_id + '\n' + \
+        service = Service.objects.get(service_id=invoice.service_id)
+        service_description = service.detail_text if service.detail_text else 'Detail text is empty'
+        invoice_detail = '-------------------- Invoice --------------------' + '\n' + \
+                         'Invoice ID: ' + invoice.invoice_id + '\n' + \
                          'Price: ' + format_price(invoice.price) + '\n' + \
                          'Status: ' + invoice.status.value + '\n' + \
                          'Date: ' + format_date(invoice.date) + '\n' + \
-                         'Due date: ' + format_date(invoice.due_date) + '\n'
+                         'Due date: ' + format_date(invoice.due_date) + '\n\n' + \
+                         '-------------------- Service --------------------' + '\n' + \
+                         'Title: ' + service.title + '\n' + \
+                         'Category: ' + service.category.category_name + '\n' + \
+                         'Description: ' + service_description
 
+        filename = invoice.invoice_id + '_' + invoice.status.value
         self.bot.send_document(chat_id=get_chat_id(self.data['callback_query']),
                                document=open(file_path, 'rb'),
                                filename=filename + '.pdf')

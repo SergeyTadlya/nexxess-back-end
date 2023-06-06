@@ -5,3 +5,4 @@ __pycache__/
 */migrations/*
 */templates_old/*
 /pdf_client/*
+/telegram_log.log

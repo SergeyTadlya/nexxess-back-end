@@ -9,7 +9,10 @@ from .keyboards import *
 from ..utils import *
 
 import datetime
-import time
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 class ServicesHandler:
@@ -217,7 +220,7 @@ class ServicesHandler:
                                                                     'UF_CONTACT_ID': user.b24_contact_id,
                                                                     'STATUS_ID': 'N',
                                                                     'RESPONSIBLE_ID': 1,
-                                                                    'PAY_SYSTEM_ID': 3,
+                                                                    'PAY_SYSTEM_ID': 4,  # Change PAY_SYSTEM_ID to 3
                                                                     'DATE_PAY_BEFORE': tomorrow.strftime("%m/%d/%Y"),
                                                                     "PRODUCT_ROWS": [
                                                                         {"ID": 0,
@@ -228,7 +231,11 @@ class ServicesHandler:
                                                                     ]})
             LocalInvoice.objects.create(b24_invoice_id=invoice_id, stripe_price_id=product.stripe_id)
         except BitrixError as error_message:
-            print(error_message)
+            # Exception logger credentials
+            user_chat_id = str(user.telegram_id)
+            username = user.telegram_username
+
+            logger.error('Exception: ' + user_chat_id + ' (' + username + ') - ' + str(error_message))
 
         # Service data
         service_title = service.title if service.title else 'Title is empty...'
@@ -238,15 +245,24 @@ class ServicesHandler:
 
         # Send invoice to user
         stripe = StripeSettings.objects.get(id=1)
-        print(stripe.telegram_provider_token)
-        self.bot.sendInvoice(chat_id=get_chat_id(self.data['callback_query']),
-                             title=service_title,
-                             description=service_info_text,
-                             payload='services_' + str(invoice_id),
-                             provider_token=stripe.telegram_provider_token,
-                             currency='USD',
-                             prices=price,
-                             reply_markup=invoice_for_selected_service_keyboard(service))
+        try:
+
+            self.bot.sendInvoice(chat_id=get_chat_id(self.data['callback_query']),
+                                 title=service_title,
+                                 description=service_info_text,
+                                 payload='services_' + str(invoice_id),
+                                 provider_token=stripe.telegram_provider_token,
+                                 currency='USD',
+                                 prices=price,
+                                 reply_markup=invoice_for_selected_service_keyboard(service))
+        except Exception as e:
+            self.bot.sendMessage(chat_id=get_chat_id(self.data['callback_query']),
+                                 text='Oops, somthing went wrong... 🙁')
+            # Exception logger credentials
+            user_chat_id = str(user.telegram_id)
+            username = user.telegram_username
+
+            logger.error('Exception: ' + user_chat_id + ' (' + username + ') - ' + str(e))
 
     def set_pre_checkout_query(self, invoice_id):
         user = User.objects.filter(telegram_id=self.data['pre_checkout_query']['from']['id']).first()

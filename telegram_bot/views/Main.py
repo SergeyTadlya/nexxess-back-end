@@ -6,7 +6,11 @@ from .Helper import SettingsHelper
 
 from ..handlers import MessageHandler, CallbackHandler
 
+import logging
 import json
+
+
+logger = logging.getLogger(__name__)
 
 
 @csrf_exempt
@@ -21,24 +25,52 @@ def main(request):
             message_handler = MessageHandler(bot, data)
             message_handler.handle_request()
 
+            # Message logger credentials
+            telegram_username = data['message']['from']['username']
+            telegram_user_id = ' (' + str(data['message']['from']['id']) + ') - '
+
             if 'text' in data['message'].keys():
-                print('Message from: ' + str(data['message']['from']['id']) + ' - ' + data['message']['text'] + '\n')
+                user_message = data['message']['text']
+                logger.info('Message: ' + telegram_username + telegram_user_id + user_message)
+
+            elif 'successful_payment' in data['message'].keys():
+                amount = '(' + str(data['message']['successful_payment']['total_amount'] / 100)
+                currency = ' ' + data['message']['successful_payment']['currency'] + ' '
+                invoice_payload = data['message']['successful_payment']['invoice_payload'] + ')'
+
+                logger.info('Successful payment: ' + telegram_username + telegram_user_id + amount + currency + invoice_payload)
+
             else:
-                print('Message from: ' + str(data['message']['from']['id']) + ' - Not text\n')
+                logger.info('Message: ' + telegram_username + telegram_user_id + 'Not text')
 
         elif 'callback_query' in data:
             callback_handler = CallbackHandler(bot, data)
             callback_handler.handle_request()
 
-            if 'text' in data['callback_query']['message'].keys():
-                print('Callback from: ' + str(data['callback_query']['from']['id']) + ' - ' + data['callback_query']['data'] + '\n')
-            else:
-                print('Callback from: ' + str(data['callback_query']['from']['id']) + ' - Not text\n')
+            # Callback logger credentials
+            telegram_username = data['callback_query']['from']['username']
+            telegram_user_id = ' (' + str(data['callback_query']['from']['id']) + ') - '
+            user_callback_data = ' (' + data['callback_query']['data'] + ')'
+
+            button_title = ''
+            inline_keyboard = data["callback_query"]["message"]["reply_markup"]["inline_keyboard"]
+            for i in range(len(inline_keyboard)):
+                for j in range(len(inline_keyboard[i])):
+                    for key, value in inline_keyboard[i][j].items():
+                        if value == data['callback_query']['data']:
+                            button_title = inline_keyboard[i][j]['text']
+
+            logger.info('Callback: ' + telegram_username + telegram_user_id + button_title + user_callback_data)
 
         elif 'pre_checkout_query' in data:
             callback_handler = CallbackHandler(bot, data)
             callback_handler.handle_request()
 
-            print('Callback from: ' + str(data['pre_checkout_query']['from']['id']) + ' - ' + data['pre_checkout_query']['id'])
+            # Payment logger credentials
+            telegram_username = data['pre_checkout_query']['from']['username']
+            telegram_user_id = str(data['pre_checkout_query']['from']['id'])
+            pre_checkout_query_id = data['pre_checkout_query']['id']
 
-    return HttpResponse('Main')
+            logger.info('Callback: ' + telegram_username + ' (' + telegram_user_id + ') - ' + pre_checkout_query_id)
+
+    return HttpResponse('')

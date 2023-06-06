@@ -2,16 +2,18 @@ from authentication.helpers.B24Webhook import set_webhook
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 
+from telegram_bot.handlers.tickets.handlers import TicketsHandler
+from telegram_bot.views.Helper import SettingsHelper
 from authentication.models import B24keys
 from services.models import ServiceCategory
 from invoices.models import Invoice, Status
 from tickets.models import Ticket, TicketComments, TicketStatus
 
+from telegram import Bot
 from datetime import datetime, timedelta
 from bitrix24 import *
 
 import requests
-from services.models import ServiceCategory
 
 
 def trim_before(text):
@@ -114,7 +116,7 @@ def webhook_task_comment(request):
 
             if comment_isset == True:
                 message_text = comment['POST_MESSAGE']
-                if comment['AUTHOR_ID'] != '393':
+                if comment['AUTHOR_ID'] != '2':  # Change AUTHOR_ID to 393
                     # get user email
                     userId = comment['AUTHOR_ID']
                     b24User = 'user.get'
@@ -162,6 +164,11 @@ def webhook_task_comment(request):
                     ticket=ticket,
                     comment_id=comment_id,
                 ).delete()
+
+            api_token = SettingsHelper.get_bot_token()
+            bot = Bot(token=api_token)
+            TicketsHandler.show_ticket_comment_in_telegram(bot, ticket, message_text, manager_name)
+
         return HttpResponse('ok')
     except Exception as e:
         print(e)
