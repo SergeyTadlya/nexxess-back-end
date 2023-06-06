@@ -18,6 +18,7 @@ from bitrix24 import Bitrix24
 import xml.etree.ElementTree as ET
 from nexxes_proj import settings
 import os
+import base64
 
 
 
@@ -231,22 +232,37 @@ def task_detail(request, id):
         all_created_comments = TicketComments.objects.filter(ticket=Ticket.objects.get(task_id=str(id))).order_by('created_date')
         comments_array = []
         for created_comment in all_created_comments:
+            print('created_comment', created_comment)
             # test = datetime.strptime(created_comment.created_date, '%B.%d.%YT%H:%M:%S')
 
             # unset comment if message have "Author assigned:" text
             if "Author assigned:" in created_comment.text:
                 continue
+            if "Responsible person assigned:" in created_comment.text:
+                continue    
 
             comment_time = created_comment.created_date
             formatted_date = comment_time.strftime("%B %d, %Y, %I:%M %p")
-
+            if created_comment.added_documents_url != None:
+                # file_name = os.path.basename(created_comment.added_documents_url.name)
+                file_url = created_comment.added_documents_url
+                # file_name = file_url.split("/")[-1]
+                file_name = created_comment.added_document_name
+                file_type = created_comment.added_document_type
+            else:
+                file_name = ""    
+                file_url = "" 
+                file_type = "" 
+            
             comments_array.append({
                 'bitrix_id': created_comment.comment_id,
                 'message': created_comment.text,
                 'sender': created_comment.manager_name,
                 'data': formatted_date,
-                'file': f'/media/{created_comment.added_documents}',
-                'file_name': os.path.basename(created_comment.added_documents.name),
+                # 'file': f'/media/{created_comment.added_documents}',
+                'file': file_url,
+                'file_name': file_name,
+                'file_type': file_type,
             })
 
         res = {
@@ -283,8 +299,8 @@ def create_bitrix_task(request):
                     'TITLE': task_name,
                     'DESCRIPTION': task_description,
                     'DEADLINE': task_deadline,
-                    'CREATED_BY': 2, # 393
-                    'RESPONSIBLE_ID': 1, # 312
+                    'CREATED_BY': 393, # 393
+                    'RESPONSIBLE_ID': 312, # 312
                     'PRIORITY': 0,
                     'ALLOW_CHANGE_DEADLINE': 1,
                     'UF_CRM_TASK': {
@@ -364,6 +380,12 @@ def send_user_message(request):
         if request.FILES.get('file'):
             file = request.FILES.get('file')
             file_name = file.name
+            file_content_type = file.content_type
+            if file_content_type.startswith('image/'):
+                file_type = "image"
+            else:    
+                file_type = "document"
+            
             # save file localy in media folder
             file_path = os.path.join(settings.MEDIA_ROOT, 'comment_files', file_name)
             with open(file_path, 'wb') as destination:
@@ -373,18 +395,52 @@ def send_user_message(request):
             domain = request.POST.get('site_domain')
             file_url = f'{domain}/media/comment_files/{file_name}'
             post_message = f'{user_message}\n' \
-                           f'file:{file_url}'
+                           f'nexxess_file:{file_url}'
             added_file = True
+
+            # url = set_webhook()
+            # bx24 = Bitrix24(url)
+            # image_name = "image.jpeg"
+            # folder_id = 5951    # folder file "Files from tickets"
+            # get_file = bx24.callMethod('disk.folder.getchildren', id=folder_id, filter={"NAME": image_name, "TYPE": "file"})
+            # if get_file:
+            #     print('get_file', get_file[0]["ID"])
+            # else:
+            #     file_path = "/home/nexxessdev/nexxess_main/nexxess-back-end/media/comment_files/image.jpeg"
+            #     with open(file_path, 'rb') as f:
+            #         content = f.read()
+            #         f.close()
+            #     added_file = bx24.callMethod('disk.folder.uploadfile', id=folder_id, data={"NAME": image_name}, fileContent=[image_name, content])
+            
+            # add comment in task in bitrix
+            new_comment = bx24.callMethod('task.commentitem.add', taskId=ticked_id,
+                                          fields={"AUTHOR_ID": 393, "POST_MESSAGE": post_message}) # AUTHOR_ID  393
+            
+            print('file_type 418', file_type)
+            print('file_type 419', type(file_type))
+            TicketComments.objects.create(
+                ticket=Ticket.objects.get(task_id=ticked_id),
+                comment_id=new_comment,
+                text=user_message,
+                manager_name="client",
+                is_opened=True,
+                added_documents_url=file_url,
+                added_document_type=file_type,
+                added_document_name=file_name,
+                is_active=True,
+                created_date=datetime.now(),
+            )
         else:
             # comment without file
             post_message = user_message
             added_file = False
             file_name = None
             file_url = None
+            file_type = None
 
-        # add comment in task in bitrix
-        new_comment = bx24.callMethod('task.commentitem.add', taskId=ticked_id,
-                                      fields={"AUTHOR_ID": 2, "POST_MESSAGE": post_message}) # AUTHOR_ID  393
+            # add comment in task in bitrix
+            new_comment = bx24.callMethod('task.commentitem.add', taskId=ticked_id,
+                                          fields={"AUTHOR_ID": 393, "POST_MESSAGE": user_message}) # AUTHOR_ID  393
 
         now = datetime.now()
         formatted_date = now.strftime("%B %d, %Y, %I:%M %p")
@@ -395,5 +451,6 @@ def send_user_message(request):
             'added_file': added_file,
             'file_name': file_name,
             'file_url': file_url,
+            'file_type': file_type,
         }
         return JsonResponse(res)
