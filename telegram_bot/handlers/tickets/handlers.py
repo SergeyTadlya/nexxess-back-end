@@ -71,9 +71,9 @@ class TicketsHandler:
                     'TITLE': telegram_ticket.title,
                     'DESCRIPTION': telegram_ticket.description,
                     'DEADLINE': deadline,
-                    'CREATED_BY': 2,  # Change CREATED_BY to 393
-                    'RESPONSIBLE_ID': 1,  # Change RESPONSIBLE_ID to 312
-                    'PRIORITY': 2,  # Change PRIORITY to 0
+                    'CREATED_BY': 393,  # Change on another number for local developing
+                    'RESPONSIBLE_ID': 312,  # Change on another number for local developing
+                    'PRIORITY': 0,  # Change on another number for local developing
                     'ALLOW_CHANGE_DEADLINE': 1,
                     'UF_CRM_TASK': {
                         "0": 'C_' + str(user.b24_contact_id),  # bitrix24_id
