@@ -14,7 +14,10 @@ import requests
 from services.models import ServiceCategory, Service
 from django.core.files.base import ContentFile
 from nexxes_proj import settings
+from bs4 import BeautifulSoup
 import os
+import time
+import re
 
 
 def trim_before(text):
@@ -100,6 +103,7 @@ def webhook_task(request):
 
 @csrf_exempt
 def webhook_task_comment(request):
+    time.sleep(3)
     try:
         if request.method == 'POST':
             b24keys = B24keys.objects.first()
@@ -150,16 +154,30 @@ def webhook_task_comment(request):
             b24_time = request.POST.get('ts', "")
             
             if event == "ONTASKCOMMENTADD":
-                TicketComments.objects.create(
+                obj, created = TicketComments.objects.get_or_create(
                     ticket=ticket,
                     comment_id=comment_id,
-                    text=message_text,
-                    manager_name=manager_name,
-                    is_opened=is_opened,             # ticket.is_opened
-                    added_documents=None,  # You can add the documents here
-                    is_active=True,
-                    created_date=datetime.now(),
+                    defaults={
+                        "text": message_text,
+                        "manager_name": manager_name,
+                        "is_opened": is_opened,             # ticket.is_opened
+                        "added_document_type": None,
+                        "added_documents_url": None,
+                        "added_document_name": None,
+                        "is_active": True,
+                        "created_date": datetime.now(),
+                    },
                 )
+                # TicketComments.objects.create(
+                #     ticket=ticket,
+                #     comment_id=comment_id,
+                #     text=message_text,
+                #     manager_name=manager_name,
+                #     is_opened=is_opened,             # ticket.is_opened
+                #     added_documents_type=None,  # You can add the documents here
+                #     is_active=True,
+                #     created_date=datetime.now(),
+                # )
             elif event == "ONTASKCOMMENTUPDATE":
                 TicketComments.objects.filter(
                     ticket=ticket,
@@ -168,7 +186,6 @@ def webhook_task_comment(request):
                     text=message_text,
                     manager_name=manager_name,
                     is_opened=ticket.is_opened,
-                    added_documents=None,  # you can add the documents here
                     is_active=True,
                 )
             else:
@@ -177,29 +194,53 @@ def webhook_task_comment(request):
                     comment_id=comment_id,
                 )
                 # delete file from db item
-                file_path = os.path.join(settings.MEDIA_ROOT, deleted_ticket.first().added_documents.path)
-                os.remove(file_path)
+                # file_path = os.path.join(settings.MEDIA_ROOT, deleted_ticket.first().added_documents.path)
+                # os.remove(file_path)
                 deleted_ticket.delete()
 
             # if file is isset in comment
             if 'ATTACHED_OBJECTS' in comment:
                 for file_data in comment['ATTACHED_OBJECTS']:
                     file_item = file_data
-
-                file_view_url1 = domain[:-1] + comment['ATTACHED_OBJECTS'][file_item]['VIEW_URL']
-                file_view_url = "https://dev1.nexxess.com/media/comment_files/image.jpeg"
-                print('file_view_url 190', file_view_url)
-                print('file_view_url 192', file_view_url1)
                 file_name = comment['ATTACHED_OBJECTS'][file_item]['NAME']
-
-                response = requests.get(file_view_url)
-                image_content = response.content
-                # image_file = ContentFile(image_content)
-                image_file = ContentFile(image_content, name=file_name)
-
+                # get file publick link from bitrix
+                file_id = comment['ATTACHED_OBJECTS'][file_item]['FILE_ID']
+                file_public_link = bx24.callMethod(
+                    "disk.file.getExternalLink",
+                    id=int(file_id),
+                )
+                b24_response = requests.get(file_public_link)
+                b24_file_content = b24_response.content
+                # parsing file content
+                soup = BeautifulSoup(b24_file_content, 'html.parser')
+                meta_element = soup.find('meta', property='og:image')
+                # its document
+                if meta_element is None:
+                    # find public url in file type document 
+                    pattern = r'href="(/docs/pub/[^"]+)"'
+                    matches = re.findall(pattern, b24_file_content.decode())
+                    doc_url = matches[0]
+                    file_view_url = f'https://{b24_domain}{doc_url}'
+                    file_type = "document"
+                # its image
+                else:
+                    file_view_url = meta_element['content']
+                    # response = requests.get(file_view_url)
+                    # image_content = response.content
+                    # content_file = ContentFile(image_content, name=file_name)
+                    file_type = "image"                
+                
+                
+                print('file_view_url', file_view_url)
                 new_comment = TicketComments.objects.get(ticket=ticket, comment_id=comment_id)
-                new_comment.added_documents.save(file_name, image_file)
-                new_comment.save()
+                # new_comment.added_documents.save(file_name, image_file)
+                # new_comment.save()
+                if new_comment.manager_name != "client":
+                    new_comment.added_document_type = file_type
+                    new_comment.added_documents_url = file_view_url
+                    new_comment.added_document_name = file_name
+                    new_comment.save()
+
         return HttpResponse('ok')
     except Exception as e:
         print(e)

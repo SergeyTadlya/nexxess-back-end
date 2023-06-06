@@ -161,7 +161,6 @@ ACCOUNT_FORMS = {
     'disconnect': 'allauth.socialaccount.forms.DisconnectForm',
 }
 
-EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
 # LOGIN_REDIRECT_URL = '/'
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 # Default primary key field type
@@ -188,7 +187,7 @@ EMAIL_USE_TLS = True
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 SOCIALACCOUNT_ADAPTER = "authentication.adapters.CustomSocialAccountAdapter"
 EMAIL_HOST_USER = 'info@nexxess.com'
-EMAIL_HOST_PASSWORD = 'xboq xzdm cltw zjuy'
+EMAIL_HOST_PASSWORD = 'chxn glxe ltql clcv'
 
 CSRF_FAILURE_VIEW = 'authentication.views.csrf_failure'
 
