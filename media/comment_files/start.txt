@@ -1,0 +1,9 @@
+Set-ExecutionPolicy Unrestricted -Scope Process
+.\\wallet_env\Scripts\activate
+https://api.telegram.org/bot6018586237:AAEbf_JDM65gsoj3YmK7IRcKXr0m69DUl1g/setWebhook?url=https://12c7-188-190-190-33.eu.ngrok.io/telegram/
+
+git status
+git checkout main
+git pull
+git checkout dev_pasha
+git pull origin main

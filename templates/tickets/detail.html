@@ -49,14 +49,30 @@
     width: 100%;
     box-sizing: border-box;
   }
+/* desctop */
+@media only screen and (min-width: 768px) {
   .chat {
     display: flex;
     flex: 1 1;
     position: relative;
     background-color: #F5F5F5;
     min-height: 500px;
-    width: 800px;
+    min-width: 800px;
   }
+}
+
+/* phone */
+@media only screen and (max-width: 767px) {
+  .chat {
+    display: flex;
+    flex: 1 1;
+    position: relative;
+    background-color: #F5F5F5;
+    min-height: 500px;
+    min-width: 200px;
+  }
+}
+  
   .conversation .message {
     background-color: #FFFFFF;
     margin-bottom: 20px;
@@ -214,6 +230,20 @@
   padding-right: 7px;
   padding-bottom: 6px;
 }
+
+/* desctop */
+@media only screen and (min-width: 768px) {
+  .message-image {
+    height: 400px;
+  }
+}
+
+/* phone */
+@media only screen and (max-width: 767px) {
+  .message-image {
+    height: 150px;
+  }
+}
 </style>
 {% endblock extra_css %}
 {% block left_menu %}
@@ -305,7 +335,11 @@
               <p class="title">You</p>
               <p style="margin-top: 5px">{{comment.message|linebreaksbr}}</p>
               {% if comment.file_name %}
-                <img alt="img" style="height: 400px" src="{{ request.scheme }}://{{ request.get_host }}{{comment.file}}" alt="{{comment.file_name}}">
+                {% if comment.file_type == "image" %}
+                  <img class="message-image" src="{{comment.file}}" alt="{{comment.file_name}}">
+                {% else %}
+                  <a target="_blank" href="{{comment.file}}" alt="{{comment.file_name}}" style="text-decoration: none;" onmouseover="this.style.textDecoration='underline';" onmouseout="this.style.textDecoration='none';">{{comment.file_name}}</a>
+                {% endif %}
               {% endif %}
               <div class="time">{{comment.data}}</div>
             </div>
@@ -314,7 +348,11 @@
               <p class="title">Your personal manager👩‍💻</p>
               <p style="margin-top: 5px">{{comment.message|linebreaksbr}}</p>
               {% if comment.file_name %}
-                <img alt="img" style="height: 400px" src="{{ request.scheme }}://{{ request.get_host }}{{comment.file}}" alt="{{comment.file_name}}">
+                {% if comment.file_type == "image" %}
+                  <img class="message-image" src="{{comment.file}}" alt="{{comment.file_name}}">
+                {% else %}
+                  <a target="_blank" href="{{comment.file}}" alt="{{comment.file_name}}" style="text-decoration: none;" onmouseover="this.style.textDecoration='underline';" onmouseout="this.style.textDecoration='none';">{{comment.file_name}}</a>
+                {% endif %}
               {% endif %}
               <div class="time">{{comment.data}}</div>
             </div>
@@ -497,11 +535,28 @@
               // news message block with file if it added
               if(data.added_file == true){
                 document.getElementById('added_file').innerText = "";
-                var newMessageImg = document.createElement("img");
-                newMessageImg.style = "height: 400px";
-                newMessageImg.alt = data.file_name;
-                newMessageImg.src = data.file_url;
-                newMessageDiv.append(Title, newMessage, newMessageImg, TimeMessage);
+                if(data.file_type == "image"){
+                  var newMessageImg = document.createElement("img");
+                  newMessageImg.className = "message-image";
+                  newMessageImg.alt = data.file_name;
+                  newMessageImg.src = data.file_url;
+                  newMessageDiv.append(Title, newMessage, newMessageImg, TimeMessage);
+                }else{
+                  var newMessageFile = document.createElement("a");
+                  newMessageFile.alt = data.file_name;
+                  newMessageFile.target = "_blank";
+                  newMessageFile.href = data.file_url;
+                  newMessageFile.style = "text-decoration: none;";
+                  newMessageFile.addEventListener("mouseover", function() {
+                      this.style.textDecoration = "underline";
+                  });
+                  newMessageFile.addEventListener("mouseout", function() {
+                      this.style.textDecoration = "none";
+                  });
+                  newMessageFile.textContent = data.file_name;
+                  newMessageDiv.append(Title, newMessage, newMessageFile, TimeMessage);
+                }
+
               }else{
                 newMessageDiv.append(Title, newMessage, TimeMessage);
               }
