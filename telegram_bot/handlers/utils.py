@@ -2,6 +2,11 @@ from telegram_bot_calendar import DetailedTelegramCalendar, LSTEP
 
 from ..models import User, Authentication
 
+import logging
+
+
+logger = logging.getLogger(__name__)
+
 
 def get_chat_id(data):
     return data['message']['chat']['id']
@@ -49,8 +54,13 @@ def authorize_user(data):
         user.telegram_is_authenticate = True
         user.step = ''
         user.save()
+
     except Exception as e:
-        print(e)
+        # Exception logger credentials
+        user_chat_id = str(user.telegram_id)
+        username = user.telegram_username
+
+        logger.error('Exception: ' + user_chat_id + ' (' + username + ') - ' + str(e))
 
 
 class MyStyleCalendar(DetailedTelegramCalendar):

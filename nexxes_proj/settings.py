@@ -78,21 +78,6 @@ TEMPLATES = [
     },
 ]
 
-# django-allauth
-# https://django-allauth.readthedocs.io/en/latest/overview.html
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'SCOPE': [
-            'profile',
-            'email',
-        ],
-        'AUTH_PARAMS': {
-            'access_type': 'online',
-        },
-        "VERIFIED_EMAIL": True
-    }
-}
-
 AUTHENTICATION_BACKENDS = [
     # Needed to login by username in Django admin, regardless of 'allauth'
     'django.contrib.auth.backends.ModelBackend',
@@ -150,6 +135,42 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, MEDIA_URL)
 
+# LOGIN_REDIRECT_URL = '/'
+# SIGNUP_REDIRECT_URL = '/'
+
+# Default primary key field type
+# https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Additional configuration settings
+
+# Django all auth
+SITE_ID = 2
+
+SOCIALACCOUNT_ADAPTER = "authentication.adapters.CustomSocialAccountAdapter"
+SOCIALACCOUNT_QUERY_EMAIL = True
+SOCIALACCOUNT_LOGIN_ON_GET = True
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        },
+        "VERIFIED_EMAIL": True
+    }
+}
+
+# Accounts configurations
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_LOGOUT_ON_GET = True
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = True
+
 ACCOUNT_FORMS = {
     'login': 'authentication.forms.CustomLoginForm',
     'signup': 'authentication.forms.CustomSignupForm',
@@ -161,36 +182,19 @@ ACCOUNT_FORMS = {
     'disconnect': 'allauth.socialaccount.forms.DisconnectForm',
 }
 
-# LOGIN_REDIRECT_URL = '/'
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# Additional configuration settings
-SITE_ID = 2
-
-# SIGNUP_REDIRECT_URL = '/'
-
-SOCIALACCOUNT_QUERY_EMAIL = True
-SOCIALACCOUNT_LOGIN_ON_GET = True
-
-ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_LOGOUT_ON_GET = True
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = True
-
+# Email settings
 EMAIL_PORT = 587
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-SOCIALACCOUNT_ADAPTER = "authentication.adapters.CustomSocialAccountAdapter"
 EMAIL_HOST_USER = 'info@nexxess.com'
 EMAIL_HOST_PASSWORD = 'chxn glxe ltql clcv'
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+DEFAULT_FROM_EMAIL = 'info@nexxess.com'
+
 CSRF_FAILURE_VIEW = 'authentication.views.csrf_failure'
 
+# Rest framework and SIMPLE_JWT for api (not using now)
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 100,
@@ -250,4 +254,35 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 }
 
-DEFAULT_FROM_EMAIL = 'info@nexxess.com'
+# Logging settings
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'console': {'format': '%(asctime)s | %(name)s | %(levelname)s | %(message)s'},
+        'file': {'format': '%(asctime)s | %(name)s | %(levelname)s | %(message)s'}
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'console'
+        },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'formatter': 'file',
+            'filename': 'telegram_log.log'
+        }
+    },
+    'loggers': {
+        '': {
+            'level': 'INFO',
+            'handlers': ['console', 'file'],
+            'propagate': True
+        },
+        'django.request': {
+            'level': 'DEBUG',
+            'handlers': ['console', 'file']
+        }
+    }
+}

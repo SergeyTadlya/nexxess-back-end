@@ -2,11 +2,14 @@ from authentication.helpers.B24Webhook import set_webhook
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 
+from telegram_bot.handlers.tickets.handlers import TicketsHandler
+from telegram_bot.views.Helper import SettingsHelper
 from authentication.models import B24keys
 from services.models import ServiceCategory
 from invoices.models import Invoice, Status
 from tickets.models import Ticket, TicketComments, TicketStatus
 
+from telegram import Bot
 from datetime import datetime, timedelta
 from bitrix24 import *
 
@@ -152,7 +155,7 @@ def webhook_task_comment(request):
             b24_member_id = request.POST.get('auth[member_id]', "")
             b24_application_token = request.POST.get('auth[application_token]', "")
             b24_time = request.POST.get('ts', "")
-            
+
             if event == "ONTASKCOMMENTADD":
                 obj, created = TicketComments.objects.get_or_create(
                     ticket=ticket,
@@ -216,7 +219,7 @@ def webhook_task_comment(request):
                 meta_element = soup.find('meta', property='og:image')
                 # its document
                 if meta_element is None:
-                    # find public url in file type document 
+                    # find public url in file type document
                     pattern = r'href="(/docs/pub/[^"]+)"'
                     matches = re.findall(pattern, b24_file_content.decode())
                     doc_url = matches[0]
@@ -228,9 +231,9 @@ def webhook_task_comment(request):
                     # response = requests.get(file_view_url)
                     # image_content = response.content
                     # content_file = ContentFile(image_content, name=file_name)
-                    file_type = "image"                
-                
-                
+                    file_type = "image"
+
+
                 print('file_view_url', file_view_url)
                 new_comment = TicketComments.objects.get(ticket=ticket, comment_id=comment_id)
                 # new_comment.added_documents.save(file_name, image_file)
@@ -240,6 +243,10 @@ def webhook_task_comment(request):
                     new_comment.added_documents_url = file_view_url
                     new_comment.added_document_name = file_name
                     new_comment.save()
+
+            api_token = SettingsHelper.get_bot_token()
+            bot = Bot(token=api_token)
+            TicketsHandler.show_ticket_comment_in_telegram(bot, ticket, message_text, manager_name)
 
         return HttpResponse('ok')
     except Exception as e:
