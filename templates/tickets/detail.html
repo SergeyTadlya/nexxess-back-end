@@ -316,6 +316,12 @@
     <h2 class="problem-description-title">Your ticket Description📋:</h2>
     <p class="problem-description-text">{{ task.ticket_text }}</p>
   </div>
+  {% if task.added_document_name %}
+    <div class="problem-description">
+      <h2 class="problem-description-title">Added file:</h2>
+      <a target="_blank" href="{{task.added_documents_url}}" alt="{{task.added_document_name}}" style="text-decoration: none;" onmouseover="this.style.textDecoration='underline';" onmouseout="this.style.textDecoration='none';">{{task.added_document_name}}</a>
+    </div>
+  {% endif %}
 </div>
 <div class="deadline">
   Deadline: {{ task.deadline }}
