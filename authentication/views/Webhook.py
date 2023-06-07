@@ -34,6 +34,7 @@ def format_date(date):
 
 @csrf_exempt
 def webhook_task(request):
+    time.sleep(3)
     try:
         if request.method == 'POST':
             url = set_webhook()
@@ -70,6 +71,7 @@ def webhook_task(request):
                     taskId=entities_id,
                     select=["ID", "UF_TASK_WEBDAV_FILES"],
                 )['task']
+                print('task_get', task_get)
                 # added file in task
                 if task_get['ufTaskWebdavFiles'] != False:
                     file_info = bx24.callMethod(
