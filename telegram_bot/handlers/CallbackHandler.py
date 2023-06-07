@@ -8,6 +8,11 @@ from ..models import User
 
 from datetime import date
 
+import logging
+
+
+logger = logging.getLogger(__name__)
+
 
 class CallbackHandler:
     def __init__(self, bot, data):
@@ -36,16 +41,22 @@ class CallbackHandler:
 
         user = self.get_user()
         if user.telegram_is_authenticate:
+
             if 'invoices' in callback_data:
                 InvoiceHandler(self.bot, self.data, callback_data)
+
             elif 'services' in callback_data + invoice_payload:
                 ServicesHandler(self.bot, self.data, callback_data)
+
             elif 'tickets' in callback_data:
                 TicketsHandler(self.bot, self.data, callback_data)
+
             elif 'faq' in callback_data:
                 pass
+
             elif 'logout' in callback_data:
                 LogOutHandler(self.bot, self.data, callback_data)
+
             elif 'cbcal' in callback_data:
                 result, key, step = MyStyleCalendar(min_date=date.today()).process(self.data['callback_query']['data'])
                 if not result and key:
@@ -55,7 +66,11 @@ class CallbackHandler:
                                                    self.data['callback_query']['message']['message_id'],
                                                    reply_markup=key)
                     except Exception as e:
-                        print(e)
+                        # Exception logger credentials
+                        user_chat_id = self.data['callback_query']['message']['chat']['id']
+                        username = self.data['callback_query']['message']['chat']['username']
+
+                        logger.error('Exception: ' + user_chat_id + ' (' + username + ') - ' + str(e))
 
                 elif isinstance(result, date):
                     try:
@@ -66,7 +81,11 @@ class CallbackHandler:
                                                    self.data['callback_query']['message']['message_id'])
                         TicketsHandler.create_new_ticket(self.bot, self.data, due_date)
                     except Exception as e:
-                        print(e)
+                        # Exception logger credentials
+                        user_chat_id = self.data['callback_query']['message']['chat']['id']
+                        username = self.data['callback_query']['message']['chat']['username']
+
+                        logger.error('Exception: ' + user_chat_id + ' (' + username + ') - ' + str(e))
         else:
             self.bot.sendMessage(chat_id=get_chat_id(self.data['callback_query']),
                                  text='Authorization first 🙃\n'

@@ -376,7 +376,7 @@
           <div id="added_file" class="added_file"></div>
           <div class="file-upload">
             <label>
-              <input type="file" name="userfile[]" multiple id="userfile" hidden>
+              <input type="file" name="userfile[]" id="userfile" hidden>
               <img src="{% static 'images/add_file.svg' %}" style="height: 25px">
             </label>
           </div>
@@ -576,25 +576,6 @@
           }
       });
   }
-
-  // $("#add-file").click(function(event) {
-  //     var fileInput = document.createElement('input');
-  //     fileInput.type = 'file';
-  //     fileInput.style.display = 'none';
-  //     fileInput.addEventListener('change', function() {
-  //         var selectedFile = fileInput.files[0];
-  //         // console.log('Ви обрали файл:', selectedFile);
-  //         var added_file = document.getElementById("added_file");
-  //         added_file.innerText = selectedFile['name'];
-  //         added_file.dataset.file_name = selectedFile['name'];
-  //         added_file.dataset.size = selectedFile['size'];
-  //         added_file.dataset.type = selectedFile['type'];
-  //         added_file.dataset.last_modified = selectedFile['lastModified'];
-  //     });
-  //     document.body.appendChild(fileInput);
-  //     fileInput.click();
-  //     document.body.removeChild(fileInput);
-  // });
 
   // file in input block
   $(".file-upload input[type=file]").change(function(){

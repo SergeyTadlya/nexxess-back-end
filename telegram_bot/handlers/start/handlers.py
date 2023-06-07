@@ -5,7 +5,12 @@ from .keyboards import *
 from ..utils import *
 from ..system_commands import *
 from ...models import Authentication, User
+
 from random import randint
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 class StartHandler:
@@ -110,7 +115,11 @@ class AuthenticationHandler:
                       [unauthorized_user.email],
                       fail_silently=False)
         except Exception as e:
-            print(e)
+            # Exception logger credentials
+            user_chat_id = self.data['message']['from']['id']
+            username = self.data['message']['from']['username']
+
+            logger.error('Exception: ' + user_chat_id + ' (' + username + ') - ' + str(e))
 
     def set_user_verification_code(self, data):
         unauthorized_user = Authentication.objects.filter(telegram_id=self.data['message']['from']['id'])

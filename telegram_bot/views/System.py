@@ -1,5 +1,6 @@
-from ..models import TelegramSettings, InstallationSettings
 from django.http import HttpResponse
+
+from ..models import TelegramSettings, InstallationSettings
 
 import requests
 
