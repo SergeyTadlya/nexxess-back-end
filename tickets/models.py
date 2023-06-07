@@ -33,6 +33,9 @@ class Ticket(models.Model):
     b24_time = models.CharField(max_length=200, blank=True, null=True)
     task_info = models.JSONField(verbose_name='TASK_INFO_DATA', default=list, blank=True, null=True)
     task_info_crm = models.JSONField(verbose_name='TASK_INFO_DATA_CRM', default=list, blank=True, null=True)
+    added_documents_url = models.URLField(null=True, blank=True, max_length=500)
+    added_document_type = models.CharField(max_length=50, null=True, blank=True)
+    added_document_name = models.CharField(max_length=50, null=True, blank=True)
     created_at = models.DateTimeField(verbose_name='Create date', auto_now_add=True, blank=True, null=True)
 
     def __str__(self):

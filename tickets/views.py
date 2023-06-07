@@ -21,7 +21,9 @@ import os
 import base64
 
 
-
+from bs4 import BeautifulSoup
+from authentication.models import B24keys
+import re
 def check_and_shorten_string(string):
     if len(string) > 20:
         string = string[:20] + '...'
@@ -290,14 +292,31 @@ def create_bitrix_task(request):
         else:
             task_deadline = datetime.today().strftime("%Y-%m-%d")
 
+        # if file is added in task
+        if request.FILES.getlist('userfile[]'):
+            files = request.FILES.getlist('userfile[]')
+            for file in files:
+                file_name = file.name.replace(" ", "_")
+                file_content_type = file.content_type
+                file_path = os.path.join(settings.MEDIA_ROOT, 'comment_files', file_name)
+                with open(file_path, 'wb') as destination:
+                    for chunk in file.chunks():
+                        destination.write(chunk)
+                domain = request.POST.get('domain')
+                file_url = f'{domain}/media/comment_files/{file_name}'
+                post_message = f'{task_description}\n' \
+                               f'nexxess_file:{file_url}'
+        else:
+            post_message = task_description
+
+
         try:
             method = "tasks.task.add"
             url = set_webhook(method)
-            print('url', url)
             payload = {
                 'fields': {
                     'TITLE': task_name,
-                    'DESCRIPTION': task_description,
+                    'DESCRIPTION': post_message,
                     'DEADLINE': task_deadline,
                     'CREATED_BY': 393, # 393
                     'RESPONSIBLE_ID': 312, # 312
@@ -310,10 +329,8 @@ def create_bitrix_task(request):
                 }
 
             response = requests.post(url, json=payload)
-            print('response', response)
             response_data = json.loads(response.content)
             task_id = response_data['result']['task']['id']
-            print('response task_id', task_id)
 
             if response.status_code == 200:
                 time.sleep(3)
@@ -363,7 +380,6 @@ def task_data(request):
     # url = set_webhook("tasks.task.update?taskId=556&fields[TAGS]=tag_one,tag_two")
     # response = requests.post(url)
     # print('response', response)
-
     return render(request, 'tickets/list.html', context)
 
 
@@ -415,9 +431,7 @@ def send_user_message(request):
             # add comment in task in bitrix
             new_comment = bx24.callMethod('task.commentitem.add', taskId=ticked_id,
                                           fields={"AUTHOR_ID": 393, "POST_MESSAGE": post_message}) # AUTHOR_ID  393
-            
-            print('file_type 418', file_type)
-            print('file_type 419', type(file_type))
+
             TicketComments.objects.create(
                 ticket=Ticket.objects.get(task_id=ticked_id),
                 comment_id=new_comment,

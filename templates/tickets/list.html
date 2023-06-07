@@ -4,6 +4,16 @@
 {% block extra_css %}
 
   <link rel="stylesheet" type="text/css" href="{% static 'css/tickets.css' %}">
+  <style>
+    .file-info {
+      display: flex;
+    }
+    .added_file {
+      font-family: Inter,sans-serif;
+      font-size: 15px;
+      padding-left: 7px;
+    }
+  </style>
 {% endblock %}
 
 {% block title %} Tickets {% endblock %}
@@ -109,7 +119,7 @@
       Create ticket
     </button>
 
-    <form id="content__form" class="content__form" method="POST" action="{% url 'tickets:create_task' %}" >
+    <form id="content__form" class="content__form" method="POST" action="{% url 'tickets:create_task' %}" enctype="multipart/form-data">
   {% csrf_token %}
   <div class="content__form-box">
     <input class="content__form-input" type="text" name="task_name" placeholder="Title">
@@ -149,6 +159,17 @@
         </div>
       </div>
     </div>
+    <div class="file-upload" style="padding-top: 30px">
+      <div class="file-info">
+        <input type="text" id="domain" name="domain" hidden>
+        <label for="userfile">
+          <input type="file" name="userfile[]" id="userfile" hidden="">
+          <img src="/static/images/add_file.svg" style="height: 25px">
+        </label>
+        <div id="added_file" class="added_file"></div>
+      </div>
+    </div>
+
   </div>
 </form>
   </div>
@@ -247,4 +268,13 @@
   <script src="{% static 'js/jquery-ui.min.js' %}"></script>
   <script src="{% static 'js/calendar.js' %}"></script>
   <script src="{% static 'js/tickets.js' %}"></script>
+  <script>
+    var domainInput = document.getElementById('domain');
+    domainInput.value = "https://" + window.location.hostname;
+    // file in input block
+    $(".file-upload input[type=file]").change(function(){
+         var filename = $(this).val().replace(/.*\\/, "");
+         $("#added_file")[0].innerText = filename;
+    });
+  </script>
 {% endblock %}
