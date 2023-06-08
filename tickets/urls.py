@@ -1,6 +1,6 @@
 from django.conf.urls.static import static
 from django.conf import settings
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 
@@ -13,6 +13,9 @@ urlpatterns = [
     path('detail/<int:id>/', views.task_detail, name="task_detail"),
     path('ajax_tasks_filter/', views.ajax_tasks_filter),
     path('send_user_message/', views.send_user_message, name="send_user_message"),
+    path('search/', include('search.urls')),
+
+
 ]
 
 if settings.DEBUG:

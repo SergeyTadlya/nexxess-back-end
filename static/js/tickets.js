@@ -116,19 +116,71 @@ document.addEventListener('keydown', (e) => {
 
 //_____FILTER____
 
-filterBtn.addEventListener('click', filters)
+// filterBtn.addEventListener('click', filters)
 
-function filters() {
-  burger.classList.add('burger-filter--active')
-  asidefilter.classList.add('aside-filter--active')
+// function filters() {
+//   burger.classList.add('burger-filter--active')
+//   asidefilter.classList.add('aside-filter--active')
 
-  if (document.body.classList.contains('body--active')) {
-    document.body.classList.remove('body--active')
-  } else {
-    document.body.classList.add('body--active')
+//   if (document.body.classList.contains('body--active')) {
+//     document.body.classList.remove('body--active')
+//   } else {
+//     document.body.classList.add('body--active')
+//   }
+// }
+
+'use strict'
+
+//________content__titles_____
+
+const contentTitles = document.querySelectorAll('.content__titles-item');
+let isBig = false;
+let currentElement = null;
+
+const savedState = localStorage.getItem('elementState');
+if (savedState) {
+  const { elementId, state } = JSON.parse(savedState);
+  currentElement = document.getElementById(elementId);
+  isBig = state;
+
+  if (currentElement) {
+    currentElement.classList.toggle('content__titles-big-to-small', isBig);
+    currentElement.classList.toggle('content__titles-small-to-big', !isBig);
   }
 }
 
+for (let item of contentTitles) {
+  item.addEventListener('click', function() {
+    if (currentElement !== item) {
+      if (currentElement) {
+        currentElement.classList.remove('content__titles-big-to-small');
+        currentElement.classList.remove('content__titles-small-to-big');
+        currentElement.classList.add('content__titles-item');
+      }
+      currentElement = item;
+      isBig = false;
+    }
 
+    console.log("Current element:", currentElement);
 
+    if (isBig) {
+      item.classList.remove('content__titles-big-to-small');
+      item.classList.add('content__titles-small-to-big');
+      isBig = false;
+    } else {
+      item.classList.remove('content__titles-small-to-big');
+      item.classList.add('content__titles-big-to-small');
+      isBig = true;
+    }
 
+    const stateToSave = {
+      elementId: currentElement.id,
+      state: isBig
+    };
+    localStorage.setItem('elementState', JSON.stringify(stateToSave));
+
+    const ticketLink = document.getElementById(currentElement.id);
+    const hrefValue = `?state=${isBig}&ticket_field=${currentElement.id}`;
+    ticketLink.setAttribute('href', hrefValue);
+  });
+}

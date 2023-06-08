@@ -82,21 +82,25 @@
 {% endblock %}
 
 {% block content %}
-  <div class="content__inner">
-    <div class="content__top">
-      <h1 class="title content__top-title">My Tickets History</h1>
-      <div class="content__top-search">
-        <img class="content__top-img" src="{% static 'images/main/Search.svg' %}" alt="Search">
+<div class="content__inner">
+  <div class="content__top">
+    <h1 class="title content__top-title">My Tickets History</h1>
+    <div class="content__top-search">
+      <img class="content__top-img" src="{% static 'images/main/Search.svg' %}" alt="Search">
+      <form id="search-form" autocomplete="off">
+        {% csrf_token %}
         <input class="content__top-input" type="text" id="search-input" placeholder="Search">
-      </div>
+      </form>
     </div>
+  </div>
+  <div id='results_box' class='results-card not-visible'></div>
 
     <ul class="content__titles">
-      <li class="content__titles-item">ID</li>
-      <li class="content__titles-item">Title</li>
-      <li class="content__titles-item">Created date</li>
-      <li class="content__titles-item">Due date</li>
-      <li class="content__titles-item">Status</li>
+        <a href="?state=&ticket_field=" class="content__titles-item" id="id">ID</a>
+        <a href="?state=&ticket_field=" class="content__titles-item" id="title">Title</a>
+        <a href="?state=&ticket_field=" class="content__titles-item" id="created_at">Created date</a>
+        <a href="?state=&ticket_field=" class="content__titles-item" id="deadline">Due date</a>
+        <a href="?state=&ticket_field=" class="content__titles-item" id="status">Status</a>
     </ul>
 
     <div id="div-tasks">
@@ -160,18 +164,19 @@
 
       <div id="content__showing-box" class="content__showing-box">
         <p class="content__showing-text">Showing</p>
-        <p id="content__showing-number" class="content__showing-number">{{ tasks_number }}</p>
+        <p id="content__showing-number" class="content__showing-number">{{ amount_on_page }}</p>
         <img class="content__showing-img" src="{% static 'images/invoices/arrow-drop-down.svg' %}" alt="icon">
         <p class="content__showing-numbers">of {{ tasks_number }}</p>
         <ul id="content__showing-list" class="content__showing-list">
-          <li class="content__showing-item">10</li>
-          <li class="content__showing-item">50</li>
-          <li class="content__showing-item">100</li>
-          <li class="content__showing-item">All</li>
+          <a href="?page=1&limit=10" class="content__showing-item">10</a>
+          <a href="?page=1&limit=50" class="content__showing-item">50</a>
+          <a href="?page=1&limit=100" class="content__showing-item">100</a>
+          <a href="?page=1&limit=all" class="content__showing-item">All</a>
         </ul>
       </div>
 
   </div>
+
     <div id="tasks_pagination">
     {% if tasks.has_other_pages %}
         <div class="content__pagination">
@@ -195,7 +200,7 @@
                         {% if tasks.number == i %}
                             <span class="content__pagination-button pagination--active">{{ i }}</span>
                         {% else %}
-                            <a class="content__pagination-button" href="?page={{ i }}" >{{ i }}</a>
+                            <a class="content__pagination-button" href="?page={{ i }}&limit={{ amount_on_page }}" >{{ i }}</a>
                         {% endif %}
                     {% endfor %}
                 {% endif %}
@@ -307,10 +312,18 @@
 {% endblock footer %}
 
 {% block extra_js %}
-    <script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
-    <script src="{% static 'js/jquery-ui.min.js' %}"></script>
-    <script src="{% static 'js/calendar.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- <script src="{% static 'js/jquery-3.6.4.min.js' %}"></script> -->
+    <!-- <script src="{% static 'js/jquery-ui.min.js' %}"></script> -->
+    <!-- <script src="{% static 'js/calendar.js' %}"></script> -->
     <script src="{% static 'js/global.js' %}"></script>
     <script src="{% static 'js/tickets.js' %}"></script>
-    <script src="{% static 'ajax/task_ajax.js' %}"></script>
+    <!-- <script src="{% static 'ajax/task_ajax.js' %}"></script> -->
+
+    <script src="{% static 'js/ticket_dynamic_search.js' %}"></script>
+    <script src="{% static 'js/general_dynamic_search.js' %}"></script>
+
+    <script src="{% static 'js/tickets_pagination.js' %}"></script>
+
+
 {% endblock %}

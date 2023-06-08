@@ -108,6 +108,25 @@
   border: 1px solid #7C48EE;
   border-radius: 4px;
 }
+.results-card {
+  position: relative;
+  z-index: 9999;
+  width: 285px;
+  box-shadow: 0 8px 8px rgba(0,0,0,0.25);
+  background-color: rgba(255, 255, 255, 0.3);
+  transition: 0.5s;
+  border-radius: 7px;
+  padding: 15px 15px;
+  margin-left: auto;
+  margin-top: -20px;
+  margin-bottom: 15px;
+}
+.not-visible {
+  display: none;
+}
+.item {
+  text-decoration: none;
+}
 .content__top-input {
   width: 100%;
   margin-left: 8px;
@@ -263,7 +282,7 @@
 .content__list-product-description {
   width: 45%;
   list-style: decimal;
-  
+
   font-size: 20px;
   margin-left: 20px;
 }
@@ -276,7 +295,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  
+
+}
+
+.content__list-product-description-text-small .content__list-product-description-text {
+  font-size: 18px;
 }
 
 .content__list-product-description-text-small .content__list-product-description-text {

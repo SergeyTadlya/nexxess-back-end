@@ -80,8 +80,36 @@ def invoices(request):
                 'number': status_number
             })
 
+        # Sorting for invoices on page
+        sort_order = 0
+        sort_by = 0
+
+        if request.GET.get('invoice_field'):
+            sort_order = request.GET.get('state') == 'true'
+            sort_by = request.GET.get('invoice_field')
+        elif request.session.get('for_sort'):
+            sort_order = request.session.get('for_sort')[0]
+            sort_by = request.session.get('for_sort')[1]
+
+        try:
+            if sort_by == 'invoice_id':
+                invoices_array = sorted(invoices_array, key=lambda x: int(x[sort_by]), reverse=sort_order)
+            elif sort_by == 'status':
+                invoices_array = sorted(invoices_array, key=lambda x: x[sort_by].value, reverse=sort_order)
+            elif sort_by == 'price':
+                invoices_array = sorted(invoices_array, key=lambda x: int(x[sort_by][1:]), reverse=sort_order)
+            else:
+                invoices_array = sorted(invoices_array, key=lambda x: x[sort_by], reverse=sort_order)
+            request.session['for_sort'] = [sort_order, sort_by]
+        except KeyError:
+            pass
+
         # Pagination for invoices
-        paginator = Paginator(invoices_array, 10)
+        limit = request.GET.get('limit', '10')
+        if not limit.isdigit():
+            limit = len(invoices_array)
+
+        paginator = Paginator(invoices_array, limit)
         page = request.GET.get('page', 1)
 
         try:
@@ -97,6 +125,7 @@ def invoices(request):
             'statuses_amount': len(invoices_statuses),
             'invoices_number': len(all_user_invoices),
             'bought_services': bought_services,
+            'amount_on_page': limit,
         }
 
         return render(request, "invoices/invoices.html", context)
@@ -242,29 +271,30 @@ def invoice_detail(request, id):
                 return render(request, "invoices/detail.html", res)
             else:
                 return redirect('/invoices/')
-        except :
-                return redirect('/invoices/')
-    else: return redirect('authentication:main')
+        except:
+            return redirect('/invoices/')
+    else:
+        return redirect('authentication:main')
+
 
 
 def generate_new_pdf(pdf_path, id, invoice, request):
-
     pdf_file = fitz.open(pdf_path)
 
     # Load the first page of the PDF
     page = pdf_file.load_page(0)
 
     # Insert the invoice id
-    page.insert_text(fitz.Point(115, 206), str(invoice.invoice_id), fontsize = 16)
+    page.insert_text(fitz.Point(115, 206), str(invoice.invoice_id), fontsize=16)
 
     # Insert the date
     page.insert_text(fitz.Point(105, 225), str(format_date(invoice.date)))
     data = str(request.user.first_name) + ' ' + str(request.user.last_name)
-    page.insert_text(fitz.Point(100, 342), str((invoice.product_title)), fontsize = 12)
+    page.insert_text(fitz.Point(100, 342), str((invoice.product_title)), fontsize=12)
 
     # Insert the due date
     page.insert_text(fitz.Point(95, 241), str(format_date(invoice.due_date)))
-    page.insert_text(fitz.Point(105, 283), str(data), fontsize = 14)
+    page.insert_text(fitz.Point(105, 283), str(data), fontsize=14)
     # Insert the price
     page.insert_text(fitz.Point(469, 343), str(format_price(invoice.price)))
     page.insert_text(fitz.Point(469, 400), str(format_price(invoice.price)))
@@ -315,7 +345,7 @@ def create_payment_link(request):
             },
         ],
         metadata={"b24_invoice_id": b24_invoice_id},
-        after_completion={"type": "redirect", "redirect": {"url": stipe_settings.webhook_url+b24_invoice_id},}
+        after_completion={"type": "redirect", "redirect": {"url": stipe_settings.webhook_url + b24_invoice_id}, }
     )
     print(stripe_response)
     return JsonResponse({'pay_link': stripe_response.url})
@@ -326,6 +356,6 @@ def complete_payment_link(request):
     b24invoice_id = request.GET["b24invoice_id"]
     url = set_webhook("")
     bx24 = Bitrix24(url)
-    bx24.callMethod('crm.invoice.update', id=b24invoice_id, fields={'STATUS_ID': 'P',})
+    bx24.callMethod('crm.invoice.update', id=b24invoice_id, fields={'STATUS_ID': 'P', })
     time.sleep(5)
     return redirect("/invoices/")

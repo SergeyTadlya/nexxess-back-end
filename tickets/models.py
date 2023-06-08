@@ -58,6 +58,9 @@ class TicketComments(models.Model):
     is_active = models.BooleanField(default=True)
     created_date = models.DateTimeField(null=True, blank=True, auto_now_add=True,)
 
+    def __str__(self):
+        return self.text
+
 
 class TelegramTicket(models.Model):
     responsible = models.CharField(max_length=50, verbose_name='Responsible bitrix ID')

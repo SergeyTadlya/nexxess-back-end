@@ -78,8 +78,34 @@ def tasks(request):
             'number': status_number
         })
 
+    # Sorting for tickets on page
+    sort_order = 0
+    sort_by = 0
+
+    if request.GET.get('ticket_field'):
+        sort_order = request.GET.get('state') == 'true'
+        sort_by = request.GET.get('ticket_field')
+    elif request.session.get('for_sort'):
+        sort_order = request.session.get('for_sort')[0]
+        sort_by = request.session.get('for_sort')[1]
+
+    try:
+        if sort_by == 'id':
+            tasks_array = sorted(tasks_array, key=lambda x: int(x[sort_by]), reverse=sort_order)
+        elif sort_by == 'status':
+            tasks_array = sorted(tasks_array, key=lambda x: x[sort_by].value, reverse=sort_order)
+        else:
+            tasks_array = sorted(tasks_array, key=lambda x: x[sort_by], reverse=sort_order)
+        request.session['for_sort'] = [sort_order, sort_by]
+    except KeyError:
+        pass
+
     # Pagination for tickets
-    paginator = Paginator(tasks_array, 10)
+    limit = request.GET.get('limit', '10')
+    if not limit.isdigit():
+        limit = len(tasks_array)
+
+    paginator = Paginator(tasks_array, limit)
     page = request.GET.get('page', 1)
 
     try:
@@ -89,14 +115,13 @@ def tasks(request):
     except EmptyPage:
         tasks_array = paginator.page(paginator.num_pages)
 
-
-
     context = {
         'tasks': tasks_array,
         'tasks_statuses': tasks_statuses,
         'tasks_number': len(all_user_tasks),
         'statuses_amount': len(tasks_statuses),
         'bought_services': bought_services,
+        'amount_on_page': limit,
     }
 
     return render(request, "tickets/tickets.html", context)
@@ -241,7 +266,7 @@ def task_detail(request, id):
             if "Author assigned:" in created_comment.text:
                 continue
             if "Responsible person assigned:" in created_comment.text:
-                continue    
+                continue
 
             comment_time = created_comment.created_date
             formatted_date = comment_time.strftime("%B %d, %Y, %I:%M %p")
@@ -252,10 +277,10 @@ def task_detail(request, id):
                 file_name = created_comment.added_document_name
                 file_type = created_comment.added_document_type
             else:
-                file_name = ""    
-                file_url = "" 
-                file_type = "" 
-            
+                file_name = ""
+                file_url = ""
+                file_type = ""
+
             comments_array.append({
                 'bitrix_id': created_comment.comment_id,
                 'message': created_comment.text,
@@ -336,6 +361,7 @@ def create_bitrix_task(request):
                 time.sleep(3)
                 return redirect('tickets:tasks')
 
+
         except Exception as e:
             print(e)
 
@@ -399,9 +425,9 @@ def send_user_message(request):
             file_content_type = file.content_type
             if file_content_type.startswith('image/'):
                 file_type = "image"
-            else:    
+            else:
                 file_type = "document"
-            
+
             # save file localy in media folder
             file_path = os.path.join(settings.MEDIA_ROOT, 'comment_files', file_name)
             with open(file_path, 'wb') as destination:
@@ -427,7 +453,7 @@ def send_user_message(request):
             #         content = f.read()
             #         f.close()
             #     added_file = bx24.callMethod('disk.folder.uploadfile', id=folder_id, data={"NAME": image_name}, fileContent=[image_name, content])
-            
+
             # add comment in task in bitrix
             new_comment = bx24.callMethod('task.commentitem.add', taskId=ticked_id,
                                           fields={"AUTHOR_ID": 393, "POST_MESSAGE": post_message}) # AUTHOR_ID  393

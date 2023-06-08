@@ -7,6 +7,11 @@ from tickets.models import Ticket, TicketStatus
 from invoices.models import Invoice
 
 import requests
+from authentication.helpers.B24Webhook import set_webhook
+from django.contrib.auth.decorators import login_required
+from django.views.generic import TemplateView
+
+
 
 
 class TestView(TemplateView):

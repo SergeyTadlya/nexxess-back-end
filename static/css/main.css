@@ -38,8 +38,12 @@
   padding-bottom: 20px;
   border-bottom: 1px solid #C2C8D0;
 }
-
-
+.not-visible {
+  display: none;
+}
+.item {
+  text-decoration: none;
+}
 .content__list {
   margin-top: 20px;
   display: -ms-grid;
@@ -238,6 +242,7 @@
     margin: 0;
   }
   .content__top-search {
+    position: relative;
     padding: 5px;
     max-width: 100%;
     margin-left: 0;

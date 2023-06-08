@@ -24,6 +24,18 @@ const contentTitles = document.querySelectorAll('.content__titles-item');
 let isBig = false;
 let currentElement = null;
 
+const savedState = localStorage.getItem('elementState');
+if (savedState) {
+  const { elementId, state } = JSON.parse(savedState);
+  currentElement = document.getElementById(elementId);
+  isBig = state;
+
+  if (currentElement) {
+    currentElement.classList.toggle('content__titles-big-to-small', isBig);
+    currentElement.classList.toggle('content__titles-small-to-big', !isBig);
+  }
+}
+
 for (let item of contentTitles) {
   item.addEventListener('click', function() {
     if (currentElement !== item) {
@@ -45,6 +57,16 @@ for (let item of contentTitles) {
       item.classList.add('content__titles-big-to-small');
       isBig = true;
     }
+
+    const stateToSave = {
+      elementId: currentElement.id,
+      state: isBig
+    };
+    localStorage.setItem('elementState', JSON.stringify(stateToSave));
+
+    const invoiceLink = document.getElementById(currentElement.id);
+    const hrefValue = `?state=${isBig}&invoice_field=${currentElement.id}`;
+    invoiceLink.setAttribute('href', hrefValue);
   });
 }
 

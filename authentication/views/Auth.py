@@ -29,6 +29,7 @@ def verification(request):
 
         return render(request, '2fa.html')
     else:
+
         return render(request, 'main.html')
 
 

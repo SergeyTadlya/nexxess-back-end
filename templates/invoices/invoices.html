@@ -91,7 +91,11 @@
             <h1 class="title content__top-title">Invoices history</h1>
             <div class="content__top-search">
                 <img class="content__top-img" src="{% static 'images/main/Search.svg' %}" alt="Search">
-                <input class="content__top-input" type="text" id="search-input" placeholder="Search">
+                <form id="search-form" autocomplete="off">
+                  {% csrf_token %}
+                  <input class="content__top-input" type="text" id="search-input" placeholder="Search">
+                </form>
+                <div id='results_box' class='results-card not-visible'></div>
             </div>
         </div>
         <button class="content__filter-btn" type="button">
@@ -99,12 +103,12 @@
             Filter
         </button>
         <ul class="content__titles">
-          <li class="content__titles-item" id="invoice_id">Invoice</li>
-          <li class="content__titles-item" id="date">Invoice Date</li>
-          <li class="content__titles-item" id="due_date">Due Date</li>
-          <li class="content__titles-item" id="price">Total</li>
-          <li class="content__titles-item" id="status">Status</li>
-          <li class="content__titles-item">Action</li>
+          <a href="?state=&invoice_field=" class="content__titles-item" id="invoice_id">Invoice</a>
+          <a href="?state=&invoice_field=" class="content__titles-item" id="date">Invoice Date</a>
+          <a href="?state=&invoice_field=" class="content__titles-item" id="due_date">Due Date</a>
+          <a href="?state=&invoice_field=" class="content__titles-item" id="price">Total</a>
+          <a href="?state=&invoice_field=" class="content__titles-item" id="status">Status</a>
+          <a href="?state=&invoice_field=" class="content__titles-item">Action</a>
         </ul>
         <div id="div-invoices">
             {% for invoice in invoices %}
@@ -167,14 +171,14 @@
     </div>
     <div id="content__showing-box" class="content__showing-box">
         <p class="content__showing-text">Showing</p>
-        <p id="content__showing-number" class="content__showing-number">{{ invoices_number }}</p>
+        <p id="content__showing-number" class="content__showing-number">{{ amount_on_page }}</p>
         <img class="content__showing-img" src="{% static 'images/invoices/arrow-drop-down.svg' %}" alt="icon">
         <p class="content__showing-numbers">of {{ invoices_number }}</p>
         <ul id="content__showing-list" class="content__showing-list">
-          <li class="content__showing-item" id="10" value="10">10</li>
-          <li class="content__showing-item" id="50" value="50">50</li>
-          <li class="content__showing-item" id="100" value="100">100</li>
-          <li class="content__showing-item" id="All" value="All">All</li>
+          <a href="?page=1&limit=10" class="content__showing-item">10</a>
+          <a href="?page=1&limit=50" class="content__showing-item">50</a>
+          <a href="?page=1&limit=100" class="content__showing-item">100</a>
+          <a href="?page=1&limit=all" class="content__showing-item">All</a>
         </ul>
     </div>
     <div class="content__pagination" id="invoices_pagination">
@@ -198,7 +202,7 @@
                     {% if invoices.number == i %}
                         <span class="content__pagination-button pagination--active">{{ i }}</span>
                     {% else %}
-                        <a class="content__pagination-button" href="?page={{ i }}" >{{ i }}</a>
+                        <a class="content__pagination-button" href="?page={{ i }}&limit={{ amount_on_page }}" >{{ i }}</a>
                     {% endif %}
                 {% endfor %}
             {% endif %}
@@ -349,7 +353,11 @@
       });
     </script>
     <script src="{% static 'js/invoices.js' %}"></script>
-    <script src="{% static 'js/calendar.js' %}"></script>
     <script src="{% static 'js/global.js' %}"></script>
-    <script src="{% static 'ajax/invoices_ajax.js' %}"></script>
+     <script src="{% static 'ajax/invoices_ajax.js' %}"></script>
+    <script src="{% static 'js/invoice_dynamic_search.js' %}"></script>
+    <script src="{% static 'js/general_dynamic_search.js' %}"></script>
+    <script src="{% static 'js/invoices_pagination.js' %}"></script>
+     <script src="{% static 'js/calendar.js' %}"></script>
+
 {% endblock extra_js %}
