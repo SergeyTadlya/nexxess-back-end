@@ -1,96 +1,86 @@
 'use strict'
 
-const accordionInfoBtn = document.querySelectorAll('#aside-info__accordion-top')
-const accordionInfoList = document.querySelectorAll('.aside-info__accordion-list')
-const accordionInfoArrow = document.querySelectorAll('.aside-info__top-arrow')
+//__________Mobile content arrow_____
 
-accordionInfoBtn.forEach((button, index) => {
+const contentBox = document.querySelectorAll('.content__body-box')
+const contentBtn = document.querySelectorAll('.content__body-btn')
+
+contentBtn.forEach((button, index) => {
   button.addEventListener('click', (e) => {
-    accordionInfoBtn[index].classList.toggle('accordion__top--active')
-    accordionInfoList[index].classList.toggle('accordion__list--active')
-    accordionInfoArrow[index].classList.toggle('accordion__arrow--active')
+    contentBox[index].classList.toggle('content__body-activeBox')
+    contentBtn[index].classList.toggle('content__body-activeBtn')
   })
 })
 
-const accordionFilterBtn = document.querySelectorAll('#aside-filter__accordion-top')
-const accordionFilterList = document.querySelectorAll('.aside-filter__accordion-list')
-const accordionFilterArrow = document.querySelectorAll('.aside-filter__top-arrow')
 
-accordionFilterBtn.forEach((button, index) => {
-  button.addEventListener('click', (e) => {
-    accordionFilterBtn[index].classList.toggle('accordion__top--active')
-    accordionFilterList[index].classList.toggle('accordion__list--active')
-    accordionFilterArrow[index].classList.toggle('accordion__arrow--active')
-  })
-})
 
 //_________*BLOCK*Cotent-top______
 
-const contentTopBox = document.querySelector('#content__showing-box')
-const contentTopList = document.querySelector('#content__showing-list')
-const contentTopNumber = document.querySelector('#content__showing-number')
+// const contentTopBox = document.querySelector('#content__showing-box')
+// const contentTopList = document.querySelector('#content__showing-list')
+// const contentTopNumber = document.querySelector('#content__showing-number')
 
-const contentTopItem = document.querySelectorAll('.content__showing-item')
+// const contentTopItem = document.querySelectorAll('.content__showing-item')
 
-contentTopBox.addEventListener('click', () => {
-  contentTopList.classList.toggle('content__showing--active')
-})
+// contentTopBox.addEventListener('click', () => {
+//   contentTopList.classList.toggle('content__showing--active')
+// })
 
-contentTopItem.forEach((item) => {
-  item.addEventListener('click', () => {
-    contentTopNumber.textContent = item.textContent
-  })
-})
+// contentTopItem.forEach((item) => {
+//   item.addEventListener('click', () => {
+//     contentTopNumber.textContent = item.textContent
+//   })
+// })
 
 // ______CREATE TICKET_____
-const cteareBtn = document.querySelector('#content__create-btn')
-const contentForm = document.querySelector('#content__form')
+// const cteareBtn = document.querySelector('#content__create-btn')
+// const contentForm = document.querySelector('#content__form')
 
-cteareBtn.addEventListener('click', () => {
-  contentForm.classList.toggle('content__form--active')
-})
+// cteareBtn.addEventListener('click', () => {
+//   contentForm.classList.toggle('content__form--active')
+// })
 
 //_________________POPUP *NEW TAG*_________________
 
-const btnNewTag = document.querySelector('#form__new-tag')
+// const btnNewTag = document.querySelector('#form__new-tag')
 
-const popup = document.querySelector('.popup')
-const popupClose = document.querySelector('.popup__close')
-const popupInput = document.querySelector('#popup__input')
+// const popup = document.querySelector('.popup')
+// const popupClose = document.querySelector('.popup__close')
+// const popupInput = document.querySelector('#popup__input')
 
-// ----------OPEN POPUP----------
-btnNewTag.addEventListener('click', (e) => {
-  // if (navList.classList.contains('header__menu--active')) menu()
-  popup.classList.add('show')
-  document.body.style.cssText = `overflow: hidden;`
-})
+// // ----------OPEN POPUP----------
+// btnNewTag.addEventListener('click', (e) => {
+//   // if (navList.classList.contains('header__menu--active')) menu()
+//   popup.classList.add('show')
+//   document.body.style.cssText = `overflow: hidden;`
+// })
 
-// adding # to the beginning of input
-popupInput.addEventListener('click', () => {
-  popupInput.value = '#'
-})
+// // adding # to the beginning of input
+// popupInput.addEventListener('click', () => {
+//   popupInput.value = '#'
+// })
 
-// close on click on overlay
-popupClose.addEventListener('click', (e) => {
-  popup.classList.remove('show')
-  document.body.style.cssText = ''
-})
+// // close on click on overlay
+// popupClose.addEventListener('click', (e) => {
+//   popup.classList.remove('show')
+//   document.body.style.cssText = ''
+// })
 
-// close on click on overlay
-popup.addEventListener('click', (e) => {
-  if (e.target === popup) {
-    popup.classList.remove('show')
-    document.body.style.cssText = ''
-  }
-})
+// // close on click on overlay
+// popup.addEventListener('click', (e) => {
+//   if (e.target === popup) {
+//     popup.classList.remove('show')
+//     document.body.style.cssText = ''
+//   }
+// })
 
-// close on press of escape button
-document.addEventListener('keydown', (e) => {
-  if (e.code === 'Escape' && popup.classList.contains('show')) {
-    popup.classList.remove('show')
-    document.body.style.cssText = ''
-  }
-})
+// // close on press of escape button
+// document.addEventListener('keydown', (e) => {
+//   if (e.code === 'Escape' && popup.classList.contains('show')) {
+//     popup.classList.remove('show')
+//     document.body.style.cssText = ''
+//   }
+// })
 
 //__________BURGER AND FILTER__________
 
@@ -112,7 +102,7 @@ document.addEventListener('keydown', (e) => {
 
 //   burger.classList.toggle('burger--active')
 //   asideInfo.classList.toggle('aside-info--active')
-  
+
 //   if(document.body.classList.contains('body--active') && !burger.classList.contains('burger--active')) {
 //     document.body.classList.remove('body--active')
 //   } else {
@@ -120,40 +110,77 @@ document.addEventListener('keydown', (e) => {
 //   }
 // }
 
-const headerNav = document.querySelector('.nav__list')
-const burger = document.querySelector('.burger')
 
-burger.addEventListener('click', menu)
 
-function menu() {
-  burger.classList.toggle('burger--active')
-  headerNav.classList.toggle('show-nav')
-}
+
 
 //_____FILTER____
 
-filterBtn.addEventListener('click', filters)
+// filterBtn.addEventListener('click', filters)
 
-function filters() {
-  burger.classList.add('burger-filter--active')
-  asidefilter.classList.add('aside-filter--active')
+// function filters() {
+//   burger.classList.add('burger-filter--active')
+//   asidefilter.classList.add('aside-filter--active')
 
-  if (document.body.classList.contains('body--active')) {
-    document.body.classList.remove('body--active')
-  } else {
-    document.body.classList.add('body--active')
+//   if (document.body.classList.contains('body--active')) {
+//     document.body.classList.remove('body--active')
+//   } else {
+//     document.body.classList.add('body--active')
+//   }
+// }
+
+'use strict'
+
+//________content__titles_____
+
+const contentTitles = document.querySelectorAll('.content__titles-item');
+let isBig = false;
+let currentElement = null;
+
+const savedState = localStorage.getItem('elementState');
+if (savedState) {
+  const { elementId, state } = JSON.parse(savedState);
+  currentElement = document.getElementById(elementId);
+  isBig = state;
+
+  if (currentElement) {
+    currentElement.classList.toggle('content__titles-big-to-small', isBig);
+    currentElement.classList.toggle('content__titles-small-to-big', !isBig);
   }
 }
 
+for (let item of contentTitles) {
+  item.addEventListener('click', function() {
+    if (currentElement !== item) {
+      if (currentElement) {
+        currentElement.classList.remove('content__titles-big-to-small');
+        currentElement.classList.remove('content__titles-small-to-big');
+        currentElement.classList.add('content__titles-item');
+      }
+      currentElement = item;
+      isBig = false;
+    }
 
-//__________Mobile content arrow_____
+    console.log("Current element:", currentElement);
 
-const contentBox = document.querySelectorAll('.content__body-box')
-const contentBtn = document.querySelectorAll('.content__body-btn')
+    if (isBig) {
+      item.classList.remove('content__titles-big-to-small');
+      item.classList.add('content__titles-small-to-big');
+      isBig = false;
+    } else {
+      item.classList.remove('content__titles-small-to-big');
+      item.classList.add('content__titles-big-to-small');
+      isBig = true;
+    }
 
-contentBtn.forEach((button, index) => {
-  button.addEventListener('click', (e) => {
-    contentBox[index].classList.toggle('content__body-activeBox')
-    contentBtn[index].classList.toggle('content__body-activeBtn')
-  })
-})
+    const stateToSave = {
+      elementId: currentElement.id,
+      state: isBig
+    };
+    localStorage.setItem('elementState', JSON.stringify(stateToSave));
+
+    const ticketLink = document.getElementById(currentElement.id);
+    const hrefValue = `?state=${isBig}&ticket_field=${currentElement.id}`;
+    ticketLink.setAttribute('href', hrefValue);
+  });
+}

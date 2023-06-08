@@ -12,7 +12,9 @@
     <div class="aside-info__box">
       <div class="aside-info__box-top">
         <img class="aside-info__top-img" src="{% static 'images/alert.svg' %}" alt="icon">
-        <h6 class="aside-info__top-title">Important</h6>
+        {% for b_s in bought_services %}
+          <h6 class="aside-info__top-title"> {{ b_s.product_title }}</h6>
+        {% endfor %}
         <p class="aside-info__top-number">3</p>
       </div>
       <ul class="aside-info__box-list">
@@ -41,22 +43,15 @@
       </div>
 
       <ul class="aside-filter__accordion-list accordion__list--active">
-          {% for task_status in tasks_statuses %}
+        {% for task_status in tasks_statuses %}
           <li class="aside-filter__accordion-item" id="statuses_amount" value="{{ statuses_amount }}">
             <label class="aside-filter__accordion-label" for="{{ task_status.id }}">
-                <input id="{{ invoice_status.id }}" class="aside-filter__accordion-check" value="{{ task_status.name }}" type="checkbox">
+                <input id="{{ task_status.id }}" class="aside-filter__accordion-check" value="{{ task_status.name }}" type="checkbox">
                 {{ task_status.name }}
               </label>
             <p class="aside-filter__accordion-number">{{ task_status.number }}</p>
           </li>
         {% endfor %}
-<!--        <li class="aside-filter__accordion-item">-->
-<!--          <label class="aside-filter__accordion-label" for="status1">-->
-<!--              <input id="status1" class="aside-filter__accordion-check"  name="check" type="checkbox" >-->
-<!--              Ongoing-->
-<!--            </label>-->
-<!--          <p class="aside-filter__accordion-number">0</p>-->
-<!--        </li>-->
       </ul>
     </div>
 
@@ -71,13 +66,13 @@
         <li class="aside-filter__accordion-item">
           <p class="aside-filter__accordion-text">From:</p>
           <div class="aside-filter__accordion-box">
-            <input id="fromDatePicker" class="aside-filter__accordion-date"  type="text" readonly="readonly" placeholder="select a date">
+            <input id="fromDatePicker" class="aside-filter__accordion-date" type="text" readonly="readonly" placeholder="select a date">
           </div>
         </li>
         <li class="aside-filter__accordion-item">
           <p class="aside-filter__accordion-text">To:</p>
           <div class="aside-filter__accordion-box">
-            <input id="toDatePicker" class="aside-filter__accordion-date"  type="text" readonly="readonly" placeholder="select a date">
+            <input id="toDatePicker" class="aside-filter__accordion-date" type="text" readonly="readonly" placeholder="select a date">
           </div>
         </li>
       </ul>
@@ -87,99 +82,146 @@
 {% endblock %}
 
 {% block content %}
-
 <div class="content__inner">
   <div class="content__top">
-    <h1 class="title content__top-title">Tickets</h1>
+    <h1 class="title content__top-title">My Tickets History</h1>
     <div class="content__top-search">
-        <img class="content__top-img" src="{% static 'images/main/Search.svg' %}" alt="Search">
-        <form id="search-form" autocomplete="off">
-            {% csrf_token %}
-            <input class="content__top-input" type="text" id="search-input" placeholder="Search">
-        </form>
+      <img class="content__top-img" src="{% static 'images/main/Search.svg' %}" alt="Search">
+      <form id="search-form" autocomplete="off">
+        {% csrf_token %}
+        <input class="content__top-input" type="text" id="search-input" placeholder="Search">
+      </form>
     </div>
   </div>
   <div id='results_box' class='results-card not-visible'></div>
 
     <ul class="content__titles">
-      <li class="content__titles-item">Ticked id#</li>
-      <li class="content__titles-item">Name</li>
-      <li class="content__titles-item">Ticket Date</li>
-      <li class="content__titles-item">Due Date</li>
-      <li class="content__titles-item">Status</li>
+        <a href="?state=&ticket_field=" class="content__titles-item" id="id">ID</a>
+        <a href="?state=&ticket_field=" class="content__titles-item" id="title">Title</a>
+        <a href="?state=&ticket_field=" class="content__titles-item" id="created_at">Created date</a>
+        <a href="?state=&ticket_field=" class="content__titles-item" id="deadline">Due date</a>
+        <a href="?state=&ticket_field=" class="content__titles-item" id="status">Status</a>
     </ul>
 
-    <div class="content__box">
-
-      <div class="content__body">
-          <ul class="content__body-list">
-              {% for task in tasks %}
-                  <li class="content__body-box">
-                      <ul class="content__body-titles">
-                          <li class="content__body-title">Ticket id#</li>
-                          <li class="content__body-title">Status</li>
-                          <li class="content__body-title">Name</li>
-                          <li class="content__body-title">Ticket Date</li>
-                          <li class="content__body-title">Due Date</li>
-                      </ul>
-                      <ul class="content__body-items">
-                          <li class="content__body-item style--width">
-                              <a class="content__body-link" href="{% url 'tickets:task_detail' task.id %}">
-
-
-                              <a href="{% url 'tickets:task_detail' task.id %}"><p class="content__body-name">{{ task.id }}</p></a>
-
-                          </li>
-                          <li class="content__body-item style--width">
-                            <a class="content__body-link" href="{% url 'tickets:task_detail' task.id %}">
-                              <p class="content__body-name">{{ task.title }}</p>
+    <div id="div-tasks">
+        {% for task in tasks %}
+            {% if task.more_one %}
+                <div class="content__body">
+                  <p class="content__body-titleDate">{{ task.created_at }}</p>
+                    {% endif %}
+                  <ul class="content__body-list">
+                      <li class="content__body-box">
+                          <ul class="content__body-titles">
+                              <li class="content__titles-item">ID</li>
+                              <li class="content__titles-item">Title</li>
+                              <li class="content__titles-item">Created date</li>
+                              <li class="content__titles-item">Due date</li>
+                              <li class="content__titles-item">Status</li>
+                          </ul>
+                          <ul class="content__body-items">
+                              <li class="content__body-item style--width">
+                                  <a href="{% url 'tickets:task_detail' task.id %}">
+                                      <p class="content__body-name">{{ task.id }}</p>
+                                  </a>
+                              </li>
+                              <li class="content__body-item style--width">
+                                <a class="content__body-link" href="{% url 'tickets:task_detail' task.id %}">
+                                    <p class="content__body-name">{{ task.title }}</p>
                                 </a>
-                          </li>
-                          <li class="content__body-item style--width">
-                            <a class="content__body-link" href="{% url 'tickets:task_detail' task.id %}">
-                              <p class="content__body-date">{{ task.created_at }}</p>
-                              </a>
-                          </li>
-                          <li class="content__body-item style--width">
-                              <p class="content__body-date">{{ task.deadline }}</p>
-                          </li>
-                          <li class="content__body-item style--width">
-                              {% if task.status == '2' %}
-                              <p class="content__body-status style--width font--blue">New</p>
-                              {% elif task.status == '3' %}
-                              <p class="content__body-status style--width font--green">Ongoing</p>
-                              {% else %}
-                              <p class="content__body-status style--width font--white">Closed</p>
-                              {% endif %}
-                          </li>
-                      </ul>
-                      <div class="content__body-messages">
-                          <p>1</p>
-                          <img src="{% static 'images/mail.svg' %}" alt="print">
-                      </div>
-                      <button class="content__body-btn">
-                          <img class="content__body-img" src="{% static 'images/chevron.svg' %}" alt="arrow">
-                      </button>
-                  </li>
-              {% endfor %}
-          </ul>
-      </div>
-
+                              </li>
+                              <li class="content__body-item style--width">
+                                <a class="content__body-link" href="{% url 'tickets:task_detail' task.id %}">
+                                    <p class="content__body-date">{{ task.created_at }}</p>
+                                </a>
+                              </li>
+                              <li class="content__body-item style--width">
+                                  <a class="content__body-link" href="{% url 'tickets:task_detail' task.id %}">
+                                      <p class="content__body-date">{{ task.deadline }}</p>
+                                  </a>
+                              </li>
+                              <li class="content__body-item style--width">
+                                  <a class="content__body-link" href="{% url 'tickets:task_detail' task.id %}">
+                                      <p class="content__body-status style--width font--{{ task.status.color }}">{{ task.status.name }}</p>
+                                  </a>
+                              </li>
+                          </ul>
+                          {% if task.new_comment != 0 %}
+                              <div class="content__body-messages">
+                                  <p>{{task.new_comment}}</p>
+                                  <img src="{% static 'images/mail.svg' %}" alt="print">
+                              </div>
+                              <button class="content__body-btn">
+                                  <img class="content__body-img" src="{% static 'images/chevron.svg' %}" alt="arrow">
+                              </button>
+                          {% endif %}
+                      </li>
+                  </ul>
+                    {% if task.more_one %}
+                </div>
+        {% endif %}
+        {% endfor %}
     </div>
 
       <div id="content__showing-box" class="content__showing-box">
         <p class="content__showing-text">Showing</p>
-        <p id="content__showing-number" class="content__showing-number">{{ tasks_number }}</p>
+        <p id="content__showing-number" class="content__showing-number">{{ amount_on_page }}</p>
         <img class="content__showing-img" src="{% static 'images/invoices/arrow-drop-down.svg' %}" alt="icon">
         <p class="content__showing-numbers">of {{ tasks_number }}</p>
         <ul id="content__showing-list" class="content__showing-list">
-          <li class="content__showing-item">10</li>
-          <li class="content__showing-item">50</li>
-          <li class="content__showing-item">100</li>
-          <li class="content__showing-item">All</li>
+          <a href="?page=1&limit=10" class="content__showing-item">10</a>
+          <a href="?page=1&limit=50" class="content__showing-item">50</a>
+          <a href="?page=1&limit=100" class="content__showing-item">100</a>
+          <a href="?page=1&limit=all" class="content__showing-item">All</a>
         </ul>
       </div>
+
   </div>
+
+    <div id="tasks_pagination">
+    {% if tasks.has_other_pages %}
+        <div class="content__pagination">
+            {% if tasks.has_previous %}
+                <a id="prev" class="content__pagination-arrow" href="?page={{ tasks.previous_page_number }}">
+                  <svg width="46" height="46" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M14.021 6.912a.69.69 0 0 1 0 .976L9.91 12l4.112 4.112a.69.69 0 0 1-.976.976l-4.6-4.6a.69.69 0 0 1 0-.976l4.6-4.6a.69.69 0 0 1 .976 0Z" clip-rule="evenodd"></path>
+                  </svg>
+                </a>
+            {% else %}
+                <a id="prev" class="content__pagination-arrow" href="" style="pointer-events: none">
+                  <svg width="46" height="46" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M14.021 6.912a.69.69 0 0 1 0 .976L9.91 12l4.112 4.112a.69.69 0 0 1-.976.976l-4.6-4.6a.69.69 0 0 1 0-.976l4.6-4.6a.69.69 0 0 1 .976 0Z" clip-rule="evenodd"></path>
+                  </svg>
+                </a>
+            {% endif %}
+
+            <div class="content__pagination-buttons">
+                {% if tasks.has_other_pages %}
+                    {% for i in tasks.paginator.page_range %}
+                        {% if tasks.number == i %}
+                            <span class="content__pagination-button pagination--active">{{ i }}</span>
+                        {% else %}
+                            <a class="content__pagination-button" href="?page={{ i }}&limit={{ amount_on_page }}" >{{ i }}</a>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            {% if tasks.has_next %}
+                <a id="next" class="content__pagination-arrow" href="?page={{ tasks.next_page_number }}">
+                  <svg width="46" height="46" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M9.979 6.912a.69.69 0 0 1 .976 0l4.6 4.6a.69.69 0 0 1 0 .976l-4.6 4.6a.69.69 0 1 1-.976-.976L14.091 12 9.98 7.888a.69.69 0 0 1 0-.976Z" clip-rule="evenodd"></path>
+                  </svg>
+                </a>
+            {% else %}
+                <a id="next" class="content__pagination-arrow" href="" style="pointer-events: none">
+                  <svg width="46" height="46" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M9.979 6.912a.69.69 0 0 1 .976 0l4.6 4.6a.69.69 0 0 1 0 .976l-4.6 4.6a.69.69 0 1 1-.976-.976L14.091 12 9.98 7.888a.69.69 0 0 1 0-.976Z" clip-rule="evenodd"></path>
+                  </svg>
+                </a>
+            {% endif %}
+        </div>
+    {% endif %}
+    </div>
 {% endblock %}
 
 {% block footer %}
@@ -270,10 +312,18 @@
 {% endblock footer %}
 
 {% block extra_js %}
-  <script src="{% static 'js/ticket_dynamic_search.js' %}"></script>
-  <!-- <script src="{% static 'ajax/task_ajax.js' %}"></script> -->
-  <script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
-  <script src="{% static 'js/jquery-ui.min.js' %}"></script>
-  <script src="{% static 'js/calendar.js' %}"></script>
-  <!-- <script src="{% static 'js/tickets.js' %}"></script> -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- <script src="{% static 'js/jquery-3.6.4.min.js' %}"></script> -->
+    <!-- <script src="{% static 'js/jquery-ui.min.js' %}"></script> -->
+    <!-- <script src="{% static 'js/calendar.js' %}"></script> -->
+    <script src="{% static 'js/global.js' %}"></script>
+    <script src="{% static 'js/tickets.js' %}"></script>
+    <!-- <script src="{% static 'ajax/task_ajax.js' %}"></script> -->
+
+    <script src="{% static 'js/ticket_dynamic_search.js' %}"></script>
+    <script src="{% static 'js/general_dynamic_search.js' %}"></script>
+
+    <script src="{% static 'js/tickets_pagination.js' %}"></script>
+
+
 {% endblock %}

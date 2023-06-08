@@ -19,9 +19,9 @@ def search_for_invoice(request):
                 input_value = input_value[:-1]
             result = None
             queryset = Invoice.objects.filter(Q(invoice_id__icontains=input_value) |
-                                            Q(created_at__icontains=input_value) |
-                                            Q(price__icontains=input_value) |
-                                            Q(status__value__icontains=input_value)).distinct()
+                                              Q(created_at__icontains=input_value) |
+                                              Q(price__icontains=input_value) |
+                                              Q(status__value__icontains=input_value)).distinct()
 
             if all([len(queryset) > 0, len(input_value) > 0]):
                 data = []
@@ -35,19 +35,19 @@ def search_for_invoice(request):
                 result = data
             else:
                 result = 'No invoices...'
-            
+
         return result
-    
+
 
 def invoice_search(request):
     result = search_for_invoice(request)
-    
+
     return JsonResponse({'data': result})
 
 
 def invoice_detail_search(request, pk):
     search_object = get_object_or_404(Invoice, pk=pk)
-    return render(request, 'invoices/example.html', context={'object': search_object})
+    return render(request, 'invoices/detail.html', context={'object': search_object})
 
 
 # search for services
@@ -62,14 +62,14 @@ def search_for_service(request):
                 input_value = input_value[:-1]
             result = None
             queryset = Service.objects.filter(Q(category__category_name__icontains=input_value) |
-                                            Q(title__icontains=input_value) |
-                                            Q(price__icontains=input_value) |
-                                            Q(detail_text__icontains=input_value)).distinct()
+                                              Q(title__icontains=input_value) |
+                                              Q(price__icontains=input_value) |
+                                              Q(detail_text__icontains=input_value)).distinct()
 
             if len(queryset) > 0:
                 data = []
                 for element in queryset:
-                    item = {'Service': {'pk': element.pk,
+                    item = {'Service': {'pk': element.category.category_b24_id,
                                         'name': element.title,
                                         'price': element.price,
                                         }}
@@ -79,7 +79,7 @@ def search_for_service(request):
                 result = 'No services...'
 
         return result
-        
+
 
 def service_search(request):
     result = search_for_service(request)
@@ -104,31 +104,31 @@ def search_for_ticket(request):
                 input_value = input_value[:-1]
             result = None
             queryset = Ticket.objects.filter(Q(task_id__icontains=input_value) |
-                                            Q(ticket_title__icontains=input_value) |
-                                            Q(ticket_text__icontains=input_value) |
-                                            Q(comments__text__icontains=input_value) |
-                                            Q(created_at__icontains=input_value) |
-                                            Q(status__icontains=input_value)).distinct()
+                                             Q(ticket_title__icontains=input_value) |
+                                             Q(ticket_text__icontains=input_value) |
+                                             Q(comments__text__icontains=input_value) |
+                                             Q(created_at__icontains=input_value) |
+                                             Q(status__name__icontains=input_value)).distinct()
 
             if all([len(queryset) > 0, len(input_value) > 0]):
                 data = []
                 for element in queryset:
                     item = {'Ticket': {'pk': element.pk,
-                                        'task_id': element.task_id,
-                                        'title': element.ticket_title,
-                                        'date': element.created_at.strftime("%Y-%m-%d"),
-                                        }}
+                                       'task_id': element.task_id,
+                                       'title': element.ticket_title,
+                                       'date': element.created_at.strftime("%Y-%m-%d"),
+                                       }}
                     data.append(item)
                 result = data
             else:
                 result = 'No tickets...'
-        
+
         return result
 
 
 def ticket_search(request):
     result = search_for_ticket(request)
-        
+
     return JsonResponse({'data': result})
 
 
@@ -136,4 +136,4 @@ def ticket_detail_search(request, pk):
     search_object = get_object_or_404(Ticket, pk=pk)
     comments = TicketComments.objects.filter(ticket=pk)
     comments_list = [comm.text for comm in list(comments)]
-    return render(request, 'tickets/example.html', context={'object': search_object, 'comments': comments_list})
+    return render(request, 'tickets/detail.html', context={'task': search_object, 'comments': comments_list})

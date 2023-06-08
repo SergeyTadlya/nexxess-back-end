@@ -23,7 +23,7 @@ def general_search(request):
 
         if result == ['No invoices...', 'No services...', 'No tickets...']:
             result = 'No results...'
-        
+
         return JsonResponse({'data': result})
 
     return JsonResponse({})

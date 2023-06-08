@@ -11,7 +11,7 @@
     <div class="aside-info aside-info-none">
       <div class="aside-info__box">
         <div class="aside-info__box-top">
-          <img class="aside-info__top-img" src="{% static 'images/important.svg' %}" alt="icon">
+          <img class="aside-info__top-img" src="{% static '/images/main/custom-tickets.svg' %}" alt="icon">
           <h6 class="aside-info__top-title">Important</h6>
           <p class="aside-info__top-number">3</p>
         </div>
@@ -31,40 +31,37 @@
         </ul>
       </div>
 
-      <div class="aside-info__accordion">
-        <div id="aside-info__accordion-top" class="aside-info__accordion-top">
-          <img class="aside-info__top-img" src="{% static 'images/tickets.svg' %}" alt="icon">
-          <h6 class="aside-info__top-title">Tickets</h6>
-          <img class="aside-info__top-arrow" src="{% static 'images/chevron-down.svg' %}" alt="icon">
-        </div>
+              <div class="aside-info__accordion">
+          <div id="aside-info__accordion-top" class="aside-info__accordion-top">
+            <img class="aside-info__top-img" src="{% static 'images/main/custom-tickets.svg' %}" alt="icon">
+            <h6 class="aside-info__top-title">Tickets</h6>
+            <img class="aside-info__top-arrow" src="{% static 'images/chevron-down.svg' %}" alt="icon">
+          </div>
 
-        <ul class="aside-info__accordion-list">
-          <li class="aside-info__accordion-item">
-            <a class="aside-info__accordion-link" href="#">
-              <p class="aside-info__accordion-text">Ongoing</p>
-              <p class="aside-info__accordion-number font--green">2</p>
-            </a>
-          </li>
-          <li class="aside-info__accordion-item">
-            <a class="aside-info__accordion-link" href="#">
-              <p class="aside-info__accordion-text">Overdue</p>
-              <p class="aside-info__accordion-number font--red">8</p>
-            </a>
-          </li>
-        </ul>
-      </div>
-        <button class="aside-filter__accordion-btn" id="search-btn">Search</button>
-    </div>
+          <ul class="aside-info__accordion-list">
+            <ul class="aside-info__accordion-list">
+              {% for status in statuses %}
+                  <li class="aside-info__accordion-item">
+                    <a class="aside-info__accordion-link" href="#">
+                      <p class="aside-info__accordion-text">{{ status.name }}</p>
+                      <p class="aside-info__accordion-number font--{{ status.color }}">{{ status.number }}</p>
+                    </a>
+                  </li>
+              {% endfor %}
+            </ul>
+
+            </div>
+            </div>
 {% endblock left_menu %}
 
 {% block content %}
     <div class="content__inner">
         <div class="content__top">
             <h1 class="title content__top-title">{{ section_title}}</h1>
-            <div class="content__top-search">
+            <!-- <div class="content__top-search">
                 <img class="content__top-img" src="{% static 'images/main/Search.svg' %}" alt="Search">
                 <input class="content__top-input" type="text" id="search-input" placeholder="Search">
-            </div>
+            </div> -->
         </div>
         <ul class="content__list">
             {% for product in services %}
@@ -213,7 +210,7 @@
   $(document).ready(function () {
     $(".order_click").click(function()
     {
-      var button = $(".order_click")[0];
+      var button = $(this);
       var b24_product_id = $(button).data("b24id");
       $.ajax({
         url: '/services/create_invoice/',
@@ -237,7 +234,10 @@
 
     </script>
 
-    <script src="{% static 'js/dynamic_search.js' %}"></script>
+    <!-- <script src="{% static 'js/dynamic_search.js' %}"></script> -->
     <script src="{% static 'js/services.js' %}"></script>
+    <script src="{% static 'js/global.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{% static 'js/general_dynamic_search.js' %}"></script>
 
 {% endblock extra_js %}

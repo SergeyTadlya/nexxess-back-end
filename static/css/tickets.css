@@ -481,21 +481,21 @@
   border-radius: 4px;
 }
 .results-card { 
-  max-width: 285px;
+  position: relative;
+  z-index: 9999;
+  width: 285px;
   box-shadow: 0 8px 8px rgba(0,0,0,0.25);
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.3);
   transition: 0.5s;
   border-radius: 7px;
   padding: 15px 15px;
   margin-left: auto;
-  margin-top: -20px; /* Добавляем отступ сверху для создания пространства между элементами */
-  margin-bottom: 15px; /* Добавляем отступ снизу для создания пространства между элементами */
+  margin-top: -30px;
+  margin-bottom: 15px;
 }
-
 .not-visible {
   display: none;
 }
-
 .item {
   text-decoration: none;
 }
@@ -605,6 +605,84 @@
   font-weight: 600;
   font-size: 20px;
   line-height: 150%;
+  cursor: pointer;
+  padding-right: 20px;
+  position: relative;
+}
+.content__titles-item::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  background-image: url(../images/invoices/tuda-syuda.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  width: 20px;
+  height: 20px;
+}
+.content__titles-small-to-big {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 135px;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 150%;
+  cursor: pointer;
+  padding-right: 20px;
+  position: relative;
+}
+.content__titles-small-to-big::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  background-image: url(../images/invoices/small-to-big.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  width: 20px;
+  height: 20px;
+}
+.content__titles-big-to-small {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 135px;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 150%;
+  cursor: pointer;
+  padding-right: 20px;
+  position: relative;
+}
+.content__titles-big-to-small::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  background-image: url(../images/invoices/big-to-small.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  width: 20px;
+  height: 20px;
 }
 .content__body {
   position: relative;
@@ -1095,18 +1173,18 @@
   .content {
     gap: 40px;
   }
-  .content__create-btn {
+  /* .content__create-btn {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-  }
+  } */
   .content__form {
     margin: 10px 0;
     -webkit-box-orient: vertical;
     -webkit-box-direction: reverse;
         -ms-flex-direction: column-reverse;
             flex-direction: column-reverse;
-    height: 0;
+    /* height: 100; */
     overflow: hidden;
   }
   .content__form-duration {
@@ -1155,7 +1233,7 @@
     font-size: 14px;
     line-height: 140%;
     overflow: hidden;
-    height: 60px;
+    height: 90px;
     -webkit-transition: all 0.5s;
     -o-transition: all 0.5s;
     transition: all 0.5s;
@@ -1206,7 +1284,9 @@
             align-items: center;
     font-size: 14px;
     line-height: 140%;
+    text-align: center;
   }
+
   .content__body-item + .content__body-item {
     margin-top: 6px;
   }
@@ -1231,7 +1311,7 @@
             order: 5;
   }
   .content__body-link {
-    height: 22px;
+    height: 35px;
   }
   .content__body-number {
     display: none;
@@ -1291,14 +1371,14 @@
     -webkit-transition: all 0.5s;
     -o-transition: all 0.5s;
     transition: all 0.5s;
-    height: 135px;
+    height: 100%;
   }
   .content__body-activeBtn {
     -webkit-transition: all 0.5s;
     -o-transition: all 0.5s;
     transition: all 0.5s;
     -webkit-transform: rotate(-180deg);
-        -ms-transform: rotate(-180deg);
-            transform: rotate(-180deg);
+    -ms-transform: rotate(-180deg);
+    transform: rotate(-180deg) translateY(5px);
   }
 }

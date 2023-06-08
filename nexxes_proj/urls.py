@@ -1,8 +1,7 @@
 from django.conf.urls.static import static
-from django.conf import settings
 from django.contrib import admin
+from django.conf import settings
 from django.urls import path, include
-
 
 urlpatterns = [
     path('', include('authentication.urls')),
@@ -14,9 +13,9 @@ urlpatterns = [
     path('services/', include('services.urls')),
     path('support/', include('support.urls')),
     path('telegram/', include('telegram_bot.urls')),
-    
+
     path('search/', include('search.urls')),
-    ]
+]
 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

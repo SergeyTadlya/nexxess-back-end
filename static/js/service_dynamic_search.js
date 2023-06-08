@@ -23,7 +23,7 @@ const sendSearchData = (input_value) => {
                 resultsBox.innerHTML = ""
                 data.forEach(input_value=> {
                     resultsBox.innerHTML += `
-                        <a href="${url}search/service/${input_value.Service.pk}" class="item">
+                        <a href="${url}about_service/${input_value.Service.pk}" class="item">
                             <div class="row mt-2 mb-2">
                                 <div class="col-2">
                                     <p class="text-muted">${input_value.Service.name}<br><span style="font-size: 12px;"><i>price:</i>  ${input_value.Service.price}</p>
@@ -39,40 +39,21 @@ const sendSearchData = (input_value) => {
                     resultsBox.classList.add('not-visible')
                 }
             }
-        },    
+        },
         error: (error) => {
             console.log(error)
-        }    
-    })    
+        }
+    })
 }
 
 searchInput.addEventListener("keyup", e => {
 
     console.log(e.target.value);
-  
+
     if (resultsBox.classList.contains('not-visible')) {
       resultsBox.classList.remove('not-visible');
     }
-  
+
     sendSearchData(e.target.value);
   });
 
-
-// let keyPressCount = 0;
-// let searchTimeout;
-
-// searchInput.addEventListener("keyup", e => {
-//     keyPressCount++;
-
-//     if (keyPressCount % 2 === 0) {
-//         clearTimeout(searchTimeout);
-//         searchTimeout = setTimeout(() => {
-//             console.log(e.target.value);
-//             sendSearchData(e.target.value);
-//         }, 300); // Задержка в миллисекундах перед отправкой запроса
-//     }
-
-//     if (resultsBox.classList.contains('not-visible')) {
-//         resultsBox.classList.remove('not-visible');
-//     }
-// });

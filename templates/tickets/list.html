@@ -13,7 +13,9 @@
     <div class="aside-info__box">
       <div class="aside-info__box-top">
         <img class="aside-info__top-img" src="{% static 'images/alert.svg' %}" alt="icon">
-        <h6 class="aside-info__top-title">Important</h6>
+        {% for b_s in bought_services %}
+          <h6 class="aside-info__top-title"> {{ b_s.product_title }}</h6>
+        {% endfor %}
         <p class="aside-info__top-number">3</p>
       </div>
       <ul class="aside-info__box-list">
@@ -98,9 +100,13 @@
       <h1 class="title content__top-title">Tickets</h1>
       <div class="content__top-search">
         <img class="content__top-img" src="{% static 'images/main/Search.svg' %}" alt="Search">
-        <input class="content__top-input" type="text" placeholder="Search">
+        <form id="search-form" autocomplete="off">
+          {% csrf_token %}
+          <input class="content__top-input" type="text" id="search-input" placeholder="Search">
+        </form>
       </div>
     </div>
+    <div id='results_box' class='results-card not-visible'></div>
 
     <button id="content__create-btn" class="content__create-btn" type="button">
       <img class="content__create-img" src="{% static 'images/create-btn.svg' %}" alt="create-icon">
@@ -239,9 +245,14 @@
 
 {% endblock footer %}
 {% block extra_js %}
-  <script src="{% static 'ajax/task_ajax.js' %}"></script>
+  <!-- <script src="{% static 'ajax/task_ajax.js' %}"></script> -->
+  <script src="{% static 'js/global.js' %}"></script>
   <script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
   <script src="{% static 'js/jquery-ui.min.js' %}"></script>
   <script src="{% static 'js/calendar.js' %}"></script>
-  <script src="{% static 'js/tickets.js' %}"></script>
+  <!-- <script src="{% static 'js/tickets.js' %}"></script> -->
+
+  <script src="{% static 'js/ticket_dynamic_search.js' %}"></script>
+  <script src="{% static 'js/general_dynamic_search.js' %}"></script>
+
 {% endblock %}

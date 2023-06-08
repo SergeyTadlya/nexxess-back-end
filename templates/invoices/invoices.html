@@ -16,7 +16,9 @@
       <div class="aside-info__box">
         <div class="aside-info__box-top">
           <img class="aside-info__top-img" src="{% static 'images/alert.svg' %}" alt="icon">
-          <h6 class="aside-info__top-title">Important</h6>
+          {% for b_s in bought_services %}
+            <h6 class="aside-info__top-title"> {{ b_s.product_title }}</h6>
+          {% endfor %}
           <p class="aside-info__top-number">3</p>
         </div>
         <ul class="aside-info__box-list">
@@ -88,89 +90,96 @@
         <div class="content__top">
             <h1 class="title content__top-title">Invoices history</h1>
             <div class="content__top-search">
+
                 <img class="content__top-img" src="{% static 'images/main/Search.svg' %}" alt="Search">
                 <form id="search-form" autocomplete="off">
-                    {% csrf_token %}
-                    <input class="content__top-input" type="text" id="search-input" placeholder="Search">
+                  {% csrf_token %}
+                  <input class="content__top-input" type="text" id="search-input" placeholder="Search">
                 </form>
+                <div id='results_box' class='results-card not-visible'></div>
             </div>
         </div>
-        <div id='results_box' class='results-card not-visible'></div>
         <button class="content__filter-btn" type="button">
             <img class="content__filter-img" src="{% static 'images/filter-btn.svg' %}" alt="filter-icon">
             Filter
         </button>
         <ul class="content__titles">
-          <li class="content__titles-item" id="invoice_id">Invoice</li>
-          <li class="content__titles-item" id="date">Invoice Date</li>
-          <li class="content__titles-item" id="due_date">Due Date</li>
-          <li class="content__titles-item" id="price">Total</li>
-          <li class="content__titles-item" id="status">Status</li>
-          <li class="content__titles-item">Action</li>
+          <a href="?state=&invoice_field=" class="content__titles-item" id="invoice_id">Invoice</a>
+          <a href="?state=&invoice_field=" class="content__titles-item" id="date">Invoice Date</a>
+          <a href="?state=&invoice_field=" class="content__titles-item" id="due_date">Due Date</a>
+          <a href="?state=&invoice_field=" class="content__titles-item" id="price">Total</a>
+          <a href="?state=&invoice_field=" class="content__titles-item" id="status">Status</a>
+          <a href="?state=&invoice_field=" class="content__titles-item">Action</a>
         </ul>
         <div id="div-invoices">
-            {% for invoice_date in invoices_dates %}
-                <div class="content__body">
-                    <p class="content__body-titleDate">{{ invoice_date }}</p>
-                    {% for invoice in invoices %}
-                        {% if invoice.date == invoice_date %}
-                            <ul class="content__body-list">
-                                <li  class="content__body-box" >
-                                    <ul class="content__body-titles">
-                                        <li class="content__body-title">Invoice</li>
-                                        <li class="content__body-title">Status</li>
-                                        <li class="content__body-title">Invoice Date</li>
-                                        <li class="content__body-title">Due Date</li>
-                                        <li class="content__body-title">Total</li>
-                                    </ul>
-                                    <ul class="content__body-items">
+            {% for invoice in invoices %}
+                {% if invoice.more_one %}
+                    <div class="content__body">
+                        <p class="content__body-titleDate">{{ invoice.date }}</p>
+                {% endif %}
+                        <ul class="content__body-list">
+                            <li  class="content__body-box" >
+                                <ul class="content__body-titles">
+                                    <li class="content__body-title">Invoice</li>
+                                    <li class="content__body-title">Status</li>
+                                    <li class="content__body-title">Invoice Date</li>
+                                    <li class="content__body-title">Due Date</li>
+                                    <li class="content__body-title">Total</li>
+                                </ul>
+                                <ul class="content__body-items">
+                                    <li  class="content__body-item style--width">
+                                        <a class="content__body-link" href="{% url 'create_invoice_pdf' invoice.id %}" target="_blank">
+                                            <img src="{% static 'images/invoices/print.svg' %}"  alt="print">
+                                        </a>
+                                        <a href="{% url 'invoice_detail' invoice.id %}">
+                                              <p class="content__body-invoice" >{{ invoice.invoice_id }}</p>
+                                        </a>
+                                    </li>
+                                    <li  class="content__body-item style--width">
+                                        <a class="content__body-link" href="{% url 'invoice_detail' invoice.id %}"  target="_blank">
+                                            <p class="content__body-date">{{ invoice.date }}</p></a>
+                                    </li>
+                                    <li class="content__body-item style--width">
+                                        <a class="content__body-link" href="{% url 'invoice_detail' invoice.id %}"  target="_blank">
+                                            <p class="content__body-date">{{ invoice.due_date }}</p></a>
+                                    </li>
+                                    <li  class="content__body-item style--width">
+                                        <a class="content__body-link" href="{% url 'invoice_detail' invoice.id %}"  target="_blank">
+                                        <p class="content__body-money">{{ invoice.price }}</p></a>
+                                    </li>
+                                    <li  class="content__body-item style--width">
+                                        <p class="content__body-status style--width font--{{ invoice.status.color }}">{{ invoice.status.value }}</p>
+                                    </li>
 
-                                        <li  class="content__body-item style--width">
-                                            <a class="content__body-link" href="{% url 'create_invoice_pdf' invoice.id %}" target="_blank">
-                                                <img src="{% static 'images/invoices/print.svg' %}"  alt="print"></a>
-
-                                              <a href="{% url 'invoice_detail' invoice.id %}"><p class="content__body-invoice" >{{ invoice.invoice_id }}</p></a></a>
-                                        </li>
-                                        <li  class="content__body-item style--width">
-                                            <a class="content__body-link" href="{% url 'create_invoice_pdf' invoice.id %}"  target="_blank">
-                                                <p class="content__body-date">{{ invoice.date }}</p></a>
-                                        </li>
-                                        <li class="content__body-item style--width">
-                                            <a class="content__body-link" href="{% url 'create_invoice_pdf' invoice.id %}"  target="_blank">
-                                                <p class="content__body-date">{{ invoice.due_date }}</p></a>
-                                        </li>
-                                        <li  class="content__body-item style--width">
-                                            <a class="content__body-link" href="{% url 'create_invoice_pdf' invoice.id %}"  target="_blank">
-                                            <p class="content__body-money">{{ invoice.price }}</p></a>
-                                        </li>
-                                        <li  class="content__body-item style--width">
-                                            <p class="content__body-status style--width font--{{ invoice.status.color }}">{{ invoice.status.value }}</p>
-                                        </li>
-                                            <li class="content__body-item style--width">
+                                    <li class="content__body-item style--width">
+                                        {% if invoice.status.value == 'Paid' %}
+                                            <a class="button_pay"></a>
+                                        {% else %}
                                             <a class="button_pay" data-b24invoice="{{ invoice.invoice_id }}">Pay</a>
-                                        </li>
-                                    </ul>
-                                    <button class="content__body-btn">
-                                        <img class="content__body-img" src="{% static 'images/chevron.svg' %}" alt="arrow">
-                                    </button>
-                                </li>
-                            </ul>
-                        {% endif %}
-                    {% endfor %}
-                </div>
+                                        {% endif %}
+                                    </li>
+                                </ul>
+                                <button class="content__body-btn">
+                                    <img class="content__body-img" src="{% static 'images/chevron.svg' %}" alt="arrow">
+                                </button>
+                            </li>
+                        </ul>
+                {% if invoice.more_one %}
+                    </div>
+                {% endif %}
             {% endfor %}
         </div>
     </div>
     <div id="content__showing-box" class="content__showing-box">
         <p class="content__showing-text">Showing</p>
-        <p id="content__showing-number" class="content__showing-number">10</p>
+        <p id="content__showing-number" class="content__showing-number">{{ amount_on_page }}</p>
         <img class="content__showing-img" src="{% static 'images/invoices/arrow-drop-down.svg' %}" alt="icon">
         <p class="content__showing-numbers">of {{ invoices_number }}</p>
         <ul id="content__showing-list" class="content__showing-list">
-          <li class="content__showing-item" id="10" value="10">10</li>
-          <li class="content__showing-item" id="50" value="50">50</li>
-          <li class="content__showing-item" id="100" value="100">100</li>
-          <li class="content__showing-item" id="All" value="All">All</li>
+          <a href="?page=1&limit=10" class="content__showing-item">10</a>
+          <a href="?page=1&limit=50" class="content__showing-item">50</a>
+          <a href="?page=1&limit=100" class="content__showing-item">100</a>
+          <a href="?page=1&limit=all" class="content__showing-item">All</a>
         </ul>
     </div>
     <div class="content__pagination" id="invoices_pagination">
@@ -194,7 +203,7 @@
                     {% if invoices.number == i %}
                         <span class="content__pagination-button pagination--active">{{ i }}</span>
                     {% else %}
-                        <a class="content__pagination-button" href="?page={{ i }}" >{{ i }}</a>
+                        <a class="content__pagination-button" href="?page={{ i }}&limit={{ amount_on_page }}" >{{ i }}</a>
                     {% endif %}
                 {% endfor %}
             {% endif %}
@@ -305,10 +314,52 @@
 {% endblock footer %}
 
 {% block extra_js %}
-    <script src="{% static 'js/invoice_dynamic_search.js' %}"></script>
-    <script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
-    <script src="{% static 'js/jquery-ui.min.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- <script src="{% static 'js/jquery-ui.min.js' %}"></script> -->
+    <script>
+      var items = document.querySelectorAll('.content__descrip-item');
+        items.forEach(function(item) {
+          if(item.innerText[0] == "•"){
+            item.innerText = item.innerText.replace(/•/g, '');
+            item.style = "list-style: disc";
+          }
+          if(item.innerText == "INCLUDES:"){
+            // document.getElementById("includes").innerText = item.innerText;
+            item.remove();
+          }
+        });
+
+      $(document).ready(function () {
+        $(".button_pay").click(function()
+        {
+          var button = $(this);
+          var b24_product_id = $(button).data("b24invoice");
+
+          $.ajax({
+            url: '/invoices/create_payment_link/',
+            type: 'POST',
+            data: {"b24_invoice_id":b24_product_id},
+            dataType: 'json',
+            success: function(data) {
+              if (data.pay_link){
+                // window.open(data.pay_link, '_blank');
+                window.location.href = data.pay_link;
+              }else
+              {
+                alert("We have some problem. Please try late")
+              }
+            },
+          });
+        });
+      });
+    </script>
+
     <script src="{% static 'js/invoices.js' %}"></script>
-    <script src="{% static 'js/calendar.js' %}"></script>
-    <script src="{% static 'ajax/invoices_ajax.js' %}"></script>
+    <script src="{% static 'js/global.js' %}"></script>
+    <!-- <script src="{% static 'ajax/invoices_ajax.js' %}"></script> -->
+    <script src="{% static 'js/invoice_dynamic_search.js' %}"></script>
+    <script src="{% static 'js/general_dynamic_search.js' %}"></script>
+    <script src="{% static 'js/invoices_pagination.js' %}"></script>
+    <!-- <script src="{% static 'js/calendar.js' %}"></script> -->
+
 {% endblock extra_js %}

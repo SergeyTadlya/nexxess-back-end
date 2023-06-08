@@ -38,88 +38,11 @@
   padding-bottom: 20px;
   border-bottom: 1px solid #C2C8D0;
 }
-.content__top-search {
-  margin-left: 15px;
-  padding: 8px 16px;
-  max-width: 285px;
-  width: 100%;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  border: 1px solid #7C48EE;
-  border-radius: 4px;
-}
-.results-card { 
-  width: 285px;
-  box-shadow: 0 8px 8px rgba(0,0,0,0.25);
-  background-color: rgba(255, 255, 255, 0.8);
-  transition: 0.5s;
-  border-radius: 7px;
-  padding: 15px 15px;
-  margin-left: auto;
-  margin-top: -30px; /* Добавляем отступ сверху для создания пространства между элементами */
-  margin-bottom: 15px; /* Добавляем отступ снизу для создания пространства между элементами */
-}
 .not-visible {
   display: none;
 }
 .item {
   text-decoration: none;
-}
-.content__top-input {
-  margin-left: 8px;
-  font-weight: 400;
-  width: 100%;
-  font-size: 16px;
-  line-height: 24px;
-  letter-spacing: -0.01em;
-  color: #312D3A;
-  outline: none;
-  border: none;
-}
-.content__top-input::-webkit-input-placeholder {
-  color: #000;
-  -webkit-transition: all 0.3s;
-  transition: all 0.3s;
-}
-.content__top-input::-moz-placeholder {
-  color: #000;
-  -moz-transition: all 0.3s;
-  transition: all 0.3s;
-}
-.content__top-input:-ms-input-placeholder {
-  color: #000;
-  -ms-transition: all 0.3s;
-  transition: all 0.3s;
-}
-.content__top-input::-ms-input-placeholder {
-  color: #000;
-  -ms-transition: all 0.3s;
-  transition: all 0.3s;
-}
-.content__top-input::placeholder {
-  color: #000;
-  -webkit-transition: all 0.3s;
-  -o-transition: all 0.3s;
-  transition: all 0.3s;
-}
-.content__top-input:focus::-webkit-input-placeholder {
-  color: #858585;
-}
-.content__top-input:focus::-moz-placeholder {
-  color: #858585;
-}
-.content__top-input:focus:-ms-input-placeholder {
-  color: #858585;
-}
-.content__top-input:focus::-ms-input-placeholder {
-  color: #858585;
-}
-.content__top-input:focus::placeholder {
-  color: #858585;
 }
 .content__list {
   margin-top: 20px;
@@ -319,6 +242,7 @@
     margin: 0;
   }
   .content__top-search {
+    position: relative;
     padding: 5px;
     max-width: 100%;
     margin-left: 0;
