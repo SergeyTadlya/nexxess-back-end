@@ -28,9 +28,15 @@ $(document).ready(function () {
                 "X-CSRFToken": csrftoken,
             },
             success: (data) => {
-                $("#username").val(data['username']);
                 $("#first_name").val(data['first_name']);
                 $("#last_name").val(data['last_name']);
+                $("#phone").val(data['phone']);
+                $("#bio").val(data['bio']);
+
+                $("#country").val(data['country']);
+                $("#city").val(data['city']);
+                $("#street").val(data['street']);
+                $("#tax_id").val(data['tax_id']);
             },
         });
     });

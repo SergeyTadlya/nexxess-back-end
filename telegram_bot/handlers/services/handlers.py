@@ -235,7 +235,7 @@ class ServicesHandler:
             user_chat_id = str(user.telegram_id)
             username = user.telegram_username
 
-            logger.error('Exception: ' + user_chat_id + ' (' + username + ') - ' + str(error_message))
+            logger.error('Exception: ' + username + ' (' + user_chat_id + ') - ' + str(error_message))
 
         # Service data
         service_title = service.title if service.title else 'Title is empty...'
@@ -262,7 +262,7 @@ class ServicesHandler:
             user_chat_id = str(user.telegram_id)
             username = user.telegram_username
 
-            logger.error('Exception: ' + user_chat_id + ' (' + username + ') - ' + str(e))
+            logger.error('Exception: ' + username + ' (' + user_chat_id + ') - ' + str(e))
 
     def set_pre_checkout_query(self, invoice_id):
         user = User.objects.filter(telegram_id=self.data['pre_checkout_query']['from']['id']).first()
