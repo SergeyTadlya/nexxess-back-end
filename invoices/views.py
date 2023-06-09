@@ -11,8 +11,9 @@ from tickets.models import Ticket, TicketStatus
 from .models import Invoice, Status, StripeSettings, LocalInvoice
 
 from bitrix24 import Bitrix24, BitrixError
-from datetime import datetime
+from datetime import datetime, timedelta
 
+import requests
 import stripe
 import json
 import time
@@ -29,6 +30,40 @@ def format_price(price):
 
     return f'${price}' if price else ''
 
+def create_task(responsible_id, invoice):
+    try:
+        method = "tasks.task.add"
+        url = set_webhook(method)
+        current_datetime = (datetime.now() + timedelta(days=365)).strftime("%b.%d.%Y")
+        # hours, minutes, seconds = map(int, invoice.time_remaining.split(':'))
+        # time_delta = timedelta(hours=hours, minutes=minutes, seconds=seconds)
+        time_estimate = invoice.time_remaining
+        print(f'>>>>>>>>{invoice.invoice_id}')
+        print(f'>>>type{type(invoice.invoice_id)}')
+        task_data = {
+            'fields': {
+                'TITLE': f'Bought Service{invoice.product_title}',
+                'DESCRIPTION': invoice.service_id + ' | ' + invoice.product_title,
+                'DEADLINE': current_datetime,
+                'CREATED_BY': 393,
+                'RESPONSIBLE_ID': 312,
+                'PRIORITY': 1,
+                'ALLOW_CHANGE_DEADLINE': 1,
+                'ALLOW_TIME_TRACKING': 1,
+                'TIME_ESTIMATE': time_estimate,
+                'UF_CRM_TASK': {
+                    "0": 'C_' + responsible_id,  # bitrix24_id
+                    },
+                "UF_OLD_INVOICE": invoice.invoice_id,
+            }
+        }
+        response = requests.post(url, json=task_data)
+        if response.status_code == 200:
+            print('Successfully created')
+        else:
+            print('Error:', response.text)
+    except Exception as e:
+        print('Error:', str(e))
 
 @login_required(login_url='/accounts/login/')
 def invoices(request):
@@ -37,6 +72,14 @@ def invoices(request):
         # Get all user invoices and sorting by created date
         all_user_invoices = Invoice.objects.all().order_by('-date') if request.user.is_superuser \
             else Invoice.objects.filter(responsible=request.user.b24_contact_id).order_by('-date')
+        paid_invoice_status = Status.objects.get(abbreviation="P", value="Paid")
+        paid_invoices = Invoice.objects.filter(responsible=request.user.b24_contact_id, status=paid_invoice_status, task_created=False)
+        for invoice in paid_invoices:
+            responsible = str(request.user.b24_contact_id)
+            if not invoice.task_created:
+                create_task(responsible, invoice)
+                invoice.task_created = True
+                invoice.save()
 
         # Get all existing statuses for user invoices
         all_statuses = Status.objects.all()
