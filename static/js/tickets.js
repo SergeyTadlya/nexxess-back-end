@@ -2,85 +2,85 @@
 
 //__________Mobile content arrow_____
 
-const contentBox = document.querySelectorAll('.content__body-box')
-const contentBtn = document.querySelectorAll('.content__body-btn')
-
-contentBtn.forEach((button, index) => {
-  button.addEventListener('click', (e) => {
-    contentBox[index].classList.toggle('content__body-activeBox')
-    contentBtn[index].classList.toggle('content__body-activeBtn')
-  })
-})
-
-
-
-//_________*BLOCK*Cotent-top______
-
-const contentTopBox = document.querySelector('#content__showing-box')
-const contentTopList = document.querySelector('#content__showing-list')
-const contentTopNumber = document.querySelector('#content__showing-number')
-
-const contentTopItem = document.querySelectorAll('.content__showing-item')
-
-contentTopBox.addEventListener('click', () => {
-  contentTopList.classList.toggle('content__showing--active')
-})
-
-contentTopItem.forEach((item) => {
-  item.addEventListener('click', () => {
-    contentTopNumber.textContent = item.textContent
-  })
-})
-
-// ______CREATE TICKET_____
-const cteareBtn = document.querySelector('#content__create-btn')
-const contentForm = document.querySelector('#content__form')
-
-cteareBtn.addEventListener('click', () => {
-  contentForm.classList.toggle('content__form--active')
-})
-
-//_________________POPUP *NEW TAG*_________________
-
-const btnNewTag = document.querySelector('#form__new-tag')
-
-const popup = document.querySelector('.popup')
-const popupClose = document.querySelector('.popup__close')
-const popupInput = document.querySelector('#popup__input')
-
-// ----------OPEN POPUP----------
-btnNewTag.addEventListener('click', (e) => {
-  // if (navList.classList.contains('header__menu--active')) menu()
-  popup.classList.add('show')
-  document.body.style.cssText = `overflow: hidden;`
-})
-
-// adding # to the beginning of input
-popupInput.addEventListener('click', () => {
-  popupInput.value = '#'
-})
-
-// close on click on overlay
-popupClose.addEventListener('click', (e) => {
-  popup.classList.remove('show')
-  document.body.style.cssText = ''
-})
-
-// close on click on overlay
-popup.addEventListener('click', (e) => {
-  if (e.target === popup) {
-    popup.classList.remove('show')
-    document.body.style.cssText = ''
-  }
-})
-
-// close on press of escape button
-document.addEventListener('keydown', (e) => {
-  if (e.code === 'Escape' && popup.classList.contains('show')) {
-    popup.classList.remove('show')
-    document.body.style.cssText = ''
-  }
-})
+//const contentBox = document.querySelectorAll('.content__body-box')
+//const contentBtn = document.querySelectorAll('.content__body-btn')
+//
+//contentBtn.forEach((button, index) => {
+//  button.addEventListener('click', (e) => {
+//    contentBox[index].classList.toggle('content__body-activeBox')
+//    contentBtn[index].classList.toggle('content__body-activeBtn')
+//  })
+//})
+//
+//
+//
+////_________*BLOCK*Cotent-top______
+//
+//const contentTopBox = document.querySelector('#content__showing-box')
+//const contentTopList = document.querySelector('#content__showing-list')
+//const contentTopNumber = document.querySelector('#content__showing-number')
+//
+//const contentTopItem = document.querySelectorAll('.content__showing-item')
+//
+//contentTopBox.addEventListener('click', () => {
+//  contentTopList.classList.toggle('content__showing--active')
+//})
+//
+//contentTopItem.forEach((item) => {
+//  item.addEventListener('click', () => {
+//    contentTopNumber.textContent = item.textContent
+//  })
+//})
+//
+//// ______CREATE TICKET_____
+//const cteareBtn = document.querySelector('#content__create-btn')
+//const contentForm = document.querySelector('#content__form')
+//
+//cteareBtn.addEventListener('click', () => {
+//  contentForm.classList.toggle('content__form--active')
+//})
+//
+////_________________POPUP *NEW TAG*_________________
+//
+//const btnNewTag = document.querySelector('#form__new-tag')
+//
+//const popup = document.querySelector('.popup')
+//const popupClose = document.querySelector('.popup__close')
+//const popupInput = document.querySelector('#popup__input')
+//
+//// ----------OPEN POPUP----------
+//btnNewTag.addEventListener('click', (e) => {
+//  // if (navList.classList.contains('header__menu--active')) menu()
+//  popup.classList.add('show')
+//  document.body.style.cssText = `overflow: hidden;`
+//})
+//
+//// adding # to the beginning of input
+//popupInput.addEventListener('click', () => {
+//  popupInput.value = '#'
+//})
+//
+//// close on click on overlay
+//popupClose.addEventListener('click', (e) => {
+//  popup.classList.remove('show')
+//  document.body.style.cssText = ''
+//})
+//
+//// close on click on overlay
+//popup.addEventListener('click', (e) => {
+//  if (e.target === popup) {
+//    popup.classList.remove('show')
+//    document.body.style.cssText = ''
+//  }
+//})
+//
+//// close on press of escape button
+//document.addEventListener('keydown', (e) => {
+//  if (e.code === 'Escape' && popup.classList.contains('show')) {
+//    popup.classList.remove('show')
+//    document.body.style.cssText = ''
+//  }
+//})
 
 //__________BURGER AND FILTER__________
 

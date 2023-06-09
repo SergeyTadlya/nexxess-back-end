@@ -1,4 +1,4 @@
-п{% extends 'base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block extra_css %}
@@ -473,6 +473,7 @@
 </div>
 {% endblock %}
 {% block extra_js %}
+     <script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
 <script>
   // send ajax using "enter" keydown
   $("#new-user-message-form").keydown(function(event) {
@@ -585,6 +586,5 @@
 </script>
 <script src="{% static 'js/tickets.js' %}"> </script>
 <script src="{% static 'js/global.js' %}"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="{% static 'js/general_dynamic_search.js' %}"></script>
 {% endblock %}

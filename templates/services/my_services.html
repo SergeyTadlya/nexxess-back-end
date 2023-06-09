@@ -59,13 +59,13 @@
 
 {% block content %}
     <div class="content__inner">
-        <div class="content__top">
-            <h1 class="title content__top-title">My Services</h1>
-            <div class="content__top-search">
-                <img class="content__top-img" src="{% static 'images/main/Search.svg' %}" alt="Search">
-                <input class="content__top-input" type="text" id="search-input" placeholder="Search">
-            </div>
-        </div>
+<!--        <div class="content__top">-->
+<!--            <h1 class="title content__top-title">My Services</h1>-->
+<!--            <div class="content__top-search">-->
+<!--                <img class="content__top-img" src="{% static 'images/main/Search.svg' %}" alt="Search">-->
+<!--                <input class="content__top-input" type="text" id="search-input" placeholder="Search">-->
+<!--            </div>-->
+<!--        </div>-->
         <ul class="content__list">
           {% for service in b24_service %}
             <li class="content__list-item">
@@ -194,7 +194,9 @@
 </div>
 {% endblock footer %}
 {% block extra_js %}
-    <script src="{% static 'js/dynamic_search.js' %}"></script>
+    <script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
+    <script src="{% static 'js/general_dynamic_search.js' %}"></script>
+    <script src="{% static 'js/global.js' %}"></script>
     <script src="{% static 'js/services.js' %}"></script>
     <script src="{% static 'js/main.js' %}"></script>
 {% endblock extra_js %}

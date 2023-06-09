@@ -361,7 +361,6 @@ def create_bitrix_task(request):
                 time.sleep(3)
                 return redirect('tickets:tasks')
 
-
         except Exception as e:
             print(e)
 

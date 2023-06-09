@@ -12,9 +12,9 @@ urlpatterns = [
     path('my_services/', views.my_services, name='my_services'),
     path('create_invoice/', views.create_invoice, name='create_invoice'),
     path('about_service/<int:id>/', views.product_detail, name='product_detail'),
-    path('service_1/', views.service_1, name='service1'),
-    path('service_2/', views.service_2, name='service2'),
-    path('service_3/', views.service_3, name='service3'),
+    # path('service_1/', views.service_1, name='service1'),
+    # path('service_2/', views.service_2, name='service2'),
+    # path('service_3/', views.service_3, name='service3'),
     path('search/', include('search.urls')),
 ]
 
