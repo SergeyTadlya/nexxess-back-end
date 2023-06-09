@@ -53,17 +53,19 @@ def webhook_task(request):
             if all([entities_id, b24_time, b24_domain, b24_member_id, b24_application_token]):
                 task_url = set_webhook() + 'tasks.task.get/?id=' + entities_id
                 task_crm = set_webhook() + 'tasks.task.get/?taskId=' + entities_id + '&select%5B0%5D=UF_CRM_TASK'
+                task_invoice_crm = set_webhook() + 'tasks.task.get/?taskId=' + entities_id + '&select%5B0%5D=UF_OLD_INVOICE'
                 task_info = requests.get(task_url).json()['result']['task']
                 task_info_crm = requests.get(task_crm).json()['result']['task']
+                pinned_invoice = requests.get(task_invoice_crm).json()['result']['task']['ufOldInvoice']
 
                 ticket_title = task_info["title"]
                 ticket_text = task_info["description"]
                 status = TicketStatus.objects.filter(value=task_info["status"])
                 if status.exists():
                     status = status.first()
-
                 deadline = datetime.strptime(task_info["deadline"][:11] + '23:59:59', '%Y-%m-%dT%H:%M:%S')
-                created_at = datetime.strptime(task_info["changedDate"][:19], '%Y-%m-%dT%H:%M:%S')
+                created_at = task_info["createdDate"]
+                tracked_time = task_info['timeSpentInLogs']
 
 
                 task_get = bx24.callMethod(
@@ -111,7 +113,7 @@ def webhook_task(request):
                 print('file_type', file_type)
 
                 defaults = {
-                    'responsible': trim_before(task_info_crm["ufCrmTask"][0]),
+                    'responsible': trim_before(task_info_crm["ufCrmTask"][0]) if (len(task_info_crm["ufCrmTask"]) == 1) else 393,
                     'ticket_title': ticket_title,
                     'ticket_text': ticket_text,
                     'status': status,
@@ -125,14 +127,15 @@ def webhook_task(request):
                     'task_info': task_info,
                     'task_info_crm': task_info_crm,
                     'created_at': created_at,
+                    'visible': True,
+                    'tracked_time': tracked_time,
+                    'pinned_invoice': pinned_invoice,
                     'added_document_name': file_name,
                     'added_documents_url': file_view_url,
                     'added_document_type': file_type,
                 }
                 Ticket.objects.update_or_create(task_id=entities_id, defaults=defaults)
-
         return HttpResponse('ok')
-
     except Exception as e:
         print(e)
     return HttpResponse('ok')
@@ -303,8 +306,13 @@ def webhook_invoice(request):
             # Now we can get info about invoice
             method = "crm.invoice.get/?id=" + entities_id
             url = set_webhook(method)
-
             invoice_load = requests.get(url).json()['result']
+            service_id = invoice_load['PRODUCT_ROWS'][0]['PRODUCT_ID']
+            tracker_method = "crm.product.get/?id=" + service_id
+            track_url = set_webhook(tracker_method)
+            invoice_load_tracker = requests.get(track_url).json()['result']
+            time_tracker = ''.join(re.findall("[0-9]", invoice_load_tracker["PROPERTY_143"]["value"]))
+            time_tracker = int(time_tracker) * 3600
             status = Status.objects.filter(abbreviation=invoice_load['STATUS_ID'])
             if status.exists():
                 status = status.first()

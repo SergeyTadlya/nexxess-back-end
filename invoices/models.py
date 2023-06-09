@@ -30,6 +30,9 @@ class Invoice(models.Model):
     date = models.DateTimeField(verbose_name='Date', blank=True, null=True)
     due_date = models.DateTimeField(verbose_name='Due date', blank=True, null=True)
     product_title = models.CharField(verbose_name='Product title', max_length=200, blank=True, null=True)
+    task_created = models.BooleanField(verbose_name='Task created', default=False)
+    time_remaining = models.CharField(verbose_name='Bought time',max_length=200, blank=True, null=True)
+    tracked_time = models.CharField(verbose_name='Tracked time', blank=True, null=True, max_length=100)
 
     def __str__(self):
         return f'Invoice {self.invoice_id}, responsible - {self.responsible}'

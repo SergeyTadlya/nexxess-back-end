@@ -7,6 +7,7 @@ from authentication.helpers.B24Webhook import set_webhook
 from authentication.models import B24keys
 from invoices.models import Invoice, StripeSettings, LocalInvoice, Status
 
+from tickets.models import Ticket
 from .models import Service, ServiceCategory
 
 from bitrix24 import Bitrix24, BitrixError
@@ -265,11 +266,35 @@ def my_services(request):
                                            select=["ID", "NAME", "PROPERTY_143", "PRICE", "CURRENCY_ID", "PROPERTY_144",
                                                    "DESCRIPTION", "SECTION_ID"])
         for products in section_products:
-            description_parts = products['DESCRIPTION'].split("• ")
-            parts_array = [remove_html_tags(item.replace("&nbsp;", "").strip()) for item in description_parts if item.strip()]
-
+            print(f'>>>>>>>>>PRODUCTS{products}')
+            description_parts = products['DESCRIPTION'].split("<br>\n ")  ####### remove tags
+            parts_array = [remove_html_tags(item) for item in description_parts]
             property_type_id = products['PROPERTY_144']['value']
             property_type_name = property_type["VALUES"][property_type_id]["VALUE"]
+            pinned_invoice = Invoice.objects.filter(responsible=b24_contact_id, status=paid_invoice_status,
+                                                    service_id=service_id).order_by('tracked_time')
+            print(f'>>>>>>>>>PINNED{pinned_invoice}')
+            if pinned_invoice.exists():
+                pinned_invoice = pinned_invoice.first().invoice_id
+                print(pinned_invoice)
+
+            wasted_time = Ticket.objects.filter(responsible=b24_contact_id, pinned_invoice=pinned_invoice)
+
+            if wasted_time.exists():
+                wasted_time = wasted_time.first().tracked_time
+                print(wasted_time)
+                print(f'>>>>>>>>>>>>>>>TIME{type(wasted_time)}')
+            else:
+                wasted_time = 0
+            wasted_time = int(wasted_time) if wasted_time is not None else 0
+            time_remaining_bx24 = ''.join(re.findall("[0-9]", products["PROPERTY_143"]["value"]))
+            bought_time = int(time_remaining_bx24) * 3600
+            print(f'wasted time>>>>{wasted_time}')
+            time_remaining = bought_time - int(wasted_time)
+            hours, minutes, seconds = time_remaining // 3600, (time_remaining % 3600) // 60, time_remaining % 60
+            print(f'ws>>>>>>>>>>>>>>>>>>>>>>>>>{time_remaining}')
+            Invoice.objects.update_or_create(invoice_id=pinned_invoice,
+                                             defaults={"tracked_time": wasted_time})
 
             b24_service.append({
                 "ID": products["ID"],
@@ -277,9 +302,11 @@ def my_services(request):
                 "DESCRIPTION": parts_array,
                 "PRICE": products["PRICE"],
                 "CATEGORY": property_type_name,
+                "TIME_REMAINING": f"{hours:02d}:{minutes:02d}:{seconds:02d}",
             })
 
     b24_domain = B24keys.objects.order_by("id").first().domain[:-1]
+    print(f'b24_service>>>>>>>>>>>>>>{b24_service}')
     context = {
         'b24_domain': b24_domain,
         'b24_service': b24_service

@@ -37,6 +37,9 @@ class Ticket(models.Model):
     added_document_type = models.CharField(max_length=50, null=True, blank=True)
     added_document_name = models.CharField(max_length=50, null=True, blank=True)
     created_at = models.DateTimeField(verbose_name='Create date', auto_now_add=True, blank=True, null=True)
+    visible = models.BooleanField(verbose_name='IsTicketVisible', default=True)
+    tracked_time = models.CharField(verbose_name='Tracked time', blank=True, null=True, max_length=100)
+    pinned_invoice = models.CharField(verbose_name='Invoice', blank=True, max_length=20)
 
     def __str__(self):
         return f'Ticket {self.task_id}, responsible - {self.responsible}'
