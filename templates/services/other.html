@@ -203,15 +203,14 @@
           data: {"b24_product_id":b24_product_id},
           dataType: 'json',
           success: function(data) {
-            if (data.invoice_id){
-              window.location.href = '/invoices/detail/'+data.invoice_id+"/";
-
-            }else
-            {
-              alert("We have some problem. Please try late")
-            }
-            console.log(data);
-
+            if (data.error) {
+                    alert(data.error); // outout error message
+                } else if (data.invoice_id) {
+                    window.location.href = '/invoices/detail/' + data.invoice_id + "/";
+                } else {
+                    console.log("We have some problem. Please try later");
+                }
+                console.log(data);
           },
         });
       });

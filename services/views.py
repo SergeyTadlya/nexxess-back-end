@@ -218,29 +218,38 @@ def create_invoice(request):
     product = Service.objects.get(service_id=request.POST["b24_product_id"])
     tomorrow = datetime.date.today() + datetime.timedelta(days=1)
     bx24 = Bitrix24(url)
-    try:
-        invoice_id = bx24.callMethod('crm.invoice.add', fields={'ORDER_TOPIC': "Invoice - " + product.title,
-                                                                'PERSON_TYPE_ID': 1,
-                                                                'UF_CONTACT_ID': request.user.b24_contact_id,  # 1
-                                                                'STATUS_ID': 'N',
-                                                                'RESPONSIBLE_ID': 1,
-                                                                'PAY_SYSTEM_ID': 3,
-                                                                'DATE_PAY_BEFORE': tomorrow.strftime("%m/%d/%Y"),
-                                                                "PRODUCT_ROWS": [
-                                                                    {"ID": 0,
-                                                                     "PRODUCT_ID": product.service_id,  # product.id
-                                                                     "PRODUCT_NAME": product.title,
-                                                                     "QUANTITY": 1,
-                                                                     "PRICE": product.price},
-                                                                ]})
+    products_counts = Invoice.objects.filter(responsible=request.user.b24_contact_id, service_id=product.service_id)
+    print(products_counts)
+    # print(len(products_counts))
+    if products_counts.exists():
+        return JsonResponse({'error': 'You have already created invoice'})
+    elif not products_counts.exists():
+        try:
+            invoice_id = bx24.callMethod('crm.invoice.add', fields={'ORDER_TOPIC': "Invoice - " + product.title,
+                                                                    'PERSON_TYPE_ID': 1,
+                                                                    'UF_CONTACT_ID': request.user.b24_contact_id,  # 1
+                                                                    'STATUS_ID': 'N',
+                                                                    'RESPONSIBLE_ID': 1,
+                                                                    'PAY_SYSTEM_ID': 3,
+                                                                    'DATE_PAY_BEFORE': tomorrow.strftime("%m/%d/%Y"),
+                                                                    "PRODUCT_ROWS": [
+                                                                        {"ID": 0,
+                                                                         "PRODUCT_ID": product.service_id,  # product.id
+                                                                         "PRODUCT_NAME": product.title,
+                                                                         "QUANTITY": 1,
+                                                                         "PRICE": product.price},
+                                                                    ]})
 
-        time.sleep(3)
-        LocalInvoice.objects.create(b24_invoice_id=invoice_id, stripe_price_id=product.stripe_id)
-        invoice = Invoice.objects.get(invoice_id=invoice_id)
-    except BitrixError as message:
-        print(message)
+            time.sleep(3)
+            LocalInvoice.objects.create(b24_invoice_id=invoice_id, stripe_price_id=product.stripe_id)
+            invoice = Invoice.objects.get(invoice_id=invoice_id)
+            return JsonResponse({'invoice_id': str(invoice.id)})
 
-    return JsonResponse({'invoice_id': str(invoice.id)})
+        except BitrixError as message:
+            return JsonResponse({'error': str(message)})
+
+
+
 
 
 @login_required(login_url='/accounts/login/')
