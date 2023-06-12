@@ -135,15 +135,15 @@
                                         </a>
                                     </li>
                                     <li  class="content__body-item style--width">
-                                        <a class="content__body-link" href="{% url 'create_invoice_pdf' invoice.id %}"  target="_blank">
+                                        <a href="{% url 'invoice_detail' invoice.id %}">
                                             <p class="content__body-date">{{ invoice.date }}</p></a>
                                     </li>
                                     <li class="content__body-item style--width">
-                                        <a class="content__body-link" href="{% url 'create_invoice_pdf' invoice.id %}"  target="_blank">
+                                        <a href="{% url 'invoice_detail' invoice.id %}">
                                             <p class="content__body-date">{{ invoice.due_date }}</p></a>
                                     </li>
                                     <li  class="content__body-item style--width">
-                                        <a class="content__body-link" href="{% url 'create_invoice_pdf' invoice.id %}"  target="_blank">
+                                        <a href="{% url 'invoice_detail' invoice.id %}">
                                         <p class="content__body-money">{{ invoice.price }}</p></a>
                                     </li>
                                     <li  class="content__body-item style--width">
