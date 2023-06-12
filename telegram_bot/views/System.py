@@ -6,16 +6,15 @@ import requests
 
 
 def set_telegram_webhook(request):
-    active_telegram_settings = TelegramSettings.objects.filter(is_active=True)
-    active_install_settings = InstallationSettings.objects.filter(is_active=True)
+    telegram_settings = TelegramSettings.objects.filter(is_active=True)
+    install_settings = InstallationSettings.objects.filter(is_active=True)
 
-    if active_telegram_settings.exists() and active_install_settings.exists():
-        active_telegram_settings = active_telegram_settings.first()
-        active_install_settings = active_install_settings.first()
+    if telegram_settings.exists() and install_settings.exists():
+        telegram_settings = telegram_settings.first()
+        install_settings = install_settings.first()
 
-        webhook_url = active_telegram_settings.api_url + 'bot' + active_telegram_settings.telegram_bot_token + \
-                      '/setWebhook?url=' + active_install_settings.domain
-        webhook_url += 'telegram/' if active_install_settings.domain[-1] == '/' else '/telegram/'
+        webhook_url = f'{telegram_settings.api_url}bot{telegram_settings.telegram_bot_token}/setWebhook?url={install_settings.domain}'
+        webhook_url += 'telegram/' if install_settings.domain[-1] == '/' else '/telegram/'
 
         response = requests.post(url=webhook_url)
         data = response.json()

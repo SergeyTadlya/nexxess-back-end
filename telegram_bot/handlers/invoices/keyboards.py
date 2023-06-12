@@ -6,12 +6,12 @@ def invoices_statuses_keyboard(invoices, invoices_statuses) -> InlineKeyboardMar
     buttons = []
 
     for invoice_status in invoices_statuses:
-        text = invoice_status.sticker + ' ' + invoice_status.value + ' (' + str(invoices.filter(status__value=invoice_status.value).count()) + ')'
-        callback_data = 'invoices_status_' + invoice_status.value + '_1'
+        text = f'{invoice_status.sticker} {invoice_status.value} ({invoices.filter(status__value=invoice_status.value).count()})'
+        callback_data = f'invoices_status_{invoice_status.value}_1'
 
         buttons.append([InlineKeyboardButton(text, callback_data=callback_data)])
 
-    buttons.append([InlineKeyboardButton('All invoices (' + str(len(invoices)) + ')', callback_data='invoices_status_All_1')])
+    buttons.append([InlineKeyboardButton(f'All invoices ({len(invoices)})', callback_data='invoices_status_All_1')])
 
     return InlineKeyboardMarkup(buttons)
 
@@ -25,20 +25,20 @@ def invoices_for_selected_status_keyboard(invoices, status, current_page, all_pa
         price = format_price(invoice.price)
         date = format_date(invoice.date)
 
-        invoice_detail = sticker + ' ' + product_title_preview + ' | ' + price + ' | ' + date
-        invoice_callback_data = 'invoices_status_' + status.value + '_' + str(current_page) + '_detail_' + invoice.invoice_id
+        invoice_detail = f'{sticker} {product_title_preview} | {price} | {date}'
+        invoice_callback_data = f'invoices_status_{status.value}_{current_page}_detail_{invoice.invoice_id}'
 
         buttons.append([InlineKeyboardButton(invoice_detail, callback_data=invoice_callback_data)])
 
     if has_pages:
-        callback_data_right = 'invoices_status_' + status.value + '_' + str(current_page - 1) if not current_page == 1 else 'Stop'
-        callback_data_left = 'invoices_status_' + status.value + '_' + str(current_page + 1) if not current_page == all_pages else 'Stop'
+        callback_data_right = f'invoices_status_{status.value}_{current_page - 1}' if not current_page == 1 else 'Stop'
+        callback_data_left = f'invoices_status_{status.value}_{current_page + 1}' if not current_page == all_pages else 'Stop'
         right = '➡️' if not current_page == all_pages else '🚫'
         left = '⬅️' if not current_page == 1 else '🚫'
 
         buttons.append([
             InlineKeyboardButton(left, callback_data=callback_data_right),
-            InlineKeyboardButton(str(current_page) + '/' + str(all_pages), callback_data='Stop'),
+            InlineKeyboardButton(f'{current_page} / {all_pages}', callback_data='Stop'),
             InlineKeyboardButton(right, callback_data=callback_data_left)
         ])
 
@@ -56,8 +56,8 @@ def all_invoices_keyboard(invoices, current_page, all_pages, has_pages) -> Inlin
         price = format_price(invoice.price)
         date = format_date(invoice.date)
 
-        invoice_detail = sticker + ' ' + product_title_preview + ' | ' + price + ' | ' + date
-        invoice_callback_data = 'invoices_status_All_' + str(current_page) + '_detail_' + invoice.invoice_id
+        invoice_detail = f'{sticker} {product_title_preview} | {price} | {date}'
+        invoice_callback_data = f'invoices_status_All_{current_page}_detail_{invoice.invoice_id}'
 
         buttons.append([InlineKeyboardButton(invoice_detail, callback_data=invoice_callback_data)])
 
@@ -69,7 +69,7 @@ def all_invoices_keyboard(invoices, current_page, all_pages, has_pages) -> Inlin
 
         buttons.append([
             InlineKeyboardButton(left, callback_data=callback_data_left),
-            InlineKeyboardButton(str(current_page) + '/' + str(all_pages), callback_data='Stop'),
+            InlineKeyboardButton(f'{current_page} / {all_pages}', callback_data='Stop'),
             InlineKeyboardButton(right, callback_data=callback_data_right)
         ])
 
@@ -81,11 +81,11 @@ def all_invoices_keyboard(invoices, current_page, all_pages, has_pages) -> Inlin
 def invoice_details_keyboard(status, current_page, invoice) -> InlineKeyboardMarkup:
     if invoice.status.value == 'Paid':
         buttons = [
-            [InlineKeyboardButton('⬅️ Back to ' + status.lower() + ' invoices', callback_data='invoices_status_' + status + '_' + current_page)]
+            [InlineKeyboardButton(f'⬅️ Back to {status.lower()} invoices', callback_data=f'invoices_status_{status}_{current_page}')]
         ]
     else:
         buttons = [
             [InlineKeyboardButton('Pay the invoice', callback_data='services_detail_' + invoice.invoice_id)],
-            [InlineKeyboardButton('⬅️ Back to ' + status.lower() + ' invoices', callback_data='invoices_status_' + status + '_' + current_page)]
+            [InlineKeyboardButton(f'⬅️ Back to {status.lower()} invoices', callback_data=f'invoices_status_{status}_{current_page}')]
         ]
     return InlineKeyboardMarkup(buttons)

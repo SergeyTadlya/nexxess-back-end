@@ -70,12 +70,12 @@ class CallbackHandler:
                         user_chat_id = self.data['callback_query']['message']['chat']['id']
                         username = self.data['callback_query']['message']['chat']['username']
 
-                        logger.error('Exception: ' + username + ' (' + user_chat_id + ') - ' + str(e))
+                        logger.error(f'Exception: {username} ({ user_chat_id}) - {e}')
 
                 elif isinstance(result, date):
                     try:
                         due_date = result.strftime('%Y-%m-%d')
-                        self.bot.edit_message_text('Deadline is ' + due_date + '\n\n' + \
+                        self.bot.edit_message_text(f'Deadline is {due_date}\n\n'
                                                    'Wait a few seconds while the ticket is being created',
                                                    self.data['callback_query']['message']['chat']['id'],
                                                    self.data['callback_query']['message']['message_id'])
@@ -85,7 +85,7 @@ class CallbackHandler:
                         user_chat_id = self.data['callback_query']['message']['chat']['id']
                         username = self.data['callback_query']['message']['chat']['username']
 
-                        logger.error('Exception: ' + username + ' (' + user_chat_id + ') - ' + str(e))
+                        logger.error(f'Exception: {username} ({user_chat_id}) - {e}')
         else:
             self.bot.sendMessage(chat_id=get_chat_id(self.data['callback_query']),
                                  text='Authorization first 🙃\n'

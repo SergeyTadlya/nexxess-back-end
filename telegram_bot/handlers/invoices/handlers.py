@@ -7,7 +7,6 @@ from services.models import Service
 
 import logging
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -57,10 +56,11 @@ class InvoiceHandler:
         invoices_quantity = len(invoices)
         if invoices_quantity == 0:
             self.bot.sendMessage(chat_id=get_chat_id(self.data['callback_query']),
-                                 text='You don`t have any ' + status_name.lower() + ' invoices')
+                                 text=f'You don`t have any {status_name.lower()} invoices')
             return
 
-        all_pages = invoices_quantity // element_on_page if not invoices_quantity % element_on_page else (invoices_quantity // element_on_page) + 1
+        all_pages = invoices_quantity // element_on_page if not invoices_quantity % element_on_page else (
+                                                                                                                     invoices_quantity // element_on_page) + 1
         has_pages = False
 
         if invoices_quantity > element_on_page:
@@ -68,12 +68,12 @@ class InvoiceHandler:
             invoices = invoices[element_on_page * (current_page - 1):element_on_page * current_page]
 
         try:
-            message = invoice_status.sticker + ' ' + invoice_status.value + ' invoices: '
             self.bot.edit_message_text(
-                message,
+                f'{invoice_status.sticker} {invoice_status.value} invoices: ',
                 chat_id=get_chat_id(self.data['callback_query']),
                 message_id=self.data['callback_query']['message']['message_id'],
-                reply_markup=invoices_for_selected_status_keyboard(invoices, invoice_status, current_page, all_pages, has_pages)
+                reply_markup=invoices_for_selected_status_keyboard(invoices, invoice_status, current_page, all_pages,
+                                                                   has_pages)
             )
         except Exception as e:
             # Exception logger credentials
@@ -92,7 +92,8 @@ class InvoiceHandler:
                                  text='You don`t have any invoices')
             return
 
-        all_pages = invoices_quantity // element_on_page if not invoices_quantity % element_on_page else (invoices_quantity // element_on_page) + 1
+        all_pages = invoices_quantity // element_on_page if not invoices_quantity % element_on_page else (
+                                                                                                                     invoices_quantity // element_on_page) + 1
         has_pages = False
 
         if invoices_quantity > element_on_page:
@@ -125,18 +126,18 @@ class InvoiceHandler:
 
         service = Service.objects.get(service_id=invoice.service_id)
         service_description = service.detail_text if service.detail_text else 'Detail text is empty'
-        invoice_detail = ' ---- Invoice ---- \n'\
-                         f'Invoice ID: {invoice.invoice_id}\n'\
-                         f'Price: {format_price(invoice.price)}\n'\
-                         f'Status: {invoice.status.value}\n'\
-                         f'Date: {format_date(invoice.date)}\n'\
-                         f'Due date: {format_date(invoice.due_date)}\n\n'\
-                         ' ---- Service ---- \n'\
-                         f'Title: {service.title}\n'\
-                         f'Category: {service.category.category_name}\n'\
+        invoice_detail = ' ---- Invoice ---- \n' \
+                         f'Invoice ID: {invoice.invoice_id}\n' \
+                         f'Price: {format_price(invoice.price)}\n' \
+                         f'Status: {invoice.status.value}\n' \
+                         f'Date: {format_date(invoice.date)}\n' \
+                         f'Due date: {format_date(invoice.due_date)}\n\n' \
+                         ' ---- Service ---- \n' \
+                         f'Title: {service.title}\n' \
+                         f'Category: {service.category.category_name}\n' \
                          f'Description: {service_description}'
 
-        filename = invoice.invoice_id + '_' + invoice.status.value
+        filename = f'{invoice.invoice_id}_{invoice.status.value}'
         self.bot.send_document(chat_id=get_chat_id(self.data['callback_query']),
                                document=open(file_path, 'rb'),
                                filename=filename + '.pdf')

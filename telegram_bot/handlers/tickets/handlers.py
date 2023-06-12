@@ -13,7 +13,6 @@ import requests
 import logging
 import time
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -88,7 +87,7 @@ class TicketsHandler:
                 time.sleep(1)
                 new_user_ticket = Ticket.objects.filter(responsible=str(user.b24_contact_id)).last()
                 bot.sendMessage(chat_id=get_chat_id(data['callback_query']),
-                                text='Great, your ticket successfully created:\n'\
+                                text='Great, your ticket successfully created:\n' \
                                      f'#{new_user_ticket.task_id} | {new_user_ticket.ticket_title}',
                                 reply_markup=return_to_menu_keyboard())
             else:
@@ -137,11 +136,11 @@ class TicketsHandler:
                     message_text = message_text.replace('&#91;/P&#93;', '')
                     message_text = message_text.replace('[/P]', '')
 
-                message = '📩 You have received a new message from the manager:\n'\
-                          '-----------------------\n👤\n'\
-                          f'"{message_text}"\n\n'\
-                          '-----------------------\n'\
-                          'Here is a link to the current ticket:\n'\
+                message = '📩 You have received a new message from the manager:\n' \
+                          '--------\n👤\n' \
+                          f'"{message_text}"\n\n' \
+                          '--------\n' \
+                          'Here is a link to the current ticket:\n' \
                           f'https://dev1.nexxess.com/tickets/detail/{ticket.task_id}/'
 
                 if user.telegram_id:
@@ -160,15 +159,17 @@ class TicketsHandler:
     def show_ticket_for_selected_status(self, status_name, current_page, element_on_page=8):
         user = get_user(self.data['callback_query'])
         ticket_status = TicketStatus.objects.get(name=status_name)
-        tickets = Ticket.objects.filter(responsible=str(user.b24_contact_id), status=ticket_status).order_by('-created_at')
+        tickets = Ticket.objects.filter(responsible=str(user.b24_contact_id), status=ticket_status).order_by(
+            '-created_at')
 
         tickets_quantity = len(tickets)
         if tickets_quantity == 0:
             self.bot.sendMessage(chat_id=get_chat_id(self.data['callback_query']),
-                                 text='You don`t have any ' + status_name.lower() + ' tickets')
+                                 text=f'You don`t have any {status_name.lower()} tickets')
             return
 
-        all_pages = tickets_quantity // element_on_page if not tickets_quantity % element_on_page else (tickets_quantity // element_on_page) + 1
+        all_pages = tickets_quantity // element_on_page if not tickets_quantity % element_on_page else (
+                                                                                                                   tickets_quantity // element_on_page) + 1
         has_pages = False
 
         if tickets_quantity > element_on_page:
@@ -181,7 +182,8 @@ class TicketsHandler:
                 message,
                 chat_id=get_chat_id(self.data['callback_query']),
                 message_id=self.data['callback_query']['message']['message_id'],
-                reply_markup=tickets_for_selected_status_keyboard(tickets, ticket_status, current_page, all_pages,has_pages)
+                reply_markup=tickets_for_selected_status_keyboard(tickets, ticket_status, current_page, all_pages,
+                                                                  has_pages)
             )
         except Exception as e:
             # Exception logger credentials
@@ -200,7 +202,8 @@ class TicketsHandler:
                                  text='You don`t have any tickets')
             return
 
-        all_pages = tickets_quantity // element_on_page if not tickets_quantity % element_on_page else (tickets_quantity // element_on_page) + 1
+        all_pages = tickets_quantity // element_on_page if not tickets_quantity % element_on_page else (
+                                                                                                                   tickets_quantity // element_on_page) + 1
         has_pages = False
 
         if tickets_quantity > element_on_page:
@@ -228,12 +231,12 @@ class TicketsHandler:
 
         active_value = '☑️' if ticket.is_active is True else '❌'
 
-        ticket_detail = f'Ticket #{ticket_id}\n'\
-                        f'Title: \n{ticket.ticket_title}\n\n'\
-                        f'Description: \n{ticket.ticket_text}\n\n'\
-                        f'Status: {ticket.status.name}\n'\
-                        f'Deadline: {format_date(ticket.deadline)}\n'\
-                        f'Active: {active_value}\n\n'\
+        ticket_detail = f'Ticket #{ticket_id}\n' \
+                        f'Title: \n{ticket.ticket_title}\n\n' \
+                        f'Description: \n{ticket.ticket_text}\n\n' \
+                        f'Status: {ticket.status.name}\n' \
+                        f'Deadline: {format_date(ticket.deadline)}\n' \
+                        f'Active: {active_value}\n\n' \
                         f'Link to the ticket: https://dev1.nexxess.com/tickets/detail/{ticket.task_id}/'
 
         self.bot.sendMessage(chat_id=get_chat_id(self.data['callback_query']),

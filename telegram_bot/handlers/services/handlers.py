@@ -10,7 +10,7 @@ from ..utils import *
 
 import datetime
 import logging
-
+import time
 
 logger = logging.getLogger(__name__)
 
@@ -104,10 +104,10 @@ class ServicesHandler:
             service = service.first()
 
         service_info_text = service.detail_text if service.detail_text else 'Detail text is empty...'
-        service_description = '----------------------  Service  ----------------------' + '\n' + \
-                              'Title: ' + service.title + '\n' + \
-                              'Category: ' + service.category.category_name + '\n' + \
-                              'Description: ' + service_info_text + '\n\n'
+        service_description = ' ----  Service  ---- \n' \
+                              f'Title: {service.title}\n' \
+                              f'Category: {service.category.category_name}\n' \
+                              f'Description: {service_info_text}\n\n'
         self.bot.sendMessage(chat_id=get_chat_id(self.data['callback_query']),
                              text=service_description,
                              reply_markup=back_to_my_services_keyboard())
@@ -121,7 +121,8 @@ class ServicesHandler:
         more_one = True if Service.objects.filter(category=service.category).count() > 1 else False
 
         service_info_text = service.detail_text if service.detail_text else 'Detail text is empty...'
-        message = format_price(service.price) + ' | ' + service.title + '\n\n' + service_info_text
+        message = f'{format_price(service.price)} | {service.title}\n\n' \
+                  f'{service_info_text}'
 
         if delete_message:
             self.bot.sendMessage(chat_id=get_chat_id(self.data['callback_query']),
@@ -146,28 +147,28 @@ class ServicesHandler:
 
         service_info_text = service.detail_text if service.detail_text else 'Detail text is empty...'
         if invoice.status.value == 'Paid':
-            invoice_detail = '----------------------  Service  ----------------------' + '\n' + \
-                             'Title: ' + service.title + '\n' + \
-                             'Category: ' + service.category.category_name + '\n' + \
-                             'Description: ' + service_info_text + '\n\n' + \
-                             '----------------------  Invoice  ----------------------' + '\n' + \
-                             'Id: ' + invoice.invoice_id + '\n' + \
-                             'Price: ' + format_price(invoice.price) + '\n' + \
-                             'Status: ' + invoice.status.sticker + ' ' + invoice.status.value + '\n' + \
-                             'Date: ' + format_date(invoice.date) + '\n' + \
-                             'Due date: ' + format_date(invoice.due_date)
+            invoice_detail = ' ----  Service  ---- \n' \
+                             f'Title: {service.title}\n' \
+                             f'Category: {service.category.category_name}\n' \
+                             f'Description: {service_info_text}\n\n' \
+                             ' ----  Invoice  ---- \n' \
+                             f'Id: {invoice.invoice_id}\n' \
+                             f'Price: {format_price(invoice.price)}\n' \
+                             f'Status: {invoice.status.sticker} {invoice.status.value}\n' \
+                             f'Date: {format_date(invoice.date)}\n' \
+                             f'Due date: {format_date(invoice.due_date)}'
             self.bot.sendMessage(chat_id=get_chat_id(self.data['callback_query']),
                                  text=invoice_detail,
                                  reply_markup=invoice_for_selected_service_keyboard(service, invoice))
 
         else:
             # Message about invoice
-            invoice_detail = '----------------------  Invoice  ----------------------' + '\n' + \
-                             'Id: ' + invoice.invoice_id + '\n' + \
-                             'Price: ' + format_price(invoice.price) + '\n' + \
-                             'Status: ' + invoice.status.sticker + ' ' + invoice.status.value + '\n' + \
-                             'Date: ' + format_date(invoice.date) + '\n' + \
-                             'Due date: ' + format_date(invoice.due_date)
+            invoice_detail = ' ----  Invoice  ---- \n' \
+                             f'Id: {invoice.invoice_id}\n' \
+                             f'Price: {format_price(invoice.price)}\n' \
+                             f'Status: {invoice.status.sticker} {invoice.status.value}\n' \
+                             f'Date: {format_date(invoice.date)}\n' \
+                             f'Due date: {format_date(invoice.due_date)}'
             self.bot.sendMessage(chat_id=get_chat_id(self.data['callback_query']),
                                  text=invoice_detail)
 
@@ -230,12 +231,12 @@ class ServicesHandler:
                                                                          "PRICE": product.price},
                                                                     ]})
             LocalInvoice.objects.create(b24_invoice_id=invoice_id, stripe_price_id=product.stripe_id)
-        except BitrixError as error_message:
+        except BitrixError as bitrix_error:
             # Exception logger credentials
-            user_chat_id = str(user.telegram_id)
+            user_chat_id = user.telegram_id
             username = user.telegram_username
 
-            logger.error('Exception: ' + username + ' (' + user_chat_id + ') - ' + str(error_message))
+            logger.error(f'Exception: {username} ({user_chat_id} - {bitrix_error}')
 
         # Service data
         service_title = service.title if service.title else 'Title is empty...'
@@ -261,7 +262,7 @@ class ServicesHandler:
             user_chat_id = str(user.telegram_id)
             username = user.telegram_username
 
-            logger.error('Exception: ' + username + ' (' + user_chat_id + ') - ' + str(e))
+            logger.error(f'Exception: {username} ({user_chat_id}) - {e}')
 
     def set_pre_checkout_query(self, invoice_id):
         user = User.objects.filter(telegram_id=self.data['pre_checkout_query']['from']['id']).first()

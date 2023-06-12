@@ -42,7 +42,7 @@ def selected_category_keyboard(services) -> InlineKeyboardMarkup:
     buttons = list()
 
     for service in services:
-        service_text = service.title + ' - ' + format_price(service.price)
+        service_text = f'{service.title} - {format_price(service.price)}'
         service_callback_data = 'services_info_' + service.service_id
 
         buttons.append([InlineKeyboardButton(service_text, callback_data=service_callback_data)])
@@ -74,7 +74,7 @@ def already_existing_service_keyboard(invoice) -> InlineKeyboardMarkup:
 
     button = [[
         InlineKeyboardButton(
-            sticker + ' ' + product_title_preview + ' | ' + price + ' | ' + date,
+            f'{sticker} {product_title_preview} | {price} | {date}',
             callback_data='services_detail_' + invoice.invoice_id)
     ]]
     return InlineKeyboardMarkup(button)
@@ -83,20 +83,20 @@ def already_existing_service_keyboard(invoice) -> InlineKeyboardMarkup:
 def invoice_for_selected_service_keyboard(service, invoice=None) -> InlineKeyboardMarkup:
     if invoice is None:
         buttons = [
-            [InlineKeyboardButton('Pay ' + format_price(service.price) + '.00', pay=True)],
-            [InlineKeyboardButton('⬅️ Back to ' + service.title, callback_data='services_info_' + service.service_id + '_del')]
+            [InlineKeyboardButton(f'Pay {format_price(service.price)}.00', pay=True)],
+            [InlineKeyboardButton('⬅️ Back to ' + service.title, callback_data=f'services_info_{service.service_id}_del')]
         ]
 
     elif invoice.status.value == 'Paid':
         buttons = [
-            [InlineKeyboardButton('⬅️ Back to ' + service.title, callback_data='services_info_' + service.service_id + '_del')]
+            [InlineKeyboardButton('⬅️ Back to ' + service.title, callback_data=f'services_info_{service.service_id}_del')]
         ]
 
     else:
         buttons = [
-            [InlineKeyboardButton('Pay ' + format_price(service.price) + '.00', pay=True)],
+            [InlineKeyboardButton(f'Pay {format_price(service.price)}.00', pay=True)],
             [InlineKeyboardButton('⬅️ Back to ' + service.title,
-                                  callback_data='services_info_' + service.service_id + '_del')]
+                                  callback_data=f'services_info_{service.service_id}_del')]
         ]
 
     return InlineKeyboardMarkup(buttons)

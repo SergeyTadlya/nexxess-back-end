@@ -31,7 +31,7 @@ def generate_new_pdf(user, invoice, pdf_path):
 
     # Insert the date
     page.insert_text(fitz.Point(105, 225), str(format_date(invoice.date)))
-    data = str(user.first_name) + ' ' + str(user.last_name)
+    data = f'{user.first_name} {user.last_name}'
     page.insert_text(fitz.Point(100, 342), str(invoice.product_title), fontsize=12)
 
     # Insert the due date
