@@ -297,7 +297,6 @@ def my_services(request):
             print(f'ws>>>>>>>>>>>>>>>>>>>>>>>>>{time_remaining}')
             Invoice.objects.update_or_create(invoice_id=pinned_invoice,
                                              defaults={"tracked_time": wasted_time})
-
             b24_service.append({
                 "ID": products["ID"],
                 "NAME": products["NAME"],
@@ -306,7 +305,6 @@ def my_services(request):
                 "CATEGORY": property_type_name,
                 "TIME_REMAINING": f"{hours:02d}:{minutes:02d}:{seconds:02d}",
             })
-
     b24_domain = B24keys.objects.order_by("id").first().domain[:-1]
     print(f'b24_service>>>>>>>>>>>>>>{b24_service}')
     context = {
