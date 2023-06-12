@@ -244,9 +244,8 @@ class ServicesHandler:
         price = [LabeledPrice(label=service_title, amount=service_price)]
 
         # Send invoice to user
-        stripe = StripeSettings.objects.get(id=1)
+        stripe = StripeSettings.objects.first()
         try:
-
             self.bot.sendInvoice(chat_id=get_chat_id(self.data['callback_query']),
                                  title=service_title,
                                  description=service_info_text,

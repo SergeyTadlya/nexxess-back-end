@@ -9,7 +9,7 @@ from telegram_bot.models import User
 from tickets.models import Ticket, TicketStatus
 from invoices.models import Invoice
 
-from bitrix24 import Bitrix24
+from bitrix24 import *
 
 
 @login_required(login_url='/accounts/login/')
@@ -45,9 +45,6 @@ def profile_view(request):
 
     if request.method == 'POST':
 
-        url = set_webhook()
-        bx24 = Bitrix24(url)
-
         if request.FILES:
             if request.FILES['profile_image'].size < (2 * 1024 * 1024):
                 file = request.FILES['profile_image']
@@ -70,45 +67,75 @@ def profile_view(request):
         check_list = [first_name, last_name, phone, bio, country, city, street, tax_id, old_password]
 
         if new_password == '':
+            try:
+                user.first_name = first_name if first_name else user.first_name
+                user.last_name = last_name if last_name else user.last_name
+                user.phone = phone if phone else user.phone
+                user.bio = bio if bio else user.bio
 
-            user.first_name = first_name if first_name else user.first_name
-            user.last_name = last_name if last_name else user.last_name
-            user.phone = phone if phone else user.phone
-            user.bio = bio if bio else user.bio
+                user.country = country if country else user.country
+                user.city = city if city else user.city
+                user.street = street if street else user.street
+                user.tax_id = tax_id if tax_id else user.tax_id
 
-            user.country = country if country else user.country
-            user.city = city if city else user.city
-            user.street = street if street else user.street
-            user.tax_id = tax_id if tax_id else user.tax_id
-
-            data = bx24.callMethod('user.get', {"ID": 312})
-            print(f'  >>>>>>>>>>>>>>  {data}')
-
-            user.save()
+                url = set_webhook()
+                bx24 = Bitrix24(url)
+                bx24.callMethod(
+                    'user.update',
+                    ID=312,  # user.b24_contact_id
+                    NAME=user.first_name,
+                    LAST_NAME=user.last_name,
+                    PERSONAL_MOBILE=user.phone,
+                    WORK_POSITION=user.bio,
+                    PERSONAL_COUNTRY=user.country,
+                    PERSONAL_CITY=user.city,
+                    PERSONAL_STREET=user.street,
+                    UF_TAX_ID=user.tax_id
+                )
+                user.save()
+            except BitrixError as bitrix_error:
+                print(' ---- The data could not be updated due to this error: ---- \n' + str(bitrix_error))
 
             return redirect('/profile/')
 
         elif '' not in check_list and len(new_password) > 7 and any([authenticate(request, username=user.email, password=old_password), all([old_password == user.password, len(old_password) == 41])], ):
+            try:
+                user.first_name = first_name if first_name else user.first_name
+                user.last_name = last_name if last_name else user.last_name
+                user.phone = phone if phone else user.phone
+                user.bio = bio if bio else user.bio
 
-            user.first_name = first_name if first_name else user.first_name
-            user.last_name = last_name if last_name else user.last_name
-            user.phone = phone if phone else user.phone
-            user.bio = bio if bio else user.bio
+                user.country = country if country else user.country
+                user.city = city if city else user.city
+                user.street = street if street else user.street
+                user.tax_id = tax_id if tax_id else user.tax_id
 
-            user.country = country if country else user.country
-            user.city = city if city else user.city
-            user.street = street if street else user.street
-            user.tax_id = tax_id if tax_id else user.tax_id
+                url = set_webhook()
+                bx24 = Bitrix24(url)
+                bx24.callMethod(
+                    'user.update',
+                    ID=312,  # user.b24_contact_id
+                    NAME=user.first_name,
+                    LAST_NAME=user.last_name,
+                    PERSONAL_MOBILE=user.phone,
+                    WORK_POSITION=user.bio,
+                    PERSONAL_COUNTRY=user.country,
+                    PERSONAL_CITY=user.city,
+                    PERSONAL_STREET=user.street,
+                    UF_TAX_ID=user.tax_id
+                )
 
-            user.set_password(new_password)
-            user.google_auth = False
+                user.set_password(new_password)
+                user.google_auth = False
+                user.save()
 
-            user.save()
+            except BitrixError as bitrix_error:
+                print(' ---- The data could not be updated due to this error: ---- \n' + str(bitrix_error))
+
+            return redirect('/accounts/login/')
 
         else:
             return redirect('/profile/')
-
-        return redirect('/accounts/login/')
 
     user.first_name = user.first_name if user.first_name else 'Empty'
     user.last_name = user.last_name if user.last_name else 'Empty'
@@ -133,7 +160,6 @@ def ajax_errors(request):
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
 
         if request.method == 'POST':
-
             response = {
                 'first_name': request.user.first_name,
                 'last_name': request.user.last_name,

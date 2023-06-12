@@ -181,8 +181,7 @@ class TicketsHandler:
                 message,
                 chat_id=get_chat_id(self.data['callback_query']),
                 message_id=self.data['callback_query']['message']['message_id'],
-                reply_markup=tickets_for_selected_status_keyboard(tickets, ticket_status, current_page, all_pages,
-                                                                  has_pages)
+                reply_markup=tickets_for_selected_status_keyboard(tickets, ticket_status, current_page, all_pages,has_pages)
             )
         except Exception as e:
             # Exception logger credentials
