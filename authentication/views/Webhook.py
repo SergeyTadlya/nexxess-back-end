@@ -34,7 +34,7 @@ def format_date(date):
 
 @csrf_exempt
 def webhook_task(request):
-    time.sleep(3)
+    # time.sleep(3)
     try:
         if request.method == 'POST':
             url = set_webhook()
