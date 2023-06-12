@@ -119,7 +119,7 @@ class AuthenticationHandler:
             user_chat_id = self.data['message']['from']['id']
             username = self.data['message']['from']['username']
 
-            logger.error('Exception: ' + user_chat_id + ' (' + username + ') - ' + str(e))
+            logger.error('Exception: ' + username + ' (' + user_chat_id + ') - ' + str(e))
 
     def set_user_verification_code(self, data):
         unauthorized_user = Authentication.objects.filter(telegram_id=self.data['message']['from']['id'])

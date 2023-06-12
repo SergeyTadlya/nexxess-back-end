@@ -70,7 +70,7 @@ class CallbackHandler:
                         user_chat_id = self.data['callback_query']['message']['chat']['id']
                         username = self.data['callback_query']['message']['chat']['username']
 
-                        logger.error('Exception: ' + user_chat_id + ' (' + username + ') - ' + str(e))
+                        logger.error('Exception: ' + username + ' (' + user_chat_id + ') - ' + str(e))
 
                 elif isinstance(result, date):
                     try:
@@ -85,7 +85,7 @@ class CallbackHandler:
                         user_chat_id = self.data['callback_query']['message']['chat']['id']
                         username = self.data['callback_query']['message']['chat']['username']
 
-                        logger.error('Exception: ' + user_chat_id + ' (' + username + ') - ' + str(e))
+                        logger.error('Exception: ' + username + ' (' + user_chat_id + ') - ' + str(e))
         else:
             self.bot.sendMessage(chat_id=get_chat_id(self.data['callback_query']),
                                  text='Authorization first 🙃\n'
