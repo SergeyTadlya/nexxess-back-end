@@ -40,7 +40,7 @@ class Ticket(models.Model):
     started_date = models.DateTimeField(verbose_name='Started date', blank=True, null=True)
     visible = models.BooleanField(verbose_name='IsTicketVisible', default=True)
     tracked_time = models.CharField(verbose_name='Tracked time', blank=True, null=True, max_length=100)
-    pinned_invoice = models.CharField(verbose_name='Invoice', blank=True,null=True, max_length=20)
+    pinned_invoice = models.CharField(verbose_name='Invoice', blank=True, max_length=20)
 
     def __str__(self):
         return f'Ticket {self.task_id}, responsible - {self.responsible}'
