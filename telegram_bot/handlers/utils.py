@@ -60,7 +60,7 @@ def authorize_user(data):
         user_chat_id = str(user.telegram_id)
         username = user.telegram_username
 
-        logger.error('Exception: ' + username + ' (' + user_chat_id + ') - ' + str(e))
+        logger.error(f'Exception: {username} ({user_chat_id}) - {e}')
 
 
 class MyStyleCalendar(DetailedTelegramCalendar):

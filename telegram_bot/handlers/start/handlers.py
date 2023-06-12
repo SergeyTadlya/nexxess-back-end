@@ -107,7 +107,8 @@ class AuthenticationHandler:
 
             self.bot.sendMessage(chat_id=get_chat_id(self.data),
                                  text=f'Greate!\n'
-                                      f'We have sent a confirmation code to the {unauthorized_user.email}.\n'
+                                      f'(if you want to write another email, click -> /start).\n'
+                                      f'We have sent a confirmation code to the {unauthorized_user.email}\n'
                                       f'Check it and write here your code:')
             send_mail('Secret key',
                       f'Your private key for {unauthorized_user.email}:\n\n{code}',
@@ -119,7 +120,7 @@ class AuthenticationHandler:
             user_chat_id = self.data['message']['from']['id']
             username = self.data['message']['from']['username']
 
-            logger.error('Exception: ' + username + ' (' + user_chat_id + ') - ' + str(e))
+            logger.error(f'Exception: {username} ({user_chat_id}) - {e}')
 
     def set_user_verification_code(self, data):
         unauthorized_user = Authentication.objects.filter(telegram_id=self.data['message']['from']['id'])
@@ -140,9 +141,9 @@ class AuthenticationHandler:
             set_up_commands(self.bot)
 
             self.bot.sendMessage(chat_id=get_chat_id(self.data),
-                                 text='Awesome!😎 \n\n'
+                                 text='Awesome! 😎\n\n'
                                       'Authorization was successful.\n'
-                                      'Now you can use commands or keyboard for more comfortable')
+                                      'Familiarize yourself with this information below 👇')
             StartHandler.show_menu(self.bot, self.data)
         else:
             self.bot.sendMessage(chat_id=get_chat_id(self.data),

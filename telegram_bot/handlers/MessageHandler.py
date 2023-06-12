@@ -31,16 +31,16 @@ class MessageHandler:
             service = Service.objects.get(service_id=invoice.service_id)
 
             service_info_text = service.detail_text if service.detail_text else 'Detail text is empty...'
-            message = '----------------------  Service  ----------------------' + '\n' + \
-                      'Title: ' + service.title + '\n' + \
-                      'Category: ' + service.category.category_name + '\n' + \
-                      'Description: ' + service_info_text + '\n\n' + \
-                      '----------------------  Invoice  ----------------------' + '\n' + \
-                      'Id: ' + invoice.invoice_id + '\n' + \
-                      'Price: ' + format_price(invoice.price) + '\n' + \
-                      'Status: ' + invoice.status.sticker + ' ' + invoice.status.value + '\n' + \
-                      'Date: ' + format_date(invoice.date) + '\n' + \
-                      'Due date: ' + format_date(invoice.due_date)
+            message = ' ----  Service  ---- \n' \
+                      f'Title: {service.title}\n' \
+                      f'Category: {service.category.category_name}\n' \
+                      f'Description: {service_info_text}\n\n' \
+                      ' ----  Invoice  ---- \n' \
+                      f'Id: {invoice.invoice_id}\n' \
+                      f'Price: {format_price(invoice.price)}\n' \
+                      f'Status: {invoice.status.sticker} {invoice.status.value}\n' \
+                      f'Date: {format_date(invoice.date)}\n' \
+                      f'Due date: {format_date(invoice.due_date)}'
 
             self.bot.sendMessage(chat_id=get_chat_id(self.data),
                                  text=message,
