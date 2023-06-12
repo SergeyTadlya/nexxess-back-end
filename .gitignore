@@ -7,3 +7,4 @@ __pycache__/
 /pdf_client/*
 /telegram_log.log
 /media/comment_files/*
+/media/*

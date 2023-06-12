@@ -88,18 +88,27 @@ class TicketsHandler:
                 time.sleep(1)
                 new_user_ticket = Ticket.objects.filter(responsible=str(user.b24_contact_id)).last()
                 bot.sendMessage(chat_id=get_chat_id(data['callback_query']),
-                                text='Great, your ticket successfully created:' + '\n' +
-                                     '#' + new_user_ticket.task_id + ' | ' + new_user_ticket.ticket_title,
+                                text='Great, your ticket successfully created:\n'\
+                                     f'#{new_user_ticket.task_id} | {new_user_ticket.ticket_title}',
                                 reply_markup=return_to_menu_keyboard())
+            else:
+                bot.sendMessage(chat_id=get_chat_id(data['callback_query']),
+                                text='Oops, somthing went wrong... 🙁',
+                                reply_markup=return_to_menu_keyboard())
+                # Exception logger credentials
+                user_chat_id = user.telegram_id
+                username = user.telegram_username
+
+                logger.warning(f'Exception: {username} ({user_chat_id}) - status code is invalid')
         except Exception as e:
             bot.sendMessage(chat_id=get_chat_id(data['callback_query']),
                             text='Oops, somthing went wrong... 🙁',
                             reply_markup=return_to_menu_keyboard())
             # Exception logger credentials
-            user_chat_id = str(user.telegram_id)
+            user_chat_id = user.telegram_id
             username = user.telegram_username
 
-            logger.error('Exception: ' + user_chat_id + ' (' + username + ') - ' + str(e))
+            logger.error(f'Exception: {username} ({user_chat_id}) - {e}')
 
     @staticmethod
     def show_tickets_menu(bot, data):
@@ -128,12 +137,12 @@ class TicketsHandler:
                     message_text = message_text.replace('&#91;/P&#93;', '')
                     message_text = message_text.replace('[/P]', '')
 
-                message = '📩 You have received a new message from the manager:\n' + \
-                          '---------------------------------------------' + '\n👤\n' + \
-                          '"' + message_text + '"\n\n' + \
-                          '---------------------------------------------' + '\n' + \
-                          'Here is a link to the current ticket:\n' + \
-                          'https://dev1.nexxess.com/tickets/detail/' + ticket.task_id + '/'
+                message = '📩 You have received a new message from the manager:\n'\
+                          '-----------------------\n👤\n'\
+                          f'"{message_text}"\n\n'\
+                          '-----------------------\n'\
+                          'Here is a link to the current ticket:\n'\
+                          f'https://dev1.nexxess.com/tickets/detail/{ticket.task_id}/'
 
                 if user.telegram_id:
                     bot.sendMessage(chat_id=user.telegram_id,
@@ -159,8 +168,7 @@ class TicketsHandler:
                                  text='You don`t have any ' + status_name.lower() + ' tickets')
             return
 
-        all_pages = tickets_quantity // element_on_page if not tickets_quantity % element_on_page else (
-                                                                                                               tickets_quantity // element_on_page) + 1
+        all_pages = tickets_quantity // element_on_page if not tickets_quantity % element_on_page else (tickets_quantity // element_on_page) + 1
         has_pages = False
 
         if tickets_quantity > element_on_page:
@@ -168,20 +176,19 @@ class TicketsHandler:
             tickets = tickets[element_on_page * (current_page - 1):element_on_page * current_page]
 
         try:
-            message = ticket_status.sticker + ' ' + ticket_status.name + ' tickets: '
+            message = f'{ticket_status.sticker} {ticket_status.name} tickets:'
             self.bot.edit_message_text(
                 message,
                 chat_id=get_chat_id(self.data['callback_query']),
                 message_id=self.data['callback_query']['message']['message_id'],
-                reply_markup=tickets_for_selected_status_keyboard(tickets, ticket_status, current_page, all_pages,
-                                                                  has_pages)
+                reply_markup=tickets_for_selected_status_keyboard(tickets, ticket_status, current_page, all_pages,has_pages)
             )
         except Exception as e:
             # Exception logger credentials
             user_chat_id = str(user.telegram_id)
             username = user.telegram_username
 
-            logger.error('Exception: ' + user_chat_id + ' (' + username + ') - ' + str(e))
+            logger.error(f'Exception: {username} ({user_chat_id}) - {e}')
 
     def show_all_tickets(self, current_page, element_on_page=8):
         user = get_user(self.data['callback_query'])
@@ -193,8 +200,7 @@ class TicketsHandler:
                                  text='You don`t have any tickets')
             return
 
-        all_pages = tickets_quantity // element_on_page if not tickets_quantity % element_on_page else (
-                                                                                                               tickets_quantity // element_on_page) + 1
+        all_pages = tickets_quantity // element_on_page if not tickets_quantity % element_on_page else (tickets_quantity // element_on_page) + 1
         has_pages = False
 
         if tickets_quantity > element_on_page:
@@ -213,7 +219,7 @@ class TicketsHandler:
             user_chat_id = str(user.telegram_id)
             username = user.telegram_username
 
-            logger.error('Exception: ' + user_chat_id + ' (' + username + ') - ' + str(e))
+            logger.error(f'Exception: {username} ({user_chat_id}) - {e}')
 
     def show_ticket_details(self, status_name, current_page, ticket_id):
         ticket = Ticket.objects.filter(task_id=ticket_id)
@@ -222,13 +228,13 @@ class TicketsHandler:
 
         active_value = '☑️' if ticket.is_active is True else '❌'
 
-        ticket_detail = 'Ticket #' + ticket_id + '\n' + \
-                        'Title: \n' + ticket.ticket_title + '\n\n' + \
-                        'Description: \n' + ticket.ticket_text + '\n\n' + \
-                        'Status: ' + str(ticket.status.name) + '\n' + \
-                        'Deadline: ' + format_date(ticket.deadline) + '\n' + \
-                        'Active: ' + active_value + '\n\n' + \
-                        'Link to the ticket: ' + 'https://dev1.nexxess.com/tickets/detail/' + ticket.task_id + '/'
+        ticket_detail = f'Ticket #{ticket_id}\n'\
+                        f'Title: \n{ticket.ticket_title}\n\n'\
+                        f'Description: \n{ticket.ticket_text}\n\n'\
+                        f'Status: {ticket.status.name}\n'\
+                        f'Deadline: {format_date(ticket.deadline)}\n'\
+                        f'Active: {active_value}\n\n'\
+                        f'Link to the ticket: https://dev1.nexxess.com/tickets/detail/{ticket.task_id}/'
 
         self.bot.sendMessage(chat_id=get_chat_id(self.data['callback_query']),
                              text=ticket_detail,
@@ -244,8 +250,8 @@ class TicketsHandler:
                              reply_markup=return_to_menu_keyboard())
 
     def save_ticket_title(self, title):
-        if title == 'None' or title.startswith('/') or title in ['👨‍💻 Services', '🧾 Invoices', '📝 Tickets', '⁉️ FAQ',
-                                                                 '🚪 Log Out']:
+        title_check_list = ['👨‍💻 Services', '🧾 Invoices', '📝 Tickets', '⁉️ FAQ', '🚪 Log Out']
+        if title == 'None' or title.startswith('/') or title in title_check_list:
             self.bot.sendMessage(chat_id=get_chat_id(self.data),
                                  text='Only text format is accepted\n'
                                       'Try again:')
@@ -258,11 +264,10 @@ class TicketsHandler:
 
         self.bot.sendMessage(chat_id=get_chat_id(self.data),
                              text='Great, now describe the situation:')
-        # reply_markup=return_to_set_title_keyboard(ticket.id)
 
     def save_ticket_description(self, description):
-        if description == 'None' or description.startswith('/') or description in ['👨‍💻 Services', '🧾 Invoices',
-                                                                                   '📝 Tickets', '⁉️ FAQ', '🚪 Log Out']:
+        description_check_list = ['👨‍💻 Services', '🧾 Invoices', '📝 Tickets', '⁉️ FAQ', '🚪 Log Out']
+        if description == 'None' or description.startswith('/') or description in description_check_list:
             self.bot.sendMessage(chat_id=get_chat_id(self.data),
                                  text='Only text format is accepted\n'
                                       'Try again:')
@@ -282,6 +287,6 @@ class TicketsHandler:
 
         calendar, step = MyStyleCalendar(calendar_id=1, min_date=date.today()).build()
         self.bot.sendMessage(chat_id=get_chat_id(self.data),
-                             text=f'Okay, it remains to choose the deadline\n'
-                                  f'Select {LSTEP[step]}  for deadline:',
+                             text='Okay, it remains to choose the deadline\n'
+                                  f'Select {LSTEP[step]} for deadline:',
                              reply_markup=calendar)

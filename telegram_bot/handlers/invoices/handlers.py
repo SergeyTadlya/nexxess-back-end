@@ -80,7 +80,7 @@ class InvoiceHandler:
             user_chat_id = str(user.telegram_id)
             username = user.telegram_username
 
-            logger.error('Exception: ' + user_chat_id + ' (' + username + ') - ' + str(e))
+            logger.error(f'Exception: {username} ({user_chat_id}) - {e}')
 
     def show_all_invoices(self, current_page, element_on_page=8):
         user = get_user(self.data['callback_query'])
@@ -111,7 +111,7 @@ class InvoiceHandler:
             user_chat_id = str(user.telegram_id)
             username = user.telegram_username
 
-            logger.error('Exception: ' + user_chat_id + ' (' + username + ') - ' + str(e))
+            logger.error(f'Exception: {username} ({user_chat_id}) - {e}')
 
     def show_invoice_details(self, status_name, current_page, invoice_id):
         invoice = get_invoice_by_id(invoice_id, status_name)
@@ -125,16 +125,16 @@ class InvoiceHandler:
 
         service = Service.objects.get(service_id=invoice.service_id)
         service_description = service.detail_text if service.detail_text else 'Detail text is empty'
-        invoice_detail = '-------------------- Invoice --------------------' + '\n' + \
-                         'Invoice ID: ' + invoice.invoice_id + '\n' + \
-                         'Price: ' + format_price(invoice.price) + '\n' + \
-                         'Status: ' + invoice.status.value + '\n' + \
-                         'Date: ' + format_date(invoice.date) + '\n' + \
-                         'Due date: ' + format_date(invoice.due_date) + '\n\n' + \
-                         '-------------------- Service --------------------' + '\n' + \
-                         'Title: ' + service.title + '\n' + \
-                         'Category: ' + service.category.category_name + '\n' + \
-                         'Description: ' + service_description
+        invoice_detail = ' ---- Invoice ---- \n'\
+                         f'Invoice ID: {invoice.invoice_id}\n'\
+                         f'Price: {format_price(invoice.price)}\n'\
+                         f'Status: {invoice.status.value}\n'\
+                         f'Date: {format_date(invoice.date)}\n'\
+                         f'Due date: {format_date(invoice.due_date)}\n\n'\
+                         ' ---- Service ---- \n'\
+                         f'Title: {service.title}\n'\
+                         f'Category: {service.category.category_name}\n'\
+                         f'Description: {service_description}'
 
         filename = invoice.invoice_id + '_' + invoice.status.value
         self.bot.send_document(chat_id=get_chat_id(self.data['callback_query']),

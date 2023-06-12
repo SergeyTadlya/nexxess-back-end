@@ -189,24 +189,10 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'info@nexxess.com'
 EMAIL_HOST_PASSWORD = 'chxn glxe ltql clcv'
-# EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
-
-SOCIALACCOUNT_ADAPTER = "authentication.adapters.CustomSocialAccountAdapter"
-
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 DEFAULT_FROM_EMAIL = 'info@nexxess.com'
 
-
-# Additional configuration settings
-SOCIALACCOUNT_QUERY_EMAIL = True
-ACCOUNT_LOGOUT_ON_GET= True
-ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'  # відповідає за заборону логіну без підтвердження пошти
-ACCOUNT_EMAIL_REQUIRED = True
 CSRF_FAILURE_VIEW = 'authentication.views.csrf_failure'
 
 # Rest framework and SIMPLE_JWT for api (not using now)
@@ -295,9 +281,5 @@ LOGGING = {
             'handlers': ['console', 'file'],
             'propagate': True
         },
-        'django.request': {
-            'level': 'DEBUG',
-            'handlers': ['console', 'file']
-        }
     }
 }
