@@ -114,6 +114,8 @@ def webhook_task(request):
             print('file_name', file_name)
             print('file_view_url', file_view_url)
             print('file_type', file_type)
+            print(f'>>>>>>pined {pinned_invoice}')
+            print(f'>>>>>type{type(pinned_invoice)}')
 
             defaults = {
                 'responsible': trim_before(task_info_crm["ufCrmTask"][0]) if (len(task_info_crm["ufCrmTask"]) == 1) else 393,
@@ -130,7 +132,7 @@ def webhook_task(request):
                 'task_info': task_info,
                 'task_info_crm': task_info_crm,
                 'started_date': created_at,
-                'visible': True,
+                'visible': True if pinned_invoice is None else False,
                 'tracked_time': tracked_time,
                 'pinned_invoice': pinned_invoice,
                 'added_document_name': file_name,

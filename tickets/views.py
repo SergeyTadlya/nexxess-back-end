@@ -34,7 +34,7 @@ def check_and_shorten_string(string):
 def tasks(request):
     # Get all user tickets and sorting by created date
     all_user_tasks = Ticket.objects.all().order_by('-created_at') if request.user.is_superuser \
-        else Ticket.objects.filter(responsible=str(request.user.b24_contact_id)).order_by('-created_at')
+        else Ticket.objects.filter(responsible=str(request.user.b24_contact_id), visible=True).order_by('-created_at')
 
     # Get all existing statuses for user tickets
     all_statuses = TicketStatus.objects.all()
