@@ -97,9 +97,9 @@
               </ul>
               <div class="content__list-box" style="width: 160px">
                 <p class="content__list-price" style="width: 100%">Price: ${{service.PRICE}}</p>
-                {% if service.CATEGORY == 'Consultation' %}
-                  <p class="content__list-price" style="width: 100%">Remains, hour: 10</p>
-                {% endif %}
+
+                  <p class="content__list-price" style="width: 100%">Remains, {{ service.TIME_REMAINING }}</p>
+
               </div>
             </li>
           {% endfor %}

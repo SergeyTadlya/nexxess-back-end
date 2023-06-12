@@ -20,7 +20,7 @@ class TicketStatus(models.Model):
 class Ticket(models.Model):
     responsible = models.CharField(max_length=150, verbose_name='Responsible bitrix ID', blank=True, null=True)
     task_id = models.JSONField(max_length=50, verbose_name='TASK_ID', blank=True, null=True)
-    ticket_title = models.CharField(max_length=25,  verbose_name='Ticket title', blank=True, null=True)
+    ticket_title = models.CharField(max_length=100,  verbose_name='Ticket title', blank=True, null=True)
     ticket_text = models.TextField(verbose_name='Ticket description', max_length=1200, blank=True, null=True)
     status = models.ForeignKey(TicketStatus, on_delete=models.PROTECT, verbose_name='Status', blank=True, null=True)
     is_opened = models.BooleanField(verbose_name="Opened (yes/no)", default=False, blank=True, null=True)
@@ -37,6 +37,7 @@ class Ticket(models.Model):
     added_document_type = models.CharField(max_length=50, null=True, blank=True)
     added_document_name = models.CharField(max_length=50, null=True, blank=True)
     created_at = models.DateTimeField(verbose_name='Create date', auto_now_add=True, blank=True, null=True)
+    started_date = models.DateTimeField(verbose_name='Started date', blank=True, null=True)
     visible = models.BooleanField(verbose_name='IsTicketVisible', default=True)
     tracked_time = models.CharField(verbose_name='Tracked time', blank=True, null=True, max_length=100)
     pinned_invoice = models.CharField(verbose_name='Invoice', blank=True, max_length=20)

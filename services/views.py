@@ -279,6 +279,8 @@ def my_services(request):
                 print(pinned_invoice)
 
             wasted_time = Ticket.objects.filter(responsible=b24_contact_id, pinned_invoice=pinned_invoice)
+            print(f'wasted time:{wasted_time}')
+            
 
             if wasted_time.exists():
                 wasted_time = wasted_time.first().tracked_time

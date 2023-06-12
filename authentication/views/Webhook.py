@@ -35,110 +35,113 @@ def format_date(date):
 @csrf_exempt
 def webhook_task(request):
     # time.sleep(3)
-    try:
-        if request.method == 'POST':
-            url = set_webhook()
-            bx24 = Bitrix24(url)
-            event = request.POST.get('event', "")
-            if event == "ONTASKADD":
-                entities_id = request.POST.get('data[FIELDS_AFTER][ID]', "")
-            elif event == "ONTASKUPDATE":
-                entities_id = request.POST.get('data[FIELDS_BEFORE][ID]', "")
+    # try:
+    if request.method == 'POST':
+        url = set_webhook()
+        bx24 = Bitrix24(url)
+        event = request.POST.get('event', "")
+        if event == "ONTASKADD":
+            entities_id = request.POST.get('data[FIELDS_AFTER][ID]', "")
+        elif event == "ONTASKUPDATE":
+            entities_id = request.POST.get('data[FIELDS_BEFORE][ID]', "")
 
-            b24_time = request.POST.get('ts', "")
-            b24_domain = request.POST.get('auth[domain]', "")
-            b24_member_id = request.POST.get('auth[member_id]', "")
-            b24_application_token = request.POST.get('auth[application_token]', "")
+        b24_time = request.POST.get('ts', "")
+        b24_domain = request.POST.get('auth[domain]', "")
+        b24_member_id = request.POST.get('auth[member_id]', "")
+        b24_application_token = request.POST.get('auth[application_token]', "")
 
-            if all([entities_id, b24_time, b24_domain, b24_member_id, b24_application_token]):
-                task_url = set_webhook() + 'tasks.task.get/?id=' + entities_id
-                task_crm = set_webhook() + 'tasks.task.get/?taskId=' + entities_id + '&select%5B0%5D=UF_CRM_TASK'
-                task_invoice_crm = set_webhook() + 'tasks.task.get/?taskId=' + entities_id + '&select%5B0%5D=UF_OLD_INVOICE'
-                task_info = requests.get(task_url).json()['result']['task']
-                task_info_crm = requests.get(task_crm).json()['result']['task']
-                pinned_invoice = requests.get(task_invoice_crm).json()['result']['task']['ufOldInvoice']
+        if all([entities_id, b24_time, b24_domain, b24_member_id, b24_application_token]):
+            task_url = set_webhook() + 'tasks.task.get/?id=' + entities_id
+            task_crm = set_webhook() + 'tasks.task.get/?taskId=' + entities_id + '&select%5B0%5D=UF_CRM_TASK'
+            task_invoice_crm = set_webhook() + 'tasks.task.get/?taskId=' + entities_id + '&select%5B0%5D=UF_OLD_INVOICE'
+            task_info = requests.get(task_url).json()['result']['task']
+            task_info_crm = requests.get(task_crm).json()['result']['task']
+            pinned_invoice = requests.get(task_invoice_crm).json()['result']['task']['ufOldInvoice']
 
-                ticket_title = task_info["title"]
-                ticket_text = task_info["description"]
-                status = TicketStatus.objects.filter(value=task_info["status"])
-                if status.exists():
-                    status = status.first()
-                deadline = datetime.strptime(task_info["deadline"][:11] + '23:59:59', '%Y-%m-%dT%H:%M:%S')
-                created_at = task_info["createdDate"]
-                tracked_time = task_info['timeSpentInLogs']
+            ticket_title = task_info["title"]
+            ticket_text = task_info["description"]
+            status = TicketStatus.objects.filter(value=task_info["status"])
+            if status.exists():
+                status = status.first()
+            deadline = datetime.strptime(task_info["deadline"][:11] + '23:59:59', '%Y-%m-%dT%H:%M:%S')
+            print(task_info["createdDate"])
+            created_at = datetime.strptime(task_info["createdDate"][:19], '%Y-%m-%dT%H:%M:%S')
+            tracked_time = task_info['timeSpentInLogs']
+            print(f'>>>>>>>TRACKED TIME{tracked_time}')
 
 
-                task_get = bx24.callMethod(
-                    'tasks.task.get',
-                    taskId=entities_id,
-                    select=["ID", "UF_TASK_WEBDAV_FILES"],
-                )['task']
-                print('task_get', task_get)
-                # added file in task
-                if task_get['ufTaskWebdavFiles'] != False:
-                    file_info = bx24.callMethod(
-                        'task.item.getfiles',
-                        TASKID=entities_id,
-                    )[0]
-                    file_name = file_info['NAME']
-                    file_public_link = bx24.callMethod(
-                        'disk.file.getExternalLink',
-                        id=file_info['FILE_ID'],
-                    )
-                    b24_response = requests.get(file_public_link)
-                    b24_file_content = b24_response.content
-                    # parsing file content
-                    soup = BeautifulSoup(b24_file_content, 'html.parser')
-                    meta_element = soup.find('meta', property='og:image')
-                    # its document
-                    if meta_element is None:
-                        # find public url in file type document
-                        pattern = r'href="(/docs/pub/[^"]+)"'
-                        matches = re.findall(pattern, b24_file_content.decode())
-                        doc_url = matches[0]
-                        file_view_url = f'https://crm.nexxess.com{doc_url}'
-                        file_type = "document"
 
-                    # its image
-                    else:
-                        file_view_url = meta_element['content']
-                        file_type = "image"
+            task_get = bx24.callMethod(
+                'tasks.task.get',
+                taskId=entities_id,
+                select=["ID", "UF_TASK_WEBDAV_FILES"],
+            )['task']
+            print('task_get', task_get)
+            # added file in task
+            if task_get['ufTaskWebdavFiles'] != False:
+                file_info = bx24.callMethod(
+                    'task.item.getfiles',
+                    TASKID=entities_id,
+                )[0]
+                file_name = file_info['NAME']
+                file_public_link = bx24.callMethod(
+                    'disk.file.getExternalLink',
+                    id=file_info['FILE_ID'],
+                )
+                b24_response = requests.get(file_public_link)
+                b24_file_content = b24_response.content
+                # parsing file content
+                soup = BeautifulSoup(b24_file_content, 'html.parser')
+                meta_element = soup.find('meta', property='og:image')
+                # its document
+                if meta_element is None:
+                    # find public url in file type document
+                    pattern = r'href="(/docs/pub/[^"]+)"'
+                    matches = re.findall(pattern, b24_file_content.decode())
+                    doc_url = matches[0]
+                    file_view_url = f'https://crm.nexxess.com{doc_url}'
+                    file_type = "document"
+
+                # its image
                 else:
-                    file_name = ""
-                    file_view_url = ""
-                    file_type = ""
+                    file_view_url = meta_element['content']
+                    file_type = "image"
+            else:
+                file_name = ''
+                file_view_url = ''
+                file_type = ""
 
-                print('file_name', file_name)
-                print('file_view_url', file_view_url)
-                print('file_type', file_type)
+            print('file_name', file_name)
+            print('file_view_url', file_view_url)
+            print('file_type', file_type)
 
-                defaults = {
-                    'responsible': trim_before(task_info_crm["ufCrmTask"][0]) if (len(task_info_crm["ufCrmTask"]) == 1) else 393,
-                    'ticket_title': ticket_title,
-                    'ticket_text': ticket_text,
-                    'status': status,
-                    'is_opened': False,
-                    'is_active': True,
-                    'deadline': deadline,
-                    'b24_domain': b24_domain,
-                    'b24_member_id': b24_member_id,
-                    'b24_application_token': b24_application_token,
-                    'b24_time': b24_time,
-                    'task_info': task_info,
-                    'task_info_crm': task_info_crm,
-                    'created_at': created_at,
-                    'visible': True,
-                    'tracked_time': tracked_time,
-                    'pinned_invoice': pinned_invoice,
-                    'added_document_name': file_name,
-                    'added_documents_url': file_view_url,
-                    'added_document_type': file_type,
-                }
-                Ticket.objects.update_or_create(task_id=entities_id, defaults=defaults)
-        return HttpResponse('ok')
-    except Exception as e:
-        print(e)
+            defaults = {
+                'responsible': trim_before(task_info_crm["ufCrmTask"][0]) if (len(task_info_crm["ufCrmTask"]) == 1) else 393,
+                'ticket_title': ticket_title,
+                'ticket_text': ticket_text,
+                'status': status,
+                'is_opened': False,
+                'is_active': True,
+                'deadline': deadline,
+                'b24_domain': b24_domain,
+                'b24_member_id': b24_member_id,
+                'b24_application_token': b24_application_token,
+                'b24_time': b24_time,
+                'task_info': task_info,
+                'task_info_crm': task_info_crm,
+                'started_date': created_at,
+                'visible': True,
+                'tracked_time': tracked_time,
+                'pinned_invoice': pinned_invoice,
+                'added_document_name': file_name,
+                'added_documents_url': file_view_url,
+                'added_document_type': file_type,
+            }
+            Ticket.objects.update_or_create(task_id=entities_id, defaults=defaults)
     return HttpResponse('ok')
+    # except Exception as e:
+    #     print(e)
+    # return HttpResponse('ok')
 
 
 @csrf_exempt

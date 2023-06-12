@@ -4,7 +4,7 @@ from .models import Ticket, TicketComments, TelegramTicket, TicketStatus
 
 @admin.register(Ticket)
 class TicketAdmin(admin.ModelAdmin):
-    list_display = ['id', 'task_id', 'responsible', 'ticket_title', 'ticket_text', 'is_opened', 'created_at', 'is_active']
+    list_display = ['id', 'task_id', 'responsible', 'ticket_title', 'ticket_text', 'is_opened', 'created_at', 'is_active', 'started_date']
     list_filter = ['responsible', 'is_opened']
 
 
