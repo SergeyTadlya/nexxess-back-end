@@ -241,20 +241,25 @@
     {
       var button = $(this);
       var b24_product_id = $(button).data("b24invoice");
+      var user_id = {{ user.id }}
 
         $.ajax({
           url: '/invoices/create_payment_link/',
           type: 'POST',
-          data: {"b24_invoice_id":b24_product_id},
+          data: {
+              "b24_invoice_id":b24_product_id,
+              "user_id": user_id
+          },
           dataType: 'json',
           success: function(data) {
-            if (data.pay_link){
+            //console.log(data.status)
+            //if (data.pay_link){
               // window.open(data.pay_link, '_blank');
-              window.location.href = data.pay_link;
-            }else
-            {
-              alert("We have some problem. Please try late")
-            }
+            //  window.location.href = data.pay_link;
+            //}else
+            //{
+            //  alert("We have some problem. Please try late")
+            //}
           },
         });
       });

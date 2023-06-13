@@ -7,6 +7,7 @@ from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
 
 from authentication.helpers.B24Webhook import set_webhook
 from tickets.models import Ticket, TicketStatus
+from .helpers import PaymentHelper, RightSignatureHelper, BitrixHelper
 
 from .models import Invoice, Status, StripeSettings, LocalInvoice
 
@@ -393,6 +394,65 @@ def create_payment_link(request):
     print(stripe_response)
     return JsonResponse({'pay_link': stripe_response.url})
 
+
+@login_required(login_url='/accounts/login/')
+@csrf_exempt
+def check_user_sign(request):
+    user_id = request.POST.get('user_id')
+    b24_invoice_id = request.POST.get('b24_invoice_id')
+
+    sign_helper = RightSignatureHelper()
+
+    contact = BitrixHelper.get_contact(user_id)
+    if contact.get('status') == 'error':
+        return JsonResponse(data=contact, status=200)
+
+    invoice = BitrixHelper.get_invoice(b24_invoice_id)
+    if invoice.get('status') == 'error':
+        return JsonResponse(data=invoice, status=200)
+
+    product = BitrixHelper.get_product(invoice['PRODUCT_ROWS'][0]['PRODUCT_ID'])
+    if product.get('status') == 'error':
+        return JsonResponse(data=invoice, status=200)
+
+    # If 'Pay' button pressed first time - field with Signed File in Invoice is None
+    if invoice[BitrixHelper.INVOICE_SIGNED_FILE] is None:
+        sign_helper.send_document(contact, invoice, product)
+
+        return JsonResponse(
+            data={
+                'status': 'document_sent',
+                'message': f"Please, check your mailbox and sign File and then press 'Pay' button again to get a payment link"
+            },
+            status=200
+        )
+
+    # File were sent but not signed
+    is_signed = PaymentHelper.is_file_signed(contact, invoice)
+    if not is_signed:
+        sign_helper.check_status()
+
+        return JsonResponse(
+            data={
+                'status': 'not_signed',
+                'message': f"Please, check your mailbox and sign File and then press 'Pay' button again to get a payment link"
+            },
+            status=200
+        )
+    else:
+        # TODO: sent payment link
+        return JsonResponse(
+            data={
+                'status': 'link',
+                'link': "https://dev1.nexxess.com"
+            },
+            status=200
+        )
+
+
+@csrf_exempt
+def test(request):
+    print(request)
 
 @csrf_exempt
 def complete_payment_link(request):

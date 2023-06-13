@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Invoice, Status, StripeSettings, LocalInvoice
+from .models import Invoice, Status, StripeSettings, LocalInvoice, RightSignatureSettings, RightSignatureTemplate, RightSignatureDocument
 
 
 @admin.register(Invoice)
@@ -20,3 +20,18 @@ class StripeSettingsAdmin(admin.ModelAdmin):
 @admin.register(LocalInvoice)
 class LocalInvoiceAdmin(admin.ModelAdmin):
     list_display = ['b24_invoice_id', 'stripe_price_id']
+
+
+@admin.register(RightSignatureTemplate)
+class RightSignatureTemplateAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name', 'reference_id', 'is_active']
+
+
+@admin.register(RightSignatureDocument)
+class RightSignatureDocumentAdmin(admin.ModelAdmin):
+    list_display = ['id', 'template', 'contact', 'invoice', 'created_at', 'updated_at']
+
+
+@admin.register(RightSignatureSettings)
+class RightSignatureSettingsAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name', 'is_active']
