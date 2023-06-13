@@ -216,11 +216,13 @@ def create_invoice(request):
     url = set_webhook(method)
     b24_product_id = request.POST["b24_product_id"]
     product = Service.objects.get(service_id=request.POST["b24_product_id"])
+    today = datetime.date.today()
+    print(f"PRINT>>>>>>{today}")
     tomorrow = datetime.date.today() + datetime.timedelta(days=1)
     bx24 = Bitrix24(url)
-    products_counts = Invoice.objects.filter(responsible=request.user.b24_contact_id, service_id=product.service_id)
-    print(products_counts)
-    # print(len(products_counts))
+    products_counts = Invoice.objects.filter(responsible=request.user.b24_contact_id, service_id=product.service_id,
+                                             date__date=today)
+
     if products_counts.exists():
         return JsonResponse({'error': 'You have already created invoice'})
     elif not products_counts.exists():
