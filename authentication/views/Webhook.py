@@ -111,12 +111,6 @@ def webhook_task(request):
                 file_view_url = ''
                 file_type = ""
 
-            print('file_name', file_name)
-            print('file_view_url', file_view_url)
-            print('file_type', file_type)
-            print(f'>>>>>>pined {pinned_invoice}')
-            print(f'>>>>>type{type(pinned_invoice)}')
-
             defaults = {
                 'responsible': trim_before(task_info_crm["ufCrmTask"][0]) if (len(task_info_crm["ufCrmTask"]) == 1) else 393,
                 'ticket_title': ticket_title,
