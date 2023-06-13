@@ -5,7 +5,7 @@ from django.db.models import Q
 from django.http import JsonResponse
 
 from authentication.helpers.B24Webhook import set_webhook
-from invoices.views import format_date, parse_date
+from invoices.views import format_date
 from invoices.models import *
 from .models import Ticket, TicketStatus, TicketComments
 from datetime import datetime
@@ -94,10 +94,8 @@ def tasks(request):
             tasks_array = sorted(tasks_array, key=lambda x: int(x[sort_by]), reverse=sort_order)
         elif sort_by == 'status':
             tasks_array = sorted(tasks_array, key=lambda x: x[sort_by].value, reverse=sort_order)
-        elif sort_by == 'title':
-            tasks_array = sorted(tasks_array, key=lambda x: x[sort_by], reverse=sort_order)
         else:
-            tasks_array = sorted(tasks_array, key=lambda x: parse_date(x[sort_by]), reverse=sort_order)
+            tasks_array = sorted(tasks_array, key=lambda x: x[sort_by], reverse=sort_order)
         request.session['for_sort'] = [sort_order, sort_by]
     except KeyError:
         pass

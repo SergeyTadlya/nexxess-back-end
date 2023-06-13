@@ -23,9 +23,6 @@ import fitz
 def format_date(date):
     return date.strftime('%d %b %Y') if date else ''
 
-def parse_date(date_string):
-    return datetime.strptime(date_string, "%d %b %Y") if date_string else ''
-
 
 def format_price(price):
     price = str(price)
@@ -138,8 +135,6 @@ def invoices(request):
             sort_by = request.session.get('for_sort')[1]
 
         try:
-            if sort_by == 'action':
-                sort_by = 'status'
             if sort_by == 'invoice_id':
                 invoices_array = sorted(invoices_array, key=lambda x: int(x[sort_by]), reverse=sort_order)
             elif sort_by == 'status':
@@ -147,7 +142,7 @@ def invoices(request):
             elif sort_by == 'price':
                 invoices_array = sorted(invoices_array, key=lambda x: int(x[sort_by][1:]), reverse=sort_order)
             else:
-                invoices_array = sorted(invoices_array, key=lambda x: parse_date(x[sort_by]), reverse=sort_order)
+                invoices_array = sorted(invoices_array, key=lambda x: x[sort_by], reverse=sort_order)
             request.session['for_sort'] = [sort_order, sort_by]
         except KeyError:
             pass
