@@ -255,11 +255,11 @@
               if (data.status === 'error') {
                   // TODO: change alert to popup with message in data.message
                   alert(data.message)
-              } else if (data.status === 'document_sent' || data.status === 'not_signed') {
+              } else if (data.status === 'document_sent' || data.status === 'not_signed' || data.status === 'paid') {
                   // TODO: change alert to popup with message in data.message
                   alert(data.message)
               } else if (data.status === 'link') {
-                  window.location.href = data.link
+                  {#// window.location.href = data.link#}
               }
           },
         });

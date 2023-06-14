@@ -449,13 +449,23 @@ def check_user_sign(request):
     else:
         payment_link = create_payment_link(request)
 
-        return JsonResponse(
-            data={
-                'status': 'link',
-                'link': payment_link['pay_link']
-            },
-            status=200
-        )
+        # If invoice was paid, don't send payment link again
+        if invoice['STATUS_ID'] == 'P':
+            return JsonResponse(
+                data={
+                    'status': 'paid',
+                    'message': "Your invoice was paid. Please, wait until status change to 'Paid'"
+                },
+                status=200
+            )
+        else:
+            return JsonResponse(
+                data={
+                    'status': 'link',
+                    'link': payment_link['pay_link']
+                },
+                status=200
+            )
 
 
 @csrf_exempt
