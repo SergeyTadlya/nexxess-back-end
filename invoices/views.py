@@ -7,6 +7,7 @@ from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
 
 from authentication.helpers.B24Webhook import set_webhook
 from tickets.models import Ticket, TicketStatus
+from .helpers import PaymentHelper, RightSignatureHelper, BitrixHelper
 
 from .models import Invoice, Status, StripeSettings, LocalInvoice
 
@@ -396,7 +397,80 @@ def create_payment_link(request):
         after_completion={"type": "redirect", "redirect": {"url": stipe_settings.webhook_url + b24_invoice_id}, }
     )
     print(stripe_response)
-    return JsonResponse({'pay_link': stripe_response.url})
+    return {'pay_link': stripe_response.url}
+
+
+@login_required(login_url='/accounts/login/')
+@csrf_exempt
+def check_user_sign(request):
+    user_id = request.POST.get('user_id')
+    b24_invoice_id = request.POST.get('b24_invoice_id')
+
+    sign_helper = RightSignatureHelper()
+
+    contact = BitrixHelper.get_contact(user_id)
+    if contact.get('status') == 'error':
+        return JsonResponse(data=contact, status=200)
+
+    invoice = BitrixHelper.get_invoice(b24_invoice_id)
+    if invoice.get('status') == 'error':
+        return JsonResponse(data=invoice, status=200)
+
+    product = BitrixHelper.get_product(invoice['PRODUCT_ROWS'][0]['PRODUCT_ID'])
+    if product.get('status') == 'error':
+        return JsonResponse(data=invoice, status=200)
+
+    # If 'Pay' button pressed first time - field with Signed File in Invoice is None
+    if invoice[BitrixHelper.INVOICE_SIGNED_FILE] is None:
+        sign_helper.send_document(contact, invoice, product)
+
+        return JsonResponse(
+            data={
+                'status': "document_sent",
+                'message': f"Please, check your mailbox and sign File and then press 'Pay' button again to get a payment link"
+            },
+            status=200
+        )
+
+    # File were sent but not signed
+    is_signed = PaymentHelper.is_file_signed(contact, invoice)
+    if not is_signed:
+        status = sign_helper.check_status(contact, invoice)
+
+        if not status:
+            message = "Please, check your mailbox and sign the file, then press the 'Pay' button again to get a payment link."
+        else:
+            message = "File signed successfully."
+            payment_link = create_payment_link(request)
+
+        return JsonResponse(
+            data={
+                'status': 'not_signed' if not status else 'link',
+                'message': message,
+                'link': payment_link['pay_link'] if status else None
+            },
+            status=200
+        )
+    else:
+        payment_link = create_payment_link(request)
+
+        # If invoice was paid, don't send payment link again
+        if invoice['STATUS_ID'] == 'P':
+            return JsonResponse(
+                data={
+                    'status': 'paid',
+                    'message': "Your invoice was paid. Please, wait until status change to 'Paid'"
+                },
+                status=200
+            )
+        else:
+            return JsonResponse(
+                data={
+                    'status': 'link',
+                    'link': payment_link['pay_link']
+                },
+                status=200
+            )
 
 
 @csrf_exempt
