@@ -63,7 +63,7 @@ class LocalInvoice(models.Model):
     payment_link = models.CharField(verbose_name='Payment link', max_length=250, null=True, blank=True)
 
 
-class RightSignatureSettings(models.Model):
+class ShareFileSettings(models.Model):
     name = models.CharField(verbose_name="Name", max_length=50, unique=True)
     subdomain = models.CharField(verbose_name="Subdomain", max_length=50)
     client_id = models.CharField(verbose_name="Client ID", max_length=100, unique=True)
@@ -72,6 +72,21 @@ class RightSignatureSettings(models.Model):
     code = models.CharField(verbose_name="Code", max_length=50, null=True, blank=True)
     username = models.CharField(verbose_name="Username", max_length=50, null=True, blank=True)
     password = models.CharField(verbose_name="Password", max_length=50, null=True, blank=True)
+    is_active = models.BooleanField(verbose_name='Is active', default=False)
+
+    def __str__(self):
+        return f'ShareFile setting - {self.name}'
+
+    class Meta:
+        verbose_name = 'ShareFile settings'
+        verbose_name_plural = 'ShareFile settings'
+
+
+class RightSignatureSettings(models.Model):
+    name = models.CharField(verbose_name="Name", max_length=50, unique=True)
+    client_id = models.CharField(verbose_name="Client ID", max_length=100, unique=True)
+    client_secret = models.CharField(verbose_name="Client Secret", max_length=100, unique=True)
+    private_api = models.CharField(verbose_name="Private API", max_length=100, null=True, blank=True)
     is_active = models.BooleanField(verbose_name='Is active', default=False)
 
     def __str__(self):
@@ -96,6 +111,7 @@ class RightSignatureTemplate(models.Model):
 
 
 class RightSignatureDocument(models.Model):
+    reference_id = models.CharField(verbose_name="Reference ID", max_length=100, unique=True)
     template = models.ForeignKey(to="RightSignatureTemplate", on_delete=models.PROTECT, verbose_name='Template')
     contact = models.ForeignKey(to="telegram_bot.User", on_delete=models.PROTECT, verbose_name='Contact')
     invoice = models.ForeignKey(to="Invoice", on_delete=models.PROTECT, verbose_name='Invoice')
@@ -109,3 +125,17 @@ class RightSignatureDocument(models.Model):
     class Meta:
         verbose_name = 'RightSignature document'
         verbose_name_plural = 'RightSignature documents'
+
+
+class RightSignatureField(models.Model):
+    reference_id = models.CharField(verbose_name="Reference ID", max_length=100, unique=True, null=True, blank=True)
+    template = models.ForeignKey(to="RightSignatureTemplate", on_delete=models.PROTECT, verbose_name='Template')
+    name = models.CharField(verbose_name="Name", max_length=100, unique=True)
+    value = models.CharField(verbose_name="Value", max_length=100, null=True, blank=True)
+
+    def __str__(self):
+        return f'RightSignature field - {self.id}'
+
+    class Meta:
+        verbose_name = 'RightSignature field'
+        verbose_name_plural = 'RightSignature fields'

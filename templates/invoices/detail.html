@@ -252,14 +252,15 @@
           },
           dataType: 'json',
           success: function(data) {
-            //console.log(data.status)
-            //if (data.pay_link){
-              // window.open(data.pay_link, '_blank');
-            //  window.location.href = data.pay_link;
-            //}else
-            //{
-            //  alert("We have some problem. Please try late")
-            //}
+              if (data.status === 'error') {
+                  // TODO: change alert to popup with message in data.message
+                  alert(data.message)
+              } else if (data.status === 'document_sent' || data.status === 'not_signed') {
+                  // TODO: change alert to popup with message in data.message
+                  alert(data.message)
+              } else if (data.status === 'link') {
+                  window.location.href = data.link
+              }
           },
         });
       });

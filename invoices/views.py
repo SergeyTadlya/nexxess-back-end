@@ -392,7 +392,7 @@ def create_payment_link(request):
         after_completion={"type": "redirect", "redirect": {"url": stipe_settings.webhook_url + b24_invoice_id}, }
     )
     print(stripe_response)
-    return JsonResponse({'pay_link': stripe_response.url})
+    return {'pay_link': stripe_response.url}
 
 
 @login_required(login_url='/accounts/login/')
@@ -421,7 +421,7 @@ def check_user_sign(request):
 
         return JsonResponse(
             data={
-                'status': 'document_sent',
+                'status': "document_sent",
                 'message': f"Please, check your mailbox and sign File and then press 'Pay' button again to get a payment link"
             },
             status=200
@@ -430,29 +430,33 @@ def check_user_sign(request):
     # File were sent but not signed
     is_signed = PaymentHelper.is_file_signed(contact, invoice)
     if not is_signed:
-        sign_helper.check_status()
+        status = sign_helper.check_status(contact, invoice)
+
+        if not status:
+            message = "Please, check your mailbox and sign the file, then press the 'Pay' button again to get a payment link."
+        else:
+            message = "File signed successfully."
+            payment_link = create_payment_link(request)
 
         return JsonResponse(
             data={
-                'status': 'not_signed',
-                'message': f"Please, check your mailbox and sign File and then press 'Pay' button again to get a payment link"
+                'status': 'not_signed' if not status else 'link',
+                'message': message,
+                'link': payment_link['pay_link'] if status else None
             },
             status=200
         )
     else:
-        # TODO: sent payment link
+        payment_link = create_payment_link(request)
+
         return JsonResponse(
             data={
                 'status': 'link',
-                'link': "https://dev1.nexxess.com"
+                'link': payment_link['pay_link']
             },
             status=200
         )
 
-
-@csrf_exempt
-def test(request):
-    print(request)
 
 @csrf_exempt
 def complete_payment_link(request):

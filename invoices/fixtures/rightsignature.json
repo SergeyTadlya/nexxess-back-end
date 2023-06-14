@@ -1,0 +1,112 @@
+[
+  {
+    "model": "invoices.RightSignatureSettings",
+    "pk": 1,
+    "fields": {
+      "name": "RightSignature",
+      "client_id": "92IlaO4Wbc0jy4xMkKbT7jPvm14KdNlaqpPrCMKmkYM",
+      "client_secret": "6qvEzJOlFV-iBArPIfY3abYemmN_jsMAndvz0F5KfdM",
+      "private_api": "pv_b8ad42d55aea4bc6993832876fff735f",
+      "is_active": true
+    }
+  },
+  {
+    "model": "invoices.RightSignatureTemplate",
+    "pk": 1,
+    "fields": {
+      "name": "Master Client Intake Form",
+      "reference_id": "25fd27eb-d1f6-497d-bf00-e1c703bb0f51",
+      "is_active": true
+    }
+  },
+  {
+    "model": "invoices.RightSignatureField",
+    "pk": 1,
+    "fields": {
+      "template": "1",
+      "name": "benefecial_trust_cb",
+      "value": "true"
+    }
+  },
+  {
+    "model": "invoices.RightSignatureField",
+    "pk": 2,
+    "fields": {
+      "template": "1",
+      "name": "price",
+      "value": ""
+    }
+  },
+  {
+    "model": "invoices.RightSignatureField",
+    "pk": 3,
+    "fields": {
+      "template": "1",
+      "name": "benefecial_trust",
+      "value": "ONE"
+    }
+  },
+  {
+    "model": "invoices.RightSignatureField",
+    "pk": 4,
+    "fields": {
+      "template": "1",
+      "name": "4_d_no_cb",
+      "value": "true"
+    }
+  },
+  {
+    "model": "invoices.RightSignatureField",
+    "pk": 5,
+    "fields": {
+      "template": "1",
+      "name": "4_e_no_cb",
+      "value": "true"
+    }
+  },
+  {
+    "model": "invoices.RightSignatureField",
+    "pk": 6,
+    "fields": {
+      "template": "1",
+      "name": "4_f_no_cb",
+      "value": "true"
+    }
+  },
+  {
+    "model": "invoices.RightSignatureField",
+    "pk": 7,
+    "fields": {
+      "template": "1",
+      "name": "4_h_no_cb",
+      "value": "true"
+    }
+  },
+  {
+    "model": "invoices.RightSignatureField",
+    "pk": 8,
+    "fields": {
+      "template": "1",
+      "name": "copies_1",
+      "value": "ONE"
+    }
+  },
+  {
+    "model": "invoices.RightSignatureField",
+    "pk": 9,
+    "fields": {
+      "template": "1",
+      "name": "copies_2",
+      "value": "ONE"
+    }
+  },
+  {
+    "model": "invoices.RightSignatureField",
+    "pk": 10,
+    "fields": {
+      "template": "1",
+      "name": "hours",
+      "value": ""
+    }
+  }
+]
